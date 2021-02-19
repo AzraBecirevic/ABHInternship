@@ -4,27 +4,42 @@
 }
 
 .infoLink{
-    color:#D8D8D8;
+    font-family: Lato-Regular;
+font-size: 16px;
+color: #D8D8D8;
+letter-spacing: 0.56px;
 }
 
 .infoPar{
-    color: #D8D8D8;
+    font-family: Lato-Regular;
+font-size: 16px;
+color: #D8D8D8;
+letter-spacing: 0.56px;
 }
 
 .infoLink:hover{
-    color: #D8D8D8;
-    text-decoration:none;
+    font-family: Lato-Regular;
+font-size: 16px;
+color: #D8D8D8;
+letter-spacing: 0.56px;
 }
 
 .infoItem{
     padding: 2%;
-    color: #9B9B9B;
+    color: #D8D8D8;
 }
 .infoItem:hover{
     cursor: pointer;
 }
 
 .footerInfoHeading{
-    font-family: 'Lato-Regular';
-    color: #9B9B9B;
+    opacity: 0.5;
+font-family: Lato-Regular;
+font-size: 16px;
+color: #FFFFFF;
+letter-spacing: 0.56px;
+}
+
+.infoListLi{
+    margin-bottom: 3px;
 }

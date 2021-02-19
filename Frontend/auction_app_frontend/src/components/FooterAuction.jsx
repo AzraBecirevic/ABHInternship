@@ -7,9 +7,9 @@ const FooterAuction = () => {
         <div className="footerInfo" >
             <p className="footerInfoHeading">AUCTION</p>
             <ul className="infoList">
-                <li ><Link to='/about' className="infoLink">About us</Link></li>
-                <li><Link className="infoLink">Tearms and Conditions</Link></li>
-                <li><Link className="infoLink">Privacy and Policy</Link></li>
+                <li className="infoListLi"><Link to='/about' className="infoLink">About us</Link></li>
+                <li className="infoListLi"><Link to='/tearmsConditions' className="infoLink">Tearms and Conditions</Link></li>
+                <li className="infoListLi"><Link to='/privacyPolicy' className="infoLink">Privacy and Policy</Link></li>
             </ul>
         </div>
     )

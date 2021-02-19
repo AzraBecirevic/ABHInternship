@@ -12,16 +12,17 @@ import { faGooglePlus} from '@fortawesome/free-brands-svg-icons'
 
 
 
-const NavbarBlack = () => {
+const NavbarBlack = (props) => {
+    
     return (
         <Navbar className="upperBlack" >
                <Nav className="firstNav" >
                    <div className="socialMediaLinks">
                        <ul className="socMediaList" >
-                           <li className="listItem"><FontAwesomeIcon icon={faFacebook} size={'lg'} style={{color:'grey'}}/></li>
-                           <li className="listItem"><FontAwesomeIcon icon={faInstagramSquare} size={'lg'} style={{color:'grey'}}/></li>
-                           <li className="listItem"><FontAwesomeIcon icon={faTwitterSquare} size={'lg'}  style={{color:'grey'}}/></li>
-                           <li className="listItem"><FontAwesomeIcon icon={faGooglePlus} size={'lg'}  style={{color:'grey'}}/></li>
+                           <li className="listItem"><FontAwesomeIcon icon={faFacebook} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://www.facebook.com/')} /></li>
+                           <li className="listItem"><FontAwesomeIcon icon={faInstagramSquare} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://www.instagram.com/')} /></li>
+                           <li className="listItem"><FontAwesomeIcon icon={faTwitterSquare} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://twitter.com/')} /></li>
+                           <li className="listItem"><FontAwesomeIcon icon={faGooglePlus} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://accounts.google.com/signup/v2/webcreateaccount?flowName=GlifWebSignIn&flowEntry=SignUp')} /></li>
                        </ul>  
                    </div>
                

@@ -1,34 +1,32 @@
 .navbar-expand {
     flex-flow: row nowrap;
-     justify-content: center !important;
  }
  .navbar {
-     /*position: relative;
-     display: flex;
-     flex-wrap: wrap;
-     align-items: center;
-     justify-content: center !important;*/
-     padding: 0 !important ;
+     padding-left: 160px !important;
+     padding-right: 160px !important;
+     padding-top: 0 !important;
+     padding-bottom: 0 !important;
  }
+
  
  .upperBlack{
-     background-color: #252525 !important;   /* ili bg="dark*/
+     background-color: #252525 !important;   
      justify-content: center;
      padding: 0;
+     height: 40px;
  }
  
  .firstNav{
-     /*background-color:yellow; */
-     /*display: flex;  /* div verija*/
-     /*justify-self: center;  /*div verzija*/
-      width: 80%; /* -> margin 160 u .upperBlack*/
      justify-content: space-between;
+     height: 40px;
+     flex: 1;
  }
  
  .socialMediaLinks{
      display: flex;
      justify-self: start;
      padding: 0;
+     align-items: center;
  }
  
 
@@ -50,13 +48,14 @@
  }
 .listItem{
     padding-right: 10%;
-    color: #9B9B9B;
+    color: #D8D8D8;
 }
+
 .listItem:hover{
     cursor: pointer;
 }
  .upperLink{
-     color: white;
+     color:#FFFFFF;
      font-family: 'Lato-Regular';
      padding-right: 3px ;
  }
@@ -78,5 +77,6 @@
     text-decoration: none;
     cursor:default;
 }
+
  
  

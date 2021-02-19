@@ -2,12 +2,9 @@ import React from 'react'
 import styles from './NavbarWhite.css'
 import { Nav, Navbar } from 'react-bootstrap' 
 import { Link } from 'react-router-dom'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGavel} from '@fortawesome/free-solid-svg-icons'
 import logo from './Images/logo.PNG'
 
-// <FontAwesomeIcon className="logoIcon"  icon={faGavel} size={'lg'}/> ili slika logo
 
 const NavbarWhite = () => {
     return (
@@ -18,7 +15,7 @@ const NavbarWhite = () => {
                  <Link to='/' className="homeLink">AUCTION</Link>
                 </div>
                 <div className="searchBar"></div>
-                <div className="manu" >
+                <div className="menu" >
                     <Link to='/' className="menuItem">HOME</Link>
                 </div>
                 
