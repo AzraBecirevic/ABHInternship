@@ -1,0 +1,82 @@
+.navbar-expand {
+    flex-flow: row nowrap;
+     justify-content: center !important;
+ }
+ .navbar {
+     /*position: relative;
+     display: flex;
+     flex-wrap: wrap;
+     align-items: center;
+     justify-content: center !important;*/
+     padding: 0 !important ;
+ }
+ 
+ .upperBlack{
+     background-color: #252525 !important;   /* ili bg="dark*/
+     justify-content: center;
+     padding: 0;
+ }
+ 
+ .firstNav{
+     /*background-color:yellow; */
+     /*display: flex;  /* div verija*/
+     /*justify-self: center;  /*div verzija*/
+      width: 80%; /* -> margin 160 u .upperBlack*/
+     justify-content: space-between;
+ }
+ 
+ .socialMediaLinks{
+     display: flex;
+     justify-self: start;
+     padding: 0;
+ }
+ 
+
+ 
+ .registerLogin{
+     display: flex;
+     justify-self: end;
+     padding: 0;
+     align-items: center;
+ }
+
+ .socMediaList{
+     padding-bottom: 0%;
+     padding-top: 0%;
+     display: flex;
+     list-style-type: none;
+     margin: 0%;
+     padding-left: 0%;
+ }
+.listItem{
+    padding-right: 10%;
+    color: #9B9B9B;
+}
+.listItem:hover{
+    cursor: pointer;
+}
+ .upperLink{
+     color: white;
+     font-family: 'Lato-Regular';
+     padding-right: 3px ;
+ }
+
+ .upperLink:hover{
+     color:#8367D8;
+     text-decoration: none;
+ }
+
+ .disabledLink{
+    color:#9B9B9B;
+    font-family: 'Lato-Regular';
+    padding-right: 15px ;
+    padding-left: 15px;
+}
+.disabledLink:hover{
+    color:#9B9B9B;
+    font-family: 'Lato-Regular';
+    text-decoration: none;
+    cursor:default;
+}
+ 
+ 

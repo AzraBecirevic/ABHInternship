@@ -1,0 +1,19 @@
+.footer{
+    bottom: 0;
+    background-color: #252525; 
+    position:fixed;
+    left: 0;
+    right: 0;
+    height: 30%;  /*356px*/
+    justify-content: center;
+    font-family: 'Lato-Regular';
+    border: 1px solid #979797
+}
+
+.footerDiv{
+    margin-left: 10%;
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 2%;
+}

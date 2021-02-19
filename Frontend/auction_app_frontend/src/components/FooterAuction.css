@@ -1,0 +1,30 @@
+.infoList{
+    list-style-type: none;
+    padding-left: 0%;
+}
+
+.infoLink{
+    color:#D8D8D8;
+}
+
+.infoPar{
+    color: #D8D8D8;
+}
+
+.infoLink:hover{
+    color: #D8D8D8;
+    text-decoration:none;
+}
+
+.infoItem{
+    padding: 2%;
+    color: #9B9B9B;
+}
+.infoItem:hover{
+    cursor: pointer;
+}
+
+.footerInfoHeading{
+    font-family: 'Lato-Regular';
+    color: #9B9B9B;
+}
