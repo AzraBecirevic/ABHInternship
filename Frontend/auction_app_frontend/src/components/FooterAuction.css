@@ -1,0 +1,46 @@
+.infoList{
+    list-style-type: none;
+    padding-left: 0%;
+}
+
+.infoLink{
+    font-family: Lato-Regular;
+    font-size: 16px;
+    color: #D8D8D8;
+    letter-spacing: 0.56px;
+}
+
+.infoPar{
+    font-family: Lato-Regular;
+    font-size: 16px;
+    color: #D8D8D8;
+    letter-spacing: 0.56px;
+}
+
+.infoLink:hover{
+    font-family: Lato-Regular;
+    font-size: 16px;
+    color: #D8D8D8;
+    letter-spacing: 0.56px;
+}
+
+.infoItem{
+    padding: 2%;
+    color: #D8D8D8;
+}
+
+.infoItem:hover{
+    cursor: pointer;
+}
+
+.footerInfoHeading{
+    opacity: 0.5;
+    font-family: Lato-Regular;
+    font-size: 16px;
+    color: #FFFFFF;
+    letter-spacing: 0.56px;
+}
+
+.infoListLi{
+    margin-bottom: 3px;
+}

@@ -1,0 +1,63 @@
+.navbar-expand {
+    flex-flow: row nowrap;
+}
+ 
+.mainWhite{
+    height: 80px;
+    background-color:#FFFFFF;;
+}
+
+.secondNav{
+    padding: 10px;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.menu{
+    display:'flex';
+    align-content: center;
+    text-align: center;
+}
+
+.menuItem{
+    color: black;
+    font-family: 'Lato-Regular';
+}
+
+.menuItem:hover{
+    color: #8367d8;
+    text-decoration: none;
+    font-family: 'Lato-Bold';
+}
+
+.homeLink{
+    font-family: Lato-Light;
+    font-size: 24px;
+    color: #8367D8;
+    letter-spacing: 0.84px;
+}
+
+.homeLink:hover{
+    font-family: 'Lato-Light'; 
+    text-decoration: none;
+    color: #8367d8;
+}
+
+.logoIcon{
+    color: #9B9B9B;
+}
+
+.logoImg{
+    vertical-align:text-bottom !important;
+    width:12%; 
+    height:69%;
+}
+
+
+
+.menuItem{
+    font-family: Lato-Light;
+    font-size: 16px;
+    color: #252525;
+    letter-spacing: 0.56px;
+}

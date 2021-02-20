@@ -1,0 +1,34 @@
+.tearmsConditionsDiv{
+    font-family: 'Lato-Regular';
+}
+
+.termsHeading{
+    font-family: Lato-Regular;
+    font-size: 46px;
+    color: #252525;
+    letter-spacing: 1.61px;
+}
+
+.linkTearms{
+    color: #9B9B9B;
+}
+
+.linkTearms:hover{
+    color: #9B9B9B;
+}
+
+.tearmsSubTitle{
+    font-family: Lato-Regular;
+    font-size: 24px;
+    color: #252525;
+    letter-spacing: 0.84px;
+}
+
+.termsTextDiv{
+    font-family: Lato-Regular;
+    font-size: 18px;
+    color: #9B9B9B;
+    letter-spacing: 0.63px;
+    line-height: 25px;
+    padding-bottom: 20px;
+}
