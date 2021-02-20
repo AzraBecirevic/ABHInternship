@@ -6,6 +6,7 @@ import AboutUs from './components/AboutUs';
 import Home from './components/Home';
 import TearmsAndConditions from './components/TearmsAndConditions';
 import PrivacyAndPolicy from './components/PrivacyAndPolicy';
+import ScrollToTop from './components/ScrollToTop';
 
 
 function App() {
@@ -18,16 +19,18 @@ function App() {
 
   return (
     <Router>
-      <div className="app">
-        <Header openMe={openPage}/>
-        <div className="containerDiv">
-          <Route path="/" exact component={Home}></Route>
-          <Route path="/about" component={AboutUs}></Route>
-          <Route path="/tearmsConditions" component={TearmsAndConditions}></Route>
-          <Route path="/privacyPolicy" component={PrivacyAndPolicy}></Route>
+      <ScrollToTop>
+        <div className="app">
+          <Header openMe={openPage}/>
+          <div className="containerDiv">
+            <Route path="/" exact component={Home}></Route>
+            <Route path="/about" component={AboutUs}></Route>
+            <Route path="/tearmsConditions" component={TearmsAndConditions}></Route>
+            <Route path="/privacyPolicy" component={PrivacyAndPolicy}></Route>
+          </div>
+          <Footer openLink={openPage}/>
         </div>
-        <Footer openLink={openPage}/>
-      </div>
+      </ScrollToTop>
     </Router>
     
   );
