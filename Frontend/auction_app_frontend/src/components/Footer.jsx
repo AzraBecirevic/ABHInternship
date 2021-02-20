@@ -8,7 +8,7 @@ const Footer = (props) => {
         <footer className="footer">
             <div className="footerDiv">
                 <FooterAuction/>
-                <FooterGetInTouch  openWebLink={props.openLink}/>
+                <FooterGetInTouch openWebLink={props.openLink}/>
             </div>
         </footer>
     )

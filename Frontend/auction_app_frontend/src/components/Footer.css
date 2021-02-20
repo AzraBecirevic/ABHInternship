@@ -7,11 +7,9 @@
     justify-content: center;
     font-family: 'Lato-Regular';
     border: 1px solid #979797;
-
 }
 
 .footerDiv{
-    
     display: flex;
     justify-content:space-evenly;
     margin-top: 65px;

@@ -12,21 +12,20 @@ function App() {
  
    function openPage(e, url){
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-     if (newWindow) newWindow.opener = null
+    if (newWindow) newWindow.opener = null
 }
   
 
   return (
     <Router>
-      <div className="App">
-         <Header openMe={openPage}/>
-         <div className="containerDiv">  
-         <Route path="/" exact component={Home}></Route>
-        <Route path="/about" component={AboutUs}></Route>
-        <Route path="/tearmsConditions" component={TearmsAndConditions}></Route>
-        <Route path="/privacyPolicy" component={PrivacyAndPolicy}></Route>
-         </div>
-         
+      <div className="app">
+        <Header openMe={openPage}/>
+        <div className="containerDiv">
+          <Route path="/" exact component={Home}></Route>
+          <Route path="/about" component={AboutUs}></Route>
+          <Route path="/tearmsConditions" component={TearmsAndConditions}></Route>
+          <Route path="/privacyPolicy" component={PrivacyAndPolicy}></Route>
+        </div>
         <Footer openLink={openPage}/>
       </div>
     </Router>

@@ -1,81 +1,81 @@
 .navbar-expand {
-    flex-flow: row nowrap;
- }
- .navbar {
-     padding-left: 160px !important;
-     padding-right: 160px !important;
-     padding-top: 0 !important;
-     padding-bottom: 0 !important;
+  flex-flow: row nowrap;
  }
 
- 
+ .navbar {
+  padding-left: 160px !important;
+  padding-right: 160px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+ }
+
  .upperBlack{
-     background-color: #252525 !important;   
-     justify-content: center;
-     padding: 0;
-     height: 40px;
+  background-color: #252525 !important;   
+  justify-content: center;
+  padding: 0;
+  height: 40px;
  }
  
  .firstNav{
-     justify-content: space-between;
-     height: 40px;
-     flex: 1;
+  justify-content: space-between;
+  height: 40px;
+  flex: 1;
  }
  
  .socialMediaLinks{
-     display: flex;
-     justify-self: start;
-     padding: 0;
-     align-items: center;
+  display: flex;
+  justify-self: start;
+  padding: 0;
+  align-items: center;
  }
  
 
  
  .registerLogin{
-     display: flex;
-     justify-self: end;
-     padding: 0;
-     align-items: center;
+  display: flex;
+  justify-self: end;
+  padding: 0;
+  align-items: center;
  }
 
  .socMediaList{
-     padding-bottom: 0%;
-     padding-top: 0%;
-     display: flex;
-     list-style-type: none;
-     margin: 0%;
-     padding-left: 0%;
+  padding-bottom: 0%;
+  padding-top: 0%;
+  display: flex;
+  list-style-type: none;
+  margin: 0%;
+  padding-left: 0%;
  }
 .listItem{
-    padding-right: 10%;
-    color: #D8D8D8;
+  padding-right: 10%;
+  color: #D8D8D8;
 }
 
 .listItem:hover{
-    cursor: pointer;
+  cursor: pointer;
 }
  .upperLink{
-     color:#FFFFFF;
-     font-family: 'Lato-Regular';
-     padding-right: 3px ;
+  color:#FFFFFF;
+  font-family: 'Lato-Regular';
+  padding-right: 3px ;
  }
 
  .upperLink:hover{
-     color:#8367D8;
-     text-decoration: none;
+  color:#8367D8;
+  text-decoration: none;
  }
 
  .disabledLink{
-    color:#9B9B9B;
-    font-family: 'Lato-Regular';
-    padding-right: 15px ;
-    padding-left: 15px;
+  color:#9B9B9B;
+  font-family: 'Lato-Regular';
+  padding-right: 15px ;
+  padding-left: 15px;
 }
 .disabledLink:hover{
-    color:#9B9B9B;
-    font-family: 'Lato-Regular';
-    text-decoration: none;
-    cursor:default;
+  color:#9B9B9B;
+  font-family: 'Lato-Regular';
+  text-decoration: none;
+  cursor:default;
 }
 
  

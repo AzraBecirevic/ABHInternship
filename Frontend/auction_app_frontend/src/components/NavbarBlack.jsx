@@ -14,26 +14,33 @@ import { faGooglePlus} from '@fortawesome/free-brands-svg-icons'
 
 const NavbarBlack = (props) => {
     
+    const googleLink = 'https://accounts.google.com/signup/v2/webcreateaccount?flowName=GlifWebSignIn&flowEntry=SignUp'
+    const facebookLink = 'https://www.facebook.com/'
+    const instagramLink = 'https://www.instagram.com/'
+    const twitterLink = 'https://twitter.com/'
+
+    function openWebPage(e, link) {
+        props.openWebPage(e, link);
+      }
+
     return (
         <Navbar className="upperBlack" >
-               <Nav className="firstNav" >
-                   <div className="socialMediaLinks">
-                       <ul className="socMediaList" >
-                           <li className="listItem"><FontAwesomeIcon icon={faFacebook} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://www.facebook.com/')} /></li>
-                           <li className="listItem"><FontAwesomeIcon icon={faInstagramSquare} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://www.instagram.com/')} /></li>
-                           <li className="listItem"><FontAwesomeIcon icon={faTwitterSquare} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://twitter.com/')} /></li>
-                           <li className="listItem"><FontAwesomeIcon icon={faGooglePlus} size={'lg'} onClick={(e)=>props.openWebPage(e,'https://accounts.google.com/signup/v2/webcreateaccount?flowName=GlifWebSignIn&flowEntry=SignUp')} /></li>
-                       </ul>  
-                   </div>
-               
-                   <div className="registerLogin">
-                   <Link  className="upperLink">Login</Link> 
-                   <Link  className="disabledLink">or</Link>
-                   <Link  className="upperLink">Create account</Link>
-                   </div>
-               </Nav>
-
-           </Navbar>
+            <Nav className="firstNav" >
+                <div className="socialMediaLinks">
+                    <ul className="socMediaList" >
+                        <li className="listItem"><FontAwesomeIcon icon={faFacebook} size={'lg'} onClick={(e)=>openWebPage(e, facebookLink)} /></li>
+                        <li className="listItem"><FontAwesomeIcon icon={faInstagramSquare} size={'lg'} onClick={(e)=>openWebPage(e, instagramLink)} /></li>
+                        <li className="listItem"><FontAwesomeIcon icon={faTwitterSquare} size={'lg'} onClick={(e)=>openWebPage(e, twitterLink)} /></li>
+                        <li className="listItem"><FontAwesomeIcon icon={faGooglePlus} size={'lg'} onClick={(e)=>openWebPage(e, googleLink)} /></li>
+                    </ul>  
+                </div>
+                <div className="registerLogin">
+                    <Link  className="upperLink">Login</Link> 
+                    <Link  className="disabledLink">or</Link>
+                    <Link  className="upperLink">Create account</Link>
+                </div>
+            </Nav>
+        </Navbar>
     )
 }
 

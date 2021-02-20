@@ -1,10 +1,10 @@
 .navbar-expand {
     flex-flow: row nowrap;
- }
+}
  
 .mainWhite{
-  height: 80px;
-  background-color:#FFFFFF;;
+    height: 80px;
+    background-color:#FFFFFF;;
 }
 
 .secondNav{
@@ -38,9 +38,9 @@
 }
 
 .homeLink:hover{
-   font-family: 'Lato-Light'; 
-   text-decoration: none;
-   color: #8367d8;
+    font-family: 'Lato-Light'; 
+    text-decoration: none;
+    color: #8367d8;
 }
 
 .logoIcon{
@@ -57,7 +57,7 @@
 
 .menuItem{
     font-family: Lato-Light;
-font-size: 16px;
-color: #252525;
-letter-spacing: 0.56px;
+    font-size: 16px;
+    color: #252525;
+    letter-spacing: 0.56px;
 }

@@ -1,7 +1,5 @@
 .privacyPolicyDiv{
     font-family: 'Lato-Regular';
-    width: 600px;
-    margin: auto;
 }
 
 .policyHeading{
@@ -22,9 +20,9 @@
 
 .policySubTitle{
     font-family: Lato-Regular;
-font-size: 24px;
-color: #252525;
-letter-spacing: 0.84px;
+    font-size: 24px;
+    color: #252525;
+    letter-spacing: 0.84px;
 }
 
 .linkPolicy{
