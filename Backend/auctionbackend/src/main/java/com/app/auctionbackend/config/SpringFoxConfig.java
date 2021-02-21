@@ -1,4 +1,4 @@
-package com.app.auctionbackend;
+package com.app.auctionbackend.config;
 
 
 import org.springframework.context.annotation.Bean;
