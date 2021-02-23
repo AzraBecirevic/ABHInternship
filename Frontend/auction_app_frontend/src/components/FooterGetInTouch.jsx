@@ -22,7 +22,7 @@ const FooterGetInTouch = (props) => {
         <div className="footerTouch">
             <p className="footerInfoHeading">GET IN TOUCH</p>
             <ul className="infoList">
-                <li className="infoListLi" ><span className="infoPar">Call Us at    +123 797-567-2535</span></li>
+                <li className="infoListLi" ><span className="infoPar">Call Us at +123 797-567-2535</span></li>
                 <li className="infoListLi"><span className="infoPar">support@auction.com</span></li>
                 <li className="infoListLi">
                     <ul className="socMediaList" >

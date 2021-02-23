@@ -30,6 +30,8 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
+/*
 @SpringBootTest
 @ContextConfiguration(classes = CustomerController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -56,7 +58,8 @@ public class CustomerControllerTest {
     {
         //Init MockMvc Object and build
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }*/
+    }* /
+    *  /
     //?
 
 
@@ -87,7 +90,7 @@ public class CustomerControllerTest {
         ResponseEntity responseEntity = customerController.addCustomer(customer);
 
         /*assertThat*
-        Assert.isTrue(responseEntity.getStatusCode()== "200");*/
+        Assert.isTrue(responseEntity.getStatusCode()== "200");* /
 
 
         RequestBuilder request = MockMvcRequestBuilders
@@ -109,6 +112,7 @@ public class CustomerControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andReturn();*/
-    }
-}
+                .andReturn();*    /
+    */
+//    }
+//}

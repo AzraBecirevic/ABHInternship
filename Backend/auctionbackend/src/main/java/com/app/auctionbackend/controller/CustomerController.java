@@ -1,5 +1,6 @@
 package com.app.auctionbackend.controller;
 
+import com.app.auctionbackend.dtos.CustomerDto;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class CustomerController {
     @PostMapping(consumes = "application/json")
     public ResponseEntity addCustomer(@RequestBody Customer customer){
         try {
-            Customer registratedCustomer = customerService.registrateCustomer(customer);
-            if(registratedCustomer!=null){
+            Customer registeredCustomer = customerService.registrateCustomer(customer);
+            if(registeredCustomer!=null){
 
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                         .path("/{id}")
-                        .buildAndExpand(registratedCustomer.getId())
+                        .buildAndExpand(registeredCustomer.getId())
                         .toUri();
 
                 return new ResponseEntity(location,HttpStatus.CREATED);
@@ -42,7 +43,7 @@ public class CustomerController {
 
     @GetMapping()
     public ResponseEntity getCustomers(){
-            List<Customer> customers = customerService.getCustomers();
+            List<CustomerDto> customers = customerService.getCustomers();
             return ResponseEntity.ok(customers);
     }
 

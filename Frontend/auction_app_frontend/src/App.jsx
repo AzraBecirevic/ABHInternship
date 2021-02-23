@@ -7,6 +7,7 @@ import Home from './components/Home';
 import TearmsAndConditions from './components/TearmsAndConditions';
 import PrivacyAndPolicy from './components/PrivacyAndPolicy';
 import ScrollToTop from './components/ScrollToTop';
+import Register from './components/Register';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path="/about" component={AboutUs}></Route>
             <Route path="/tearmsConditions" component={TearmsAndConditions}></Route>
             <Route path="/privacyPolicy" component={PrivacyAndPolicy}></Route>
+            <Route path="/register" component={Register}></Route>
           </div>
           <Footer openLink={openPage}/>
         </div>

@@ -37,7 +37,7 @@ const NavbarBlack = (props) => {
                 <div className="registerLogin">
                     <Link  className="upperLink">Login</Link> 
                     <Link  className="disabledLink">or</Link>
-                    <Link  className="upperLink">Create account</Link>
+                    <Link to="/register" className="upperLink">Create account</Link>
                 </div>
             </Nav>
         </Navbar>
