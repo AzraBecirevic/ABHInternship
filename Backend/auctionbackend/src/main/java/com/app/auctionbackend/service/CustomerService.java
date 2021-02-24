@@ -21,19 +21,6 @@ public class CustomerService {
     final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
-    public List<CustomerDto> getCustomers(){
-        List<Customer> customers = customerRepository.findAll();
-        if(customers==null || customers.isEmpty())
-            return null;
-        ModelMapper modelMapper = new ModelMapper();
-        List<CustomerDto> customerDtos = new ArrayList<>();
-        for (Customer c:customers) {
-            CustomerDto customerDto =modelMapper.map(c, CustomerDto.class);
-            customerDtos.add(customerDto);
-        }
-        return customerDtos;
-    }
-
     public Customer registrateCustomer(Customer customer) throws Exception{
 
         List<Customer> customers = customerRepository.findAll();
@@ -56,8 +43,10 @@ public class CustomerService {
 
         if(customer.getPassword()==null || customer.getPassword().isEmpty())
             throw new Exception("Password is required");
+
         if(!Helper.isPasswordFormatValid(customer.getPassword()))
             throw new Exception("Password format is not valid");
+
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
         customerRepository.save(customer);

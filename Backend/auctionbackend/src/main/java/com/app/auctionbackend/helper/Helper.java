@@ -22,7 +22,7 @@ public class Helper {
        String passRegex = "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$";
 
        Pattern pat = Pattern.compile(passRegex);
-       if (passRegex == null)
+       if (password == null)
            return false;
        return pat.matcher(password).matches();
    }

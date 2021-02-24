@@ -3,8 +3,11 @@ package com.app.auctionbackend.controller;
 import com.app.auctionbackend.dtos.CustomerDto;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,6 +18,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
+
+    public class Message {
+        public String text;
+
+        public Message(String text) {
+            this.text = text;
+        }
+    }
 
     @Autowired
     private CustomerService customerService;
@@ -35,16 +46,16 @@ public class CustomerController {
             }
         }
         catch (Exception ex){
-            return new ResponseEntity<String>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<String>("Something went wrong", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new Message("Something went wrong"), HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping()
+   /* @GetMapping()
     public ResponseEntity getCustomers(){
             List<CustomerDto> customers = customerService.getCustomers();
             return ResponseEntity.ok(customers);
-    }
+    }*/
 
 }

@@ -2,8 +2,15 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Heading from './Heading';
 import styles from './Register.css'  
+import { withRouter } from "react-router-dom";
+import AuthService, {  } from "../services/authService";
+
 
 export class Register extends Component {
+
+    constructor(props){
+        super(props);
+    }
 
     state = {
         firstName:'',
@@ -13,8 +20,11 @@ export class Register extends Component {
         firstNameErrMess:'',
         lastNameErrMess:'',
         emailErrMess:'',
-        passwordErrMess:''
+        passwordErrMess:'',
+        token:''
     }
+
+   
 
     onChange = (e) => this.setState({[e.target.name]: e.target.value});
 
@@ -51,7 +61,6 @@ export class Register extends Component {
        
     }
 
-
     validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
@@ -72,51 +81,15 @@ export class Register extends Component {
         }
     }
 
-    login=async()=>{
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username:this.state.email, password:this.state.password })
-        };
-        const response = await fetch('http://localhost:8081/login', requestOptions);
-        if(response.status === 200){
-            console.log("logiran");
-          //  var data = response.json();
-           // console.log(data);
-            console.log(response);
-           console.log(response.headers['Authorization'])
-            //console.log(response.);
-           
-        }
 
-        /*fetch('http://localhost:8081/login', requestOptions).then(response => response.json())
-        .then(data => console.log(data) );*/
+    registerUser=async()=>{
+        const auth = new AuthService();
+        var succesfullySingedUp = await auth.registerUser(this.state.firstName, this.state.lastName, this.state.email, this.state.password);
+        if(succesfullySingedUp){
+            this.props.onLogin(this.state.firstName);
+            this.props.history.push("/home");
+        }
     }
-
-    registerUser= async()=>{
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firstName:this.state.firstName, lastName:this.state.lastName, username:this.state.email, password:this.state.password })
-        };
-
-       const response = await fetch('http://localhost:8081/customer', requestOptions);
-        if(response.status === 201){
-            console.log("logiranje")
-            this.login()
-        }
-        else{
-            console.log(response.json());
-        }
-        
-    }
-
-    /*getData(){   
-        
-        fetch('http://localhost:8081/ping')
-        .then(response => response.json())
-        .then(data => console.log(data) );   // this.setState({  })
-    }*/
 
     render() {
         return (
@@ -166,4 +139,5 @@ export class Register extends Component {
     }
 }
 
-export default Register
+export default withRouter(Register);
+

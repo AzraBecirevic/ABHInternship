@@ -8,34 +8,46 @@ import TearmsAndConditions from './components/TearmsAndConditions';
 import PrivacyAndPolicy from './components/PrivacyAndPolicy';
 import ScrollToTop from './components/ScrollToTop';
 import Register from './components/Register';
+import React, { Component } from 'react'
 
 
-function App() {
- 
-   function openPage(e, url){
+export class App extends Component {
+
+  state ={
+    isLogiran:false,
+    userName:''
+  }
+
+  loginCustomer=(name)=>{
+    this.setState({isLogiran:true, userName:name});
+  }
+
+  openPage(e, url){
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
     if (newWindow) newWindow.opener = null
-}
-  
+  }
 
-  return (
-    <Router>
+  render() {
+    return (
+      <Router>
       <ScrollToTop>
         <div className="app">
-          <Header openMe={openPage}/>
+          <Header openMe={this.openPage}/>
           <div className="containerDiv">
             <Route path="/" exact component={Home}></Route>
             <Route path="/about" component={AboutUs}></Route>
             <Route path="/tearmsConditions" component={TearmsAndConditions}></Route>
             <Route path="/privacyPolicy" component={PrivacyAndPolicy}></Route>
-            <Route path="/register" component={Register}></Route>
+            <Route path="/register" render={(props) => <Register {...props} onLogin={this.loginCustomer} />} />
+           
           </div>
-          <Footer openLink={openPage}/>
+          <Footer openLink={this.openPage}/>
         </div>
       </ScrollToTop>
-    </Router>
-    
-  );
+      </Router>
+    )
+  }
 }
 
-export default App;
+export default App
+

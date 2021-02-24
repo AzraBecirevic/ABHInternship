@@ -5,7 +5,7 @@ public class CustomerDto {
     // private Integer id;
     private String firstName;
     private String lastName;
-    private String username;  //email
+    private String username;
 
     public String getFirstName() {
         return firstName;
@@ -23,13 +23,6 @@ public class CustomerDto {
         this.lastName = lastName;
     }
 
-   /* public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }*/
 
     public String getUsername() {
         return username;

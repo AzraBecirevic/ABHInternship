@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-// (exclude = { SecurityAutoConfiguration.class })
 @SpringBootApplication
 public class AuctionbackendApplication {
 

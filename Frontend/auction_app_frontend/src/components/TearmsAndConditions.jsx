@@ -1,11 +1,13 @@
-import React from 'react'
 import Heading from './Heading'
 import styles from './TearmsAndConditions.css'
 import TextHelper from './TextHelper'
 
-const TearmsAndConditions = () => {
-    return (
-        <div>
+import React, { Component } from 'react'
+
+export class TearmsAndConditions extends Component {
+    render() {
+        return (
+            <div>
             <Heading title='TEARMS AND CONDITIONS'></Heading>
             <div className="container">
                 <div className="row">
@@ -49,9 +51,9 @@ const TearmsAndConditions = () => {
                     <div className="col-lg-2"></div>
                 </div>
             </div>           
-        </div>
-        
-    )
+            </div>
+        )
+    }
 }
 
 export default TearmsAndConditions

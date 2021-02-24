@@ -1,11 +1,15 @@
-import React from 'react'
 import Heading from './Heading'
 import styles from './PrivacyAndPolicy.css'
 import TextHelper from './TextHelper'
 
-const PrivacyAndPolicy = () => {
-    return (
-        <div>
+
+import React, { Component } from 'react'
+
+export class PrivacyAndPolicy extends Component {
+    render() {
+        return (
+            
+            <div>
             <Heading title="PRIVACY AND POLICY"></Heading>
             <div className="container">
                 <div className="row">
@@ -47,8 +51,13 @@ const PrivacyAndPolicy = () => {
                     <div className="col-lg-2"></div>
                 </div>
             </div>
-        </div>
-    )
+            </div>
+
+        )
+    }
 }
 
 export default PrivacyAndPolicy
+
+
+
