@@ -7,33 +7,49 @@ import Home from './components/Home';
 import TearmsAndConditions from './components/TearmsAndConditions';
 import PrivacyAndPolicy from './components/PrivacyAndPolicy';
 import ScrollToTop from './components/ScrollToTop';
+import Register from './components/Register';
+import React, { Component } from 'react'
+import { ABOUT_ROUTE, HOME_ROUTE, PRIVACY_POLICY_ROUTE, REGISTER_ROUTE, TEARMS_CONDITIONS_ROUTE } from './constants/routes';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
+export class App extends Component {
 
-function App() {
- 
-   function openPage(e, url){
+  state ={
+    isLoggedIn:false,
+    userName:''
+  }
+
+  loginCustomer=(name)=>{
+    this.setState({isLogiran:true, userName:name});
+  }
+
+  openPage(e, url){
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-    if (newWindow) newWindow.opener = null
-}
-  
+    if (newWindow) newWindow.opener = null;
 
-  return (
-    <Router>
-      <ScrollToTop>
-        <div className="app">
-          <Header openMe={openPage}/>
-          <div className="containerDiv">
-            <Route path="/" exact component={Home}></Route>
-            <Route path="/about" component={AboutUs}></Route>
-            <Route path="/tearmsConditions" component={TearmsAndConditions}></Route>
-            <Route path="/privacyPolicy" component={PrivacyAndPolicy}></Route>
+  }
+
+  render() {
+    return (
+      <Router>
+        <ScrollToTop>
+          <div className="app">
+            <Header openMe={this.openPage}/>
+            <div className="containerDiv">
+              <Route path={HOME_ROUTE} exact component={Home}></Route>
+              <Route path={ABOUT_ROUTE} component={AboutUs}></Route>
+              <Route path={TEARMS_CONDITIONS_ROUTE} component={TearmsAndConditions}></Route>
+              <Route path={PRIVACY_POLICY_ROUTE} component={PrivacyAndPolicy}></Route>
+              <Route path={REGISTER_ROUTE} render={(props) => <Register {...props} onLogin={this.loginCustomer} />} /> 
+            </div>
+            <Footer openLink={this.openPage}/>
           </div>
-          <Footer openLink={openPage}/>
-        </div>
-      </ScrollToTop>
-    </Router>
-    
-  );
+        </ScrollToTop>
+      </Router>
+    )
+  }
 }
 
-export default App;
+export default App
+
