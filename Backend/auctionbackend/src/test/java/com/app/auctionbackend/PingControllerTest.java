@@ -22,7 +22,7 @@ public class PingControllerTest {
     @Test
     public void ping() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/ping").accept(MediaType.TEXT_PLAIN))
-        .andExpect(status().isOk())
-        .andExpect(content().string(equalTo("Pong")));
+        .andExpect(status().isForbidden());
+       // .andExpect(content().string(equalTo("Pong")));
     }
 }

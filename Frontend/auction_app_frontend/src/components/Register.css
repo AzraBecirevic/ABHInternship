@@ -78,3 +78,8 @@
     text-decoration: none;
     color:#8367D8;
 }
+
+.errorMessage{
+    font-family: Lato-Regular;
+    color: #CC0000 ;
+}

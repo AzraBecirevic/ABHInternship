@@ -16,7 +16,7 @@ public class Customer {
 
     private String firstName;
     private String lastName;
-    private String username;   //email
+    private String email;
     private String password;
 
     public Integer getId() {
@@ -25,14 +25,6 @@ public class Customer {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getFirstName() {
@@ -49,6 +41,14 @@ public class Customer {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

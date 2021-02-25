@@ -10,6 +10,7 @@ import { faTwitterSquare} from '@fortawesome/free-brands-svg-icons'
 import { faGooglePlus} from '@fortawesome/free-brands-svg-icons'
 
 import React, { Component } from 'react'
+import { REGISTER_ROUTE } from '../constants/routes';
 
 export class NavbarBlack extends Component {
 
@@ -30,7 +31,7 @@ export class NavbarBlack extends Component {
         divUser = <div className="registerLogin">
             <Link  className="upperLink">Login</Link> 
             <Link  className="disabledLink">or</Link>
-            <Link to="/register" className="upperLink">Create account</Link>
+            <Link to={REGISTER_ROUTE} className="upperLink">Create account</Link>
         </div>;
       } 
       else {

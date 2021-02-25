@@ -20,32 +20,45 @@ public class CustomerService {
 
     final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-
-    public Customer registrateCustomer(Customer customer) throws Exception{
-
+    private void checkIfUserAlreadyExist(String username)throws Exception{
         List<Customer> customers = customerRepository.findAll();
         for (Customer c:customers) {
-            if(c.getUsername().equals(customer.getUsername()))
-                throw  new Exception("Enter different mail");
+            if (c.getEmail().equals(username))
+                throw  new Exception("Email you entered already exists");
         }
+    }
 
-        if(customer.getFirstName()==null || customer.getFirstName().isEmpty())
-            throw new Exception("First name is required");
+    private  void validateRequiredField(String field, String errorMessage) throws Exception{
+        if(field==null || field.isEmpty())
+            throw new Exception(errorMessage);
+    }
 
-        if(customer.getLastName()==null || customer.getLastName().isEmpty())
-            throw new Exception("Last name is required");
+    private void validateEmailFormat(String email) throws Exception{
+        if(!Helper.isEmailFormatValid(email))
+            throw  new Exception("Expected email format: example@example.com");
+    }
 
-        if(customer.getUsername() == null || customer.getUsername().isEmpty())
-            throw  new Exception("Email is required");
-
-        if(!Helper.isEmailFormatValid(customer.getUsername()))
-            throw  new Exception("Email format is not valid, email format should be like: example@example.com");
-
-        if(customer.getPassword()==null || customer.getPassword().isEmpty())
-            throw new Exception("Password is required");
-
-        if(!Helper.isPasswordFormatValid(customer.getPassword()))
+    private void validatePasswordFormat(String password) throws Exception{
+        if(!Helper.isPasswordFormatValid(password))
             throw new Exception("Password format is not valid");
+    }
+
+
+    public Customer registerCustomer(Customer customer) throws Exception{
+
+        checkIfUserAlreadyExist(customer.getEmail());
+
+        validateRequiredField(customer.getFirstName(), "First name is required");
+
+        validateRequiredField(customer.getLastName(), "Last name is required");
+
+        validateRequiredField(customer.getEmail(), "Email is required");
+
+        validateEmailFormat(customer.getEmail());
+
+        validateRequiredField(customer.getPassword(),"Password is required");
+
+        validatePasswordFormat(customer.getPassword());
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
@@ -55,11 +68,11 @@ public class CustomerService {
 
     }
 
-    public Customer findByUsername(String username){
+    public Customer findByEmail(String email){
         List<Customer> customers = customerRepository.findAll();
         Customer customer=null;
         for (Customer c:customers) {
-            if(username.equals(c.getUsername())) {
+            if(email.equals(c.getEmail())) {
                 customer=c;
             }
         }

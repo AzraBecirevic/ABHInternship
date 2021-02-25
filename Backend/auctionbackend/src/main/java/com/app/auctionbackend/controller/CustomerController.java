@@ -34,7 +34,7 @@ public class CustomerController {
     @PostMapping(consumes = "application/json")
     public ResponseEntity addCustomer(@RequestBody Customer customer){
         try {
-            Customer registeredCustomer = customerService.registrateCustomer(customer);
+            Customer registeredCustomer = customerService.registerCustomer(customer);
             if(registeredCustomer!=null){
 
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -51,11 +51,5 @@ public class CustomerController {
 
         return new ResponseEntity<>(new Message("Something went wrong"), HttpStatus.BAD_REQUEST);
     }
-
-   /* @GetMapping()
-    public ResponseEntity getCustomers(){
-            List<CustomerDto> customers = customerService.getCustomers();
-            return ResponseEntity.ok(customers);
-    }*/
 
 }

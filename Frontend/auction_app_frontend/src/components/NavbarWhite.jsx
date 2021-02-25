@@ -5,6 +5,8 @@ import logo from '../assets/logo.PNG'
 
 
 import React, { Component } from 'react'
+import { HOME_ROUTE } from '../constants/routes';
+
 
 export class NavbarWhite extends Component {
     render() {
@@ -13,11 +15,11 @@ export class NavbarWhite extends Component {
                 <Nav className="secondNav">
                     <div className="heading">
                         <img className="logoImg" src={logo} alt="Logo"/>
-                        <Link to='/' className="homeLink">AUCTION</Link>
+                        <Link to={HOME_ROUTE} className="homeLink">AUCTION</Link>
                     </div>
                     <div className="searchBar"></div>
                     <div className="menu" >
-                        <Link to='/' className="menuItem">HOME</Link>
+                        <Link to={HOME_ROUTE} className="menuItem">HOME</Link>
                     </div>   
                 </Nav>
         </Navbar>
