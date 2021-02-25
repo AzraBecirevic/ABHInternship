@@ -42,13 +42,10 @@
        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
             this.endpoint = process.env.REACT_APP_API_ENDPOINT_DEVELOP;
             this.port = process.env.REACT_APP_API_PORT_DEVELOP;
-            console.log("dev");
-        
         
         } else {
             this.endpoint = process.env.REACT_APP_API_ENDPOINT_PRODUCTION;
             this.port = process.env.REACT_APP_API_PORT_PRODUCTION;
-            console.log("prod");
         }
 
         const requestOptions = {

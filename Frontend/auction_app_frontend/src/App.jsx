@@ -26,26 +26,26 @@ export class App extends Component {
 
   openPage(e, url){
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-    if (newWindow) newWindow.opener = null
+    if (newWindow) newWindow.opener = null;
+
   }
 
   render() {
     return (
       <Router>
-      <ScrollToTop>
-        <div className="app">
-          <Header openMe={this.openPage}/>
-          <div className="containerDiv">
-            <Route path={HOME_ROUTE} exact component={Home}></Route>
-            <Route path={ABOUT_ROUTE} component={AboutUs}></Route>
-            <Route path={TEARMS_CONDITIONS_ROUTE} component={TearmsAndConditions}></Route>
-            <Route path={PRIVACY_POLICY_ROUTE} component={PrivacyAndPolicy}></Route>
-            <Route path={REGISTER_ROUTE} render={(props) => <Register {...props} onLogin={this.loginCustomer} />} />
-           
+        <ScrollToTop>
+          <div className="app">
+            <Header openMe={this.openPage}/>
+            <div className="containerDiv">
+              <Route path={HOME_ROUTE} exact component={Home}></Route>
+              <Route path={ABOUT_ROUTE} component={AboutUs}></Route>
+              <Route path={TEARMS_CONDITIONS_ROUTE} component={TearmsAndConditions}></Route>
+              <Route path={PRIVACY_POLICY_ROUTE} component={PrivacyAndPolicy}></Route>
+              <Route path={REGISTER_ROUTE} render={(props) => <Register {...props} onLogin={this.loginCustomer} />} /> 
+            </div>
+            <Footer openLink={this.openPage}/>
           </div>
-          <Footer openLink={this.openPage}/>
-        </div>
-      </ScrollToTop>
+        </ScrollToTop>
       </Router>
     )
   }
