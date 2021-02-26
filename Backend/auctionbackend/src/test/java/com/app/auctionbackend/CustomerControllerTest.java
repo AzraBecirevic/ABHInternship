@@ -21,8 +21,7 @@ public class CustomerControllerTest {
     public void registerCustomerShouldReturnBadRequest() throws Exception{
         mvc.perform(MockMvcRequestBuilders.post("/customer")
                 .contentType(MediaType.APPLICATION_JSON)
-                 )
-                .andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -30,8 +29,7 @@ public class CustomerControllerTest {
         mvc.perform(MockMvcRequestBuilders.post("/customer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"firstName\": \"Cust1\", \"lastName\": \"Cust1Lats\", \"email\":\"cust1@mail.com\", \"password\":\"mojpass123@\"}")
-                 )
-                .andExpect(status().isCreated());
+        ).andExpect(status().isCreated());
     }
 
     @Test
@@ -39,8 +37,7 @@ public class CustomerControllerTest {
         mvc.perform(MockMvcRequestBuilders.post("/customer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"firstName\": \"Cust1\", \"lastName\": \"Cust1Lats\", \"email\":\"cust1@mail\", \"password\":\"mojpass123@\"}")
-        )
-                .andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -48,8 +45,7 @@ public class CustomerControllerTest {
         mvc.perform(MockMvcRequestBuilders.post("/customer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"firstName\": \"Cust1\", \"lastName\": \"Cust1Lats\", \"email\":\"cust1@mail.com\", \"password\":\"s12@\"}")
-        )
-                .andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -57,8 +53,7 @@ public class CustomerControllerTest {
         mvc.perform(MockMvcRequestBuilders.post("/customer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"firstName\": \"Cust1\", \"lastName\": \"Cust1Lats\", \"email\":\"cust1@mail.com\", \"password\":\"mojpass123\"}")
-        )
-                .andExpect(status().isBadRequest());
+        ).andExpect(status().isBadRequest());
     }
 
 }
