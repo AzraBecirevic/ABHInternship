@@ -7,6 +7,6 @@ export const ENDPOINT =
     : process.env.REACT_APP_API_ENDPOINT_PRODUCTION;
 
 export const PORT =
-  process.env.NODE_ENV !== "development"
+  !process.env.NODE_ENV || process.env.NODE_ENV === "development"
     ? process.env.REACT_APP_API_PORT_DEVELOP
     : process.env.REACT_APP_API_PORT_PRODUCTION;

@@ -1,9 +1,6 @@
 import { ENDPOINT, PORT } from "../constants/auth";
 
 class AuthService {
-  endpoint;
-  port;
-
   async login(
     email,
     password,
@@ -32,7 +29,6 @@ class AuthService {
       showError("Connection refused. Please try later.");
       return false;
     }
-
     if (response.status === 200) {
       if (rememberMe) {
         localStorage.setItem("token", response.headers.get("authorization"));
@@ -44,9 +40,12 @@ class AuthService {
       showSuccess("You have successfully logged in.");
       return true;
     } else {
-      showError(
-        "Something went wrong with your login, check your email and password and try again."
-      );
+      if (response.status === 404) {
+        showError("Connection refused. Please try again later.");
+      } else {
+        showError("Incorrect email or password.");
+      }
+
       return false;
     }
   }
@@ -90,11 +89,23 @@ class AuthService {
       showSuccess("You have successfully registered.");
       return true;
     } else {
-      var data = await response.json();
-      showError(data.text);
+      try {
+        var data = await response.json();
+        showError(data.text);
+      } catch (err) {
+        showError("Connection refused. Please try later.");
+      }
       return false;
     }
   }
+
+  logout = () => {
+    const logoutKeys = ["email", "token"];
+    logoutKeys.forEach((key) => {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    });
+  };
 }
 
 export default AuthService;

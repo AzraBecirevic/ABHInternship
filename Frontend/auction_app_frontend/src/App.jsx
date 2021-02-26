@@ -24,6 +24,7 @@ import Login from "./components/Login";
 import LoadingSpinner from "./components/LoadingSpinner";
 import jwtDecoder from "jwt-decode";
 import ToastService from "./services/toastService";
+import AuthService from "./services/authService";
 
 export class App extends Component {
   state = {
@@ -35,19 +36,16 @@ export class App extends Component {
   email = "";
 
   toastService = new ToastService();
+  authService = new AuthService();
 
   componentDidMount() {
-    if (sessionStorage.getItem("token") != null) {
-      this.loginCustomer(
-        sessionStorage.getItem("email"),
-        sessionStorage.getItem("token")
-      );
-    }
-    if (localStorage.getItem("token") !== null) {
-      this.loginCustomer(
-        localStorage.getItem("email"),
-        localStorage.getItem("token")
-      );
+    var email;
+    var token;
+
+    if (localStorage.getItem("token") != null) {
+      email = localStorage.getItem("email");
+      token = localStorage.getItem("token");
+
       var decodedJWT = jwtDecoder(localStorage.getItem("token"));
       var exp = decodedJWT.exp;
 
@@ -55,11 +53,17 @@ export class App extends Component {
       var expirationDate = new Date(exp * 1000);
 
       if (currentDate > expirationDate) {
-        this.logoutCustomer();
         this.toastService.showInfoToast(
           "Your session has expired. Please login again."
         );
       }
+    }
+    if (sessionStorage.getItem("token") != null) {
+      email = sessionStorage.getItem("email");
+      token = sessionStorage.getItem("token");
+    }
+    if (email != null && token != null) {
+      this.loginCustomer(email, token);
     }
   }
 
@@ -70,23 +74,17 @@ export class App extends Component {
   };
 
   logoutCustomer = () => {
-    if (localStorage.getItem("token") != null) {
-      localStorage.removeItem("token");
-      if (localStorage.getItem("email") != null) {
-        localStorage.removeItem("email");
-      }
+    try {
+      this.authService.logout();
+      this.email = "";
+      this.jwtToken = "";
+      this.setState({ isLoggedIn: false });
+      this.toastService.showSuccessToast("You have successfully log out.");
+    } catch (err) {
+      this.toastService.showErrorToast(
+        "It is not possible to log you out now. Please try later"
+      );
     }
-
-    if (sessionStorage.getItem("token") != null) {
-      sessionStorage.removeItem("token");
-      if (sessionStorage.getItem("email") != null) {
-        sessionStorage.removeItem("email");
-      }
-    }
-    this.email = "";
-    this.jwtToken = "";
-
-    this.setState({ isLoggedIn: false });
   };
 
   setIsLoading = (isLoadingValue) => {
