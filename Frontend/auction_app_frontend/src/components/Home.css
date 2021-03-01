@@ -86,8 +86,8 @@ a.nav-link {
 }
 
 .tabProductImage {
-  max-width: 260px;
-  height: 260px;
+  width: 100%;
+  height: 100%;
 }
 
 .mainProductName {
@@ -129,4 +129,11 @@ a.nav-link {
   padding-left: 20px;
   padding-right: 20px;
   margin-top: 23px;
+}
+
+@media (max-width: 750px) {
+  .homeBodyDiv {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }

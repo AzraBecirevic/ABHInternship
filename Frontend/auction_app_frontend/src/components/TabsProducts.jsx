@@ -11,12 +11,12 @@ export class TabsProducts extends Component {
       <div className="row">
         <div className="col-lg-2"></div>
         <div className="col-lg-12">
-          <div className="row">
+          <div className="row imagetiles">
             {this.props.array != null &&
               this.props.array.map(function (product) {
                 return (
                   <div
-                    className="col-sm-12 col-md-6 col-lg-4"
+                    className="col-lg-3 col-md-3 col-sm-6 col-xs-6"
                     key={product.id}
                     style={{ marginTop: "40px" }}
                   >
