@@ -63,38 +63,40 @@ export class Home extends Component {
     return (
       <div className="homeDiv">
         <div className="homeHeadingDiv">
-          <div className="row">
-            <div className="col-lg-4">
+          <div className="row headingrow">
+            <div className="col-lg-4 col-sm-4 homemenu">
               <CategoriesMenu
                 categories={this.state.categories}
               ></CategoriesMenu>
             </div>
-            <div className="col-lg-8">
+            <div className="col-lg-6 col-sm-8 mainProduct">
               {this.state.product != null && (
-                <div style={{ marginTop: "133px" }}>
-                  <div className="mainProductName">
-                    {this.state.product.name}
+                <div className="row mainProductDiv">
+                  <div className="col-lg-5 mainProductData">
+                    <div className="mainProductName">
+                      {this.state.product.name}
+                    </div>
+                    <div className="">
+                      <div style={{ paddingRight: "0" }}>
+                        <div className="mainProductPrice">
+                          Starts from - ${this.state.product.startPrice}
+                        </div>
+                        <div className="mainProductDesc">
+                          {this.state.product.description}
+                        </div>
+                        {this.props.isLoggedIn && (
+                          <button className="mainBidButton">
+                            BID NOW {this.arrow}{" "}
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="row">
-                    <div className="col-lg-5" style={{ paddingRight: "0" }}>
-                      <div className="mainProductPrice">
-                        Starts from - ${this.state.product.startPrice}
-                      </div>
-                      <div className="mainProductDesc">
-                        {this.state.product.description}
-                      </div>
-                      {this.props.isLoggedIn && (
-                        <button className="mainBidButton">
-                          BID NOW {this.arrow}{" "}
-                        </button>
-                      )}
-                    </div>
-                    <div className="col-lg-6" style={{ paddingLeft: "0" }}>
-                      <img
-                        className="mainProductImage"
-                        src={`data:image/png;base64, ${this.state.product.imageList[0].image}`}
-                      />
-                    </div>
+                  <div className="col-lg-6 col-sm-12 image">
+                    <img
+                      className="mainProductImage"
+                      src={`data:image/png;base64, ${this.state.product.imageList[0].image}`}
+                    />
                   </div>
                 </div>
               )}

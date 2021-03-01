@@ -131,9 +131,53 @@ a.nav-link {
   margin-top: 23px;
 }
 
-@media (max-width: 750px) {
+.mainProductDiv {
+  margin-top: 133px;
+}
+
+.homeDiv {
+  margin-bottom: 200px;
+}
+
+div.col-lg-6.col-sm-12.image {
+  margin-top: 50px;
+}
+
+@media (max-width: 900px) {
   .homeBodyDiv {
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  .homeHeadingDiv {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .homeHeadingMenu {
+    margin-right: 0%;
+    width: 100%;
+  }
+
+  div.headingrow div.col-lg-4.homemenu {
+    padding-right: 0;
+  }
+
+  div.row.mainProductDiv {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  div.row.mainProductDiv div:first-child {
+    order: 2;
+  }
+
+  div.col-lg-6.col-sm-12.image {
+    margin-top: 0;
+  }
+
+  .mainProductImage {
+    width: 100%;
   }
 }
