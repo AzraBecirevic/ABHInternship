@@ -1,7 +1,5 @@
 package com.app.auctionbackend.helper;
 
-import io.swagger.models.auth.In;
-
 import java.util.regex.Pattern;
 
 import static com.app.auctionbackend.helper.ValidationConstants.PASSWORD_MAX_LENGTH;
@@ -31,4 +29,5 @@ public class Helper {
            return false;
        return pat.matcher(password).matches();
    }
+
 }

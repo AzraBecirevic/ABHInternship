@@ -108,69 +108,71 @@ export class Login extends Component {
       <div>
         <div>
           <Heading title="LOGIN"></Heading>
-          <div className="row">
-            <div className="col-lg-3"></div>
-            <div className="col-lg-6">
-              <div className="register">
-                <div className="registerHeadingDiv">
-                  <p className="registerHeading">LOGIN</p>
-                </div>
-                <div className="formDiv">
-                  <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                      <label className="formLabel">Enter Email</label>
-                      <input
-                        type="text"
-                        name="email"
-                        className="form-control"
-                        value={this.state.email}
-                        onChange={this.onChange}
-                      />
-                      <small
-                        className="errorMessage"
-                        hidden={this.state.emailErrMess === ""}
-                      >
-                        {this.state.emailErrMess}
-                      </small>
-                    </div>
-                    <div className="form-group">
-                      <label className="formLabel">Password</label>
-                      <input
-                        type="password"
-                        name="password"
-                        className="form-control"
-                        value={this.state.password}
-                        onChange={this.onChange}
-                      />
-                      <small
-                        className="errorMessage"
-                        hidden={this.state.passwordErrMess === ""}
-                      >
-                        {this.state.passwordErrMess}
-                      </small>
-                    </div>
-                    <div className="form-group">
-                      <input
-                        type="checkbox"
-                        name="rememberMe"
-                        checked={this.state.rememberMe}
-                        onChange={this.toggleCheck}
-                      />
+          <div className="loginDiv">
+            <div className="row">
+              <div className="col-lg-3"></div>
+              <div className="col-lg-6">
+                <div className="register">
+                  <div className="registerHeadingDiv">
+                    <p className="registerHeading">LOGIN</p>
+                  </div>
+                  <div className="formDiv">
+                    <form onSubmit={this.onSubmit}>
+                      <div className="form-group">
+                        <label className="formLabel">Enter Email</label>
+                        <input
+                          type="text"
+                          name="email"
+                          className="form-control"
+                          value={this.state.email}
+                          onChange={this.onChange}
+                        />
+                        <small
+                          className="errorMessage"
+                          hidden={this.state.emailErrMess === ""}
+                        >
+                          {this.state.emailErrMess}
+                        </small>
+                      </div>
+                      <div className="form-group">
+                        <label className="formLabel">Password</label>
+                        <input
+                          type="password"
+                          name="password"
+                          className="form-control"
+                          value={this.state.password}
+                          onChange={this.onChange}
+                        />
+                        <small
+                          className="errorMessage"
+                          hidden={this.state.passwordErrMess === ""}
+                        >
+                          {this.state.passwordErrMess}
+                        </small>
+                      </div>
+                      <div className="form-group">
+                        <input
+                          type="checkbox"
+                          name="rememberMe"
+                          checked={this.state.rememberMe}
+                          onChange={this.toggleCheck}
+                        />
 
-                      <label className="formLabel">Remember me</label>
-                    </div>
-                    <button
-                      disabled={this.state.disableLoginButton}
-                      type="submit"
-                      className="loginBtn"
-                    >
-                      LOGIN
-                    </button>
-                  </form>
+                        <label className="formLabel">Remember me</label>
+                      </div>
+                      <button
+                        disabled={this.state.disableLoginButton}
+                        type="submit"
+                        className="loginBtn"
+                      >
+                        LOGIN
+                      </button>
+                    </form>
+                  </div>
                 </div>
               </div>
+              <div className="col-lg-3"></div>
             </div>
-            <div className="col-lg-3"></div>
           </div>
         </div>
       </div>

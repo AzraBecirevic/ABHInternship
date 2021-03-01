@@ -2,7 +2,6 @@ package com.app.auctionbackend.dtos;
 
 public class CustomerDto {
 
-    // private Integer id;
     private String firstName;
     private String lastName;
     private String username;
@@ -23,7 +22,6 @@ public class CustomerDto {
         this.lastName = lastName;
     }
 
-
     public String getUsername() {
         return username;
     }
@@ -31,4 +29,5 @@ public class CustomerDto {
     public void setUsername(String username) {
         this.username = username;
     }
+
 }

@@ -1,15 +1,12 @@
 package com.app.auctionbackend.service;
 
-import com.app.auctionbackend.dtos.CustomerDto;
 import com.app.auctionbackend.helper.Helper;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.repo.CustomerRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("customerService")

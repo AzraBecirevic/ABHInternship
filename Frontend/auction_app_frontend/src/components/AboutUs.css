@@ -1,32 +1,33 @@
-.aboutTextDiv{
-    font-family: Lato-Regular;
-    font-size: 18px;
-    color: #9B9B9B;
-    letter-spacing: 0.63px;
-    line-height: 25px;
-    width:500px;
-    margin-right: 110px;
+.aboutTextDiv {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #9b9b9b;
+  letter-spacing: 0.63px;
+  line-height: 25px;
+  width: 500px;
+  margin-right: 110px;
 }
 
-.aboutImageOne{
-    width:500px;
-    margin-bottom:11px;
+.aboutImageOne {
+  width: 500px;
+  margin-bottom: 11px;
 }
 
-.aboutImagesTwo{
-    width:500px;
-    display:flex;
-    justify-content:space-between;
+.aboutImagesTwo {
+  width: 500px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.aboutHeading{
-    font-family: Lato-Regular;
-    font-size: 46px;
-    color: #252525;
-    letter-spacing: 1.61px;
+.aboutHeading {
+  font-family: Lato-Regular;
+  font-size: 46px;
+  color: #252525;
+  letter-spacing: 1.61px;
 }
 
-.aboutUs{
-    margin-left: 160px;
-    margin-right:160px ;
+.aboutUs {
+  margin-top: 85px;
+  margin-left: 160px;
+  margin-right: 160px;
 }

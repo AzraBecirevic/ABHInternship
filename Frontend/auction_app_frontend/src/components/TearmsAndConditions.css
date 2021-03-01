@@ -1,34 +1,38 @@
-.tearmsConditionsDiv{
-    font-family: 'Lato-Regular';
+.container {
+  margin-top: 85px;
 }
 
-.termsHeading{
-    font-family: Lato-Regular;
-    font-size: 46px;
-    color: #252525;
-    letter-spacing: 1.61px;
+.tearmsConditionsDiv {
+  font-family: "Lato-Regular";
 }
 
-.linkTearms{
-    color: #9B9B9B;
+.termsHeading {
+  font-family: Lato-Regular;
+  font-size: 46px;
+  color: #252525;
+  letter-spacing: 1.61px;
 }
 
-.linkTearms:hover{
-    color: #9B9B9B;
+.linkTearms {
+  color: #9b9b9b;
 }
 
-.tearmsSubTitle{
-    font-family: Lato-Regular;
-    font-size: 24px;
-    color: #252525;
-    letter-spacing: 0.84px;
+.linkTearms:hover {
+  color: #9b9b9b;
 }
 
-.termsTextDiv{
-    font-family: Lato-Regular;
-    font-size: 18px;
-    color: #9B9B9B;
-    letter-spacing: 0.63px;
-    line-height: 25px;
-    padding-bottom: 20px;
+.tearmsSubTitle {
+  font-family: Lato-Regular;
+  font-size: 24px;
+  color: #252525;
+  letter-spacing: 0.84px;
+}
+
+.termsTextDiv {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #9b9b9b;
+  letter-spacing: 0.63px;
+  line-height: 25px;
+  padding-bottom: 20px;
 }
