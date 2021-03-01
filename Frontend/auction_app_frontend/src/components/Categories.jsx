@@ -4,6 +4,7 @@ import Heading from "./Heading";
 import styles from "./Categories.css";
 import { Link } from "react-router-dom";
 import ProductService from "../services/productService";
+import ToastService from "../services/toastService";
 
 export class Categories extends Component {
   constructor(props) {
@@ -18,27 +19,28 @@ export class Categories extends Component {
 
   categoryService = new CategoryService();
   productService = new ProductService();
+  toastService = new ToastService();
 
   componentDidMount = async () => {
-    const { chosenCategory } = this.props.location.state;
-    this.state.categoryId = chosenCategory;
-    this.setState({
-      categories: await this.categoryService.getCategories(false),
-    });
-    this.setState({
-      products: await this.productService.getProductsByCategoryId(
-        true,
-        this.state.categoryId
-      ),
-    });
+    try {
+      const { chosenCategory } = this.props.location.state;
+      this.state.categoryId = chosenCategory;
+      this.setState({
+        categories: await this.categoryService.getCategories(),
+      });
+      this.setState({
+        products: await this.productService.getProductsByCategoryId(
+          this.state.categoryId
+        ),
+      });
+    } catch (error) {
+      this.toastService.showErrorToast("Connection refused. Please try later.");
+    }
   };
 
   handleCategoryChange = async (categoryID) => {
     this.setState({
-      products: await this.productService.getProductsByCategoryId(
-        false,
-        categoryID
-      ),
+      products: await this.productService.getProductsByCategoryId(categoryID),
     });
   };
 
@@ -95,6 +97,9 @@ export class Categories extends Component {
                   })}
               </div>
             </div>
+          </div>
+          <div className="exploreDiv">
+            <button className="exploreButton">EXPLORE MORE</button>
           </div>
         </div>
       </div>

@@ -24,21 +24,26 @@ export class Home extends Component {
   arrow = ">";
   categoryService = new CategoryService();
   productService = new ProductService();
+  toastService = new ToastService();
 
   componentDidMount = async () => {
-    this.setState({ product: await this.productService.getProduct(true) });
-    this.setState({
-      categories: await this.categoryService.getCategories(false),
-    });
-    // takes only first nine categories, if length > 9
-    if (this.state.categories != null && this.state.categories.length > 9) {
-      this.setState({ categories: this.state.categories.slice(0, 8) });
-    }
-    this.setState({ products: await this.productService.getProducts(false) });
+    try {
+      this.setState({ product: await this.productService.getProduct() });
+      this.setState({
+        categories: await this.categoryService.getCategories(),
+      });
+      // takes only first nine categories, if length > 9
+      if (this.state.categories != null && this.state.categories.length > 9) {
+        this.setState({ categories: this.state.categories.slice(0, 8) });
+      }
+      this.setState({ products: await this.productService.getProducts() });
 
-    this.setState({
-      newArrivals: await this.productService.getNewArrivals(false),
-    });
+      this.setState({
+        newArrivals: await this.productService.getNewArrivals(),
+      });
+    } catch (error) {
+      this.toastService.showErrorToast("Connection refused. Please try later.");
+    }
   };
 
   handleTabSelect = async (key) => {
@@ -97,29 +102,6 @@ export class Home extends Component {
           </div>
         </div>
         <div className="homeBodyDiv">
-          <div className="row">
-            {this.state.products != null &&
-              this.state.products.map(function (product) {
-                return (
-                  <div
-                    className="col-lg-4"
-                    key={product.id}
-                    style={{ marginTop: "40px" }}
-                  >
-                    <img
-                      className="homeProductImage"
-                      src={`data:image/png;base64, ${product.image}`}
-                    />
-                    <div>
-                      <a className="productNameLink">{product.name}</a>
-                    </div>
-                    <div className="startsFrom">
-                      Starts from ${product.startPrice}
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
           <div className="homeTabsDiv">
             <Tabs
               defaultActiveKey="newArrivals"

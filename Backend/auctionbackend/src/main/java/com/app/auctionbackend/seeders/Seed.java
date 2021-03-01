@@ -58,7 +58,7 @@ public class Seed {
             Image image = new Image();
             try{
 
-                byte[] fileContent = FileUtils.readFileToByteArray( new File("src/main/resources/images/Sneakers.jpg") );
+                byte[] fileContent = FileUtils.readFileToByteArray( new File("src/main/resources/images/Sneakers2.PNG") );
                 String encodedString = Base64.getEncoder().encodeToString(fileContent);
                 image.setImage(encodedString);
             }
@@ -129,6 +129,46 @@ public class Seed {
             c.setName("Category "+(i+4));
             categoryRepository.save(c);
         }
+
+        //
+        Category c = new Category();
+        c.setName("Category 11");
+        categoryRepository.save(c);
+
+        Subcategory subcategory = new Subcategory();
+        subcategory.setName("Subcategory");
+
+        subcategory.setCategory(c);
+        subcategoryRepository.save(subcategory);
+
+        Image image = new Image();
+        try{
+
+            byte[] fileContent = FileUtils.readFileToByteArray( new File("src/main/resources/images/Sneakers2.PNG") );
+            String encodedString = Base64.getEncoder().encodeToString(fileContent);
+            image.setImage(encodedString);
+        }
+        catch (Exception ex){
+
+        }
+        List<Image> images = new ArrayList<>();
+        images.add(image);
+
+        Product p = new Product();
+        p.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis. Integer nec gravida velit, eget efficitur sapien. Nunc eget auctor lorem.");
+        LocalDateTime endDate = LocalDateTime.of(2021,3,3,0,0);
+        p.setEndDate(endDate);
+        LocalDateTime startDate = LocalDateTime.of(2021,2,20,0,0);
+        p.setStartDate(startDate);
+        p.setName("Product");
+        p.setStartPrice(50);
+
+        images.get(0).setProduct(p);
+
+        p.setImageList(images);
+
+        productRepository.save(p);
+        imageRepository.save(image);
     }
 }
 

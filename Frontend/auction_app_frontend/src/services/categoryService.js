@@ -1,7 +1,7 @@
 import { ENDPOINT, PORT } from "../constants/auth";
 
 class CategoryService {
-  async getCategories(isFirstCall) {
+  async getCategories() {
     const requestOptions = {
       method: "GET",
     };
@@ -15,18 +15,10 @@ class CategoryService {
         return;
       }
     });
-    if (!response) {
-      if (isFirstCall) {
-        this.showErrorMessage("Connection refused. Please try later.");
-      }
-      return null;
+    if (!response || response.status === 404) {
+      throw response;
     }
-    if (response.status === 404) {
-      if (isFirstCall) {
-        this.showErrorMessage("Connection refused. Please try later.");
-      }
-      return null;
-    }
+
     if (response.status === 200) {
       var categoryList = await response.json();
       return categoryList;

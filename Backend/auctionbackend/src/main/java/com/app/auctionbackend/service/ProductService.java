@@ -108,7 +108,7 @@ public class ProductService {
 
     public ProductDetailsDto getMostExpensiveProduct(){
         List<Product> products = productRepository.findByOrderByStartPrice();
-        if(products==null)
+        if(products==null || products.size()==0)
             return null;
         Product product = products.get(products.size()-1); //last
 

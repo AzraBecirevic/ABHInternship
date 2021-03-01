@@ -1,37 +1,27 @@
 import { ENDPOINT, PORT } from "../constants/auth";
-import ToastService from "./toastService";
 
 class ProductService {
-  toastService = new ToastService();
-
-  showErrorMessage = (errorMessage) => {
-    this.toastService.showErrorToast(errorMessage);
-  };
-
-  async getProducts(isFirstCall) {
-    return await this.getData("/product/getOffered", isFirstCall);
+  async getProducts() {
+    return await this.getData("/product/getOffered");
   }
 
-  async getNewArrivals(isFirstCall) {
-    return await this.getData("/product/newArrivals", isFirstCall);
+  async getNewArrivals() {
+    return await this.getData("/product/newArrivals");
   }
 
-  async getLastChance(isFirstCall) {
-    return await this.getData("/product/lastChance", isFirstCall);
+  async getLastChance() {
+    return await this.getData("/product/lastChance");
   }
 
-  async getProductsByCategoryId(isFirstCall, chosenCategory) {
-    return await this.getData(
-      "/product/byCategory/" + chosenCategory,
-      isFirstCall
-    );
+  async getProductsByCategoryId(chosenCategory) {
+    return await this.getData("/product/byCategory/" + chosenCategory);
   }
 
-  async getProduct(isFirstCall) {
-    return await this.getData("/product/getMostExpensive", isFirstCall);
+  async getProduct() {
+    return await this.getData("/product/getMostExpensive");
   }
 
-  async getData(link, isFirstCall) {
+  async getData(link) {
     const requestOptions = {
       method: "GET",
     };
@@ -44,18 +34,10 @@ class ProductService {
         }
       }
     );
-    if (!response) {
-      if (isFirstCall) {
-        this.showErrorMessage("Connection refused. Please try later.");
-      }
-      return null;
+    if (!response || response.status === 404) {
+      throw response;
     }
-    if (response.status === 404) {
-      if (isFirstCall) {
-        this.showErrorMessage("Connection refused. Please try later.");
-      }
-      return null;
-    }
+
     if (response.status === 200) {
       var data = await response.json();
       return data;
