@@ -44,22 +44,22 @@ public class ProductController {
         return new ResponseEntity<List<ProductDto>>(productDtos, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/newArrivals")
-    public List<ProductDto> getNewArrivals(){
-        List<ProductDto> productDtos = productService.getNewArrivals();
-        return productDtos;
-    }
-
-    @GetMapping(value = "/lastChance")
-    public List<ProductDto> getLastChanceProducts(){
-        List<ProductDto> productDtos = productService.getLastChanceProducts();
-        return productDtos;
-    }
-
     @GetMapping(value = "/getMostExpensive")
     public ProductDetailsDto getMostExpensiveProduct(){
         ProductDetailsDto productDetailsDto = productService.getMostExpensiveProduct();
         return productDetailsDto;
+    }
+
+    @GetMapping(value = "/newArrivals/{number}")
+    public List<ProductDto> getNewArrivalsInfProduct(@PathVariable Integer number){
+        List<ProductDto> productDtos = productService.getNewArrivalsInfProduct(number);
+        return productDtos;
+    }
+
+    @GetMapping(value = "/lastChance/{number}")
+    public List<ProductDto> getLastChanceInfProduct(@PathVariable Integer number){
+        List<ProductDto> productDtos = productService.getLastChanceInfProduct(number);
+        return productDtos;
     }
 
 }

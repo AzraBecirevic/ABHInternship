@@ -70,7 +70,7 @@ public class Seed {
 
             Product p = new Product();
             p.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-            LocalDateTime endDate = LocalDateTime.of(2021,3,3,0,0);
+            LocalDateTime endDate = LocalDateTime.of(2021,3,4,0,0);
             p.setEndDate(endDate);
             LocalDateTime startDate = LocalDateTime.of(2021,2,20,0,0);
             p.setStartDate(startDate);

@@ -20,14 +20,20 @@ export class Home extends Component {
     products: null,
     newArrivals: null,
     lastChance: null,
+    hasMoreNewArrivalsData: true,
+    hasMoreLastChanceData: true,
+    isNewArrivalsTab: true,
+    fetchNumber: 1,
   };
   arrow = ">";
   categoryService = new CategoryService();
   productService = new ProductService();
   toastService = new ToastService();
+  fetchNumber = 0;
 
   componentDidMount = async () => {
     try {
+      this.fetchNumber = 1;
       this.setState({ product: await this.productService.getProduct() });
       this.setState({
         categories: await this.categoryService.getCategories(),
@@ -39,8 +45,50 @@ export class Home extends Component {
       this.setState({ products: await this.productService.getProducts() });
 
       this.setState({
-        newArrivals: await this.productService.getNewArrivals(),
+        newArrivals: await this.productService.getNewArrivals(1),
       });
+    } catch (error) {
+      this.toastService.showErrorToast("Connection refused. Please try later.");
+    }
+  };
+
+  fetchMoreNewArrivals = async () => {
+    try {
+      if (this.state.isNewArrivalsTab && this.state.newArrivals != null) {
+        this.fetchNumber = this.fetchNumber + 1;
+        const newProducts = await this.productService.getNewArrivals(
+          this.fetchNumber
+        );
+
+        if (newProducts !== null && newProducts.length > 0) {
+          this.setState({
+            newArrivals: this.state.newArrivals.concat(newProducts),
+          });
+        } else {
+          this.setState({ hasMoreNewArrivalsData: false });
+        }
+      }
+    } catch (error) {
+      this.toastService.showErrorToast("Connection refused. Please try later.");
+    }
+  };
+
+  fetchMoreLastChance = async () => {
+    try {
+      if (!this.state.isNewArrivalsTab && this.state.lastChance != null) {
+        this.fetchNumber = this.fetchNumber + 1;
+        const lastChanceProducts = await this.productService.getLastChance(
+          this.fetchNumber
+        );
+
+        if (lastChanceProducts !== null && lastChanceProducts.length > 0) {
+          this.setState({
+            lastChance: this.state.lastChance.concat(lastChanceProducts),
+          });
+        } else {
+          this.setState({ hasMoreLastChanceData: false });
+        }
+      }
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");
     }
@@ -48,13 +96,19 @@ export class Home extends Component {
 
   handleTabSelect = async (key) => {
     if (key === "newArrivals") {
-      /* this.setState({
-        newArrivals: await this.productService.getNewArrivals(),
-      });*/
+      this.fetchNumber = 1;
+      this.setState({
+        isNewArrivalsTab: true,
+        hasMoreNewArrivalsData: true,
+        newArrivals: await this.productService.getNewArrivals(1),
+      });
     }
     if (key === "lastChance") {
+      this.fetchNumber = 1;
       this.setState({
-        lastChance: await this.productService.getLastChance(false),
+        isNewArrivalsTab: false,
+        hasMoreLastChanceData: true,
+        lastChance: await this.productService.getLastChance(1),
       });
     }
   };
@@ -120,10 +174,18 @@ export class Home extends Component {
                   onSelect={this.handleTabSelect}
                 >
                   <Tab eventKey="newArrivals" title="New Arrivals">
-                    <TabsProducts array={this.state.newArrivals}></TabsProducts>
+                    <TabsProducts
+                      array={this.state.newArrivals}
+                      fetchMore={this.fetchMoreNewArrivals}
+                      hasMore={this.state.hasMoreNewArrivalsData}
+                    ></TabsProducts>
                   </Tab>
                   <Tab eventKey="lastChance" title="LastChance">
-                    <TabsProducts array={this.state.lastChance}></TabsProducts>
+                    <TabsProducts
+                      array={this.state.lastChance}
+                      fetchMore={this.fetchMoreLastChance}
+                      hasMore={this.state.hasMoreLastChanceData}
+                    ></TabsProducts>
                   </Tab>
                 </Tabs>
               </div>

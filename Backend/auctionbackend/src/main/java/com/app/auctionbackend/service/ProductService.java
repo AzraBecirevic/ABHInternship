@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import static com.app.auctionbackend.helper.InfinityScrollConstants.NUMBER_PER_CALL;
+
 @Service("productService")
 public class ProductService {
 
@@ -106,11 +108,52 @@ public class ProductService {
         return productDtos;
     }
 
+    public  List<ProductDto> getNewArrivalsInfProduct(Integer number){
+        List<ProductDto> newArrivals = getNewArrivals();
+
+        if(newArrivals == null || newArrivals.size() == 0)
+            return null;
+
+        Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
+        Integer to = (number * NUMBER_PER_CALL);
+
+        if(number * NUMBER_PER_CALL > newArrivals.size())
+            to = newArrivals.size();
+
+        List<ProductDto> newArrivalsInf = new ArrayList<>();
+
+        for(int i = from; i < to; i++){
+            newArrivalsInf.add(newArrivals.get(i));
+        }
+
+        return newArrivalsInf;
+    }
+
+    public  List<ProductDto> getLastChanceInfProduct(Integer number){
+        List<ProductDto> lastChance = getLastChanceProducts();
+
+        if(lastChance == null || lastChance.size() == 0)
+            return null;
+
+        Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
+        Integer to = (number * NUMBER_PER_CALL);
+
+        if(number * NUMBER_PER_CALL > lastChance.size())
+            to = lastChance.size();
+
+        List<ProductDto> lastChanceInf = new ArrayList<>();
+
+        for(int i = from; i < to; i++){
+            lastChanceInf.add(lastChance.get(i));
+        }
+        return lastChanceInf;
+    }
+
     public ProductDetailsDto getMostExpensiveProduct(){
         List<Product> products = productRepository.findByOrderByStartPrice();
         if(products==null || products.size()==0)
             return null;
-        Product product = products.get(products.size()-1); //last
+        Product product = products.get(products.size()-1);
 
         if(product!=null){
             ModelMapper modelMapper = new ModelMapper();

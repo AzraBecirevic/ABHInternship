@@ -5,12 +5,12 @@ class ProductService {
     return await this.getData("/product/getOffered");
   }
 
-  async getNewArrivals() {
-    return await this.getData("/product/newArrivals");
+  async getNewArrivals(fetchNumber) {
+    return await this.getData("/product/newArrivals/" + fetchNumber);
   }
 
-  async getLastChance() {
-    return await this.getData("/product/lastChance");
+  async getLastChance(fetchNumber) {
+    return await this.getData("/product/lastChance/" + fetchNumber);
   }
 
   async getProductsByCategoryId(chosenCategory) {
