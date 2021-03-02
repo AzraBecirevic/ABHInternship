@@ -9,14 +9,13 @@ export class TabsProducts extends Component {
   render() {
     return (
       <div className="row">
-        <div className="col-lg-2"></div>
         <div className="col-lg-12">
           <div className="row imagetiles">
             {this.props.array != null &&
               this.props.array.map(function (product) {
                 return (
                   <div
-                    className="col-lg-3 col-md-3 col-sm-6 col-xs-6"
+                    className="col-lg-3 col-md-3 col-sm-6 col-xs-6 tabsProductDiv"
                     key={product.id}
                     style={{ marginTop: "40px" }}
                   >
@@ -36,7 +35,6 @@ export class TabsProducts extends Component {
               })}
           </div>
         </div>
-        <div className="col-lg-2"></div>
       </div>
     );
   }

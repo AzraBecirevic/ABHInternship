@@ -1,13 +1,14 @@
-.homeHeadingDiv {
-  height: 563px;
+.homeHeadingDiv div.row {
   background-color: #fafafa;
-  padding-left: 160px;
-  padding-right: 160px;
 }
 
+.homeHeadingMenu {
+  height: 563px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
+}
 .homeBodyDiv {
-  padding-left: 160px;
-  padding-right: 160px;
   margin-top: 56px;
 }
 
@@ -112,8 +113,8 @@ a.nav-link {
 }
 
 .mainProductImage {
-  width: 400px;
-  height: 294px;
+  width: 100%;
+  padding-top: 30px;
 }
 
 .mainBidButton {
@@ -132,7 +133,7 @@ a.nav-link {
 }
 
 .mainProductDiv {
-  margin-top: 133px;
+  margin-top: 120px;
 }
 
 .homeDiv {
@@ -143,7 +144,22 @@ div.col-lg-6.col-sm-12.image {
   margin-top: 50px;
 }
 
-@media (max-width: 900px) {
+div.col-lg-3.col-md-3.col-sm-6.col-xs-6.tabsProductDiv {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+div.col-lg-9.col-md-8.col-sm-8.mainProduct {
+  padding-left: 50px;
+}
+
+@media (max-width: 1500px) {
+  .mainProductImage {
+    padding-top: 70px;
+  }
+}
+
+@media (max-width: 991.5px) {
   .homeBodyDiv {
     padding-left: 10px;
     padding-right: 10px;
@@ -157,6 +173,9 @@ div.col-lg-6.col-sm-12.image {
   .homeHeadingMenu {
     margin-right: 0%;
     width: 100%;
+  }
+  div.col-lg-9.col-md-8.col-sm-8.mainProduct {
+    padding-left: 0px;
   }
 
   div.headingrow div.col-lg-4.homemenu {
@@ -179,5 +198,36 @@ div.col-lg-6.col-sm-12.image {
 
   .mainProductImage {
     width: 100%;
+  }
+}
+
+@media (max-width: 575.5px) {
+  .header {
+    background-color: yellow;
+  }
+
+  .homeDiv {
+    padding-right: 0%;
+  }
+
+  .homeHeadingDiv {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .homeBodyDiv {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  div.col-lg-3.col-md-4.col-sm-4.homemenu {
+    padding-right: 0%;
+  }
+  div.col-lg-9.col-md-8.col-sm-8.mainProduct {
+    padding-right: 0%;
+    padding-left: 0px;
+  }
+  div.homeBodyDiv.row.col-lg-8 {
+    padding-right: 0;
   }
 }

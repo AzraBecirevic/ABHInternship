@@ -32,7 +32,7 @@ export class CategoriesMenu extends Component {
                   </li>
                 );
               })}
-            <li className="menuCategoriesItem">
+            <li className="menuAllCategoriesItem">
               <a className="categoryLink">All categories</a>
             </li>
           </ul>

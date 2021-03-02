@@ -44,7 +44,7 @@ public class Seed {
         customer.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer);
 
-        for(int i = 1; i <= 3; i++){
+        for(int i = 1; i <= 6; i++){
             Category c = new Category();
             c.setName("Category "+i);
             categoryRepository.save(c);
@@ -69,7 +69,7 @@ public class Seed {
             images.add(image);
 
             Product p = new Product();
-            p.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis. Integer nec gravida velit, eget efficitur sapien. Nunc eget auctor lorem.");
+            p.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
             LocalDateTime endDate = LocalDateTime.of(2021,3,3,0,0);
             p.setEndDate(endDate);
             LocalDateTime startDate = LocalDateTime.of(2021,2,20,0,0);
@@ -101,7 +101,7 @@ public class Seed {
 
 
             Product pr = new Product();
-            pr.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis. Integer nec gravida velit, eget efficitur sapien. Nunc eget auctor lorem.");
+            pr.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis. ");
             LocalDateTime endDate2 = LocalDateTime.of(2021,3,28,0,0);
             pr.setEndDate(endDate2);
             LocalDateTime startDate2 = LocalDateTime.of(2021,2,27,0,0);
@@ -124,15 +124,15 @@ public class Seed {
             subcategoryRepository.save(subcategory);
         }
 
-        for(int i =0;i<7;i++){
+       /* for(int i =0;i<7;i++){
             Category c = new Category();
             c.setName("Category "+(i+4));
             categoryRepository.save(c);
-        }
+        }*/
 
         //
         Category c = new Category();
-        c.setName("Category 11");
+        c.setName("Category A");
         categoryRepository.save(c);
 
         Subcategory subcategory = new Subcategory();
@@ -155,7 +155,7 @@ public class Seed {
         images.add(image);
 
         Product p = new Product();
-        p.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis. Integer nec gravida velit, eget efficitur sapien. Nunc eget auctor lorem.");
+        p.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDate = LocalDateTime.of(2021,3,3,0,0);
         p.setEndDate(endDate);
         LocalDateTime startDate = LocalDateTime.of(2021,2,20,0,0);
@@ -169,6 +169,51 @@ public class Seed {
 
         productRepository.save(p);
         imageRepository.save(image);
+
+        //
+
+        Category c1 = new Category();
+        c1.setName("Category B");
+        categoryRepository.save(c1);
+
+        Subcategory subcategory1 = new Subcategory();
+        subcategory1.setName("Subcategory");
+
+        subcategory1.setCategory(c1);
+        subcategoryRepository.save(subcategory1);
+
+        Image image1 = new Image();
+        try{
+
+            byte[] fileContent = FileUtils.readFileToByteArray( new File("src/main/resources/images/Sneakers2.PNG") );
+            String encodedString = Base64.getEncoder().encodeToString(fileContent);
+            image1.setImage(encodedString);
+        }
+        catch (Exception ex){
+
+        }
+        List<Image> images1 = new ArrayList<>();
+        images1.add(image1);
+
+        Product p1 = new Product();
+        p1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDate1 = LocalDateTime.of(2021,3,3,0,0);
+        p1.setEndDate(endDate1);
+        LocalDateTime startDate1 = LocalDateTime.of(2021,2,20,0,0);
+        p1.setStartDate(startDate1);
+        p1.setName("Product");
+        p1.setStartPrice(50);
+
+        images1.get(0).setProduct(p1);
+
+        p1.setImageList(images1);
+
+        productRepository.save(p1);
+        imageRepository.save(image1);
+
+        //
+
+
     }
 }
 
