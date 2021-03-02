@@ -44,7 +44,7 @@ public class Seed {
         customer.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer);
 
-        for(int i = 1; i <= 6; i++){
+        for(int i = 1; i <= 30; i++){
             Category c = new Category();
             c.setName("Category "+i);
             categoryRepository.save(c);
