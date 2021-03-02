@@ -168,97 +168,99 @@ export class Register extends Component {
       <div>
         <Heading title="REGISTER"></Heading>
         {this.state.isLoading && <LoadingSpinner></LoadingSpinner>}
-        <div className="row">
-          <div className="col-lg-3"></div>
-          <div className="col-lg-6">
-            <div className="register">
-              <div className="registerHeadingDiv">
-                <p className="registerHeading">REGISTER</p>
-              </div>
-              <div className="formDiv">
-                <form onSubmit={this.onSubmit}>
-                  <div className="form-group">
-                    <label className="formLabel">First Name</label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      className="form-control"
-                      value={this.state.firstName}
-                      onChange={this.onChange}
-                    />
-                    <small
-                      className="errorMessage"
-                      hidden={this.state.firstNameErrMess === ""}
+        <div className="registerDiv">
+          <div className="row">
+            <div className="col-lg-3"></div>
+            <div className="col-lg-6">
+              <div className="register">
+                <div className="registerHeadingDiv">
+                  <p className="registerHeading">REGISTER</p>
+                </div>
+                <div className="formDiv">
+                  <form onSubmit={this.onSubmit}>
+                    <div className="form-group">
+                      <label className="formLabel">First Name</label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        className="form-control"
+                        value={this.state.firstName}
+                        onChange={this.onChange}
+                      />
+                      <small
+                        className="errorMessage"
+                        hidden={this.state.firstNameErrMess === ""}
+                      >
+                        {this.state.firstNameErrMess}
+                      </small>
+                    </div>
+                    <div className="form-group">
+                      <label className="formLabel">Last Name</label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        className="form-control"
+                        value={this.state.lastName}
+                        onChange={this.onChange}
+                      />
+                      <small
+                        className="errorMessage"
+                        hidden={this.state.lastNameErrMess === ""}
+                      >
+                        {this.state.lastNameErrMess}
+                      </small>
+                    </div>
+                    <div className="form-group">
+                      <label className="formLabel">Enter Email</label>
+                      <input
+                        type="text"
+                        name="email"
+                        className="form-control"
+                        value={this.state.email}
+                        onChange={this.onChange}
+                      />
+                      <small
+                        className="errorMessage"
+                        hidden={this.state.emailErrMess === ""}
+                      >
+                        {this.state.emailErrMess}
+                      </small>
+                    </div>
+                    <div className="form-group">
+                      <label className="formLabel">Password</label>
+                      <input
+                        type="password"
+                        name="password"
+                        className="form-control"
+                        value={this.state.password}
+                        onChange={this.onChange}
+                      />
+                      <small
+                        className="errorMessage"
+                        hidden={this.state.passwordErrMess === ""}
+                      >
+                        {this.state.passwordErrMess}
+                      </small>
+                    </div>
+                    <button
+                      disabled={this.state.disableRegisterButton}
+                      type="submit"
+                      className="block"
                     >
-                      {this.state.firstNameErrMess}
-                    </small>
-                  </div>
-                  <div className="form-group">
-                    <label className="formLabel">Last Name</label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      className="form-control"
-                      value={this.state.lastName}
-                      onChange={this.onChange}
-                    />
-                    <small
-                      className="errorMessage"
-                      hidden={this.state.lastNameErrMess === ""}
-                    >
-                      {this.state.lastNameErrMess}
-                    </small>
-                  </div>
-                  <div className="form-group">
-                    <label className="formLabel">Enter Email</label>
-                    <input
-                      type="text"
-                      name="email"
-                      className="form-control"
-                      value={this.state.email}
-                      onChange={this.onChange}
-                    />
-                    <small
-                      className="errorMessage"
-                      hidden={this.state.emailErrMess === ""}
-                    >
-                      {this.state.emailErrMess}
-                    </small>
-                  </div>
-                  <div className="form-group">
-                    <label className="formLabel">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      className="form-control"
-                      value={this.state.password}
-                      onChange={this.onChange}
-                    />
-                    <small
-                      className="errorMessage"
-                      hidden={this.state.passwordErrMess === ""}
-                    >
-                      {this.state.passwordErrMess}
-                    </small>
-                  </div>
-                  <button
-                    disabled={this.state.disableRegisterButton}
-                    type="submit"
-                    className="block"
-                  >
-                    REGISTER
-                  </button>
-                </form>
-                <p className="formMessage">
-                  Already have an account?{" "}
-                  <Link className="formLoginLink" to={LOGIN_ROUTE}>
-                    Login
-                  </Link>
-                </p>
+                      REGISTER
+                    </button>
+                  </form>
+                  <p className="formMessage">
+                    Already have an account?{" "}
+                    <Link className="formLoginLink" to={LOGIN_ROUTE}>
+                      Login
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
+            <div className="col-lg-3"></div>
           </div>
-          <div className="col-lg-3"></div>
         </div>
       </div>
     );

@@ -1,19 +1,14 @@
 package com.app.auctionbackend.controller;
 
-import com.app.auctionbackend.dtos.CustomerDto;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
-import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/customer")

@@ -1,0 +1,60 @@
+.categoriesDiv {
+  padding-left: 160px;
+  padding-right: 160px;
+  margin-top: 30px;
+}
+
+.categoriesMenu {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  width: 256px;
+  height: 576px;
+}
+.categoriesMenuHeading {
+  font-family: Lato-Bold;
+  font-size: 14px;
+  color: #8367d8;
+  letter-spacing: 0.49px;
+  padding-left: 20px;
+  padding-top: 15px;
+}
+.categoriesList {
+  list-style-type: none;
+  padding-left: 0px;
+}
+.categoryItem {
+  padding-left: 20px;
+  padding-bottom: 23px;
+}
+
+.linkCategory {
+  font-family: Lato-Regular;
+  font-size: 14px;
+  color: #252525;
+  letter-spacing: 0.49px;
+}
+.linkCategory:hover {
+  cursor: pointer;
+  color: #252525;
+  text-decoration: none;
+}
+
+.categoryProductImage {
+  width: 265px;
+  height: 350px;
+}
+.exploreButton {
+  width: 250px;
+  height: 56px;
+  background-color: #8367d8;
+  border: none;
+  font-family: Lato-Bold;
+  font-size: 18px;
+  color: #ffffff;
+  letter-spacing: 0.63px;
+}
+
+.exploreDiv {
+  text-align: center;
+  margin-top: 109px;
+}

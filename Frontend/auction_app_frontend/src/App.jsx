@@ -11,6 +11,7 @@ import Register from "./components/Register";
 import React, { Component } from "react";
 import {
   ABOUT_ROUTE,
+  CATEGORIES_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   PRIVACY_POLICY_ROUTE,
@@ -25,6 +26,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import jwtDecoder from "jwt-decode";
 import ToastService from "./services/toastService";
 import AuthService from "./services/authService";
+import Categories from "./components/Categories";
 
 export class App extends Component {
   state = {
@@ -114,7 +116,13 @@ export class App extends Component {
                 logout={this.logoutCustomer}
               />
               <div className="containerDiv">
-                <Route path={HOME_ROUTE} exact component={Home}></Route>
+                <Route
+                  exact
+                  path={HOME_ROUTE}
+                  render={(props) => (
+                    <Home {...props} isLoggedIn={this.state.isLoggedIn} />
+                  )}
+                />
                 <Route path={ABOUT_ROUTE} component={AboutUs}></Route>
                 <Route
                   path={TEARMS_CONDITIONS_ROUTE}
@@ -141,6 +149,7 @@ export class App extends Component {
                     <Register {...props} setIsLoading={this.setIsLoading} />
                   )}
                 />
+                <Route exact path={CATEGORIES_ROUTE} component={Categories} />
               </div>
               <Footer openLink={this.openPage} />
             </div>

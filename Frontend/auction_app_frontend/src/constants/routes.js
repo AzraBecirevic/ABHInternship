@@ -5,3 +5,4 @@ export const PRIVACY_POLICY_ROUTE = "/privacyPolicy";
 export const REGISTER_ROUTE = "/register";
 export const LOGIN_ROUTE = "/login";
 export const FORGOT_PASSWORD = "/forgotPassword";
+export const CATEGORIES_ROUTE = "/categories";
