@@ -83,7 +83,7 @@ a.nav-link {
 }
 
 .homeTabsDiv {
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .tabProductImage {
@@ -229,5 +229,9 @@ div.col-lg-9.col-md-8.col-sm-8.mainProduct {
   }
   div.homeBodyDiv.row.col-lg-8 {
     padding-right: 0;
+  }
+
+  div.row.mainProductDiv div.col-lg-4.mainProductData {
+    margin-left: 16px;
   }
 }
