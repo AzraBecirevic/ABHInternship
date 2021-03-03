@@ -156,6 +156,7 @@ div.col-lg-9.col-md-8.col-sm-8.mainProduct {
 .infErrorMessage {
   text-align: center;
   color: #8367d8;
+  padding-top: 40px;
 }
 
 .infLoadingMessage {

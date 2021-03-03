@@ -44,15 +44,14 @@ export class Categories extends Component {
 
   handleCategoryChange = async (categoryID) => {
     this.fetchNumber = 1;
+    const productsList = await this.productService.getProductsByCategoryId(
+      categoryID,
+      this.fetchNumber
+    );
     this.setState({
+      products: productsList,
       categoryId: categoryID,
       hasMoreData: true,
-    });
-    this.setState({
-      products: await this.productService.getProductsByCategoryId(
-        this.state.categoryId,
-        this.fetchNumber
-      ),
     });
   };
 
