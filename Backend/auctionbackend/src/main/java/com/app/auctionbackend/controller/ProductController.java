@@ -36,11 +36,12 @@ public class ProductController {
         return new ResponseEntity<ProductDetailsDto>(productDetailsDto, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/byCategory/{categoryId}")
-    public ResponseEntity<List<ProductDto>> getProductByCategoryId(@PathVariable Integer categoryId){
-        if(categoryId<=0)
+    @GetMapping(value = "/byCategory/{categoryId}/{number}")
+    public ResponseEntity<List<ProductDto>> getProductByCategoryId(@PathVariable Integer categoryId, @PathVariable Integer number){
+        if(categoryId<=0){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        List<ProductDto> productDtos = productService.getProductByCategoryId(categoryId);
+        }
+        List<ProductDto> productDtos = productService.getProductByCategoryId(categoryId, number);
         return new ResponseEntity<List<ProductDto>>(productDtos, HttpStatus.OK);
     }
 

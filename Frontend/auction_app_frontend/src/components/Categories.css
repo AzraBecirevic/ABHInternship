@@ -1,14 +1,10 @@
 .categoriesDiv {
-  padding-left: 160px;
-  padding-right: 160px;
   margin-top: 30px;
 }
 
 .categoriesMenu {
   background: #ffffff;
   border: 1px solid #d8d8d8;
-  width: 256px;
-  height: 576px;
 }
 .categoriesMenuHeading {
   font-family: Lato-Bold;
@@ -33,15 +29,24 @@
   color: #252525;
   letter-spacing: 0.49px;
 }
+
 .linkCategory:hover {
   cursor: pointer;
-  color: #252525;
+  color: #8367d8;
+  text-decoration: none;
+}
+
+.linkCategoryActive {
+  color: #8367d8;
+}
+
+.linkCategoryActive:hover {
+  color: #8367d8;
   text-decoration: none;
 }
 
 .categoryProductImage {
-  width: 265px;
-  height: 350px;
+  width: 100%;
 }
 .exploreButton {
   width: 250px;
@@ -56,5 +61,44 @@
 
 .exploreDiv {
   text-align: center;
-  margin-top: 109px;
+  margin-top: 50px;
+}
+
+div.col-lg-4.col-md-6.col-sm-6.product {
+  margin-bottom: 40px;
+}
+
+.noMoreDataMessage {
+  text-align: center;
+  color: #8367d8;
+  padding-top: 40px;
+}
+
+@media (max-width: 767.5px) {
+  .categoriesMenu {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 575.5px) {
+  .categoriesMenu {
+    width: 100%;
+    text-align: initial;
+  }
+  div.col-lg-3.col-md-4.col-sm-12.categories {
+    padding-right: 0%;
+  }
+  div.col-lg-9.col-md-8.col-sm-12.categories {
+    padding-right: 0%;
+  }
+  div.col-lg-4.col-md-6.col-sm-6.product {
+    padding-right: 0%;
+  }
+  .categoryProductImage {
+    width: 100%;
+  }
+  div.col-lg-8.categoriesColumn {
+    padding-right: 0%;
+  }
 }
