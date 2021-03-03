@@ -16,7 +16,7 @@ export class TabsProducts extends Component {
         loader={<p className="infLoadingMessage">Loading...</p>}
         endMessage={
           <p className="infErrorMessage">
-            <b>You have seen it all</b>
+            <b>There are no more products to show.</b>
           </p>
         }
       >

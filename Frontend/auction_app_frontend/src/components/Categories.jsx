@@ -5,6 +5,7 @@ import styles from "./Categories.css";
 import { Link } from "react-router-dom";
 import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export class Categories extends Component {
   constructor(props) {
@@ -92,8 +93,13 @@ export class Categories extends Component {
                               return (
                                 <li className="categoryItem" key={category.id}>
                                   <a
-                                    className="linkCategory"
-                                    onClick={() =>
+                                    className={
+                                      "a " +
+                                      (this.state.categoryId == category.id
+                                        ? "linkCategoryActive"
+                                        : " linkCategory")
+                                    }
+                                    onClick={(e) =>
                                       this.handleCategoryChange(category.id)
                                     }
                                   >
@@ -108,41 +114,53 @@ export class Categories extends Component {
                   </div>
                 </div>
                 <div className="col-lg-9 col-md-8 col-sm-12 categories">
-                  <div className="row">
-                    {this.state.products != null &&
-                      this.state.products.map(function (product) {
-                        return (
-                          <div
-                            className="col-lg-4 col-md-6 col-sm-6 product"
-                            key={product.id}
-                          >
-                            <img
-                              className="categoryProductImage"
-                              src={`data:image/png;base64, ${product.image}`}
-                            />
-                            <div>
-                              <a className="productNameLink">{product.name}</a>
-                            </div>
-                            <div className="startsFrom">
-                              Starts from ${product.startPrice}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-
-                  <div className="exploreDiv">
-                    <button
-                      className="exploreButton"
-                      onClick={this.exploreMore}
-                    >
-                      EXPLORE MORE
-                    </button>
-                  </div>
-
-                  {!this.state.hasMoreData && (
-                    <div className="noMoreDataMessage">
-                      There is no more products to show.
+                  {this.state.products != null &&
+                    this.state.products.length > 0 && (
+                      <InfiniteScroll
+                        dataLength={
+                          this.state.products == null
+                            ? 0
+                            : this.state.products.length
+                        }
+                        next={this.exploreMore}
+                        hasMore={this.state.hasMoreData}
+                        loader={<p className="infLoadingMessage">Loading...</p>}
+                        endMessage={
+                          <p className="infErrorMessage">
+                            <b>There are no more products to show.</b>
+                          </p>
+                        }
+                      >
+                        <div className="row">
+                          {this.state.products != null &&
+                            this.state.products.map(function (product) {
+                              return (
+                                <div
+                                  className="col-lg-4 col-md-6 col-sm-6 product"
+                                  key={product.id}
+                                >
+                                  <img
+                                    className="categoryProductImage"
+                                    src={`data:image/png;base64, ${product.image}`}
+                                  />
+                                  <div>
+                                    <a className="productNameLink">
+                                      {product.name}
+                                    </a>
+                                  </div>
+                                  <div className="startsFrom">
+                                    Starts from ${product.startPrice}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      </InfiniteScroll>
+                    )}
+                  {(this.state.products == null ||
+                    this.state.products.length <= 0) && (
+                    <div className="infErrorMessage">
+                      There are no products in this category.
                     </div>
                   )}
                 </div>

@@ -42,9 +42,8 @@
   color: #252525;
   letter-spacing: 0.56px;
 }
-
 .categoryLink:hover {
-  color: #252525;
+  color: #8367d8;
   text-decoration: none;
 }
 
@@ -88,7 +87,6 @@ a.nav-link {
 
 .tabProductImage {
   width: 100%;
-  height: 100%;
 }
 
 .mainProductName {
@@ -113,7 +111,8 @@ a.nav-link {
 }
 
 .mainProductImage {
-  width: 100%;
+  width: 500px;
+  height: 450px;
   padding-top: 30px;
 }
 
@@ -146,7 +145,7 @@ div.col-lg-6.col-sm-12.image {
 
 div.col-lg-3.col-md-3.col-sm-6.col-xs-6.tabsProductDiv {
   margin-top: 60px;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
 }
 
 div.col-lg-9.col-md-8.col-sm-8.mainProduct {
@@ -175,9 +174,14 @@ div.infinite-scroll-component {
 @media (max-width: 1500px) {
   .mainProductImage {
     padding-top: 70px;
+    width: 100%;
   }
 }
-
+@media (min-width: 992px) and (max-width: 1200px) {
+  div.row.mainProductDiv div.col-lg-8.col-sm-12.image {
+    padding-left: 70px;
+  }
+}
 @media (max-width: 991.5px) {
   .homeBodyDiv {
     padding-left: 10px;

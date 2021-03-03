@@ -59,6 +59,27 @@ public class Seed {
         customer.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer);
 
+        Customer customer2 = new Customer();
+        customer2.setFirstName("Customer2");
+        customer2.setLastName("Lastname2");
+        customer2.setEmail("customer2@mail.com");
+        customer2.setPassword(passwordEncoder.encode("mojpass123@"));
+        customerRepository.save(customer2);
+
+        Customer customer3 = new Customer();
+        customer3.setFirstName("Customer3");
+        customer3.setLastName("Lastname3");
+        customer3.setEmail("customer3@mail.com");
+        customer3.setPassword(passwordEncoder.encode("mojpass123@"));
+        customerRepository.save(customer3);
+
+        Customer customer4 = new Customer();
+        customer4.setFirstName("Customer4");
+        customer4.setLastName("Lastname4");
+        customer4.setEmail("customer4@mail.com");
+        customer4.setPassword(passwordEncoder.encode("mojpass123@"));
+        customerRepository.save(customer4);
+
 
         Category women = new Category();
         women.setName("Women");
@@ -185,10 +206,10 @@ public class Seed {
         womenShoes.setCategory(women);
         subcategoryRepository.save(womenShoes);
 
-        Image womenSneakersImg1 = getImageData("src/main/resources/images/Sneakers2.PNG");
-        Image womenSneakersImg2 = getImageData("src/main/resources/images/Sneakers2.PNG");
-        Image womenSneakersImg3 = getImageData("src/main/resources/images/Sneakers2.PNG");
-        Image womenSneakersImg4 = getImageData("src/main/resources/images/Sneakers2.PNG");
+        Image womenSneakersImg1 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
+        Image womenSneakersImg2 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
+        Image womenSneakersImg3 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
+        Image womenSneakersImg4 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
 
         List<Image> womenSneakersImages = new ArrayList<>();
         womenSneakersImages.add(womenSneakersImg1);
@@ -621,7 +642,7 @@ public class Seed {
 
         Product manGreySneakers = new Product();
         manGreySneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateGS = LocalDateTime.of(2021,3,29,0,0);
+        LocalDateTime endDateGS = LocalDateTime.of(2021,3,5,0,0);
         manGreySneakers.setEndDate(endDateGS);
         LocalDateTime startDateGS= LocalDateTime.of(2021,3,1,0,0);
         manGreySneakers.setStartDate(startDateGS);
@@ -711,7 +732,7 @@ public class Seed {
 
         Product kidsNavyTShirt = new Product();
         kidsNavyTShirt.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateKN = LocalDateTime.of(2021,3,29,0,0);
+        LocalDateTime endDateKN = LocalDateTime.of(2021,3,6,0,0);
         kidsNavyTShirt.setEndDate(endDateKN);
         LocalDateTime startDateKN = LocalDateTime.of(2021,3,1,0,0);
         kidsNavyTShirt.setStartDate(startDateKN);
@@ -780,25 +801,467 @@ public class Seed {
         home.setName("Home");
         categoryRepository.save(home);
 
+        Subcategory homeDecoration = new Subcategory();
+        homeDecoration.setName("Home decoration");
+        homeDecoration.setCategory(home);
+        subcategoryRepository.save(homeDecoration);
+
+        Image homeDecorationCloudImg1 = getImageData("src/main/resources/images/homeDecorationCloud.jpg");
+        Image homeDecorationCloudImg2 = getImageData("src/main/resources/images/homeDecorationCloud.jpg");
+        Image homeDecorationCloudImg3 = getImageData("src/main/resources/images/homeDecorationCloud.jpg");
+        Image homeDecorationCloudImg4 = getImageData("src/main/resources/images/homeDecorationCloud.jpg");
+
+        List<Image> homeDecorationCloudImages = new ArrayList<>();
+        homeDecorationCloudImages.add(homeDecorationCloudImg1);
+        homeDecorationCloudImages.add(homeDecorationCloudImg2);
+        homeDecorationCloudImages.add(homeDecorationCloudImg3);
+        homeDecorationCloudImages.add(homeDecorationCloudImg4);
+
+
+        Product homeDecorationCloud = new Product();
+        homeDecorationCloud.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateHC = LocalDateTime.of(2021,3,29,0,0);
+        homeDecorationCloud.setEndDate(endDateHC);
+        LocalDateTime startDateHC = LocalDateTime.of(2021,3,1,0,0);
+        homeDecorationCloud.setStartDate(startDateHC);
+        homeDecorationCloud.setName("Cloud decoration");
+        homeDecorationCloud.setStartPrice(70);
+
+        homeDecorationCloudImages.get(0).setProduct(homeDecorationCloud);
+        homeDecorationCloudImages.get(1).setProduct(homeDecorationCloud);
+        homeDecorationCloudImages.get(2).setProduct(homeDecorationCloud);
+        homeDecorationCloudImages.get(3).setProduct(homeDecorationCloud);
+
+        homeDecorationCloud.setImageList(homeDecorationCloudImages);
+
+        productRepository.save(homeDecorationCloud);
+        imageRepository.save(homeDecorationCloudImg1);
+        imageRepository.save(homeDecorationCloudImg2);
+        imageRepository.save(homeDecorationCloudImg3);
+        imageRepository.save(homeDecorationCloudImg4);
+
+        Image homeDecorationCandlestickImg1 = getImageData("src/main/resources/images/homeDecorationCandlestick.jpg");
+        Image homeDecorationCandlestickImg2 = getImageData("src/main/resources/images/homeDecorationCandlestick.jpg");
+        Image homeDecorationCandlestickImg3 = getImageData("src/main/resources/images/homeDecorationCandlestick.jpg");
+        Image homeDecorationCandlestickImg4 = getImageData("src/main/resources/images/homeDecorationCandlestick.jpg");
+
+        List<Image> homeDecorationCandlestickImages = new ArrayList<>();
+        homeDecorationCandlestickImages.add(homeDecorationCandlestickImg1);
+        homeDecorationCandlestickImages.add(homeDecorationCandlestickImg2);
+        homeDecorationCandlestickImages.add(homeDecorationCandlestickImg3);
+        homeDecorationCandlestickImages.add(homeDecorationCandlestickImg4);
+
+
+        Product homeDecorationCandlestick = new Product();
+        homeDecorationCandlestick.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateHCs = LocalDateTime.of(2021,3,29,0,0);
+        homeDecorationCandlestick.setEndDate(endDateHCs);
+        LocalDateTime startDateHCs = LocalDateTime.of(2021,3,1,0,0);
+        homeDecorationCandlestick.setStartDate(startDateHCs);
+        homeDecorationCandlestick.setName("Candlestick");
+        homeDecorationCandlestick.setStartPrice(90);
+
+        homeDecorationCandlestickImages.get(0).setProduct(homeDecorationCandlestick);
+        homeDecorationCandlestickImages.get(1).setProduct(homeDecorationCandlestick);
+        homeDecorationCandlestickImages.get(2).setProduct(homeDecorationCandlestick);
+        homeDecorationCandlestickImages.get(3).setProduct(homeDecorationCandlestick);
+
+
+        homeDecorationCandlestick.setImageList(homeDecorationCandlestickImages);
+
+        productRepository.save(homeDecorationCandlestick);
+        imageRepository.save(homeDecorationCandlestickImg1);
+        imageRepository.save(homeDecorationCandlestickImg2);
+        imageRepository.save(homeDecorationCandlestickImg3);
+        imageRepository.save(homeDecorationCandlestickImg4);
+
+
+        List<Product> homeDecorationProducts = new ArrayList<>();
+        homeDecorationProducts.add(homeDecorationCloud);
+        homeDecorationProducts.add(homeDecorationCandlestick);
+
+
+        homeDecoration.setProducts(homeDecorationProducts);
+
+        subcategoryRepository.save(homeDecoration);
+
+
         Category art = new Category();
         art.setName("Art");
         categoryRepository.save(art);
+
+        Subcategory artPaintings = new Subcategory();
+        artPaintings.setName("Painting");
+        artPaintings.setCategory(art);
+        subcategoryRepository.save(artPaintings);
+
+        Image artPaintingImg1 = getImageData("src/main/resources/images/artPainting1.jpg");
+        Image artPaintingImg2 = getImageData("src/main/resources/images/artPainting1.jpg");
+        Image artPaintingImg3 = getImageData("src/main/resources/images/artPainting1.jpg");
+        Image artPaintingImg4 = getImageData("src/main/resources/images/artPainting1.jpg");
+
+        List<Image> artPainting1Images = new ArrayList<>();
+        artPainting1Images.add(artPaintingImg1);
+        artPainting1Images.add(artPaintingImg2);
+        artPainting1Images.add(artPaintingImg3);
+        artPainting1Images.add(artPaintingImg4);
+
+
+        Product artPainting1 = new Product();
+        artPainting1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateAp1 = LocalDateTime.of(2021,3,29,0,0);
+        artPainting1.setEndDate(endDateAp1);
+        LocalDateTime startDateAp1 = LocalDateTime.of(2021,3,1,0,0);
+        artPainting1.setStartDate(startDateAp1);
+        artPainting1.setName("Flower picture");
+        artPainting1.setStartPrice(70);
+
+        artPainting1Images.get(0).setProduct(artPainting1);
+        artPainting1Images.get(1).setProduct(artPainting1);
+        artPainting1Images.get(2).setProduct(artPainting1);
+        artPainting1Images.get(3).setProduct(artPainting1);
+
+        artPainting1.setImageList(artPainting1Images);
+
+        productRepository.save(artPainting1);
+        imageRepository.save(artPaintingImg1);
+        imageRepository.save(artPaintingImg2);
+        imageRepository.save(artPaintingImg3);
+        imageRepository.save(artPaintingImg4);
+
+
+        List<Product> artPaintingProducts = new ArrayList<>();
+        artPaintingProducts.add(artPainting1);
+
+        artPaintings.setProducts(artPaintingProducts);
+
+        subcategoryRepository.save(artPaintings);
+
+
 
         Category computers = new Category();
         computers.setName("Computers");
         categoryRepository.save(computers);
 
+        Subcategory computersSubcategory = new Subcategory();
+        computersSubcategory.setName("Computer");
+        computersSubcategory.setCategory(computers);
+        subcategoryRepository.save(computersSubcategory);
+
+        Image computer1Img1 = getImageData("src/main/resources/images/computer1.jpg");
+        Image computer1Img2 = getImageData("src/main/resources/images/computer1.jpg");
+        Image computer1Img3 = getImageData("src/main/resources/images/computer1.jpg");
+        Image computer1Img4 = getImageData("src/main/resources/images/computer1.jpg");
+
+        List<Image> computer1Images = new ArrayList<>();
+        computer1Images.add(computer1Img1);
+        computer1Images.add(computer1Img2);
+        computer1Images.add(computer1Img3);
+        computer1Images.add(computer1Img4);
+
+
+        Product computer1 = new Product();
+        computer1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateC1 = LocalDateTime.of(2021,3,29,0,0);
+        computer1.setEndDate(endDateC1);
+        LocalDateTime startDateC1 = LocalDateTime.of(2021,3,1,0,0);
+        computer1.setStartDate(startDateC1);
+        computer1.setName("Computer");
+        computer1.setStartPrice(70);
+
+        computer1Images.get(0).setProduct(computer1);
+        computer1Images.get(1).setProduct(computer1);
+        computer1Images.get(2).setProduct(computer1);
+        computer1Images.get(3).setProduct(computer1);
+
+
+        computer1.setImageList(computer1Images);
+
+        productRepository.save(computer1);
+        imageRepository.save(computer1Img1);
+        imageRepository.save(computer1Img2);
+        imageRepository.save(computer1Img3);
+        imageRepository.save(computer1Img4);
+
+        List<Product> computerProducts = new ArrayList<>();
+        computerProducts.add(computer1);
+
+        computersSubcategory.setProducts(computerProducts);
+
+        subcategoryRepository.save(computersSubcategory);
+
+
         Category mobile = new Category();
         mobile.setName("Mobile");
         categoryRepository.save(mobile);
+
+        Subcategory mobilePhones = new Subcategory();
+        mobilePhones.setName("Mobile phones");
+        mobilePhones.setCategory(mobile);
+        subcategoryRepository.save(mobilePhones);
+
+        Image mobilePhone1Img1 = getImageData("src/main/resources/images/mobilePhone1.jpg");
+        Image mobilePhone1Img2 = getImageData("src/main/resources/images/mobilePhone1.jpg");
+        Image mobilePhone1Img3 = getImageData("src/main/resources/images/mobilePhone1.jpg");
+        Image mobilePhone1Img4 = getImageData("src/main/resources/images/mobilePhone1.jpg");
+
+        List<Image> mobilePhone1Images = new ArrayList<>();
+        mobilePhone1Images.add(mobilePhone1Img1);
+        mobilePhone1Images.add(mobilePhone1Img2);
+        mobilePhone1Images.add(mobilePhone1Img3);
+        mobilePhone1Images.add(mobilePhone1Img4);
+
+        Product mobilePhone1 = new Product();
+        mobilePhone1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateM1 = LocalDateTime.of(2021,3,29,0,0);
+        mobilePhone1.setEndDate(endDateM1);
+        LocalDateTime startDateM1 = LocalDateTime.of(2021,2,26,0,0);
+        mobilePhone1.setStartDate(startDateM1);
+        mobilePhone1.setName("Mobile phone");
+        mobilePhone1.setStartPrice(70);
+
+        mobilePhone1Images.get(0).setProduct(mobilePhone1);
+        mobilePhone1Images.get(1).setProduct(mobilePhone1);
+        mobilePhone1Images.get(2).setProduct(mobilePhone1);
+        mobilePhone1Images.get(3).setProduct(mobilePhone1);
+
+        mobilePhone1.setImageList(mobilePhone1Images);
+
+        productRepository.save(mobilePhone1);
+        imageRepository.save(mobilePhone1Img1);
+        imageRepository.save(mobilePhone1Img2);
+        imageRepository.save(mobilePhone1Img3);
+        imageRepository.save(mobilePhone1Img4);
+
+
+        List<Product> mobilePhoneProducts = new ArrayList<>();
+        mobilePhoneProducts.add(mobilePhone1);
+
+        mobilePhones.setProducts(mobilePhoneProducts);
+
+        subcategoryRepository.save(mobilePhones);
+
+
+        Subcategory mobileCases = new Subcategory();
+        mobileCases.setName("Mobile cases");
+        mobileCases.setCategory(mobile);
+        subcategoryRepository.save(mobileCases);
+
+        Image mobileCase1Img1 = getImageData("src/main/resources/images/mobileCase1.jpg");
+        Image mobileCase1Img2 = getImageData("src/main/resources/images/mobileCase1.jpg");
+        Image mobileCase1Img3 = getImageData("src/main/resources/images/mobileCase1.jpg");
+        Image mobileCase1Img4 = getImageData("src/main/resources/images/mobileCase1.jpg");
+
+        List<Image> mobileCase1Images = new ArrayList<>();
+        mobileCase1Images.add(mobileCase1Img1);
+        mobileCase1Images.add(mobileCase1Img2);
+        mobileCase1Images.add(mobileCase1Img3);
+        mobileCase1Images.add(mobileCase1Img4);
+
+
+        Product mobileCase1 = new Product();
+        mobileCase1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateMc1 = LocalDateTime.of(2021,3,29,0,0);
+        mobileCase1.setEndDate(endDateMc1);
+        LocalDateTime startDateMc1 = LocalDateTime.of(2021,3,1,0,0);
+        mobileCase1.setStartDate(startDateMc1);
+        mobileCase1.setName("Mobile case");
+        mobileCase1.setStartPrice(70);
+
+        mobileCase1Images.get(0).setProduct(mobileCase1);
+        mobileCase1Images.get(1).setProduct(mobileCase1);
+        mobileCase1Images.get(2).setProduct(mobileCase1);
+        mobileCase1Images.get(3).setProduct(mobileCase1);
+
+
+        mobileCase1.setImageList(mobileCase1Images);
+
+        productRepository.save(mobileCase1);
+        imageRepository.save(mobileCase1Img1);
+        imageRepository.save(mobileCase1Img2);
+        imageRepository.save(mobileCase1Img3);
+        imageRepository.save(mobileCase1Img4);
+
+        List<Product> mobileCaseProducts = new ArrayList<>();
+        mobileCaseProducts.add(mobileCase1);
+
+        mobileCases.setProducts(mobileCaseProducts);
+
+        subcategoryRepository.save(mobileCases);
+
 
         Category electronics = new Category();
         electronics.setName("Electronics");
         categoryRepository.save(electronics);
 
-        Category sportWare = new Category();
-        sportWare.setName("SportWare");
-        categoryRepository.save(sportWare);
+        Subcategory vacuumCleaners = new Subcategory();
+        vacuumCleaners.setName("Vacuum cleaners");
+        vacuumCleaners.setCategory(electronics);
+        subcategoryRepository.save(vacuumCleaners);
+
+        Image vacuumCleaner1Img1 = getImageData("src/main/resources/images/vacuumCleaner.png");
+        Image vacuumCleaner1Img2 = getImageData("src/main/resources/images/vacuumCleaner.png");
+        Image vacuumCleaner1Img3 = getImageData("src/main/resources/images/vacuumCleaner.png");
+        Image vacuumCleaner1Img4 = getImageData("src/main/resources/images/vacuumCleanerImg.png");
+
+        List<Image> vacuumCleaner1Images = new ArrayList<>();
+        vacuumCleaner1Images.add(vacuumCleaner1Img1);
+        vacuumCleaner1Images.add(vacuumCleaner1Img2);
+        vacuumCleaner1Images.add(vacuumCleaner1Img3);
+        vacuumCleaner1Images.add(vacuumCleaner1Img4);
+
+        Product vacuumCleaner1 = new Product();
+        vacuumCleaner1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateVc1 = LocalDateTime.of(2021,3,29,0,0);
+        vacuumCleaner1.setEndDate(endDateVc1);
+        LocalDateTime startDateVc1 = LocalDateTime.of(2021,2,26,0,0);
+        vacuumCleaner1.setStartDate(startDateVc1);
+        vacuumCleaner1.setName("Vacuum cleaner");
+        vacuumCleaner1.setStartPrice(150);
+
+        vacuumCleaner1Images.get(0).setProduct(vacuumCleaner1);
+        vacuumCleaner1Images.get(1).setProduct(vacuumCleaner1);
+        vacuumCleaner1Images.get(2).setProduct(vacuumCleaner1);
+        vacuumCleaner1Images.get(3).setProduct(vacuumCleaner1);
+
+        vacuumCleaner1.setImageList(vacuumCleaner1Images);
+
+        productRepository.save(vacuumCleaner1);
+        imageRepository.save(vacuumCleaner1Img1);
+        imageRepository.save(vacuumCleaner1Img2);
+        imageRepository.save(vacuumCleaner1Img3);
+        imageRepository.save(vacuumCleaner1Img4);
+
+
+        Image vacuumCleanerRobotImg1 = getImageData("src/main/resources/images/robotVacuumCleaner.jpg");
+        Image vacuumCleanerRobotImg2 = getImageData("src/main/resources/images/robotVacuumCleaner.jpg");
+        Image vacuumCleanerRobotImg3 = getImageData("src/main/resources/images/robotVacuumCleaner.jpg");
+        Image vacuumCleanerRobotImg4 = getImageData("src/main/resources/images/robotVacuumCleaner.jpg");
+
+        List<Image> vacuumCleanerRobotImages = new ArrayList<>();
+        vacuumCleanerRobotImages.add(vacuumCleanerRobotImg1);
+        vacuumCleanerRobotImages.add(vacuumCleanerRobotImg2);
+        vacuumCleanerRobotImages.add(vacuumCleanerRobotImg3);
+        vacuumCleanerRobotImages.add(vacuumCleanerRobotImg4);
+
+        Product vacuumCleanerRobot = new Product();
+        vacuumCleanerRobot.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateVCr1 = LocalDateTime.of(2021,3,29,0,0);
+        vacuumCleanerRobot.setEndDate(endDateVCr1);
+        LocalDateTime startDateVCr1 = LocalDateTime.of(2021,3,1,0,0);
+        vacuumCleanerRobot.setStartDate(startDateVCr1);
+        vacuumCleanerRobot.setName("Robot vacuum");
+        vacuumCleanerRobot.setStartPrice(150);
+
+        vacuumCleanerRobotImages.get(0).setProduct(vacuumCleanerRobot);
+        vacuumCleanerRobotImages.get(1).setProduct(vacuumCleanerRobot);
+        vacuumCleanerRobotImages.get(2).setProduct(vacuumCleanerRobot);
+        vacuumCleanerRobotImages.get(3).setProduct(vacuumCleanerRobot);
+
+        vacuumCleanerRobot.setImageList(vacuumCleanerRobotImages);
+
+        productRepository.save(vacuumCleanerRobot);
+        imageRepository.save(vacuumCleanerRobotImg1);
+        imageRepository.save(vacuumCleanerRobotImg2);
+        imageRepository.save(vacuumCleanerRobotImg3);
+        imageRepository.save(vacuumCleanerRobotImg4);
+
+
+        List<Product> vacuumCleanerProducts = new ArrayList<>();
+        vacuumCleanerProducts.add(vacuumCleaner1);
+        vacuumCleanerProducts.add(vacuumCleanerRobot);
+
+        vacuumCleaners.setProducts(vacuumCleanerProducts);
+
+        subcategoryRepository.save(vacuumCleaners);
+
+
+
+        Category sport = new Category();
+        sport.setName("Sport");
+        categoryRepository.save(sport);
+
+
+        Subcategory sportEquipment = new Subcategory();
+        sportEquipment.setName("Sport equipment");
+        sportEquipment.setCategory(sport);
+        subcategoryRepository.save(sportEquipment);
+
+        Image footballImg1 = getImageData("src/main/resources/images/football.jpg");
+        Image footballImg2 = getImageData("src/main/resources/images/football.jpg");
+        Image footballImg3 = getImageData("src/main/resources/images/football.jpg");
+        Image footballImg4 = getImageData("src/main/resources/images/football.jpg");
+
+        List<Image> footballImages = new ArrayList<>();
+        footballImages.add(footballImg1);
+        footballImages.add(footballImg2);
+        footballImages.add(footballImg3);
+        footballImages.add(footballImg4);
+
+        Product football1 = new Product();
+        football1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateF1 = LocalDateTime.of(2021,3,29,0,0);
+        football1.setEndDate(endDateF1);
+        LocalDateTime startDateF1 = LocalDateTime.of(2021,2,25,0,0);
+        football1.setStartDate(startDateF1);
+        football1.setName("Ball");
+        football1.setStartPrice(150);
+
+        footballImages.get(0).setProduct(football1);
+        footballImages.get(1).setProduct(football1);
+        footballImages.get(2).setProduct(football1);
+        footballImages.get(3).setProduct(football1);
+
+
+        football1.setImageList(footballImages);
+
+        productRepository.save(football1);
+        imageRepository.save(footballImg1);
+        imageRepository.save(footballImg2);
+        imageRepository.save(footballImg3);
+        imageRepository.save(footballImg4);
+
+        Image basketballImg1 = getImageData("src/main/resources/images/basketball.jpg");
+        Image basketballImg2 = getImageData("src/main/resources/images/basketball.jpg");
+        Image basketballImg3 = getImageData("src/main/resources/images/basketball.jpg");
+        Image basketballImg4 = getImageData("src/main/resources/images/basketball.jpg");
+
+        List<Image> basketballImages = new ArrayList<>();
+        basketballImages.add(basketballImg1);
+        basketballImages.add(basketballImg2);
+        basketballImages.add(basketballImg3);
+        basketballImages.add(basketballImg4);
+
+
+        Product basketball1 = new Product();
+        basketball1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
+        LocalDateTime endDateB1 = LocalDateTime.of(2021,3,29,0,0);
+        basketball1.setEndDate(endDateB1);
+        LocalDateTime startDateB1 = LocalDateTime.of(2021,3,1,0,0);
+        basketball1.setStartDate(startDateB1);
+        basketball1.setName("Ball");
+        basketball1.setStartPrice(150);
+
+        basketballImages.get(0).setProduct(basketball1);
+        basketballImages.get(1).setProduct(basketball1);
+        basketballImages.get(2).setProduct(basketball1);
+        basketballImages.get(3).setProduct(basketball1);
+
+        basketball1.setImageList(basketballImages);
+
+        productRepository.save(basketball1);
+        imageRepository.save(basketballImg1);
+        imageRepository.save(basketballImg2);
+        imageRepository.save(basketballImg3);
+        imageRepository.save(basketballImg4);
+
+        List<Product> sportEquipmentProducts = new ArrayList<>();
+        sportEquipmentProducts.add(football1);
+        sportEquipmentProducts.add(basketball1);
+
+        sportEquipment.setProducts(sportEquipmentProducts);
+
+        subcategoryRepository.save(sportEquipment);
 
     }
 }
