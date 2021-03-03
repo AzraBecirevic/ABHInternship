@@ -6,3 +6,4 @@ export const REGISTER_ROUTE = "/register";
 export const LOGIN_ROUTE = "/login";
 export const FORGOT_PASSWORD = "/forgotPassword";
 export const CATEGORIES_ROUTE = "/categories";
+export const SINGLE_PRODUCT_ROUTE = "/categories";
