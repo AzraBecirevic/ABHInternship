@@ -15,13 +15,16 @@ export class Categories extends Component {
     categories: null,
     products: null,
     categoryId: null,
+    hasMoreData: true,
   };
 
   categoryService = new CategoryService();
   productService = new ProductService();
   toastService = new ToastService();
+  fetchNumber = 0;
 
   componentDidMount = async () => {
+    this.fetchNumber = 1;
     try {
       const { chosenCategory } = this.props.location.state;
       this.state.categoryId = chosenCategory;
@@ -30,7 +33,8 @@ export class Categories extends Component {
       });
       this.setState({
         products: await this.productService.getProductsByCategoryId(
-          this.state.categoryId
+          this.state.categoryId,
+          this.fetchNumber
         ),
       });
     } catch (error) {
@@ -39,68 +43,114 @@ export class Categories extends Component {
   };
 
   handleCategoryChange = async (categoryID) => {
+    this.fetchNumber = 1;
     this.setState({
-      products: await this.productService.getProductsByCategoryId(categoryID),
+      categoryId: categoryID,
+      hasMoreData: true,
     });
+    this.setState({
+      products: await this.productService.getProductsByCategoryId(
+        this.state.categoryId,
+        this.fetchNumber
+      ),
+    });
+  };
+
+  exploreMore = async () => {
+    if (this.state.products != null) {
+      this.fetchNumber = this.fetchNumber + 1;
+      const moreProducts = await this.productService.getProductsByCategoryId(
+        this.state.categoryId,
+        this.fetchNumber
+      );
+      if (moreProducts != null && moreProducts.length > 0) {
+        this.setState({
+          products: this.state.products.concat(moreProducts),
+        });
+      } else {
+        this.setState({ hasMoreData: false });
+      }
+    }
   };
 
   render() {
     return (
       <div>
         <Heading title=""></Heading>
-        <div className="categoriesDiv">
-          <div className="row">
-            <div className="col-lg-4">
-              <div className="categoriesMenu">
-                <p className="categoriesMenuHeading">PRODUCT CATEGORIES</p>
-                <div className="categoriesMenuList">
-                  <ul className="categoriesList">
-                    {this.state.categories != null &&
-                      this.state.categories.map(
-                        function (category) {
-                          return (
-                            <li className="categoryItem" key={category.id}>
-                              <a
-                                className="linkCategory"
-                                onClick={() =>
-                                  this.handleCategoryChange(category.id)
-                                }
-                              >
-                                {category.name}
-                              </a>
-                            </li>
-                          );
-                        }.bind(this)
-                      )}
-                  </ul>
+        <div className="row">
+          <div className="col-lg-2"></div>
+          <div className="col-lg-8 categoriesColumn">
+            <div className="categoriesDiv">
+              <div className="row">
+                <div className="col-lg-3 col-md-4 col-sm-12 categories">
+                  <div className="categoriesMenu">
+                    <p className="categoriesMenuHeading">PRODUCT CATEGORIES</p>
+                    <div className="categoriesMenuList">
+                      <ul className="categoriesList">
+                        {this.state.categories != null &&
+                          this.state.categories.map(
+                            function (category) {
+                              return (
+                                <li className="categoryItem" key={category.id}>
+                                  <a
+                                    className="linkCategory"
+                                    onClick={() =>
+                                      this.handleCategoryChange(category.id)
+                                    }
+                                  >
+                                    {category.name}
+                                  </a>
+                                </li>
+                              );
+                            }.bind(this)
+                          )}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-9 col-md-8 col-sm-12 categories">
+                  <div className="row">
+                    {this.state.products != null &&
+                      this.state.products.map(function (product) {
+                        return (
+                          <div
+                            className="col-lg-4 col-md-6 col-sm-6 product"
+                            key={product.id}
+                          >
+                            <img
+                              className="categoryProductImage"
+                              src={`data:image/png;base64, ${product.image}`}
+                            />
+                            <div>
+                              <a className="productNameLink">{product.name}</a>
+                            </div>
+                            <div className="startsFrom">
+                              Starts from ${product.startPrice}
+                            </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+
+                  <div className="exploreDiv">
+                    <button
+                      className="exploreButton"
+                      onClick={this.exploreMore}
+                    >
+                      EXPLORE MORE
+                    </button>
+                  </div>
+
+                  {!this.state.hasMoreData && (
+                    <div className="noMoreDataMessage">
+                      There is no more products to show.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="col-lg-8">
-              <div className="row">
-                {this.state.products != null &&
-                  this.state.products.map(function (product) {
-                    return (
-                      <div className="col-lg-6" key={product.id}>
-                        <img
-                          className="categoryProductImage"
-                          src={`data:image/png;base64, ${product.image}`}
-                        />
-                        <div>
-                          <a className="productNameLink">{product.name}</a>
-                        </div>
-                        <div className="startsFrom">
-                          Starts from ${product.startPrice}
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
           </div>
-          <div className="exploreDiv">
-            <button className="exploreButton">EXPLORE MORE</button>
-          </div>
+          <div className="col-lg-2"></div>
         </div>
       </div>
     );

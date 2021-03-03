@@ -13,7 +13,7 @@ export class TabsProducts extends Component {
         dataLength={this.props.array == null ? 0 : this.props.array.length}
         next={this.props.fetchMore}
         hasMore={this.props.hasMore}
-        loader={<h4>Loading...</h4>}
+        loader={<p className="infLoadingMessage">Loading...</p>}
         endMessage={
           <p className="infErrorMessage">
             <b>You have seen it all</b>

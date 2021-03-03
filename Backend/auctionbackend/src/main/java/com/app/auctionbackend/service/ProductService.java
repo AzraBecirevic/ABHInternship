@@ -47,7 +47,7 @@ public class ProductService {
         return null;
     }
 
-    public List<ProductDto> getProductByCategoryId(Integer categoryId){
+    public List<ProductDto> getProductByCategoryId(Integer categoryId, Integer number){
         List<Product> products = productRepository.findAll();
 
         List<Product> productsByCategoryId = new ArrayList<>();
@@ -56,15 +56,32 @@ public class ProductService {
             boolean addToList = false;
             List<Subcategory> subcategories = product.getSubcategories();
             for (Subcategory s:subcategories) {
-                if(s.getCategory().getId()==categoryId){
-                    addToList=true;
+                if(s.getCategory().getId() == categoryId){
+                    addToList = true;
                 }
             }
             if(addToList)
                 productsByCategoryId.add(product);
         }
 
-        List<ProductDto> productDtos = changeToDto(productsByCategoryId);
+        List<ProductDto> productDtos = new ArrayList<>();
+        if( productsByCategoryId.size() == 0)
+           return productDtos;
+
+        Integer from = (number * 9) - 9;
+        Integer to = (number * 9);
+
+        if(number * 9 > productsByCategoryId.size())
+            to = productsByCategoryId.size();
+
+        List<Product> productsByCategoryInf = new ArrayList<>();
+
+        for(int i = from; i < to; i++){
+            productsByCategoryInf.add(productsByCategoryId.get(i));
+        }
+
+        productDtos = changeToDto(productsByCategoryInf);
+
         return productDtos;
     }
 
@@ -79,9 +96,6 @@ public class ProductService {
                 newArrivals.add(p);
             }
         }
-
-        if(newArrivals == null)
-            return null;
 
         List<ProductDto> productDtos = changeToDto(newArrivals);
         return productDtos;
@@ -101,9 +115,6 @@ public class ProductService {
             }
         }
 
-        if(lastChance == null)
-            return null;
-
         List<ProductDto> productDtos = changeToDto(lastChance);
         return productDtos;
     }
@@ -112,7 +123,7 @@ public class ProductService {
         List<ProductDto> newArrivals = getNewArrivals();
 
         if(newArrivals == null || newArrivals.size() == 0)
-            return null;
+            return  newArrivals;
 
         Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
         Integer to = (number * NUMBER_PER_CALL);
@@ -133,7 +144,7 @@ public class ProductService {
         List<ProductDto> lastChance = getLastChanceProducts();
 
         if(lastChance == null || lastChance.size() == 0)
-            return null;
+            return lastChance;
 
         Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
         Integer to = (number * NUMBER_PER_CALL);
@@ -148,6 +159,7 @@ public class ProductService {
         }
         return lastChanceInf;
     }
+
 
     public ProductDetailsDto getMostExpensiveProduct(){
         List<Product> products = productRepository.findByOrderByStartPrice();

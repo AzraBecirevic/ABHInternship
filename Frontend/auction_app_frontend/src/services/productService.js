@@ -13,8 +13,10 @@ class ProductService {
     return await this.getData("/product/lastChance/" + fetchNumber);
   }
 
-  async getProductsByCategoryId(chosenCategory) {
-    return await this.getData("/product/byCategory/" + chosenCategory);
+  async getProductsByCategoryId(chosenCategory, fetchNumber) {
+    return await this.getData(
+      "/product/byCategory/" + chosenCategory + "/" + fetchNumber
+    );
   }
 
   async getProduct() {

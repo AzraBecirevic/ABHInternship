@@ -158,6 +158,12 @@ div.col-lg-9.col-md-8.col-sm-8.mainProduct {
   color: #8367d8;
 }
 
+.infLoadingMessage {
+  font-family: Lato-Bold;
+  font-size: 18px;
+  color: #252525;
+}
+
 div.infinite-scroll-component div.row {
   margin-bottom: 15px;
 }
@@ -214,10 +220,6 @@ div.infinite-scroll-component {
 }
 
 @media (max-width: 575.5px) {
-  .header {
-    background-color: yellow;
-  }
-
   .homeDiv {
     padding-right: 0%;
   }
