@@ -24,11 +24,16 @@
   color: #252525;
 }
 
-.startFrom {
+.startsFrom {
   font-family: Lato-Regular;
   font-size: 16px;
   color: #252525;
   letter-spacing: 0.56px;
+}
+
+.startsFrom:hover {
+  text-decoration: none;
+  color: #252525;
 }
 
 .homeProductImage {
@@ -87,6 +92,7 @@ a.nav-link {
 
 .tabProductImage {
   width: 100%;
+  margin-bottom: 25px;
 }
 
 .mainProductName {
@@ -95,6 +101,11 @@ a.nav-link {
   color: #252525;
   letter-spacing: 1.61px;
 }
+.mainProductName:hover {
+  text-decoration: none;
+  color: #252525;
+  cursor: pointer;
+}
 
 .mainProductPrice {
   font-family: Lato-Regular;
@@ -102,6 +113,12 @@ a.nav-link {
   color: #8367d8;
   letter-spacing: 0.84px;
 }
+.mainProductPrice:hover {
+  text-decoration: none;
+  color: #8367d8;
+  cursor: pointer;
+}
+
 .mainProductDesc {
   font-family: Lato-Regular;
   font-size: 16px;

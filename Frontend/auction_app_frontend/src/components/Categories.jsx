@@ -19,6 +19,8 @@ export class Categories extends Component {
     categoryId: null,
     hasMoreData: true,
     isLoggedIn: false,
+    email: "",
+    token: "",
   };
 
   categoryService = new CategoryService();
@@ -29,9 +31,17 @@ export class Categories extends Component {
   componentDidMount = async () => {
     this.fetchNumber = 1;
     try {
-      const { chosenCategory, isLoggedIn } = this.props.location.state;
+      const {
+        chosenCategory,
+        isLoggedIn,
+        email,
+        token,
+      } = this.props.location.state;
       this.state.categoryId = chosenCategory;
       this.state.isLoggedIn = isLoggedIn;
+      this.state.email = email;
+      this.state.token = token;
+
       this.setState({
         categories: await this.categoryService.getCategories(),
       });
@@ -143,10 +153,23 @@ export class Categories extends Component {
                                     className="col-lg-4 col-md-6 col-sm-6 product"
                                     key={product.id}
                                   >
-                                    <img
-                                      className="categoryProductImage"
-                                      src={`data:image/png;base64, ${product.image}`}
-                                    />
+                                    <Link
+                                      to={{
+                                        pathname: SINGLE_PRODUCT_ROUTE,
+                                        state: {
+                                          chosenProduct: product.id,
+                                          isLoggedIn: this.state.isLoggedIn,
+                                          email: this.state.email,
+                                          token: this.state.token,
+                                        },
+                                      }}
+                                    >
+                                      <img
+                                        className="categoryProductImage"
+                                        src={`data:image/png;base64, ${product.image}`}
+                                      />
+                                    </Link>
+
                                     <div>
                                       <Link
                                         className="productNameLink"
@@ -155,15 +178,28 @@ export class Categories extends Component {
                                           state: {
                                             chosenProduct: product.id,
                                             isLoggedIn: this.state.isLoggedIn,
+                                            email: this.state.email,
+                                            token: this.state.token,
                                           },
                                         }}
                                       >
                                         {product.name}
                                       </Link>
                                     </div>
-                                    <div className="startsFrom">
+                                    <Link
+                                      className="startsFrom"
+                                      to={{
+                                        pathname: SINGLE_PRODUCT_ROUTE,
+                                        state: {
+                                          chosenProduct: product.id,
+                                          isLoggedIn: this.state.isLoggedIn,
+                                          email: this.state.email,
+                                          token: this.state.token,
+                                        },
+                                      }}
+                                    >
                                       Starts from ${product.startPrice}
-                                    </div>
+                                    </Link>
                                   </div>
                                 );
                               }.bind(this)

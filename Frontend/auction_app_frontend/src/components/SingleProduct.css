@@ -8,7 +8,7 @@ div.row.singleProduct {
   color: #252525;
   letter-spacing: 1.61px;
 }
-.startsFrom {
+.productStartsFrom {
   font-family: Lato-Regular;
   font-size: 24px;
   color: #8367d8;
@@ -98,7 +98,7 @@ div.row.singleProduct {
 }
 
 .productBidDetails {
-  margin-top: 66px;
+  margin-top: 36px;
 }
 .mainPicture {
   text-align: center;
@@ -123,12 +123,8 @@ div.row.bidDataHeading {
   font-size: 18px;
   color: #252525;
   letter-spacing: 0.63px;
-  margin-bottom: 30px;
 }
 
-div.row.bidData {
-  margin-bottom: 30px;
-}
 div.row.productData {
   margin-bottom: 149px;
 }
@@ -159,6 +155,13 @@ div.col-lg-2.col-sm-2.col-xs-3.highestBidsPrice {
   color: #252525;
   margin-top: 40px;
 }
+div.row.bidData {
+  padding: 13px;
+  vertical-align: center;
+}
+div.row.bidData.greyDiv {
+  background-color: #fafafa;
+}
 
 @media (min-width: 576px) and (max-width: 1750px) {
   div.row.bidsData {
@@ -167,6 +170,17 @@ div.col-lg-2.col-sm-2.col-xs-3.highestBidsPrice {
 
   div.row.productData {
     margin-bottom: 80px;
+  }
+}
+
+@media (max-width: 991.5px) {
+  .loginMessageDiv {
+    margin-left: 6px;
+    margin-right: 6px;
+  }
+  div.row.bidsData {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 }
 
@@ -199,6 +213,8 @@ div.col-lg-2.col-sm-2.col-xs-3.highestBidsPrice {
 
   .loginMessageDiv {
     margin-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
     font-size: 14px;
   }
   .bidDetails {
@@ -210,5 +226,11 @@ div.col-lg-2.col-sm-2.col-xs-3.highestBidsPrice {
   }
   .detailsDiv {
     margin-top: 40px;
+  }
+}
+
+@media (max-width: 357.5px) {
+  .placeBidBtn {
+    margin-top: 15px;
   }
 }

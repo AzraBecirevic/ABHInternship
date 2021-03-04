@@ -2,6 +2,7 @@ import { Tab } from "bootstrap";
 import React, { Component } from "react";
 import { Tabs } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 import CategoryService from "../services/categoryService";
 import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
@@ -125,20 +126,44 @@ export class Home extends Component {
                   <CategoriesMenu
                     categories={this.state.categories}
                     isLoggedIn={this.props.isLoggedIn}
+                    email={this.props.email}
+                    token={this.props.token}
                   ></CategoriesMenu>
                 </div>
                 <div className="col-lg-9 col-md-8 col-sm-8 mainProduct">
                   {this.state.product != null && (
                     <div className="row mainProductDiv">
                       <div className="col-lg-4  mainProductData">
-                        <div className="mainProductName">
+                        <Link
+                          className="mainProductName"
+                          to={{
+                            pathname: SINGLE_PRODUCT_ROUTE,
+                            state: {
+                              chosenProduct: this.state.product.id,
+                              isLoggedIn: this.props.isLoggedIn,
+                              email: this.props.email,
+                              token: this.props.token,
+                            },
+                          }}
+                        >
                           {this.state.product.name}
-                        </div>
+                        </Link>
                         <div className="">
                           <div style={{ paddingRight: "0" }}>
-                            <div className="mainProductPrice">
+                            <Link
+                              className="mainProductPrice"
+                              to={{
+                                pathname: SINGLE_PRODUCT_ROUTE,
+                                state: {
+                                  chosenProduct: this.state.product.id,
+                                  isLoggedIn: this.props.isLoggedIn,
+                                  email: this.props.email,
+                                  token: this.props.token,
+                                },
+                              }}
+                            >
                               Starts from - ${this.state.product.startPrice}
-                            </div>
+                            </Link>
                             <div className="mainProductDesc">
                               {this.state.product.description}
                             </div>
@@ -151,10 +176,22 @@ export class Home extends Component {
                         </div>
                       </div>
                       <div className="col-lg-8 col-sm-12 image">
-                        <img
-                          className="mainProductImage"
-                          src={`data:image/png;base64, ${this.state.product.imageList[0].image}`}
-                        />
+                        <Link
+                          to={{
+                            pathname: SINGLE_PRODUCT_ROUTE,
+                            state: {
+                              chosenProduct: this.state.product.id,
+                              isLoggedIn: this.props.isLoggedIn,
+                              email: this.props.email,
+                              token: this.props.token,
+                            },
+                          }}
+                        >
+                          <img
+                            className="mainProductImage"
+                            src={`data:image/png;base64, ${this.state.product.imageList[0].image}`}
+                          />
+                        </Link>
                       </div>
                     </div>
                   )}
@@ -180,14 +217,18 @@ export class Home extends Component {
                       fetchMore={this.fetchMoreNewArrivals}
                       hasMore={this.state.hasMoreNewArrivalsData}
                       isLoggedIn={this.props.isLoggedIn}
+                      email={this.props.email}
+                      token={this.props.token}
                     ></TabsProducts>
                   </Tab>
-                  <Tab eventKey="lastChance" title="LastChance">
+                  <Tab eventKey="lastChance" title="Last Chance">
                     <TabsProducts
                       array={this.state.lastChance}
                       fetchMore={this.fetchMoreLastChance}
                       hasMore={this.state.hasMoreLastChanceData}
                       isLoggedIn={this.props.isLoggedIn}
+                      email={this.props.email}
+                      token={this.props.token}
                     ></TabsProducts>
                   </Tab>
                 </Tabs>

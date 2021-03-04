@@ -33,10 +33,22 @@ export class TabsProducts extends Component {
                         key={product.id}
                         style={{ marginTop: "40px" }}
                       >
-                        <img
-                          className="tabProductImage"
-                          src={`data:image/png;base64, ${product.image}`}
-                        />
+                        <Link
+                          to={{
+                            pathname: SINGLE_PRODUCT_ROUTE,
+                            state: {
+                              chosenProduct: product.id,
+                              isLoggedIn: this.props.isLoggedIn,
+                              email: this.props.email,
+                              token: this.props.token,
+                            },
+                          }}
+                        >
+                          <img
+                            className="tabProductImage"
+                            src={`data:image/png;base64, ${product.image}`}
+                          />
+                        </Link>
 
                         <div>
                           <Link
@@ -46,15 +58,28 @@ export class TabsProducts extends Component {
                               state: {
                                 chosenProduct: product.id,
                                 isLoggedIn: this.props.isLoggedIn,
+                                email: this.props.email,
+                                token: this.props.token,
                               },
                             }}
                           >
                             {product.name}
                           </Link>
                         </div>
-                        <div className="startsFrom">
+                        <Link
+                          className="startsFrom"
+                          to={{
+                            pathname: SINGLE_PRODUCT_ROUTE,
+                            state: {
+                              chosenProduct: product.id,
+                              isLoggedIn: this.props.isLoggedIn,
+                              email: this.props.email,
+                              token: this.props.token,
+                            },
+                          }}
+                        >
                           Starts from ${product.startPrice}
-                        </div>
+                        </Link>
                       </div>
                     );
                   }.bind(this)

@@ -86,7 +86,7 @@ export class App extends Component {
       this.toastService.showSuccessToast("You have successfully log out.");
     } catch (err) {
       this.toastService.showErrorToast(
-        "It is not possible to log you out now. Please try later"
+        "It is not possible to log you out now. Please try later."
       );
     }
   };
@@ -122,7 +122,12 @@ export class App extends Component {
                   exact
                   path={HOME_ROUTE}
                   render={(props) => (
-                    <Home {...props} isLoggedIn={this.state.isLoggedIn} />
+                    <Home
+                      {...props}
+                      isLoggedIn={this.state.isLoggedIn}
+                      email={this.email}
+                      token={this.jwtToken}
+                    />
                   )}
                 />
                 <Route path={ABOUT_ROUTE} component={AboutUs}></Route>

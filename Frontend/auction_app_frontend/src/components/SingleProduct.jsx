@@ -19,6 +19,8 @@ export class SingleProduct extends Component {
     mainImage: null,
     mainImageIndex: 0,
     bids: null,
+    email: "",
+    token: "",
   };
   productService = new ProductService();
   bidService = new BidService();
@@ -27,9 +29,16 @@ export class SingleProduct extends Component {
 
   async componentDidMount() {
     try {
-      const { chosenProduct, isLoggedIn } = this.props.location.state;
+      const {
+        chosenProduct,
+        isLoggedIn,
+        email,
+        token,
+      } = this.props.location.state;
       this.state.productId = chosenProduct;
       this.state.isLoggedIn = isLoggedIn;
+      this.state.email = email;
+      this.state.token = token;
 
       this.setState({
         product: await this.productService.getProductById(chosenProduct),
@@ -105,8 +114,8 @@ export class SingleProduct extends Component {
                 </div>
                 <div className="col-lg-6">
                   <div className="productName">{this.state.product.name}</div>
-                  <div className="startsFrom">
-                    Start from - ${this.state.product.startPrice}
+                  <div className="productStartsFrom">
+                    Starts from - ${this.state.product.startPrice}
                   </div>
                   {this.state.isLoggedIn && (
                     <div className="placeBidDiv">
@@ -129,8 +138,7 @@ export class SingleProduct extends Component {
                   )}
                   {this.state.isLoggedIn === false && (
                     <div className="loginMessageDiv">
-                      If you would like to place bid for this product, please
-                      log in.
+                      If you would like to place a bid, please log in.
                     </div>
                   )}
                   <div className="productBidDetails">
@@ -168,7 +176,13 @@ export class SingleProduct extends Component {
                   {this.state.bids !== null &&
                     this.state.bids.map(function (bid, index) {
                       return (
-                        <div key={bid.id} className="row bidData">
+                        <div
+                          key={bid.id}
+                          className={
+                            "row bidData " +
+                            ((index + 1) % 2 === 0 ? "greyDiv" : "normalDiv")
+                          }
+                        >
                           <div className="col-lg-8 col-sm-8 col-xs-6 biderName">
                             {bid.customerFullName}
                           </div>

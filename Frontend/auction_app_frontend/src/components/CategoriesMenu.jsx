@@ -26,6 +26,8 @@ export class CategoriesMenu extends Component {
                           state: {
                             chosenCategory: category.id,
                             isLoggedIn: this.props.isLoggedIn,
+                            email: this.props.email,
+                            token: this.props.token,
                           },
                         }}
                       >
