@@ -15,23 +15,28 @@ export class CategoriesMenu extends Component {
         <div className="menuCategories">
           <ul className="menucategoriesList">
             {this.props.categories != null &&
-              this.props.categories.map(function (category) {
-                return (
-                  <li className="menuCategoriesItem" key={category.id}>
-                    <Link
-                      className="categoryLink"
-                      to={{
-                        pathname: CATEGORIES_ROUTE,
-                        state: {
-                          chosenCategory: category.id,
-                        },
-                      }}
-                    >
-                      {category.name}
-                    </Link>
-                  </li>
-                );
-              })}
+              this.props.categories.map(
+                function (category) {
+                  return (
+                    <li className="menuCategoriesItem" key={category.id}>
+                      <Link
+                        className="categoryLink"
+                        to={{
+                          pathname: CATEGORIES_ROUTE,
+                          state: {
+                            chosenCategory: category.id,
+                            isLoggedIn: this.props.isLoggedIn,
+                            email: this.props.email,
+                            token: this.props.token,
+                          },
+                        }}
+                      >
+                        {category.name}
+                      </Link>
+                    </li>
+                  );
+                }.bind(this)
+              )}
             <li className="menuAllCategoriesItem">
               <a className="categoryLink">All categories</a>
             </li>

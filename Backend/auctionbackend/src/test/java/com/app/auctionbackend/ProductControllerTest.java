@@ -40,28 +40,28 @@ public class ProductControllerTest {
 
     @Test
     public void getProductByCategoryId1ShouldReturnOk() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get("/product/byCategory/1")
+        mvc.perform(MockMvcRequestBuilders.get("/product/byCategory/1/1")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
     }
 
     @Test
     public void getProductByCategoryId0ShouldReturnBadRequest() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get("/product/byCategory/0")
+        mvc.perform(MockMvcRequestBuilders.get("/product/byCategory/0/1")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isBadRequest());
     }
 
     @Test
     public void getNewArrivalsShouldReturnOk() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get("/product/newArrivals")
+        mvc.perform(MockMvcRequestBuilders.get("/product/newArrivals/1")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
     }
 
     @Test
     public void getLastChanceShouldReturnOk() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get("/product/lastChance")
+        mvc.perform(MockMvcRequestBuilders.get("/product/lastChance/1")
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
     }

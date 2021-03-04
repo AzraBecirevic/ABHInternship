@@ -16,6 +16,7 @@ import {
   LOGIN_ROUTE,
   PRIVACY_POLICY_ROUTE,
   REGISTER_ROUTE,
+  SINGLE_PRODUCT_ROUTE,
   TEARMS_CONDITIONS_ROUTE,
 } from "./constants/routes";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,6 +28,7 @@ import jwtDecoder from "jwt-decode";
 import ToastService from "./services/toastService";
 import AuthService from "./services/authService";
 import Categories from "./components/Categories";
+import SingleProduct from "./components/SingleProduct";
 
 export class App extends Component {
   state = {
@@ -84,7 +86,7 @@ export class App extends Component {
       this.toastService.showSuccessToast("You have successfully log out.");
     } catch (err) {
       this.toastService.showErrorToast(
-        "It is not possible to log you out now. Please try later"
+        "It is not possible to log you out now. Please try later."
       );
     }
   };
@@ -120,7 +122,12 @@ export class App extends Component {
                   exact
                   path={HOME_ROUTE}
                   render={(props) => (
-                    <Home {...props} isLoggedIn={this.state.isLoggedIn} />
+                    <Home
+                      {...props}
+                      isLoggedIn={this.state.isLoggedIn}
+                      email={this.email}
+                      token={this.jwtToken}
+                    />
                   )}
                 />
                 <Route path={ABOUT_ROUTE} component={AboutUs}></Route>
@@ -150,6 +157,11 @@ export class App extends Component {
                   )}
                 />
                 <Route exact path={CATEGORIES_ROUTE} component={Categories} />
+                <Route
+                  exact
+                  path={SINGLE_PRODUCT_ROUTE}
+                  component={SingleProduct}
+                />
               </div>
               <Footer openLink={this.openPage} />
             </div>

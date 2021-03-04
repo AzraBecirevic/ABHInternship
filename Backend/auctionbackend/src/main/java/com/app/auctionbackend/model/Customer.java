@@ -1,9 +1,8 @@
 package com.app.auctionbackend.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Customer {
@@ -15,6 +14,9 @@ public class Customer {
     private String lastName;
     private String email;
     private String password;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Bid> bids = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -56,4 +58,11 @@ public class Customer {
         this.password = password;
     }
 
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
 }

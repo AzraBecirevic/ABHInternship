@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 
 export class Categories extends Component {
   constructor(props) {
@@ -17,6 +18,9 @@ export class Categories extends Component {
     products: null,
     categoryId: null,
     hasMoreData: true,
+    isLoggedIn: false,
+    email: "",
+    token: "",
   };
 
   categoryService = new CategoryService();
@@ -27,8 +31,17 @@ export class Categories extends Component {
   componentDidMount = async () => {
     this.fetchNumber = 1;
     try {
-      const { chosenCategory } = this.props.location.state;
+      const {
+        chosenCategory,
+        isLoggedIn,
+        email,
+        token,
+      } = this.props.location.state;
       this.state.categoryId = chosenCategory;
+      this.state.isLoggedIn = isLoggedIn;
+      this.state.email = email;
+      this.state.token = token;
+
       this.setState({
         categories: await this.categoryService.getCategories(),
       });
@@ -133,27 +146,64 @@ export class Categories extends Component {
                       >
                         <div className="row">
                           {this.state.products != null &&
-                            this.state.products.map(function (product) {
-                              return (
-                                <div
-                                  className="col-lg-4 col-md-6 col-sm-6 product"
-                                  key={product.id}
-                                >
-                                  <img
-                                    className="categoryProductImage"
-                                    src={`data:image/png;base64, ${product.image}`}
-                                  />
-                                  <div>
-                                    <a className="productNameLink">
-                                      {product.name}
-                                    </a>
+                            this.state.products.map(
+                              function (product) {
+                                return (
+                                  <div
+                                    className="col-lg-4 col-md-6 col-sm-6 product"
+                                    key={product.id}
+                                  >
+                                    <Link
+                                      to={{
+                                        pathname: SINGLE_PRODUCT_ROUTE,
+                                        state: {
+                                          chosenProduct: product.id,
+                                          isLoggedIn: this.state.isLoggedIn,
+                                          email: this.state.email,
+                                          token: this.state.token,
+                                        },
+                                      }}
+                                    >
+                                      <img
+                                        className="categoryProductImage"
+                                        src={`data:image/png;base64, ${product.image}`}
+                                      />
+                                    </Link>
+
+                                    <div>
+                                      <Link
+                                        className="productNameLink"
+                                        to={{
+                                          pathname: SINGLE_PRODUCT_ROUTE,
+                                          state: {
+                                            chosenProduct: product.id,
+                                            isLoggedIn: this.state.isLoggedIn,
+                                            email: this.state.email,
+                                            token: this.state.token,
+                                          },
+                                        }}
+                                      >
+                                        {product.name}
+                                      </Link>
+                                    </div>
+                                    <Link
+                                      className="startsFrom"
+                                      to={{
+                                        pathname: SINGLE_PRODUCT_ROUTE,
+                                        state: {
+                                          chosenProduct: product.id,
+                                          isLoggedIn: this.state.isLoggedIn,
+                                          email: this.state.email,
+                                          token: this.state.token,
+                                        },
+                                      }}
+                                    >
+                                      Starts from ${product.startPrice}
+                                    </Link>
                                   </div>
-                                  <div className="startsFrom">
-                                    Starts from ${product.startPrice}
-                                  </div>
-                                </div>
-                              );
-                            })}
+                                );
+                              }.bind(this)
+                            )}
                         </div>
                       </InfiniteScroll>
                     )}

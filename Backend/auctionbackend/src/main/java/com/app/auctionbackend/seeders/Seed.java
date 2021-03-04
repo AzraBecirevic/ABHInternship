@@ -33,6 +33,9 @@ public class Seed {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    BidRepository bidRepository;
+
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public Image getImageData(String path){
@@ -126,15 +129,19 @@ public class Seed {
 
 
         Image womenRedTShirtImage1 = getImageData("src/main/resources/images/womenRedTShirt.jpg");
-        Image womenRedTShirtImage2 = getImageData("src/main/resources/images/womenRedTShirt.jpg");
-        Image womenRedTShirtImage3 = getImageData("src/main/resources/images/womenRedTShirt.jpg");
-        Image womenRedTShirtImage4 = getImageData("src/main/resources/images/womenRedTShirt.jpg");
+        Image womenRedTShirtImage2 = getImageData("src/main/resources/images/womenWhiteTShirt.jpg");
+        Image womenRedTShirtImage3 = getImageData("src/main/resources/images/womenTShirt.jpg");
+        Image womenRedTShirtImage4 = getImageData("src/main/resources/images/womenRedBag.jpg");
+        Image womenRedTShirtImage5 = getImageData("src/main/resources/images/womenBeigeBag.jpg");
+
 
         List<Image> womenRedTShirtImages = new ArrayList<>();
         womenRedTShirtImages.add(womenRedTShirtImage1);
         womenRedTShirtImages.add(womenRedTShirtImage2);
         womenRedTShirtImages.add(womenRedTShirtImage3);
         womenRedTShirtImages.add(womenRedTShirtImage4);
+        womenRedTShirtImages.add(womenRedTShirtImage5);
+
 
         Product womenRedTShort = new Product();
         womenRedTShort.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
@@ -149,14 +156,42 @@ public class Seed {
         womenRedTShirtImages.get(1).setProduct(womenRedTShort);
         womenRedTShirtImages.get(2).setProduct(womenRedTShort);
         womenRedTShirtImages.get(3).setProduct(womenRedTShort);
+        womenRedTShirtImages.get(4).setProduct(womenRedTShort);
+
 
         womenRedTShort.setImageList(womenRedTShirtImages);
+
+
+        Bid bidRedTShirtCustomer2 = new Bid();
+        bidRedTShirtCustomer2.setBidPrice(61);
+        bidRedTShirtCustomer2.setCustomer(customer2);
+        bidRedTShirtCustomer2.setProduct(womenRedTShort);
+        bidRedTShirtCustomer2.setDateOfBidPlacement(LocalDateTime.now());
+
+        Bid bidRedTShirtCustomer3 = new Bid();
+        bidRedTShirtCustomer3.setBidPrice(80);
+        bidRedTShirtCustomer3.setCustomer(customer3);
+        bidRedTShirtCustomer3.setProduct(womenRedTShort);
+        bidRedTShirtCustomer3.setDateOfBidPlacement(LocalDateTime.now());
+
+        List<Bid> bidListCustomer2 = new ArrayList<>();
+        bidListCustomer2.add(bidRedTShirtCustomer2);
+
+        List<Bid> bidListCustomer3 = new ArrayList<>();
+        bidListCustomer2.add(bidRedTShirtCustomer3);
+
+        customer2.setBids(bidListCustomer2);
+        customer3.setBids(bidListCustomer3);
 
         productRepository.save(womenRedTShort);
         imageRepository.save(womenRedTShirtImage1);
         imageRepository.save(womenRedTShirtImage2);
         imageRepository.save(womenRedTShirtImage3);
         imageRepository.save(womenRedTShirtImage4);
+        imageRepository.save(womenRedTShirtImage5);
+        bidRepository.save(bidRedTShirtCustomer2);
+        bidRepository.save(bidRedTShirtCustomer3);
+
 
 
         Image womenWhiteTShirtImage1 = getImageData("src/main/resources/images/womenWhiteTShirt.jpg");
@@ -233,11 +268,36 @@ public class Seed {
 
         womenSneakers.setImageList(womenSneakersImages);
 
+
+        Bid bidPurpleSneakersCustomer2 = new Bid();
+        bidPurpleSneakersCustomer2.setBidPrice(210);
+        bidPurpleSneakersCustomer2.setCustomer(customer2);
+        bidPurpleSneakersCustomer2.setProduct(womenSneakers);
+        bidPurpleSneakersCustomer2.setDateOfBidPlacement(LocalDateTime.now());
+
+        Bid bidPurpleSneakersCustomer3 = new Bid();
+        bidPurpleSneakersCustomer3.setBidPrice(230);
+        bidPurpleSneakersCustomer3.setCustomer(customer3);
+        bidPurpleSneakersCustomer3.setProduct(womenSneakers);
+        bidPurpleSneakersCustomer3.setDateOfBidPlacement(LocalDateTime.now());
+
+        List<Bid> bidPurpleSneakersListCustomer2 = new ArrayList<>();
+        bidPurpleSneakersListCustomer2.add(bidPurpleSneakersCustomer2);
+
+        List<Bid> bidPurpleSneakersListCustomer3= new ArrayList<>();
+        bidPurpleSneakersListCustomer3.add(bidPurpleSneakersCustomer3);
+
+        customer2.setBids(bidPurpleSneakersListCustomer2);
+        customer3.setBids(bidPurpleSneakersListCustomer3);
+
+
         productRepository.save(womenSneakers);
         imageRepository.save(womenSneakersImg1);
         imageRepository.save(womenSneakersImg2);
         imageRepository.save(womenSneakersImg3);
         imageRepository.save(womenSneakersImg4);
+        bidRepository.save(bidPurpleSneakersCustomer2);
+        bidRepository.save(bidPurpleSneakersCustomer3);
 
 
         Image womenWhiteSneakersImg1 = getImageData("src/main/resources/images/womenWhiteSneakers.png");
