@@ -2,9 +2,11 @@ package com.app.auctionbackend.service;
 
 import com.app.auctionbackend.dtos.ProductDetailsDto;
 import com.app.auctionbackend.dtos.ProductDto;
+import com.app.auctionbackend.model.Bid;
 import com.app.auctionbackend.model.Image;
 import com.app.auctionbackend.model.Product;
 import com.app.auctionbackend.model.Subcategory;
+import com.app.auctionbackend.repo.BidRepository;
 import com.app.auctionbackend.repo.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class ProductService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    BidRepository bidRepository;
 
 
     public List<ProductDto> getProducts(){
@@ -41,6 +46,20 @@ public class ProductService {
         if(product!=null){
             ModelMapper modelMapper = new ModelMapper();
             ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
+
+            List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(id);
+            if(bidList == null || bidList.size() == 0){
+                productDetailsDto.setHighestBid(0);  // or startPrice
+                productDetailsDto.setNumberOfBids(0);
+            }
+            else{
+                Bid highestBid = bidList.get(bidList.size()-1);  //last
+                productDetailsDto.setHighestBid(highestBid.getBidPrice());
+                productDetailsDto.setNumberOfBids(bidList.size());
+            }
+
+            long diff = ChronoUnit.DAYS.between(product.getStartDate(),product.getEndDate());
+            productDetailsDto.setTimeLeft(diff);
 
             return productDetailsDto;
         }

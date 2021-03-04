@@ -8,20 +8,27 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PingControllerTest {
+public class BidControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @Test
-    public void ping() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get("/ping").accept(MediaType.TEXT_PLAIN))
-        .andExpect(status().isForbidden());
+    public void getBidsByProductById0ShouldReturnBadRequest() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get("/bid/byProductId/0")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void getBidsByProductById1ShouldReturnOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get("/bid/byProductId/1")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
+
 }

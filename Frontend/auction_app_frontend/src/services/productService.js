@@ -23,6 +23,10 @@ class ProductService {
     return await this.getData("/product/getMostExpensive");
   }
 
+  async getProductById(productId) {
+    return await this.getData("/product/" + productId);
+  }
+
   async getData(link) {
     const requestOptions = {
       method: "GET",

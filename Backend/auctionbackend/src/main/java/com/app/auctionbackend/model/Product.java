@@ -21,6 +21,9 @@ public class Product {
     @ManyToMany(mappedBy = "products")
     private List<Subcategory> subcategories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<Bid> bids = new ArrayList<>();
+
     public Integer getId() {
         return id;
     }
@@ -85,4 +88,11 @@ public class Product {
         this.subcategories = subcategories;
     }
 
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
 }

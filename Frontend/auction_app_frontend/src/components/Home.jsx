@@ -124,6 +124,7 @@ export class Home extends Component {
                 <div className="col-lg-3 col-md-4 col-sm-4 homemenu">
                   <CategoriesMenu
                     categories={this.state.categories}
+                    isLoggedIn={this.props.isLoggedIn}
                   ></CategoriesMenu>
                 </div>
                 <div className="col-lg-9 col-md-8 col-sm-8 mainProduct">
@@ -178,6 +179,7 @@ export class Home extends Component {
                       array={this.state.newArrivals}
                       fetchMore={this.fetchMoreNewArrivals}
                       hasMore={this.state.hasMoreNewArrivalsData}
+                      isLoggedIn={this.props.isLoggedIn}
                     ></TabsProducts>
                   </Tab>
                   <Tab eventKey="lastChance" title="LastChance">
@@ -185,6 +187,7 @@ export class Home extends Component {
                       array={this.state.lastChance}
                       fetchMore={this.fetchMoreLastChance}
                       hasMore={this.state.hasMoreLastChanceData}
+                      isLoggedIn={this.props.isLoggedIn}
                     ></TabsProducts>
                   </Tab>
                 </Tabs>
