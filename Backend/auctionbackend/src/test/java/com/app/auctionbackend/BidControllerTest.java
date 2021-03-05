@@ -31,4 +31,13 @@ public class BidControllerTest {
         ).andExpect(status().isOk());
     }
 
+
+    @Test
+    public void addBidShouldReturnIsForbidden() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post("/bid/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"customerEmail\": \"customer1@mail.com\", \"productId\": \"1\", \"bidPrice\":\"120\"}")
+        ).andExpect(status().isForbidden());
+    }
+
 }

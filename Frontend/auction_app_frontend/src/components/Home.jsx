@@ -168,9 +168,21 @@ export class Home extends Component {
                               {this.state.product.description}
                             </div>
                             {this.props.isLoggedIn && (
-                              <button className="mainBidButton">
-                                BID NOW {this.arrow}{" "}
-                              </button>
+                              <Link
+                                to={{
+                                  pathname: SINGLE_PRODUCT_ROUTE,
+                                  state: {
+                                    chosenProduct: this.state.product.id,
+                                    isLoggedIn: this.props.isLoggedIn,
+                                    email: this.props.email,
+                                    token: this.props.token,
+                                  },
+                                }}
+                              >
+                                <button className="mainBidButton">
+                                  BID NOW {this.arrow}{" "}
+                                </button>
+                              </Link>
                             )}
                           </div>
                         </div>

@@ -149,7 +149,27 @@ div.row.bidData {
 div.row.bidData.greyDiv {
   background-color: #fafafa;
 }
-
+.succesBidMessage {
+  height: 60px;
+  background-color: #f0f3ee;
+  font-family: Lato-Bold;
+  font-size: 18px;
+  color: #417505;
+  letter-spacing: 0.63px;
+  align-items: center;
+}
+.failBidMessage {
+  height: 60px;
+  background-color: #f6f2e5;
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #ab944e;
+  letter-spacing: 0.63px;
+}
+div.row.message {
+  height: 100%;
+  align-items: center;
+}
 @media (min-width: 576px) and (max-width: 1750px) {
   div.row.bidsData {
     margin-bottom: 90px;
@@ -159,18 +179,33 @@ div.row.bidData.greyDiv {
   }
 }
 
+@media (min-width: 992px) and (max-width: 1178px) {
+  .placeBidBtn {
+    margin-top: 15px;
+  }
+}
+
 @media (max-width: 991.5px) {
   .loginMessageDiv {
     margin-left: 3px;
     margin-right: 3px;
   }
   .productBidDetails {
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
   .detailsDiv {
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .placeBidDiv {
+    margin-left: 10px;
+  }
+  .productName {
+    margin-left: 10px;
+  }
+  .productStartsFrom {
+    margin-left: 10px;
   }
 }
 
