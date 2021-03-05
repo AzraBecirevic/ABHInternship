@@ -31,10 +31,10 @@ public class BidController {
 
     @PostMapping("/add")
     public ResponseEntity<Boolean> addBid(@RequestBody PlaceBidDto placeBidDto){
-        if(placeBidDto!=null && placeBidDto.getProductId()<=0)
+      if(placeBidDto!=null && placeBidDto.getProductId()<=0)
             return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
 
-        Boolean bidPlaced = bidService.addBidd(placeBidDto);
+        Boolean bidPlaced = bidService.addBid(placeBidDto);
         if(bidPlaced)
             return new ResponseEntity(true, HttpStatus.OK);
 

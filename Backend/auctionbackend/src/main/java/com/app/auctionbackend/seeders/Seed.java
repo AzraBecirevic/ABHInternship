@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -37,6 +38,7 @@ public class Seed {
     BidRepository bidRepository;
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
 
     public Image getImageData(String path){
         Image image = new Image();
@@ -112,7 +114,7 @@ public class Seed {
         LocalDateTime startDateB = LocalDateTime.of(2021,3,4,0,0);
         womenTShort1.setStartDate(startDateB);
         womenTShort1.setName("Black T-Shirt");
-        womenTShort1.setStartPrice(50);
+        womenTShort1.setStartPrice(50.55);
 
         womenTShirtImages.get(0).setProduct(womenTShort1);
         womenTShirtImages.get(1).setProduct(womenTShort1);

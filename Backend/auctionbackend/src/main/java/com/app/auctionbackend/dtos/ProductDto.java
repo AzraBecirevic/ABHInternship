@@ -6,6 +6,7 @@ public class ProductDto {
     private String name;
     private double startPrice;
     private String image;
+    private String startPriceText;
 
     public Integer getId() {
         return id;
@@ -39,4 +40,11 @@ public class ProductDto {
         this.image = image;
     }
 
+    public String getStartPriceText() {
+        return startPriceText;
+    }
+
+    public void setStartPriceText(String startPriceText) {
+        this.startPriceText = startPriceText;
+    }
 }

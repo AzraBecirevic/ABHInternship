@@ -78,7 +78,7 @@ export class TabsProducts extends Component {
                             },
                           }}
                         >
-                          Starts from ${product.startPrice}
+                          Starts from ${product.startPriceText}
                         </Link>
                       </div>
                     );

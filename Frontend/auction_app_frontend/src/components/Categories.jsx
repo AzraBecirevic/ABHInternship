@@ -198,7 +198,7 @@ export class Categories extends Component {
                                         },
                                       }}
                                     >
-                                      Starts from ${product.startPrice}
+                                      Starts from ${product.startPriceText}
                                     </Link>
                                   </div>
                                 );

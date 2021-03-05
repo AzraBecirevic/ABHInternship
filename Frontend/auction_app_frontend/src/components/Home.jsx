@@ -162,7 +162,7 @@ export class Home extends Component {
                                 },
                               }}
                             >
-                              Starts from - ${this.state.product.startPrice}
+                              Starts from - ${this.state.product.startPriceText}
                             </Link>
                             <div className="mainProductDesc">
                               {this.state.product.description}

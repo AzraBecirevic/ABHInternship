@@ -13,6 +13,9 @@ public class ProductDetailsDto {
     private Integer numberOfBids=0;
     private long timeLeft=0; //days
     private List<ImageDto> imageList = new ArrayList<>();
+    private String startPriceText;
+    private String highestBidText;
+
 
     public Integer getId() {
         return id;
@@ -76,5 +79,21 @@ public class ProductDetailsDto {
 
     public void setTimeLeft(long timeLeft) {
         this.timeLeft = timeLeft;
+    }
+
+    public String getStartPriceText() {
+        return startPriceText;
+    }
+
+    public void setStartPriceText(String startPriceText) {
+        this.startPriceText = startPriceText;
+    }
+
+    public String getHighestBidText() {
+        return highestBidText;
+    }
+
+    public void setHighestBidText(String highestBidText) {
+        this.highestBidText = highestBidText;
     }
 }

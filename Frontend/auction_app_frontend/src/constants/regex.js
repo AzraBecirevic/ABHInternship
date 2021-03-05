@@ -10,4 +10,4 @@ export const PASSWORD_REGEX = new RegExp(
     "}$"
 );
 
-export const BID_REGEX = /^[0-9]+$/;
+export const BID_REGEX = /^-?\d+(\.\d{1,2})?$/;

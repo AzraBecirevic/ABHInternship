@@ -5,6 +5,7 @@ import com.app.auctionbackend.model.Product;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.swing.text.StyledEditorKit;
 import java.time.LocalDateTime;
 
 public class BidDto {
@@ -16,6 +17,7 @@ public class BidDto {
     private String customerFullName;
     private Integer productId;
     private Boolean isHighestBid = false;
+    private String bidPriceText;
 
     public Integer getId() {
         return id;
@@ -73,6 +75,13 @@ public class BidDto {
         isHighestBid = highestBid;
     }
 
+    public String getBidPriceText() {
+        return bidPriceText;
+    }
+
+    public void setBidPriceText(String bidPriceText) {
+        this.bidPriceText = bidPriceText;
+    }
 }
 
 

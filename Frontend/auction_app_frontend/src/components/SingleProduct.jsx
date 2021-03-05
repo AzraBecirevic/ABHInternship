@@ -24,7 +24,9 @@ export class SingleProduct extends Component {
     token: "",
     placedBid: "",
     isBidPlaced: null,
-    placeBidErrMessage: null,
+    placeBidErrorMessage: null,
+    placeBidMessage: null,
+    placeBidSuccesMessage: null,
   };
   productService = new ProductService();
   bidService = new BidService();
@@ -77,28 +79,39 @@ export class SingleProduct extends Component {
     this.setState({ images: [...this.state.images, this.state.mainImage] });
   }
 
+  validateBidFormat(bid) {
+    bid.toString();
+    const re = BID_REGEX;
+    return re.test(String(bid));
+  }
+
   validatePlacedBid() {
-    if (this.validatePlacedBidFormat() == false) {
-      this.setState({ placeBidErrMessage: "Please enter price" });
+    if (this.validateBidFormat(this.state.placedBid) == false) {
+      this.setState({
+        placeBidErrorMessage: "Bid can have up to two decimal places",
+      });
       return false;
     }
 
-    if (this.state.placedBid <= 0) {
-      this.setState({ placeBidErrMessage: "Enter price bigger than 0" });
+    if (this.state.placedBid == 0) {
+      this.setState({ placeBidErrorMessage: "Bid price can not be 0." });
       return false;
     }
-
+    if (this.state.placedBid < 0) {
+      this.setState({ placeBidErrorMessage: "Bid price can not be negative." });
+      return false;
+    }
     if (this.state.placedBid <= this.state.product.highestBid) {
       this.setState({
-        placeBidErrMessage: "Enter price bigger than highest bid",
+        placeBidErrorMessage: "Enter price bigger than highest bid.",
       });
       return false;
     }
 
     if (this.state.product.startPrice > this.state.placedBid) {
       this.setState({
-        placeBidErrMessage:
-          "Enter $" + this.state.product.startPrice + " or more",
+        placeBidErrorMessage:
+          "Enter $" + this.state.product.startPrice + " or more.",
       });
 
       return false;
@@ -106,14 +119,11 @@ export class SingleProduct extends Component {
     return true;
   }
 
-  validatePlacedBidFormat() {
-    const re = BID_REGEX;
-    return re.test(String(this.state.placedBid));
-  }
-
   onSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ placeBidErrMessage: null });
+    this.setState({ placeBidErrorMessage: null });
+    this.setState({ placeBidSuccesMessage: null });
+
     if (this.validatePlacedBid()) {
       try {
         const isBidAdded = await this.bidService.placeBid(
@@ -144,6 +154,14 @@ export class SingleProduct extends Component {
               this.state.productId
             ),
           });
+          this.setState({
+            placeBidSuccesMessage: "Congrats! You are the highest bidder!",
+          });
+        } else {
+          this.setState({
+            placeBidErrorMessage:
+              "There are higher bids than yours. You could give a second try!",
+          });
         }
       } catch (error) {
         this.toastService.showErrorToast(
@@ -158,24 +176,20 @@ export class SingleProduct extends Component {
     return (
       <div>
         <Heading title="SINGLE PRODUCT"></Heading>
-        {this.state.isBidPlaced != null && this.state.isBidPlaced && (
+        {this.state.placeBidSuccesMessage && (
           <div className="succesBidMessage">
             <div className="row message">
               <div className="col-lg-2"></div>
-              <div className="col-lg-8">
-                Congrats! You are the highest bidder!
-              </div>
+              <div className="col-lg-8">{this.state.placeBidSuccesMessage}</div>
               <div className="col-lg-2"></div>
             </div>
           </div>
         )}
-        {this.state.isBidPlaced != null && this.state.isBidPlaced === false && (
+        {this.state.placeBidErrorMessage != null && (
           <div className="failBidMessage">
             <div className="row message">
               <div className="col-lg-2"></div>
-              <div className="col-lg-8">
-                There are higher bids than yours. You cuold give a second try!
-              </div>
+              <div className="col-lg-8">{this.state.placeBidErrorMessage}</div>
               <div className="col-lg-2"></div>
             </div>
           </div>
@@ -219,7 +233,7 @@ export class SingleProduct extends Component {
                 <div className="col-lg-6">
                   <div className="productName">{this.state.product.name}</div>
                   <div className="productStartsFrom">
-                    Starts from - ${this.state.product.startPrice}
+                    Starts from - ${this.state.product.startPriceText}
                   </div>
                   {this.state.isLoggedIn && (
                     <div className="placeBidDiv">
@@ -228,7 +242,7 @@ export class SingleProduct extends Component {
                           <input
                             className="bidInput"
                             name="placedBid"
-                            type="text"
+                            type="number"
                             value={this.state.placedBid}
                             onChange={this.onChange}
                           />
@@ -236,18 +250,18 @@ export class SingleProduct extends Component {
                             PLACE BID {this.characterArrow}{" "}
                           </button>
                         </div>
-                        {this.state.placeBidErrMessage == null && (
+
+                        {this.state.product.highestBid <= 0 && (
                           <div className="minBidValueMessage">
-                            Enter $
-                            {this.state.product.highestBid > 0
-                              ? this.state.product.highestBid + 1
-                              : this.state.product.startPrice}{" "}
-                            or more
+                            Enter ${this.state.product.startPriceText} or more
                           </div>
                         )}
-                        {this.state.placeBidErrMessage != null && (
+                        {this.state.product.highestBid > 0 && (
                           <div className="minBidValueMessage">
-                            {this.state.placeBidErrMessage}
+                            Enter more than $
+                            {this.state.product.highestBid % 1 != 0
+                              ? this.state.product.highestBid
+                              : this.state.product.highestBid + ".00"}
                           </div>
                         )}
                       </form>
@@ -262,7 +276,7 @@ export class SingleProduct extends Component {
                     <div className="bidDetails">
                       Highest bid:{" "}
                       <span className="highestBidText">
-                        {this.state.product.highestBid}
+                        ${this.state.product.highestBidText}
                       </span>
                     </div>
                     <div className="bidDetails">
@@ -318,7 +332,7 @@ export class SingleProduct extends Component {
                                 : "bidsPrice")
                             }
                           >
-                            $ {bid.bidPrice}
+                            $ {bid.bidPriceText}
                           </div>
                         </div>
                       );
