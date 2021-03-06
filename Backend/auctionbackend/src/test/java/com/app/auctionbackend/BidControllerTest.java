@@ -47,13 +47,13 @@ public class BidControllerTest {
         SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
         SecurityConstants.SECRET = skh.tokenKey;
 
-        String token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjdXN0b21lcjFAbWFpbC5jb20iLCJleHAiOjE2MTU4NDM3Nzd9.f-WUq6Gs8xNa0obrHGkQaS-txCRm5Y-is-KI2helw2sXAImZ7rzpTYxkBJSSlVidy8a17F_IENB_Mq4JP35y4w";
+        String token = skh.jwtToken;
 
-      mvc.perform(MockMvcRequestBuilders.post("/bid/add")
+         mvc.perform(MockMvcRequestBuilders.post("/bid/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", token)
                 .content("{\"customerEmail\": \"customer1@mail.com\", \"productId\": \"1\", \"bidPrice\":\"120\"}")
-        ).andExpect(status().isOk());
+         ).andExpect(status().isOk());
 
     }
 
@@ -63,7 +63,7 @@ public class BidControllerTest {
         SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
         SecurityConstants.SECRET = skh.tokenKey;
 
-        String token ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjdXN0b21lcjFAbWFpbC5jb20iLCJleHAiOjE2MTU4NDM3Nzd9.f-WUq6Gs8xNa0obrHGkQaS-txCRm5Y-is-KI2helw2sXAImZ7rzpTYxkBJSSlVidy8a17F_IENB_Mq4JP35y4w";
+        String token = skh.jwtToken;
 
         mvc.perform(MockMvcRequestBuilders.post("/bid/add")
                 .contentType(MediaType.APPLICATION_JSON)
