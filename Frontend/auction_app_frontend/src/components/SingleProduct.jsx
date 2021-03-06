@@ -86,43 +86,44 @@ export class SingleProduct extends Component {
   }
 
   validatePlacedBid() {
-    if (this.validateBidFormat(this.state.placedBid) == false) {
+    const { placedBid } = this.state;
+
+    if (this.validateBidFormat(placedBid) == false) {
       this.setState({
         placeBidErrorMessage: "Bid can have up to two decimal places",
       });
       return false;
-    }
-
-    if (this.state.placedBid == 0) {
+    } else if (placedBid > 99999) {
+      this.setState({
+        placeBidErrorMessage:
+          "Bid price is over maximum. Please enter smaller price.",
+      });
+      return false;
+    } else if (placedBid == 0) {
       this.setState({ placeBidErrorMessage: "Bid price can not be 0." });
       return false;
-    }
-    if (this.state.placedBid < 0) {
+    } else if (placedBid < 0) {
       this.setState({ placeBidErrorMessage: "Bid price can not be negative." });
       return false;
-    }
-    if (this.state.placedBid <= this.state.product.highestBid) {
+    } else if (placedBid <= this.state.product.highestBid) {
       this.setState({
         placeBidErrorMessage: "Enter price bigger than highest bid.",
       });
       return false;
-    }
-
-    if (this.state.product.startPrice > this.state.placedBid) {
+    } else if (this.state.product.startPrice > placedBid) {
       this.setState({
         placeBidErrorMessage:
           "Enter $" + this.state.product.startPrice + " or more.",
       });
-
       return false;
+    } else {
+      return true;
     }
-    return true;
   }
 
   onSubmit = async (e) => {
     e.preventDefault();
-    this.setState({ placeBidErrorMessage: null });
-    this.setState({ placeBidSuccesMessage: null });
+    this.setState({ placeBidErrorMessage: null, placeBidSuccesMessage: null });
 
     if (this.validatePlacedBid()) {
       try {
@@ -133,34 +134,18 @@ export class SingleProduct extends Component {
           this.state.token
         );
         this.setState({ isBidPlaced: isBidAdded });
-
         if (isBidAdded) {
           this.setState({
             product: await this.productService.getProductById(
               this.state.productId
             ),
-          });
-          this.setState({ images: this.state.product.imageList });
-          this.setState({
-            mainImage: this.state.images[this.state.mainImageIndex],
-          });
-          this.setState({
-            images: this.state.images.filter((image) => {
+            images: this.state.product.imageList.filter((image, index) => {
               return image.id != this.state.mainImage.id;
             }),
-          });
-          this.setState({
             bids: await this.bidService.getBidsByProductId(
               this.state.productId
             ),
-          });
-          this.setState({
             placeBidSuccesMessage: "Congrats! You are the highest bidder!",
-          });
-        } else {
-          this.setState({
-            placeBidErrorMessage:
-              "There are higher bids than yours. You could give a second try!",
           });
         }
       } catch (error) {

@@ -58,6 +58,9 @@ public class BidService {
     }
 
     public Boolean addBid(PlaceBidDto placeBidDto){
+        if(placeBidDto.getBidPrice() > 99999)
+            return false;
+
          List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(placeBidDto.getProductId());
 
         if(bidList != null && bidList.size() > 0){
@@ -76,7 +79,6 @@ public class BidService {
          Customer customer = customerRepository.findByEmail(placeBidDto.getCustomerEmail());
          if(product == null || customer == null)
              return false;
-
 
          if(product.getStartPrice() > placeBidDto.getBidPrice())
              return false;

@@ -11,8 +11,8 @@ export class TearmsAndConditions extends Component {
         <Heading title="TEARMS AND CONDITIONS"></Heading>
         <div className="container">
           <div className="row">
-            <div className="col-lg-2"></div>
-            <div className="col-lg-8">
+            <div className="col-lg-1"></div>
+            <div className="col-lg-10">
               <div className="tearmsConditionsDiv">
                 <h2 className="tearmsHeading">Introduction</h2>
                 <div className="termsTextDiv">
@@ -162,7 +162,7 @@ export class TearmsAndConditions extends Component {
                 ></TextHelper>
               </div>
             </div>
-            <div className="col-lg-2"></div>
+            <div className="col-lg-1"></div>
           </div>
         </div>
       </div>

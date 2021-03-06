@@ -58,30 +58,30 @@ public class Seed {
     public void seed(ContextRefreshedEvent event) {
 
         Customer customer = new Customer();
-        customer.setFirstName("Customer1");
-        customer.setLastName("Lastname1");
-        customer.setEmail("customer1@mail.com");
+        customer.setFirstName("Mable");
+        customer.setLastName("Labmert");
+        customer.setEmail("mableLambert@mail.com");
         customer.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer);
 
         Customer customer2 = new Customer();
-        customer2.setFirstName("Customer2");
-        customer2.setLastName("Lastname2");
-        customer2.setEmail("customer2@mail.com");
+        customer2.setFirstName("Milton");
+        customer2.setLastName("Warren");
+        customer2.setEmail("miltonWarren@mail.com");
         customer2.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer2);
 
         Customer customer3 = new Customer();
-        customer3.setFirstName("Customer3");
-        customer3.setLastName("Lastname3");
-        customer3.setEmail("customer3@mail.com");
+        customer3.setFirstName("Loyd");
+        customer3.setLastName("Parks");
+        customer3.setEmail("loydParks@mail.com");
         customer3.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer3);
 
         Customer customer4 = new Customer();
-        customer4.setFirstName("Customer4");
-        customer4.setLastName("Lastname4");
-        customer4.setEmail("customer4@mail.com");
+        customer4.setFirstName("Charlie");
+        customer4.setLastName("Fuller");
+        customer4.setEmail("charlieFuller@mail.com");
         customer4.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer4);
 
