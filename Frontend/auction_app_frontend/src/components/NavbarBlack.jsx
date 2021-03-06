@@ -27,67 +27,85 @@ export class NavbarBlack extends Component {
     if (!this.props.isLoggedIn) {
       divUser = (
         <div className="registerLogin">
-          <Link to={LOGIN_ROUTE} className="upperLink">
-            Login
-          </Link>
-          <a className="disabledLink">or</a>
-          <Link to={REGISTER_ROUTE} className="upperLink">
-            Create account
-          </Link>
+          <div className="regLoginDiv">
+            <Link to={LOGIN_ROUTE} className="upperLink">
+              Login
+            </Link>
+            <a className="disabledLink">or</a>
+            <Link to={REGISTER_ROUTE} className="upperLink">
+              Create account
+            </Link>
+          </div>
         </div>
       );
     } else {
       divUser = (
         <div className="registerLogin">
-          <a className="disabledLink">{this.props.email}</a>
-          <Link
-            to={HOME_ROUTE}
-            onClick={this.props.logout}
-            className="upperLink"
-          >
-            Logout
-          </Link>
+          <div className="regLoginDiv">
+            <a className="disabledLink">{this.props.email}</a>
+            <Link
+              to={HOME_ROUTE}
+              onClick={this.props.logout}
+              className="upperLink"
+            >
+              Logout
+            </Link>
+          </div>
         </div>
       );
     }
 
     return (
       <Navbar className="upperBlack">
-        <Nav className="firstNav">
-          <div className="socialMediaLinks">
-            <ul className="socMediaList">
-              <li className="listItem">
-                <FontAwesomeIcon
-                  icon={faFacebook}
-                  size={"lg"}
-                  onClick={(e) => this.openWebPage(e, this.facebookLink)}
-                />
-              </li>
-              <li className="listItem">
-                <FontAwesomeIcon
-                  icon={faInstagramSquare}
-                  size={"lg"}
-                  onClick={(e) => this.openWebPage(e, this.instagramLink)}
-                />
-              </li>
-              <li className="listItem">
-                <FontAwesomeIcon
-                  icon={faTwitterSquare}
-                  size={"lg"}
-                  onClick={(e) => this.openWebPage(e, this.twitterLink)}
-                />
-              </li>
-              <li className="listItem">
-                <FontAwesomeIcon
-                  icon={faGooglePlus}
-                  size={"lg"}
-                  onClick={(e) => this.openWebPage(e, this.googleLink)}
-                />
-              </li>
-            </ul>
+        <div className="row navBlack">
+          <div className="col-lg-2"></div>
+          <div className="col-lg-8">
+            <Nav className="firstNav">
+              <div className="row firstNavRow">
+                <div className="col-lg-6">
+                  <div className="socialMediaLinks">
+                    <ul className="socMediaList">
+                      <li className="listItem">
+                        <FontAwesomeIcon
+                          icon={faFacebook}
+                          size={"lg"}
+                          onClick={(e) =>
+                            this.openWebPage(e, this.facebookLink)
+                          }
+                        />
+                      </li>
+                      <li className="listItem">
+                        <FontAwesomeIcon
+                          icon={faInstagramSquare}
+                          size={"lg"}
+                          onClick={(e) =>
+                            this.openWebPage(e, this.instagramLink)
+                          }
+                        />
+                      </li>
+                      <li className="listItem">
+                        <FontAwesomeIcon
+                          icon={faTwitterSquare}
+                          size={"lg"}
+                          onClick={(e) => this.openWebPage(e, this.twitterLink)}
+                        />
+                      </li>
+                      <li className="listItem">
+                        <FontAwesomeIcon
+                          icon={faGooglePlus}
+                          size={"lg"}
+                          onClick={(e) => this.openWebPage(e, this.googleLink)}
+                        />
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-lg-6">{divUser}</div>
+              </div>
+            </Nav>
           </div>
-          {divUser}
-        </Nav>
+          <div className="col-lg-2"></div>
+        </div>
       </Navbar>
     );
   }

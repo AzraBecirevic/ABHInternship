@@ -1,15 +1,13 @@
 package com.app.auctionbackend.controller;
 
 import com.app.auctionbackend.dtos.BidDto;
+import com.app.auctionbackend.dtos.PlaceBidDto;
 import com.app.auctionbackend.model.Bid;
 import com.app.auctionbackend.service.BidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,6 +27,18 @@ public class BidController {
         List<BidDto> bidDtoList = bidService.getBidsByProductId(productId);
         return new ResponseEntity<List<BidDto>>(bidDtoList,HttpStatus.OK);
 
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Boolean> addBid(@RequestBody PlaceBidDto placeBidDto){
+      if(placeBidDto!=null && placeBidDto.getProductId()<=0)
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
+
+        Boolean bidPlaced = bidService.addBid(placeBidDto);
+        if(bidPlaced)
+            return new ResponseEntity(true, HttpStatus.OK);
+
+        return new ResponseEntity(false, HttpStatus.OK);
     }
 
 }

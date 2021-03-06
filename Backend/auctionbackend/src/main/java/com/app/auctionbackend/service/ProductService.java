@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -27,6 +28,7 @@ public class ProductService {
     @Autowired
     BidRepository bidRepository;
 
+    DecimalFormat df = new DecimalFormat("#0.00");
 
     public List<ProductDto> getProducts(){
 
@@ -49,14 +51,18 @@ public class ProductService {
 
             List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(id);
             if(bidList == null || bidList.size() == 0){
-                productDetailsDto.setHighestBid(0);  // or startPrice
+                productDetailsDto.setHighestBid(0);
                 productDetailsDto.setNumberOfBids(0);
             }
             else{
-                Bid highestBid = bidList.get(bidList.size()-1);  //last
+                Bid highestBid = bidList.get(bidList.size()-1);
                 productDetailsDto.setHighestBid(highestBid.getBidPrice());
                 productDetailsDto.setNumberOfBids(bidList.size());
             }
+
+            productDetailsDto.setStartPriceText(df.format(productDetailsDto.getStartPrice()));
+
+            productDetailsDto.setHighestBidText(df.format(productDetailsDto.getHighestBid()));
 
             long diff = ChronoUnit.DAYS.between(product.getStartDate(),product.getEndDate());
             productDetailsDto.setTimeLeft(diff);
@@ -189,6 +195,7 @@ public class ProductService {
         if(product!=null){
             ModelMapper modelMapper = new ModelMapper();
             ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
+            productDetailsDto.setStartPriceText(df.format(productDetailsDto.getStartPrice()));
 
             return productDetailsDto;
         }
@@ -208,6 +215,7 @@ public class ProductService {
                 if (image != null)
                     productDto.setImage(image.getImage());
 
+                productDto.setStartPriceText(df.format(productDto.getStartPrice()));
                 productDtos.add(productDto);
             }
         }

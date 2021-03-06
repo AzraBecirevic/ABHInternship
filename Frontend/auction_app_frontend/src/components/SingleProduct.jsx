@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { ThemeProvider } from "react-bootstrap";
+import { BID_REGEX } from "../constants/regex";
+import { BID_MAXIMUM_PRICE } from "../constants/bidPrice";
 import BidService from "../services/bidService";
 import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
@@ -21,6 +23,11 @@ export class SingleProduct extends Component {
     bids: null,
     email: "",
     token: "",
+    placedBid: "",
+    isBidPlaced: null,
+    placeBidErrorMessage: null,
+    placeBidMessage: null,
+    placeBidSuccesMessage: null,
   };
   productService = new ProductService();
   bidService = new BidService();
@@ -73,28 +80,139 @@ export class SingleProduct extends Component {
     this.setState({ images: [...this.state.images, this.state.mainImage] });
   }
 
+  validateBidFormat(bid) {
+    bid.toString();
+    const re = BID_REGEX;
+    return re.test(String(bid));
+  }
+
+  validatePlacedBid() {
+    const { placedBid } = this.state;
+
+    if (placedBid === "") {
+      this.setState({
+        placeBidErrorMessage: "You need to enter bid price.",
+      });
+      return false;
+    }
+
+    if (this.validateBidFormat(placedBid) == false) {
+      this.setState({
+        placeBidErrorMessage: "Bid can have up to two decimal places",
+      });
+      return false;
+    } else if (placedBid > BID_MAXIMUM_PRICE) {
+      this.setState({
+        placeBidErrorMessage: "Maximum allowed bid is $" + BID_MAXIMUM_PRICE,
+      });
+      return false;
+    } else if (placedBid == 0) {
+      this.setState({ placeBidErrorMessage: "Bid price can not be 0." });
+      return false;
+    } else if (placedBid < 0) {
+      this.setState({ placeBidErrorMessage: "Bid price can not be negative." });
+      return false;
+    } else if (placedBid <= this.state.product.highestBid) {
+      this.setState({
+        placeBidErrorMessage: "Enter price bigger than highest bid.",
+      });
+      return false;
+    } else if (this.state.product.startPrice > placedBid) {
+      this.setState({
+        placeBidErrorMessage:
+          "Enter $" + this.state.product.startPrice + " or more.",
+      });
+      return false;
+    }
+    return true;
+  }
+
+  onSubmit = async (e) => {
+    e.preventDefault();
+    this.setState({ placeBidErrorMessage: null, placeBidSuccesMessage: null });
+
+    if (this.validatePlacedBid()) {
+      try {
+        const { productId, email, placedBid, token } = this.state;
+        const isBidAdded = await this.bidService.placeBid(
+          productId,
+          email,
+          placedBid,
+          token
+        );
+
+        this.setState({ isBidPlaced: isBidAdded });
+        if (isBidAdded) {
+          this.setState({
+            product: await this.productService.getProductById(productId),
+            images: this.state.product.imageList.filter((image, index) => {
+              return image.id != this.state.mainImage.id;
+            }),
+            bids: await this.bidService.getBidsByProductId(productId),
+            placeBidSuccesMessage: "Congrats! You are the highest bidder!",
+          });
+        }
+      } catch (error) {
+        this.toastService.showErrorToast(
+          "Connection refused. Please try later."
+        );
+      }
+    }
+  };
+  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+
   render() {
+    const {
+      placeBidSuccesMessage,
+      placeBidErrorMessage,
+      mainImage,
+      images,
+      product,
+      isLoggedIn,
+      placedBid,
+      bids,
+    } = this.state;
+
     return (
       <div>
         <Heading title="SINGLE PRODUCT"></Heading>
+        {placeBidSuccesMessage && (
+          <div className="succesBidMessage">
+            <div className="row message">
+              <div className="col-lg-2"></div>
+              <div className="col-lg-8">{placeBidSuccesMessage}</div>
+              <div className="col-lg-2"></div>
+            </div>
+          </div>
+        )}
+        {placeBidErrorMessage != null && (
+          <div className="failBidMessage">
+            <div className="row message">
+              <div className="col-lg-2"></div>
+              <div className="col-lg-8">{placeBidErrorMessage}</div>
+              <div className="col-lg-2"></div>
+            </div>
+          </div>
+        )}
+
         <div className="row singleProduct">
           <div className="col-lg-2"></div>
           <div className="col-lg-8 singleProd">
-            {this.state.product != null && (
+            {product != null && (
               <div className="row productData">
                 <div className="col-lg-6">
-                  {this.state.mainImage != null && (
+                  {mainImage != null && (
                     <div className="mainPicture">
                       <img
                         className="productMainImage"
-                        src={`data:image/png;base64, ${this.state.mainImage.image}`}
+                        src={`data:image/png;base64, ${mainImage.image}`}
                       />
                     </div>
                   )}
 
                   <div className="row">
-                    {this.state.images != null &&
-                      this.state.images.map(
+                    {images != null &&
+                      images.map(
                         function (smallImage, index) {
                           return (
                             <div
@@ -113,30 +231,43 @@ export class SingleProduct extends Component {
                   </div>
                 </div>
                 <div className="col-lg-6">
-                  <div className="productName">{this.state.product.name}</div>
+                  <div className="productName">{product.name}</div>
                   <div className="productStartsFrom">
-                    Starts from - ${this.state.product.startPrice}
+                    Starts from - ${product.startPriceText}
                   </div>
-                  {this.state.isLoggedIn && (
+                  {isLoggedIn && (
                     <div className="placeBidDiv">
-                      <form>
+                      <form onSubmit={this.onSubmit}>
                         <div>
                           <input
                             className="bidInput"
-                            name="bidValue"
-                            type="text"
+                            name="placedBid"
+                            type="number"
+                            value={placedBid}
+                            onChange={this.onChange}
                           />
-                          <button className="placeBidBtn">
+                          <button type="submit" className="placeBidBtn">
                             PLACE BID {this.characterArrow}{" "}
                           </button>
                         </div>
-                        <div className="minBidValueMessage">
-                          Enter ${this.state.product.highestBid} or more
-                        </div>
+
+                        {product.highestBid <= 0 && (
+                          <div className="minBidValueMessage">
+                            Enter ${product.startPriceText} or more
+                          </div>
+                        )}
+                        {product.highestBid > 0 && (
+                          <div className="minBidValueMessage">
+                            Enter more than $
+                            {product.highestBid % 1 != 0
+                              ? product.highestBidText
+                              : product.highestBidText}
+                          </div>
+                        )}
                       </form>
                     </div>
                   )}
-                  {this.state.isLoggedIn === false && (
+                  {isLoggedIn === false && (
                     <div className="loginMessageDiv">
                       If you would like to place a bid, please log in.
                     </div>
@@ -145,27 +276,27 @@ export class SingleProduct extends Component {
                     <div className="bidDetails">
                       Highest bid:{" "}
                       <span className="highestBidText">
-                        {this.state.product.highestBid}
+                        ${product.highestBidText}
                       </span>
                     </div>
                     <div className="bidDetails">
-                      No bids: {this.state.product.numberOfBids}
+                      No bids: {product.numberOfBids}
                     </div>
                     <div className="bidDetails">
-                      Time left: {this.state.product.timeLeft} days
+                      Time left: {product.timeLeft} days
                     </div>
                   </div>
                   <div className="detailsDiv">
                     <div>Details</div>
                     <hr className="detailHRline"></hr>
                     <div className="productDescription">
-                      {this.state.product.description}{" "}
+                      {product.description}{" "}
                     </div>
                   </div>
                 </div>
               </div>
             )}
-            {this.state.bids != null && this.state.bids.length > 0 && (
+            {bids != null && bids.length > 0 && (
               <div className="row bidsData">
                 <div className="col-lg-12">
                   <div className="row bidDataHeading">
@@ -173,8 +304,8 @@ export class SingleProduct extends Component {
                     <div className="col-lg-2 col-sm-2 col-xs-3">Date</div>
                     <div className="col-lg-2 col-sm-2 col-xs-3">Bid</div>
                   </div>
-                  {this.state.bids !== null &&
-                    this.state.bids.map(function (bid, index) {
+                  {bids !== null &&
+                    bids.map(function (bid, index) {
                       return (
                         <div
                           key={bid.id}
@@ -201,7 +332,7 @@ export class SingleProduct extends Component {
                                 : "bidsPrice")
                             }
                           >
-                            $ {bid.bidPrice}
+                            $ {bid.bidPriceText}
                           </div>
                         </div>
                       );
@@ -209,7 +340,7 @@ export class SingleProduct extends Component {
                 </div>
               </div>
             )}
-            {(this.state.bids === null || this.state.bids.length <= 0) && (
+            {(bids === null || bids.length <= 0) && (
               <div className="noBidsMessage">
                 There are still no bids for this product.
               </div>
