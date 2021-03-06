@@ -8,7 +8,7 @@ export class TearmsAndConditions extends Component {
   render() {
     return (
       <div>
-        <Heading title="TEARMS AND CONDITIONS"></Heading>
+        <Heading title="TERMS AND CONDITIONS"></Heading>
         <div className="container">
           <div className="row">
             <div className="col-lg-1"></div>

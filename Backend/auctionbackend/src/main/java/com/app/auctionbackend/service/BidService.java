@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.app.auctionbackend.helper.ValidationConstants.BID_MAX_PRICE;
+
 @Service("bidService")
 public class BidService {
 
@@ -58,7 +60,7 @@ public class BidService {
     }
 
     public Boolean addBid(PlaceBidDto placeBidDto){
-        if(placeBidDto.getBidPrice() > 99999)
+        if(placeBidDto.getBidPrice() > BID_MAX_PRICE)
             return false;
 
          List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(placeBidDto.getProductId());
