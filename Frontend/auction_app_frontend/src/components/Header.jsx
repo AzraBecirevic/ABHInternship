@@ -19,7 +19,11 @@ export class Header extends Component {
           email={this.props.email}
           logout={this.props.logout}
         ></NavbarBlack>
-        <NavbarWhite></NavbarWhite>
+        <NavbarWhite
+          isLoggedIn={this.props.isLoggedIn}
+          email={this.props.email}
+          token={this.props.token}
+        ></NavbarWhite>
       </div>
     );
   }

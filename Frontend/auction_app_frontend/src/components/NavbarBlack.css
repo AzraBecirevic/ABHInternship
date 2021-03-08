@@ -87,3 +87,15 @@ div.row.firstNavRow {
 div.row.firstNavRow div.col-lg-6 {
   height: 100%;
 }
+
+@media (max-width: 575.5px) {
+  div.row.firstNavRow div.col-lg-6 {
+    width: 100%;
+    background-color: #252525;
+  }
+  div.row.navBlack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}

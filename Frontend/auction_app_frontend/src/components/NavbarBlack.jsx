@@ -58,11 +58,11 @@ export class NavbarBlack extends Component {
     return (
       <Navbar className="upperBlack">
         <div className="row navBlack">
-          <div className="col-lg-2"></div>
-          <div className="col-lg-8">
+          <div className="col-lg-2 col-sm-0"></div>
+          <div className="col-lg-8 col-sm-12 col-xs-12">
             <Nav className="firstNav">
               <div className="row firstNavRow">
-                <div className="col-lg-6">
+                <div className="col-lg-6 col-sm-6 col-xs-12">
                   <div className="socialMediaLinks">
                     <ul className="socMediaList">
                       <li className="listItem">
@@ -100,11 +100,11 @@ export class NavbarBlack extends Component {
                     </ul>
                   </div>
                 </div>
-                <div className="col-lg-6">{divUser}</div>
+                <div className="col-lg-6 col-sm-6 col-xs-12">{divUser}</div>
               </div>
             </Nav>
           </div>
-          <div className="col-lg-2"></div>
+          <div className="col-lg-2 col-sm-0"></div>
         </div>
       </Navbar>
     );

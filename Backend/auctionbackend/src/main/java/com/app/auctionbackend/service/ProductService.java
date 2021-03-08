@@ -202,6 +202,27 @@ public class ProductService {
         return null;
     }
 
+    public List<ProductDto> searchProductsByName(String productName){
+        List<Product> products = productRepository.findAll();
+
+       if(products==null)
+           return null;
+
+        List<Product> productsWithMatchingName = new ArrayList<>();
+
+        for (Product product: products) {
+            if(product.getName().toLowerCase().contains(productName.toLowerCase())){
+                productsWithMatchingName.add(product);
+            }
+        }
+
+        if(productsWithMatchingName.size()>10)
+            productsWithMatchingName = productsWithMatchingName.subList(0,9);
+
+        List<ProductDto> productDtos = changeToDto(productsWithMatchingName);
+        return productDtos;
+    }
+
     private List<ProductDto> changeToDto(List<Product>products){
         List<ProductDto> productDtos = new ArrayList<>();
 

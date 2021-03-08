@@ -63,4 +63,11 @@ public class ProductController {
         return productDtos;
     }
 
+    @GetMapping("byName/{productName}")
+    public List<ProductDto> searchProductsByName(@PathVariable String productName){
+        List<ProductDto> productDtos = productService.searchProductsByName(productName);
+        return productDtos;
+
+    }
+
 }

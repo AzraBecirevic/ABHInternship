@@ -27,6 +27,10 @@ class ProductService {
     return await this.getData("/product/" + productId);
   }
 
+  async getProductByName(productName) {
+    return await this.getData("/product/byName/" + productName);
+  }
+
   async getData(link) {
     const requestOptions = {
       method: "GET",

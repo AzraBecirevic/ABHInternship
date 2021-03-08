@@ -116,6 +116,7 @@ export class App extends Component {
                 isLoggedIn={this.state.isLoggedIn}
                 email={this.email}
                 logout={this.logoutCustomer}
+                token={this.jwtToken}
               />
               <div className="containerDiv">
                 <Route
