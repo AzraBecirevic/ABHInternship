@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
+import { CATEGORIES_ROUTE, SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 
 export class Categories extends Component {
   constructor(props) {
@@ -21,6 +21,7 @@ export class Categories extends Component {
     isLoggedIn: false,
     email: "",
     token: "",
+    currentFetching: false,
   };
 
   categoryService = new CategoryService();
@@ -28,7 +29,17 @@ export class Categories extends Component {
   toastService = new ToastService();
   fetchNumber = 0;
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevProps.location.state.chosenCategory !==
+      this.props.location.state.chosenCategory
+    ) {
+      this.componentDidMount();
+    }
+  };
+
   componentDidMount = async () => {
+    this.setState({ hasMoreData: true });
     this.fetchNumber = 1;
     try {
       const {
@@ -42,46 +53,39 @@ export class Categories extends Component {
       this.state.email = email;
       this.state.token = token;
 
+      const productsDto = await this.productService.getProductsByCategoryId(
+        this.state.categoryId,
+        this.fetchNumber
+      );
+
       this.setState({
         categories: await this.categoryService.getCategories(),
       });
       this.setState({
-        products: await this.productService.getProductsByCategoryId(
-          this.state.categoryId,
-          this.fetchNumber
-        ),
+        products: productsDto.productsList,
+        hasMoreData: productsDto.hasMoreData,
       });
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");
     }
   };
 
-  handleCategoryChange = async (categoryID) => {
-    this.fetchNumber = 1;
-    const productsList = await this.productService.getProductsByCategoryId(
-      categoryID,
-      this.fetchNumber
-    );
-    this.setState({
-      products: productsList,
-      categoryId: categoryID,
-      hasMoreData: true,
-    });
-  };
-
   exploreMore = async () => {
-    if (this.state.products != null) {
+    if (this.state.hasMoreData) {
+      this.setState({ currentFetching: true });
       this.fetchNumber = this.fetchNumber + 1;
-      const moreProducts = await this.productService.getProductsByCategoryId(
+      const moreProductsDto = await this.productService.getProductsByCategoryId(
         this.state.categoryId,
         this.fetchNumber
       );
-      if (moreProducts != null && moreProducts.length > 0) {
+      if (moreProductsDto != null && moreProductsDto.productsList != null) {
         this.setState({
-          products: this.state.products.concat(moreProducts),
+          products: this.state.products.concat(moreProductsDto.productsList),
+          hasMoreData: moreProductsDto.hasMoreData,
+          currentFetching: false,
         });
       } else {
-        this.setState({ hasMoreData: false });
+        this.setState({ hasMoreData: false, currentFetching: false });
       }
     }
   };
@@ -89,7 +93,6 @@ export class Categories extends Component {
   render() {
     return (
       <div>
-        <Heading title=""></Heading>
         <div className="row">
           <div className="col-lg-2"></div>
           <div className="col-lg-8 categoriesColumn">
@@ -105,19 +108,25 @@ export class Categories extends Component {
                             function (category) {
                               return (
                                 <li className="categoryItem" key={category.id}>
-                                  <a
+                                  <Link
                                     className={
                                       "a " +
                                       (this.state.categoryId == category.id
                                         ? "linkCategoryActive"
                                         : " linkCategory")
                                     }
-                                    onClick={(e) =>
-                                      this.handleCategoryChange(category.id)
-                                    }
+                                    to={{
+                                      pathname: CATEGORIES_ROUTE,
+                                      state: {
+                                        chosenCategory: category.id,
+                                        isLoggedIn: this.props.isLoggedIn,
+                                        email: this.props.email,
+                                        token: this.props.token,
+                                      },
+                                    }}
                                   >
                                     {category.name}
-                                  </a>
+                                  </Link>
                                 </li>
                               );
                             }.bind(this)
@@ -137,7 +146,11 @@ export class Categories extends Component {
                         }
                         next={this.exploreMore}
                         hasMore={this.state.hasMoreData}
-                        loader={<p className="infLoadingMessage">Loading...</p>}
+                        loader={
+                          this.state.currentFetching && (
+                            <p className="infLoadingMessage">Loading...</p>
+                          )
+                        }
                         endMessage={
                           <p className="infErrorMessage">
                             <b>There are no more products to show.</b>

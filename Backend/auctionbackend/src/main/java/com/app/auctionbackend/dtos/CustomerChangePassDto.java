@@ -1,10 +1,27 @@
 package com.app.auctionbackend.dtos;
 
-public class CustomerDto {
+public class CustomerChangePassDto {
 
-    private String firstName;
-    private String lastName;
-    private String username;
+    private String email;
+    private String password;
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    /*private String username;
 
     public String getFirstName() {
         return firstName;
@@ -28,6 +45,6 @@ public class CustomerDto {
 
     public void setUsername(String username) {
         this.username = username;
-    }
+    }*/
 
 }
