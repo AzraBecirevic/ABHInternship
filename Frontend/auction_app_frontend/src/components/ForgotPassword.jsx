@@ -40,9 +40,8 @@ export class ForgotPassword extends Component {
           this.showSuccessMessage("Email has been sent to your email adress");
         } else {
           this.showErrorMessage(
-            "Please create account if you don't have an acconut."
+            "There is no user associated with this account."
           );
-          this.props.history.push(REGISTER_ROUTE);
         }
       } catch (error) {
         this.toastService.showErrorToast(
@@ -58,6 +57,9 @@ export class ForgotPassword extends Component {
 
   showErrorMessage = (errorMessage) => {
     this.toastService.showErrorToast(errorMessage);
+    setTimeout(() => {
+      this.setState({ disableForgotButton: false });
+    }, CLOSE_TOAST_AFTER_MILISECONDS);
   };
 
   showSuccessMessage = (succesMessage) => {

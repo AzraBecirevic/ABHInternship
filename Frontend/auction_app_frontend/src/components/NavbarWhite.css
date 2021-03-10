@@ -39,6 +39,7 @@
   font-size: 24px;
   color: #8367d8;
   letter-spacing: 0.84px;
+  vertical-align: middle;
 }
 
 .homeLink:hover {
@@ -52,9 +53,8 @@
 }
 
 .logoImg {
-  vertical-align: text-bottom !important;
-  width: 12%;
-  height: 69%;
+  width: 15%;
+  height: 75%;
 }
 
 .menuItem {
@@ -64,9 +64,6 @@
   letter-spacing: 0.56px;
 }
 
-div.row.navWhite {
-  width: 100%;
-}
 div.row.secondNavRow {
   width: 100%;
 }
@@ -74,7 +71,7 @@ div.row.secondNavRow {
   background: #ffffff;
   border: 1px solid #e3e3e3;
   box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.11);
-  width: 100%;
+  /*width: 100%;*/
   height: 53px;
 }
 .searchInput {
@@ -89,6 +86,9 @@ div.row.secondNavRow {
   width: 100%;
 }
 .heading {
+  display: flex;
+  padding: 0;
+  align-items: center;
   height: 100%;
 }
 
@@ -111,10 +111,6 @@ div.row.searchResultRow {
   padding-top: 0;
   padding-bottom: 0;
   position: absolute;
-}
-
-div.row.searchResultColRow {
-  width: 100%;
 }
 
 .searchProductImage {
@@ -168,7 +164,7 @@ div.col-lg-12.searchProduct:hover {
 }
 
 .searchProductResultList {
-  padding-left: 0px;
+  padding-left: 15px;
   list-style-type: none;
   margin-bottom: 0;
 }
@@ -185,10 +181,6 @@ div.col-lg-12.searchProduct:hover {
   .saerchResultListDiv {
     width: 60%;
   }
-  .logoImg {
-    width: 12%;
-    height: 50%;
-  }
 }
 @media (min-width: 1079px) and (max-width: 1514px) {
   .saerchResultListDiv {
@@ -197,26 +189,17 @@ div.col-lg-12.searchProduct:hover {
   .searchIconDiv {
     padding-right: 10px;
   }
-  .logoImg {
-    width: 12%;
-    height: 50%;
-  }
 }
 
 @media (min-width: 1032px) and (max-width: 1078px) {
-  .logoImg {
-    width: 12%;
-    height: 50%;
+  div.row.secondNavRow div.col-lg-3.col-md-4.col-sm-4.logoDiv {
+    padding-right: 0%;
   }
 }
 
 @media (min-width: 992px) and (max-width: 1031.5px) {
   div.row.secondNavRow div.col-lg-3.col-md-4.col-sm-4.logoDiv {
-    padding: 0;
-  }
-  .logoImg {
-    width: 12%;
-    height: 50%;
+    padding-right: 0;
   }
   .searchIconDiv {
     padding-right: 25px;
@@ -239,10 +222,6 @@ div.col-lg-12.searchProduct:hover {
     width: 15%;
     padding-right: 5px;
   }
-  .logoImg {
-    width: 12%;
-    height: 55%;
-  }
   .searchInput {
     border: 0;
     width: 85%;
@@ -251,20 +230,25 @@ div.col-lg-12.searchProduct:hover {
 }
 
 @media (max-width: 575.5px) {
-  .logoImg {
-    width: 6%;
-    height: 66%;
-  }
   .saerchResultListDiv {
     width: 100%;
   }
 
   .searchIconDiv {
     padding-top: 3%;
+    width: 12%;
+    padding-right: 5px;
+  }
+  .searchInput {
+    border: 0;
+    width: 88%;
+    height: 100%;
   }
 
   .mainWhite {
-    margin-top: 120px;
+    margin-top: 80px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
   }
 
   .registerLogin {
@@ -272,7 +256,7 @@ div.col-lg-12.searchProduct:hover {
   }
 
   div.row.navWhite {
-    width: 100%;
+    /* width: 100%;*/
     display: flex;
     flex-direction: column;
   }
@@ -286,12 +270,14 @@ div.col-lg-12.searchProduct:hover {
   div.row.secondNavRow div.col-lg-6.col-md-4.col-sm-4.col-xs-12 {
     order: 2;
     margin-bottom: 10px;
+    margin-left: 14px;
   }
 
   div.row.secondNavRow div.col-lg-3.col-md-4.col-sm-4.col-xs-12.menuDiv {
     order: 1;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-left: 30px;
   }
   .menu {
     display: block;
@@ -307,7 +293,18 @@ div.col-lg-12.searchProduct:hover {
     height: 100%;
   }
 
-  .searchIconDiv {
-    width: auto;
+  div.col-lg-8.col-md-12.col-sm-12.mainWhiteCol {
+    padding-left: 20px;
+    padding-right: 2px;
+  }
+  div.row.searchResultRow {
+    padding-right: 0;
+  }
+  div.row.searchResultRow div.col-lg-8.col-sm-12.col-xs-12 {
+    padding-right: 0;
+  }
+
+  div.row.searchResultRow div.col-lg-6.col-sm-6.col-xs-12.searchResult {
+    padding-right: 0;
   }
 }

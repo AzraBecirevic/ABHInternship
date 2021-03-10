@@ -85,6 +85,13 @@ public class Seed {
         customer4.setPassword(passwordEncoder.encode("mojpass123@"));
         customerRepository.save(customer4);
 
+        Customer customer5 = new Customer();
+        customer5.setFirstName("Azra");
+        customer5.setLastName("Becirevic");
+        customer5.setEmail("azra.becirevic1998@gmail.com");
+        customer5.setPassword(passwordEncoder.encode("mojpass123@"));
+        customerRepository.save(customer5);
+
         LocalDateTime currentDate = LocalDateTime.now();
 
 

@@ -10,6 +10,7 @@ import { faGooglePlus } from "@fortawesome/free-brands-svg-icons";
 
 import React, { Component } from "react";
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE } from "../constants/routes";
+import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
 
 export class NavbarBlack extends Component {
   googleLink =
@@ -56,57 +57,64 @@ export class NavbarBlack extends Component {
     }
 
     return (
-      <Navbar className="upperBlack">
-        <div className="row navBlack">
-          <div className="col-lg-2 col-sm-0"></div>
-          <div className="col-lg-8 col-sm-12 col-xs-12">
-            <Nav className="firstNav">
-              <div className="row firstNavRow">
-                <div className="col-lg-6 col-sm-6 col-xs-12">
-                  <div className="socialMediaLinks">
-                    <ul className="socMediaList">
-                      <li className="listItem">
-                        <FontAwesomeIcon
-                          icon={faFacebook}
-                          size={"lg"}
-                          onClick={(e) =>
-                            this.openWebPage(e, this.facebookLink)
-                          }
-                        />
-                      </li>
-                      <li className="listItem">
-                        <FontAwesomeIcon
-                          icon={faInstagramSquare}
-                          size={"lg"}
-                          onClick={(e) =>
-                            this.openWebPage(e, this.instagramLink)
-                          }
-                        />
-                      </li>
-                      <li className="listItem">
-                        <FontAwesomeIcon
-                          icon={faTwitterSquare}
-                          size={"lg"}
-                          onClick={(e) => this.openWebPage(e, this.twitterLink)}
-                        />
-                      </li>
-                      <li className="listItem">
-                        <FontAwesomeIcon
-                          icon={faGooglePlus}
-                          size={"lg"}
-                          onClick={(e) => this.openWebPage(e, this.googleLink)}
-                        />
-                      </li>
-                    </ul>
+      <div className="row navBlack">
+        <div className="col-lg-2 col-sm-0"></div>
+        <div className="col-lg-8 col-sm-12 col-xs-12">
+          <Navbar className="upperBlack navbar-dark" expand="sm">
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="mr-auto firstNav">
+                <div className="row firstNavRow">
+                  <div>
+                    <div className="socialMediaLinks">
+                      <ul className="socMediaList">
+                        <li className="listItem">
+                          <FontAwesomeIcon
+                            icon={faFacebook}
+                            size={"lg"}
+                            onClick={(e) =>
+                              this.openWebPage(e, this.facebookLink)
+                            }
+                          />
+                        </li>
+                        <li className="listItem">
+                          <FontAwesomeIcon
+                            icon={faInstagramSquare}
+                            size={"lg"}
+                            onClick={(e) =>
+                              this.openWebPage(e, this.instagramLink)
+                            }
+                          />
+                        </li>
+                        <li className="listItem">
+                          <FontAwesomeIcon
+                            icon={faTwitterSquare}
+                            size={"lg"}
+                            onClick={(e) =>
+                              this.openWebPage(e, this.twitterLink)
+                            }
+                          />
+                        </li>
+                        <li className="listItem">
+                          <FontAwesomeIcon
+                            icon={faGooglePlus}
+                            size={"lg"}
+                            onClick={(e) =>
+                              this.openWebPage(e, this.googleLink)
+                            }
+                          />
+                        </li>
+                      </ul>
+                    </div>
                   </div>
+                  <div>{divUser}</div>
                 </div>
-                <div className="col-lg-6 col-sm-6 col-xs-12">{divUser}</div>
-              </div>
-            </Nav>
-          </div>
-          <div className="col-lg-2 col-sm-0"></div>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
         </div>
-      </Navbar>
+        <div className="col-lg-2 col-sm-0"></div>
+      </div>
     );
   }
 }

@@ -52,18 +52,21 @@ export class NavbarWhite extends Component {
 
     return (
       <div>
-        <Navbar className="mainWhite">
-          <div className="row navWhite">
-            <div className="col-lg-2 col-md-0 col-sm-0 "></div>
-            <div className="col-lg-8 col-md-12 col-sm-12">
+        <div className="row navWhite">
+          <div className="col-lg-2 col-md-0 col-sm-0 "></div>
+          <div className="col-lg-8 col-md-12 col-sm-12 mainWhiteCol">
+            <Navbar className="mainWhite">
               <Nav className="secondNav">
                 <div className="row secondNavRow">
                   <div className="col-lg-3 col-md-4 col-sm-4  logoDiv">
                     <div className="heading">
-                      <img className="logoImg" src={logo} alt="Logo" />
-                      <Link to={HOME_ROUTE} className="homeLink">
-                        AUCTION
-                      </Link>
+                      <div className="headingInside">
+                        <img className="logoImg" src={logo} alt="Logo" />
+
+                        <Link to={HOME_ROUTE} className="homeLink">
+                          AUCTION
+                        </Link>
+                      </div>
                     </div>
                   </div>
 
@@ -97,10 +100,11 @@ export class NavbarWhite extends Component {
                   </div>
                 </div>
               </Nav>
-            </div>
-            <div className="col-lg-2 col-md-0 col-sm-0"></div>
+            </Navbar>
           </div>
-        </Navbar>
+          <div className="col-lg-2 col-md-0 col-sm-0"></div>
+        </div>
+
         <SearchResult
           productName={productName}
           products={products}
