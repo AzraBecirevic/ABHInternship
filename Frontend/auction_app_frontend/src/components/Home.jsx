@@ -11,6 +11,8 @@ import styles from "./Home.css";
 import TabsProducts from "./TabsProducts";
 
 export class Home extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
   }
@@ -35,27 +37,33 @@ export class Home extends Component {
   fetchNumber = 0;
 
   componentDidMount = async () => {
+    this._isMounted = true;
     try {
-      const newArrivalsDto = await this.productService.getNewArrivals(1); //?
+      if (this._isMounted) {
+        const newArrivalsDto = await this.productService.getNewArrivals(1);
 
-      this.fetchNumber = 1;
-      this.setState({ product: await this.productService.getProduct() });
-      this.setState({
-        categories: await this.categoryService.getCategories(),
-      });
-      if (this.state.categories != null && this.state.categories.length > 9) {
-        this.setState({ categories: this.state.categories.slice(0, 10) });
+        this.fetchNumber = 1;
+        this.setState({ product: await this.productService.getProduct() });
+        this.setState({
+          categories: await this.categoryService.getCategories(),
+        });
+        if (this.state.categories != null && this.state.categories.length > 9) {
+          this.setState({ categories: this.state.categories.slice(0, 10) });
+        }
+        this.setState({ products: await this.productService.getProducts() });
+
+        this.setState({
+          newArrivals: newArrivalsDto.productsList,
+          hasMoreNewArrivalsData: newArrivalsDto.hasMoreData,
+        });
       }
-      this.setState({ products: await this.productService.getProducts() });
-
-      this.setState({
-        newArrivals: newArrivalsDto.productsList,
-        hasMoreNewArrivalsData: newArrivalsDto.hasMoreData,
-      });
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");
     }
   };
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   fetchMoreNewArrivals = async () => {
     try {
