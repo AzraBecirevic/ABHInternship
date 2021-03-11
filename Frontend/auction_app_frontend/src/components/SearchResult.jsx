@@ -28,11 +28,14 @@ export class SearchResult extends Component {
     }
   }
 
+  closeDiv = () => {
+    this.props.closeSerchDiv();
+  };
+
   render() {
     const { productName, products } = this.props;
     return (
       <div
-        ref={this.setWrapperRef}
         className="row searchResultRow"
         hidden={productName === "" || productName === null}
       >
@@ -43,7 +46,10 @@ export class SearchResult extends Component {
             <div className="col-lg-6 col-sm-6 col-xs-12 searchResult">
               <div className="row searchResultDiv">
                 <div className="saerchResultListDiv">
-                  <ul className="searchProductResultList">
+                  <ul
+                    className="searchProductResultList"
+                    ref={this.setWrapperRef}
+                  >
                     {" "}
                     {products !== null &&
                       products.length > 0 &&
@@ -62,8 +68,9 @@ export class SearchResult extends Component {
                                     token: this.props.token,
                                   },
                                 }}
+                                onClick={this.closeDiv}
                               >
-                                <div className="row serchResultProductRow">
+                                <div className="serchResultProductRow">
                                   <img
                                     className="searchProductImage"
                                     src={`data:image/png;base64, ${product.image}`}

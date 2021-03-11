@@ -72,3 +72,15 @@ input[type="checkbox"]:focus {
 .form-control.inputField {
   height: 57px;
 }
+.formDivForgotPass {
+  margin-left: 51px;
+  margin-right: 51px;
+  margin-bottom: 76px;
+}
+
+.forggotPasswordDiv {
+  margin-left: 51px;
+  margin-right: 51px;
+  margin-bottom: 0px;
+  margin-top: 43px;
+}

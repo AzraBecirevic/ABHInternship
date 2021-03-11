@@ -116,7 +116,7 @@ export class ChangePassword extends Component {
                       <input
                         type="password"
                         name="password"
-                        className="form-control inputField"
+                        className="form-control"
                         value={password}
                         onChange={this.onChange}
                       />

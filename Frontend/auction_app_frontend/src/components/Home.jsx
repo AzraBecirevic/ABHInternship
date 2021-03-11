@@ -43,9 +43,8 @@ export class Home extends Component {
       this.setState({
         categories: await this.categoryService.getCategories(),
       });
-      // takes only first nine categories, if length > 9
       if (this.state.categories != null && this.state.categories.length > 9) {
-        this.setState({ categories: this.state.categories.slice(0, 8) });
+        this.setState({ categories: this.state.categories.slice(0, 10) });
       }
       this.setState({ products: await this.productService.getProducts() });
 

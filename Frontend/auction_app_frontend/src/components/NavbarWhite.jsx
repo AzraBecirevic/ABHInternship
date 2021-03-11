@@ -50,6 +50,8 @@ export class NavbarWhite extends Component {
   render() {
     const { productName, products } = this.state;
 
+    const { isLoggedIn, email, token } = this.props;
+
     return (
       <div>
         <div className="row navWhite">
@@ -109,6 +111,9 @@ export class NavbarWhite extends Component {
           productName={productName}
           products={products}
           closeSerchDiv={this.closeDiv}
+          isLoggedIn={isLoggedIn}
+          email={email}
+          token={token}
         ></SearchResult>
       </div>
     );

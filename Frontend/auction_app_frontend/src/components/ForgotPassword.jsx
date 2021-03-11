@@ -110,21 +110,21 @@ export class ForgotPassword extends Component {
                 <div className="registerHeadingDiv">
                   <p className="registerHeading">FORGOT PASSWORD</p>
                 </div>
-                <div className="formDiv">
+                <div className="forggotPasswordDiv">
                   <div className="forgotPassMessage">
                     Lost your password? Please enter your username or email
                     address. You will receive a link to create a new password
                     via email.
                   </div>
                 </div>
-                <div className="formDiv">
+                <div className="formDivForgotPass">
                   <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                       <label className="formLabel">Enter Email</label>
                       <input
                         type="text"
                         name="email"
-                        className="form-control inputField"
+                        className="form-control"
                         value={email}
                         onChange={this.onChange}
                       />
