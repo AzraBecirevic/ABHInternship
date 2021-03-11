@@ -13,6 +13,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.context.annotation.Bean;
 
+import static com.app.auctionbackend.config.EndpointConstants.*;
 import static com.app.auctionbackend.config.SecurityConstants.SIGN_UP_URL;
 
 
@@ -29,7 +30,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/customer/forgotPassword/{email}","/customer/changePassword",SIGN_UP_URL, "/category", "/product/getOffered", "/product/{id}","/product/byCategory/{categoryId}/{number}","/product/newArrivals/{number}","/product/lastChance/{number}", "/swagger-ui.html","product/newArrivals", "product/lastChance","product/getMostExpensive", "/bid/byProductId/{productId}","/product/byName/{productName}").permitAll()
+                .antMatchers(FORGET_PASSWORD_URL,CHANGE_PASSWORD_URL,SIGN_UP_URL, CATEGORY_URL, GET_OFFERED_PRODUCTS_URL, GET_PRODUCT_BY_ID_URL, GET_PRODUCT_BY_CATEGORY_ID_URL, GET_NEW_ARRIVALS_URL, GET_LAST_CHANCE_URL, GET_SWAGGER_URL, GET_MOST_EXPENSIVE_PRODUCT_URL, GET_BIDS_BY_PRODUCT_ID_URL, GET_PRODUCT_BY_NAME_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))

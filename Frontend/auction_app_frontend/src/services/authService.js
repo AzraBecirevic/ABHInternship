@@ -1,4 +1,6 @@
 import { ENDPOINT, PORT } from "../constants/auth";
+import { FORGOT_PASSWORD_ENDPONT } from "../constants/endpoints";
+import { FORGOT_PASSWORD_EMAIL } from "../constants/storage";
 
 class AuthService {
   async login(
@@ -104,7 +106,7 @@ class AuthService {
       method: "GET",
     };
     const response = await fetch(
-      ENDPOINT + PORT + "/customer/forgotPassword/" + email,
+      ENDPOINT + PORT + FORGOT_PASSWORD_ENDPONT + email,
       requestOptions
     ).catch((error) => {
       if (!error.response) {
@@ -119,7 +121,7 @@ class AuthService {
     }
 
     if (response.status === 200) {
-      localStorage.setItem("forgotPasswordEmail", email);
+      localStorage.setItem(FORGOT_PASSWORD_EMAIL, email);
       return true;
     } else {
       return false;

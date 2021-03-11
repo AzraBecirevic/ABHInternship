@@ -12,6 +12,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+import static com.app.auctionbackend.config.MessageConstants.EMAIL_MESSAGE;
+import static com.app.auctionbackend.config.MessageConstants.EMAIL_SUBJECT;
+
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -34,7 +37,7 @@ public class CustomerController {
     public ResponseEntity addCustomer(@RequestBody Customer customer){
         try {
             Customer registeredCustomer = customerService.registerCustomer(customer);
-            if(registeredCustomer!=null){
+            if(registeredCustomer != null){
 
                 URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                         .path("/{id}")
@@ -54,15 +57,12 @@ public class CustomerController {
     @GetMapping(value = "/forgotPassword/{email}")
     public ResponseEntity forgotPassword(@PathVariable String email){
         Customer customer = customerService.findByEmail(email);
-        if(customer==null){
+        if(customer == null){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
         try {
-            String subject = "Forgot password";
-            String link ="http://localhost:3000/changePassword";
-            String message = "You can change your password here: "+ link;
-            emailService.sendSimpleMessage(email,  subject, message);
+            emailService.sendSimpleMessage(email, EMAIL_SUBJECT, EMAIL_MESSAGE);
         }
         catch(Error err){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -72,7 +72,7 @@ public class CustomerController {
 
     @PostMapping("/changePassword")
     public ResponseEntity changePassword(@RequestBody CustomerChangePassDto customerChangePassDto){
-        Boolean passwordChanged= customerService.changePassword(customerChangePassDto);
+        Boolean passwordChanged = customerService.changePassword(customerChangePassDto);
 
         if(passwordChanged){
             return new ResponseEntity(HttpStatus.OK);

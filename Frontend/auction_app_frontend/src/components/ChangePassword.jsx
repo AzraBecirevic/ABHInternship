@@ -1,6 +1,11 @@
 import React, { Component } from "react";
+import {
+  PASSWORD_FORMAT_MESSAGE,
+  PASSWORD_REQUIRED_MESSAGE,
+} from "../constants/messages";
 import { PASSWORD_REGEX } from "../constants/regex";
 import { LOGIN_ROUTE, REGISTER_ROUTE } from "../constants/routes";
+import { FORGOT_PASSWORD_EMAIL } from "../constants/storage";
 import AuthService from "../services/authService";
 import ToastService from "../services/toastService";
 import Heading from "./Heading";
@@ -37,7 +42,7 @@ export class ChangePassword extends Component {
         this.setState({ disableResetPassButton: true });
         this.setIsLoading(true);
 
-        const email = localStorage.getItem("forgotPasswordEmail");
+        const email = localStorage.getItem(FORGOT_PASSWORD_EMAIL);
         const { password } = this.state;
 
         const isPasswordReset = await this.authService.changePassword(
@@ -76,13 +81,12 @@ export class ChangePassword extends Component {
   validatePassword = () => {
     const { password } = this.state;
     if (password === "") {
-      this.setState({ passwordErrMess: "Password is required" });
+      this.setState({ passwordErrMess: PASSWORD_REQUIRED_MESSAGE });
       return false;
     }
     if (password !== "" && this.validatePasswordFormat(password) === false) {
       this.setState({
-        passwordErrMess:
-          "Password should be 8-16 characters long, have at least one number and one special character",
+        passwordErrMess: PASSWORD_FORMAT_MESSAGE,
       });
       return false;
     }

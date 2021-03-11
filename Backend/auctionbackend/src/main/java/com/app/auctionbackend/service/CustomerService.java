@@ -77,17 +77,17 @@ public class CustomerService {
             }
         }
 
-        if(customer!=null)
+        if(customer != null)
             return customer;
         return null;
     }
 
     public boolean changePassword(CustomerChangePassDto customerChangePassDto){
-        if( customerChangePassDto==null)
+        if( customerChangePassDto == null)
             return false;
 
         String email = customerChangePassDto.getEmail();
-        if(email==null || email.isEmpty())
+        if(email == null || email.isEmpty())
             return false;
 
         String password = customerChangePassDto.getPassword();

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { EMAIL_FORMAT_MESSAGE } from "../constants/messages";
 import { EMAIL_REGEX } from "../constants/regex";
 import { REGISTER_ROUTE } from "../constants/routes";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
@@ -85,7 +86,7 @@ export class ForgotPassword extends Component {
     }
     if (email !== "" && this.validateEmailFormat(email) === false) {
       this.setState({
-        emailErrMess: "Expected email format: example@example.com",
+        emailErrMess: EMAIL_FORMAT_MESSAGE,
       });
       return false;
     }
