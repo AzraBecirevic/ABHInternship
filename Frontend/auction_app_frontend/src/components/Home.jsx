@@ -74,7 +74,11 @@ export class Home extends Component {
           this.fetchNumber
         );
 
-        if (newProductsDto !== null && newProductsDto.productsList != null) {
+        if (
+          newProductsDto !== null &&
+          newProductsDto.productsList != null &&
+          this.state.newArrivals != null
+        ) {
           this.setState({
             newArrivals: this.state.newArrivals.concat(
               newProductsDto.productsList
@@ -105,7 +109,8 @@ export class Home extends Component {
 
         if (
           lastChanceProducts !== null &&
-          lastChanceProducts.productsList != null
+          lastChanceProducts.productsList != null &&
+          this.state.lastChance != null
         ) {
           this.setState({
             lastChance: this.state.lastChance.concat(
