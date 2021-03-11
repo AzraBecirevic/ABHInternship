@@ -82,7 +82,7 @@ export class ChangePassword extends Component {
     if (password !== "" && this.validatePasswordFormat(password) === false) {
       this.setState({
         passwordErrMess:
-          "Password should be 8-16 characters long, have at least one number or one special character",
+          "Password should be 8-16 characters long, have at least one number and one special character",
       });
       return false;
     }

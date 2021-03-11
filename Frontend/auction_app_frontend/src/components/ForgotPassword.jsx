@@ -37,7 +37,9 @@ export class ForgotPassword extends Component {
         );
 
         if (isEmailSent) {
-          this.showSuccessMessage("Email has been sent to your email adress");
+          this.showSuccessMessage(
+            "We have successfully sent a password reset link to your email address"
+          );
         } else {
           this.showErrorMessage(
             "There is no user associated with this account."
