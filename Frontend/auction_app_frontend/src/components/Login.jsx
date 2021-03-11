@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { FORGOT_PASSWORD, HOME_ROUTE } from "../constants/routes";
+import { FORGOT_PASSWORD_ROUTE, HOME_ROUTE } from "../constants/routes";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
 import AuthService from "../services/authService";
 import ToastService from "../services/toastService";
@@ -168,6 +168,14 @@ export class Login extends Component {
                         LOGIN
                       </button>
                     </form>
+                    <p className="formMessage">
+                      <Link
+                        className="forgotPasswordLink"
+                        to={FORGOT_PASSWORD_ROUTE}
+                      >
+                        Forgot password?
+                      </Link>
+                    </p>
                   </div>
                 </div>
               </div>

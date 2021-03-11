@@ -12,6 +12,8 @@ import React, { Component } from "react";
 import {
   ABOUT_ROUTE,
   CATEGORIES_ROUTE,
+  CHANGE_PASSWORD_ROUTE,
+  FORGOT_PASSWORD_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
   PRIVACY_POLICY_ROUTE,
@@ -29,6 +31,8 @@ import ToastService from "./services/toastService";
 import AuthService from "./services/authService";
 import Categories from "./components/Categories";
 import SingleProduct from "./components/SingleProduct";
+import ForgotPassword from "./components/ForgotPassword";
+import ChangePassword from "./components/ChangePassword";
 
 export class App extends Component {
   state = {
@@ -116,6 +120,7 @@ export class App extends Component {
                 isLoggedIn={this.state.isLoggedIn}
                 email={this.email}
                 logout={this.logoutCustomer}
+                token={this.jwtToken}
               />
               <div className="containerDiv">
                 <Route
@@ -161,6 +166,24 @@ export class App extends Component {
                   exact
                   path={SINGLE_PRODUCT_ROUTE}
                   component={SingleProduct}
+                />
+                <Route
+                  path={FORGOT_PASSWORD_ROUTE}
+                  render={(props) => (
+                    <ForgotPassword
+                      {...props}
+                      setIsLoading={this.setIsLoading}
+                    />
+                  )}
+                />
+                <Route
+                  path={CHANGE_PASSWORD_ROUTE}
+                  render={(props) => (
+                    <ChangePassword
+                      {...props}
+                      setIsLoading={this.setIsLoading}
+                    />
+                  )}
                 />
               </div>
               <Footer openLink={this.openPage} />

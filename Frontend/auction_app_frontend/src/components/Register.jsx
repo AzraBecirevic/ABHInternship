@@ -84,7 +84,7 @@ export class Register extends Component {
     ) {
       this.setState({
         passwordErrMess:
-          "Password should be 8-16 characters long, have at least one number or one special character",
+          "Password should be 8-16 characters long, have at least one number and one special character",
       });
       return false;
     }

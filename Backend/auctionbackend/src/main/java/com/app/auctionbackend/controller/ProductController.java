@@ -1,5 +1,6 @@
 package com.app.auctionbackend.controller;
 
+import com.app.auctionbackend.dtos.ProductsInfiniteDto;
 import com.app.auctionbackend.dtos.ProductDetailsDto;
 import com.app.auctionbackend.dtos.ProductDto;
 import com.app.auctionbackend.service.ProductService;
@@ -21,7 +22,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-
     @GetMapping("/getOffered")
     public List<ProductDto> getProducts(){
         List<ProductDto> productDtos = productService.getProducts();
@@ -37,12 +37,12 @@ public class ProductController {
     }
 
     @GetMapping(value = "/byCategory/{categoryId}/{number}")
-    public ResponseEntity<List<ProductDto>> getProductByCategoryId(@PathVariable Integer categoryId, @PathVariable Integer number){
+    public ResponseEntity<ProductsInfiniteDto> getProductByCategoryId(@PathVariable Integer categoryId, @PathVariable Integer number){
         if(categoryId<=0){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        List<ProductDto> productDtos = productService.getProductByCategoryId(categoryId, number);
-        return new ResponseEntity<List<ProductDto>>(productDtos, HttpStatus.OK);
+        ProductsInfiniteDto productDtos = productService.getProductByCategoryId(categoryId, number);
+        return new ResponseEntity<ProductsInfiniteDto>(productDtos, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getMostExpensive")
@@ -52,14 +52,20 @@ public class ProductController {
     }
 
     @GetMapping(value = "/newArrivals/{number}")
-    public List<ProductDto> getNewArrivalsInfProduct(@PathVariable Integer number){
-        List<ProductDto> productDtos = productService.getNewArrivalsInfProduct(number);
+    public ProductsInfiniteDto getNewArrivalsInfProduct(@PathVariable Integer number){
+        ProductsInfiniteDto productDtos = productService.getNewArrivalsInfProduct(number);
         return productDtos;
     }
 
     @GetMapping(value = "/lastChance/{number}")
-    public List<ProductDto> getLastChanceInfProduct(@PathVariable Integer number){
-        List<ProductDto> productDtos = productService.getLastChanceInfProduct(number);
+    public ProductsInfiniteDto getLastChanceInfProduct(@PathVariable Integer number){
+        ProductsInfiniteDto productsInfiniteDto = productService.getLastChanceInfProduct(number);
+        return productsInfiniteDto;
+    }
+
+    @GetMapping("byName/{productName}")
+    public List<ProductDto> searchProductsByName(@PathVariable String productName){
+        List<ProductDto> productDtos = productService.searchProductsByName(productName);
         return productDtos;
     }
 

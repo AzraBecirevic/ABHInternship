@@ -73,4 +73,18 @@ public class ProductControllerTest {
         ).andExpect(status().isOk());
     }
 
+    @Test
+    public void getProductsByNameReturnOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get("/product/byName/black")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getProductsByNameReturnForbidden() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get("/product/byName/")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isForbidden());
+    }
+
 }

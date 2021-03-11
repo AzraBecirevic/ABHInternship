@@ -11,6 +11,8 @@ import styles from "./Home.css";
 import TabsProducts from "./TabsProducts";
 
 export class Home extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
   }
@@ -25,6 +27,8 @@ export class Home extends Component {
     hasMoreLastChanceData: true,
     isNewArrivalsTab: true,
     fetchNumber: 1,
+    currentFetchnigNewArrivals: false,
+    currentFetchnigLastChance: false,
   };
   arrow = ">";
   categoryService = new CategoryService();
@@ -33,40 +37,60 @@ export class Home extends Component {
   fetchNumber = 0;
 
   componentDidMount = async () => {
+    this._isMounted = true;
     try {
-      this.fetchNumber = 1;
-      this.setState({ product: await this.productService.getProduct() });
-      this.setState({
-        categories: await this.categoryService.getCategories(),
-      });
-      // takes only first nine categories, if length > 9
-      if (this.state.categories != null && this.state.categories.length > 9) {
-        this.setState({ categories: this.state.categories.slice(0, 8) });
-      }
-      this.setState({ products: await this.productService.getProducts() });
+      if (this._isMounted) {
+        const newArrivalsDto = await this.productService.getNewArrivals(1);
 
-      this.setState({
-        newArrivals: await this.productService.getNewArrivals(1),
-      });
+        this.fetchNumber = 1;
+        this.setState({ product: await this.productService.getProduct() });
+        this.setState({
+          categories: await this.categoryService.getCategories(),
+        });
+        if (this.state.categories != null && this.state.categories.length > 9) {
+          this.setState({ categories: this.state.categories.slice(0, 10) });
+        }
+        this.setState({ products: await this.productService.getProducts() });
+
+        this.setState({
+          newArrivals: newArrivalsDto.productsList,
+          hasMoreNewArrivalsData: newArrivalsDto.hasMoreData,
+        });
+      }
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");
     }
   };
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   fetchMoreNewArrivals = async () => {
     try {
-      if (this.state.isNewArrivalsTab && this.state.newArrivals != null) {
+      if (this.state.hasMoreNewArrivalsData) {
+        this.setState({ currentFetchnigNewArrivals: true });
         this.fetchNumber = this.fetchNumber + 1;
-        const newProducts = await this.productService.getNewArrivals(
+        const newProductsDto = await this.productService.getNewArrivals(
           this.fetchNumber
         );
 
-        if (newProducts !== null && newProducts.length > 0) {
+        if (
+          newProductsDto !== null &&
+          newProductsDto.productsList != null &&
+          this.state.newArrivals != null
+        ) {
           this.setState({
-            newArrivals: this.state.newArrivals.concat(newProducts),
+            newArrivals: this.state.newArrivals.concat(
+              newProductsDto.productsList
+            ),
+            hasMoreNewArrivalsData: newProductsDto.hasMoreData,
+            currentFetchnigNewArrivals: false,
           });
         } else {
-          this.setState({ hasMoreNewArrivalsData: false });
+          this.setState({
+            hasMoreNewArrivalsData: false,
+            currentFetchnigNewArrivals: false,
+          });
         }
       }
     } catch (error) {
@@ -76,18 +100,30 @@ export class Home extends Component {
 
   fetchMoreLastChance = async () => {
     try {
-      if (!this.state.isNewArrivalsTab && this.state.lastChance != null) {
+      if (this.hasMoreLastChanceData) {
+        this.setState({ currentFetchnigLastChance: true });
         this.fetchNumber = this.fetchNumber + 1;
         const lastChanceProducts = await this.productService.getLastChance(
           this.fetchNumber
         );
 
-        if (lastChanceProducts !== null && lastChanceProducts.length > 0) {
+        if (
+          lastChanceProducts !== null &&
+          lastChanceProducts.productsList != null &&
+          this.state.lastChance != null
+        ) {
           this.setState({
-            lastChance: this.state.lastChance.concat(lastChanceProducts),
+            lastChance: this.state.lastChance.concat(
+              lastChanceProducts.productsList
+            ),
+            hasMoreLastChanceData: lastChanceProducts.hasMoreData,
+            currentFetchnigLastChance: false,
           });
         } else {
-          this.setState({ hasMoreLastChanceData: false });
+          this.setState({
+            hasMoreLastChanceData: false,
+            currentFetchnigLastChance: false,
+          });
         }
       }
     } catch (error) {
@@ -97,19 +133,21 @@ export class Home extends Component {
 
   handleTabSelect = async (key) => {
     if (key === "newArrivals") {
+      const newArrivalsDto = await this.productService.getNewArrivals(1);
       this.fetchNumber = 1;
       this.setState({
         isNewArrivalsTab: true,
-        hasMoreNewArrivalsData: true,
-        newArrivals: await this.productService.getNewArrivals(1),
+        hasMoreNewArrivalsData: newArrivalsDto.hasMoreData,
+        newArrivals: newArrivalsDto.productsList,
       });
     }
     if (key === "lastChance") {
+      const lastChanceDto = await this.productService.getLastChance(1);
       this.fetchNumber = 1;
       this.setState({
         isNewArrivalsTab: false,
-        hasMoreLastChanceData: true,
-        lastChance: await this.productService.getLastChance(1),
+        hasMoreLastChanceData: lastChanceDto.hasMoreData,
+        lastChance: lastChanceDto.productsList,
       });
     }
   };
@@ -231,6 +269,7 @@ export class Home extends Component {
                       isLoggedIn={this.props.isLoggedIn}
                       email={this.props.email}
                       token={this.props.token}
+                      currentFetchnig={this.state.currentFetchnigNewArrivals}
                     ></TabsProducts>
                   </Tab>
                   <Tab eventKey="lastChance" title="Last Chance">
@@ -241,6 +280,7 @@ export class Home extends Component {
                       isLoggedIn={this.props.isLoggedIn}
                       email={this.props.email}
                       token={this.props.token}
+                      currentFetchnig={this.state.currentFetchnigLastChance}
                     ></TabsProducts>
                   </Tab>
                 </Tabs>

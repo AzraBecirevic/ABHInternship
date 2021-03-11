@@ -1,23 +1,14 @@
-.navbar-expand {
-  flex-flow: row nowrap;
-}
-
-.navbar {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
 .upperBlack {
-  background-color: #252525 !important;
-  justify-content: center;
-  padding: 0;
-  height: 40px;
+  color: #d8d8d8;
 }
 
 .firstNav {
+  width: 100%;
+}
+
+div.row.firstNavRow {
+  width: 100%;
   justify-content: space-between;
-  height: 40px;
-  flex: 1;
 }
 
 .socialMediaLinks {
@@ -27,7 +18,6 @@
   align-items: center;
   height: 100%;
 }
-
 .registerLogin {
   display: flex;
   justify-self: end;
@@ -76,14 +66,28 @@
   text-decoration: none;
   cursor: default;
 }
+
 div.row.navBlack {
-  width: 100%;
+  /*width: 100%;*/
+  background-color: #252525;
 }
 
-div.row.firstNavRow {
-  width: 100%;
-}
-
-div.row.firstNavRow div.col-lg-6 {
-  height: 100%;
+@media (max-width: 575.5px) {
+  .socialMediaLinks {
+    margin-top: 10px;
+    justify-content: flex-end;
+    padding-right: 25px;
+  }
+  div.row.firstNavRow {
+    display: flex;
+    flex-direction: column;
+  }
+  .registerLogin {
+    margin-top: 10px;
+    justify-content: flex-end !important;
+  }
+  .upperBlack {
+    justify-content: flex-end !important;
+    padding-right: 0% !important;
+  }
 }

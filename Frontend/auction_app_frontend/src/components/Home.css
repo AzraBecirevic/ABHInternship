@@ -263,8 +263,8 @@ div.infinite-scroll-component {
     padding-right: 0%;
     padding-left: 0px;
   }
-  div.homeBodyDiv.row.col-lg-8 {
-    padding-right: 0;
+  div.homeBodyDiv div.row div.col-lg-8 {
+    padding-right: 0px;
   }
 
   div.row.mainProductDiv div.col-lg-4.mainProductData {

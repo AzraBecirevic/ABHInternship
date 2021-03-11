@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,6 +17,9 @@ public class CustomerControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private ApplicationContext context;
 
     @Test
     public void registerCustomerShouldReturnBadRequest() throws Exception{
@@ -56,6 +60,20 @@ public class CustomerControllerTest {
         ).andExpect(status().isBadRequest());
     }
 
+    @Test
+    public void forgotPasswordShouldReturnBadRequest() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get("/customer/forgotPassword/test@test.mail")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void forgotPasswordShouldReturnOk() throws Exception{
+        AuctionbackendApplication.main(new String[]{});
+        mvc.perform(MockMvcRequestBuilders.get("/customer/forgotPassword/azra.becirevic1998@gmail.com")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
 }
 
 

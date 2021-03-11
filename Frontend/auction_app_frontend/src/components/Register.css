@@ -1,5 +1,6 @@
 .registerDiv {
   margin-top: 85px;
+  margin-bottom: 200px;
 }
 
 .register {
@@ -43,6 +44,11 @@
   text-align: center;
   margin-top: 60px;
   height: 57px;
+}
+.block:disabled {
+  cursor: unset;
+  opacity: 0.75;
+  color: #ccc;
 }
 
 .form-control {

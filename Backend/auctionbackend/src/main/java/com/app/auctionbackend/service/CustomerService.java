@@ -1,9 +1,12 @@
 package com.app.auctionbackend.service;
 
+import com.app.auctionbackend.dtos.CustomerChangePassDto;
 import com.app.auctionbackend.helper.Helper;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.repo.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,16 +70,38 @@ public class CustomerService {
 
     public Customer findByEmail(String email){
         List<Customer> customers = customerRepository.findAll();
-        Customer customer=null;
+        Customer customer = null;
         for (Customer c:customers) {
             if(email.equals(c.getEmail())) {
-                customer=c;
+                customer = c;
             }
         }
 
-        if(customer!=null)
+        if(customer != null)
             return customer;
         return null;
     }
 
+    public boolean changePassword(CustomerChangePassDto customerChangePassDto){
+        if( customerChangePassDto == null)
+            return false;
+
+        String email = customerChangePassDto.getEmail();
+        if(email == null || email.isEmpty())
+            return false;
+
+        String password = customerChangePassDto.getPassword();
+        if(password == null || password.isEmpty() || !Helper.isPasswordFormatValid(password))
+            return false;
+
+        Customer customer = findByEmail(customerChangePassDto.getEmail());
+        if(customer == null){
+            return  false;
+        }
+
+        customer.setPassword(passwordEncoder.encode(password));
+        customerRepository.save(customer);
+
+        return true;
+    }
 }

@@ -16,9 +16,16 @@ export class CategoriesMenu extends Component {
           <ul className="menucategoriesList">
             {this.props.categories != null &&
               this.props.categories.map(
-                function (category) {
+                function (category, index) {
                   return (
-                    <li className="menuCategoriesItem" key={category.id}>
+                    <li
+                      className={
+                        index == this.props.categories.length - 1
+                          ? "menuAllCategoriesItem"
+                          : "menuCategoriesItem"
+                      }
+                      key={category.id}
+                    >
                       <Link
                         className="categoryLink"
                         to={{
@@ -37,9 +44,6 @@ export class CategoriesMenu extends Component {
                   );
                 }.bind(this)
               )}
-            <li className="menuAllCategoriesItem">
-              <a className="categoryLink">All categories</a>
-            </li>
           </ul>
         </div>
       </div>

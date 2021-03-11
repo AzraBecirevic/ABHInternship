@@ -34,6 +34,15 @@ export class SingleProduct extends Component {
   toastService = new ToastService();
   characterArrow = ">";
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevProps.location.state.chosenProduct !==
+      this.props.location.state.chosenProduct
+    ) {
+      this.componentDidMount();
+    }
+  };
+
   async componentDidMount() {
     try {
       const {
@@ -61,6 +70,11 @@ export class SingleProduct extends Component {
       });
       this.setState({
         bids: await this.bidService.getBidsByProductId(chosenProduct),
+      });
+      this.setState({
+        placeBidErrorMessage: null,
+        placeBidSuccesMessage: null,
+        placedBid: "",
       });
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");

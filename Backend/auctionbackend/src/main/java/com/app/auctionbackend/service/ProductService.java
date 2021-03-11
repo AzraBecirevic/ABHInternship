@@ -1,5 +1,6 @@
 package com.app.auctionbackend.service;
 
+import com.app.auctionbackend.dtos.ProductsInfiniteDto;
 import com.app.auctionbackend.dtos.ProductDetailsDto;
 import com.app.auctionbackend.dtos.ProductDto;
 import com.app.auctionbackend.model.Bid;
@@ -72,10 +73,12 @@ public class ProductService {
         return null;
     }
 
-    public List<ProductDto> getProductByCategoryId(Integer categoryId, Integer number){
+    public ProductsInfiniteDto getProductByCategoryId(Integer categoryId, Integer number){
         List<Product> products = productRepository.findAll();
 
         List<Product> productsByCategoryId = new ArrayList<>();
+
+        ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
 
         for (Product product: products) {
             boolean addToList = false;
@@ -90,14 +93,23 @@ public class ProductService {
         }
 
         List<ProductDto> productDtos = new ArrayList<>();
-        if( productsByCategoryId.size() == 0)
-           return productDtos;
+        if( productsByCategoryId.size() == 0){
+            productsInfiniteDto.setHasMoreData(false);
+            return productsInfiniteDto;
+        }
 
         Integer from = (number * 9) - 9;
         Integer to = (number * 9);
 
-        if(number * 9 > productsByCategoryId.size())
+        if(from>productsByCategoryId.size()-1){
+            productsInfiniteDto.setHasMoreData(false);
+            return productsInfiniteDto;
+        }
+
+        if(number * 9 >= productsByCategoryId.size()){
             to = productsByCategoryId.size();
+            productsInfiniteDto.setHasMoreData(false);
+        }
 
         List<Product> productsByCategoryInf = new ArrayList<>();
 
@@ -107,7 +119,8 @@ public class ProductService {
 
         productDtos = changeToDto(productsByCategoryInf);
 
-        return productDtos;
+        productsInfiniteDto.setProductsList(productDtos);
+        return productsInfiniteDto;
     }
 
     public List<ProductDto> getNewArrivals(){
@@ -144,17 +157,28 @@ public class ProductService {
         return productDtos;
     }
 
-    public  List<ProductDto> getNewArrivalsInfProduct(Integer number){
+     public ProductsInfiniteDto getNewArrivalsInfProduct(Integer number){
+        ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
+
         List<ProductDto> newArrivals = getNewArrivals();
 
-        if(newArrivals == null || newArrivals.size() == 0)
-            return  newArrivals;
+        if(newArrivals == null || newArrivals.size() == 0){
+           productsInfiniteDto.setHasMoreData(false);
+           return productsInfiniteDto;
+        }
 
         Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
         Integer to = (number * NUMBER_PER_CALL);
 
-        if(number * NUMBER_PER_CALL > newArrivals.size())
+        if(from > newArrivals.size()-1){
+            productsInfiniteDto.setHasMoreData(false);
+            return productsInfiniteDto;
+        }
+
+        if(number * NUMBER_PER_CALL >= newArrivals.size()){
             to = newArrivals.size();
+            productsInfiniteDto.setHasMoreData(false);
+        }
 
         List<ProductDto> newArrivalsInf = new ArrayList<>();
 
@@ -162,29 +186,40 @@ public class ProductService {
             newArrivalsInf.add(newArrivals.get(i));
         }
 
-        return newArrivalsInf;
+        productsInfiniteDto.setProductsList(newArrivalsInf);
+        return productsInfiniteDto;
     }
 
-    public  List<ProductDto> getLastChanceInfProduct(Integer number){
+    public ProductsInfiniteDto getLastChanceInfProduct(Integer number){
+        ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
         List<ProductDto> lastChance = getLastChanceProducts();
 
-        if(lastChance == null || lastChance.size() == 0)
-            return lastChance;
+        if(lastChance == null || lastChance.size() == 0){
+            productsInfiniteDto.setHasMoreData(false);
+            return productsInfiniteDto;
+        }
 
         Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
         Integer to = (number * NUMBER_PER_CALL);
 
-        if(number * NUMBER_PER_CALL > lastChance.size())
+        if(from > lastChance.size()-1){
+            productsInfiniteDto.setHasMoreData(false);
+            return productsInfiniteDto;
+        }
+
+        if(number * NUMBER_PER_CALL >= lastChance.size()){
             to = lastChance.size();
+            productsInfiniteDto.setHasMoreData(false);
+        }
 
         List<ProductDto> lastChanceInf = new ArrayList<>();
 
         for(int i = from; i < to; i++){
             lastChanceInf.add(lastChance.get(i));
         }
-        return lastChanceInf;
+        productsInfiniteDto.setProductsList(lastChanceInf);
+        return productsInfiniteDto;
     }
-
 
     public ProductDetailsDto getMostExpensiveProduct(){
         List<Product> products = productRepository.findByOrderByStartPrice();
@@ -200,6 +235,27 @@ public class ProductService {
             return productDetailsDto;
         }
         return null;
+    }
+
+    public List<ProductDto> searchProductsByName(String productName){
+        List<Product> products = productRepository.findAll();
+
+       if(products==null)
+           return null;
+
+        List<Product> productsWithMatchingName = new ArrayList<>();
+
+        for (Product product: products) {
+            if(product.getName().toLowerCase().contains(productName.toLowerCase())){
+                productsWithMatchingName.add(product);
+            }
+        }
+
+        if(productsWithMatchingName.size()>10)
+            productsWithMatchingName = productsWithMatchingName.subList(0,9);
+
+        List<ProductDto> productDtos = changeToDto(productsWithMatchingName);
+        return productDtos;
     }
 
     private List<ProductDto> changeToDto(List<Product>products){

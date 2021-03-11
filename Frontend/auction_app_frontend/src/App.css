@@ -1,9 +1,9 @@
-.app{
+.app {
   position: relative;
   min-height: 100vh;
 }
 
-.containerDiv{
-  padding-bottom:396px; 
+.containerDiv {
+  padding-bottom: 396px;
   margin-bottom: 40px;
 }

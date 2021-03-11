@@ -1,4 +1,6 @@
 import { ENDPOINT, PORT } from "../constants/auth";
+import { FORGOT_PASSWORD_ENDPONT } from "../constants/endpoints";
+import { FORGOT_PASSWORD_EMAIL } from "../constants/storage";
 
 class AuthService {
   async login(
@@ -95,6 +97,64 @@ class AuthService {
       } catch (err) {
         showError("Connection refused. Please try later.");
       }
+      return false;
+    }
+  }
+
+  async forgotPassword(email, setIsLoading) {
+    const requestOptions = {
+      method: "GET",
+    };
+    const response = await fetch(
+      ENDPOINT + PORT + FORGOT_PASSWORD_ENDPONT + email,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+    setIsLoading(false);
+    if (!response || response.status === 404) {
+      throw response;
+    }
+
+    if (response.status === 200) {
+      localStorage.setItem(FORGOT_PASSWORD_EMAIL, email);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async changePassword(email, password, setIsLoading) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    };
+
+    const response = await fetch(
+      ENDPOINT + PORT + "/customer/changePassword",
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+    setIsLoading(false);
+    if (!response || response.status === 404) {
+      throw response;
+    }
+    if (response.status === 200) {
+      return true;
+    } else {
       return false;
     }
   }
