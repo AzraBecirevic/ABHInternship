@@ -65,7 +65,7 @@ public class ProductService {
 
             productDetailsDto.setHighestBidText(df.format(productDetailsDto.getHighestBid()));
 
-            long diff = ChronoUnit.DAYS.between(product.getStartDate(),product.getEndDate());
+            long diff = ChronoUnit.DAYS.between(LocalDateTime.now(),product.getEndDate());
             productDetailsDto.setTimeLeft(diff);
 
             return productDetailsDto;
