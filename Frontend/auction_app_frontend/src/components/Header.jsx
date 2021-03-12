@@ -1,5 +1,4 @@
 import { Nav, Navbar } from "react-bootstrap";
-import styles from "./Header.css";
 import NavbarBlack from "./NavbarBlack";
 import NavbarWhite from "./NavbarWhite";
 
