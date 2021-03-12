@@ -793,7 +793,7 @@ public class Seed {
         imageRepository.save(manBlackSneakersImg2);
         imageRepository.save(manBlackSneakersImg3);
         imageRepository.save(manBlackSneakersImg4);
-        imageRepository.save(manBlackSneakersImg4);
+        imageRepository.save(manBlackSneakersImg5);
 
         Image manGreySneakersImg1 = getImageData("src/main/resources/images/manGreySneakers.jpg");
         Image manGreySneakersImg2 = getImageData("src/main/resources/images/manGreySneakers.jpg");

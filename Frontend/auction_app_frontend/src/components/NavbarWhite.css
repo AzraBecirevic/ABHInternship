@@ -178,6 +178,11 @@ div.col-lg-12.searchProduct:hover {
   width: 50%;
 }
 
+.mainWhite {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 @media (min-width: 1514px) and (max-width: 1860px) {
   .saerchResultListDiv {
     width: 60%;

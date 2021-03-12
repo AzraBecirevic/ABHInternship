@@ -1,4 +1,4 @@
-import { ENDPOINT, PORT } from "../constants/auth";
+import { ENDPOINT } from "../constants/auth";
 
 class BidService {
   async getBidsByProductId(productId) {
@@ -9,7 +9,7 @@ class BidService {
     const requestOptions = {
       method: "GET",
     };
-    const response = await fetch(ENDPOINT + PORT + link, requestOptions).catch(
+    const response = await fetch(ENDPOINT + link, requestOptions).catch(
       (error) => {
         if (!error.response) {
           return null;
@@ -44,16 +44,15 @@ class BidService {
       }),
     };
 
-    const response = await fetch(
-      ENDPOINT + PORT + "/bid/add",
-      requestOptions
-    ).catch((error) => {
-      if (!error.response) {
-        return null;
-      } else {
-        return;
+    const response = await fetch(ENDPOINT + "/bid/add", requestOptions).catch(
+      (error) => {
+        if (!error.response) {
+          return null;
+        } else {
+          return;
+        }
       }
-    });
+    );
 
     if (!response || response.status === 404 || response.status === 400) {
       throw response;

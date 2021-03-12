@@ -1,20 +1,19 @@
-import { ENDPOINT, PORT } from "../constants/auth";
+import { ENDPOINT } from "../constants/auth";
 
 class CategoryService {
   async getCategories() {
     const requestOptions = {
       method: "GET",
     };
-    const response = await fetch(
-      ENDPOINT + PORT + "/category",
-      requestOptions
-    ).catch((error) => {
-      if (!error.response) {
-        return null;
-      } else {
-        return;
+    const response = await fetch(ENDPOINT + "/category", requestOptions).catch(
+      (error) => {
+        if (!error.response) {
+          return null;
+        } else {
+          return;
+        }
       }
-    });
+    );
     if (!response || response.status === 404) {
       throw response;
     }

@@ -1,4 +1,4 @@
-import { ENDPOINT, PORT } from "../constants/auth";
+import { ENDPOINT } from "../constants/auth";
 import { FORGOT_PASSWORD_ENDPONT } from "../constants/endpoints";
 import { FORGOT_PASSWORD_EMAIL } from "../constants/storage";
 
@@ -16,16 +16,15 @@ class AuthService {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password }),
     };
-    const response = await fetch(
-      ENDPOINT + PORT + "/login",
-      requestOptions
-    ).catch((error) => {
-      if (!error.response) {
-        return null;
-      } else {
-        return;
+    const response = await fetch(ENDPOINT + "/login", requestOptions).catch(
+      (error) => {
+        if (!error.response) {
+          return null;
+        } else {
+          return;
+        }
       }
-    });
+    );
     setIsLoading(false);
     if (!response) {
       showError("Connection refused. Please try later.");
@@ -72,16 +71,15 @@ class AuthService {
       }),
     };
 
-    const response = await fetch(
-      ENDPOINT + PORT + "/customer",
-      requestOptions
-    ).catch((error) => {
-      if (!error.response) {
-        return null;
-      } else {
-        return;
+    const response = await fetch(ENDPOINT + "/customer", requestOptions).catch(
+      (error) => {
+        if (!error.response) {
+          return null;
+        } else {
+          return;
+        }
       }
-    });
+    );
     setIsLoading(false);
     if (!response) {
       showError("Connection refused. Please try later.");
@@ -106,7 +104,7 @@ class AuthService {
       method: "GET",
     };
     const response = await fetch(
-      ENDPOINT + PORT + FORGOT_PASSWORD_ENDPONT + email,
+      ENDPOINT + FORGOT_PASSWORD_ENDPONT + email,
       requestOptions
     ).catch((error) => {
       if (!error.response) {
@@ -139,7 +137,7 @@ class AuthService {
     };
 
     const response = await fetch(
-      ENDPOINT + PORT + "/customer/changePassword",
+      ENDPOINT + "/customer/changePassword",
       requestOptions
     ).catch((error) => {
       if (!error.response) {

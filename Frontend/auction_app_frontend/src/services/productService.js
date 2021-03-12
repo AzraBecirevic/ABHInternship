@@ -1,4 +1,4 @@
-import { ENDPOINT, PORT } from "../constants/auth";
+import { ENDPOINT } from "../constants/auth";
 
 class ProductService {
   async getProducts() {
@@ -35,7 +35,7 @@ class ProductService {
     const requestOptions = {
       method: "GET",
     };
-    const response = await fetch(ENDPOINT + PORT + link, requestOptions).catch(
+    const response = await fetch(ENDPOINT + link, requestOptions).catch(
       (error) => {
         if (!error.response) {
           return null;
