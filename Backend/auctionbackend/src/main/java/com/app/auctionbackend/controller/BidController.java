@@ -18,7 +18,7 @@ public class BidController {
     @Autowired
     BidService bidService;
 
-    @GetMapping(value="/byProductId/{productId}")
+    @GetMapping(value = "/byProductId/{productId}")
     public ResponseEntity<List<BidDto>>  getBidsByProductId (@PathVariable Integer productId){
         if(productId<=0){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
