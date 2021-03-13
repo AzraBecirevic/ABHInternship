@@ -40,6 +40,7 @@ export class Home extends Component {
     this._isMounted = true;
     try {
       if (this._isMounted) {
+        this.setIsLoading(true);
         const newArrivalsDto = await this.productService.getNewArrivals(1);
 
         this.fetchNumber = 1;
@@ -56,6 +57,7 @@ export class Home extends Component {
           newArrivals: newArrivalsDto.productsList,
           hasMoreNewArrivalsData: newArrivalsDto.hasMoreData,
         });
+        this.setIsLoading(false);
       }
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");
@@ -64,6 +66,10 @@ export class Home extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
+
+  setIsLoading = (isLoadingValue) => {
+    this.props.setIsLoading(isLoadingValue);
+  };
 
   fetchMoreNewArrivals = async () => {
     try {

@@ -132,6 +132,7 @@ export class App extends Component {
                       isLoggedIn={this.state.isLoggedIn}
                       email={this.email}
                       token={this.jwtToken}
+                      setIsLoading={this.setIsLoading}
                     />
                   )}
                 />
@@ -161,11 +162,22 @@ export class App extends Component {
                     <Register {...props} setIsLoading={this.setIsLoading} />
                   )}
                 />
-                <Route exact path={CATEGORIES_ROUTE} component={Categories} />
+                <Route
+                  exact
+                  path={CATEGORIES_ROUTE}
+                  render={(props) => (
+                    <Categories {...props} setIsLoading={this.setIsLoading} />
+                  )}
+                />
                 <Route
                   exact
                   path={SINGLE_PRODUCT_ROUTE}
-                  component={SingleProduct}
+                  render={(props) => (
+                    <SingleProduct
+                      {...props}
+                      setIsLoading={this.setIsLoading}
+                    />
+                  )}
                 />
                 <Route
                   path={FORGOT_PASSWORD_ROUTE}

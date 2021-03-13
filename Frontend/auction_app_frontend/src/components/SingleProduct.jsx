@@ -56,6 +56,8 @@ export class SingleProduct extends Component {
       this.state.email = email;
       this.state.token = token;
 
+      this.setIsLoading(true);
+
       this.setState({
         product: await this.productService.getProductById(chosenProduct),
       });
@@ -76,10 +78,15 @@ export class SingleProduct extends Component {
         placeBidSuccesMessage: null,
         placedBid: "",
       });
+      this.setIsLoading(false);
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");
     }
   }
+
+  setIsLoading = (isLoadingValue) => {
+    this.props.setIsLoading(isLoadingValue);
+  };
 
   changeToMainImage(index) {
     this.setState({ mainImageIndex: index });

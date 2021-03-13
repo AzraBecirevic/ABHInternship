@@ -45,7 +45,7 @@ public class AuctionbackendApplication {
 		props.put("mail.debug", "true");
 
 		return mailSender;
-		
+
 	}
 
 	public static void main(String[] args) {

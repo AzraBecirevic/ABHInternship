@@ -53,6 +53,8 @@ export class Categories extends Component {
       this.state.email = email;
       this.state.token = token;
 
+      this.setIsLoading(true);
+
       const productsDto = await this.productService.getProductsByCategoryId(
         this.state.categoryId,
         this.fetchNumber
@@ -65,9 +67,15 @@ export class Categories extends Component {
         products: productsDto.productsList,
         hasMoreData: productsDto.hasMoreData,
       });
+
+      this.setIsLoading(false);
     } catch (error) {
       this.toastService.showErrorToast("Connection refused. Please try later.");
     }
+  };
+
+  setIsLoading = (isLoadingValue) => {
+    this.props.setIsLoading(isLoadingValue);
   };
 
   exploreMore = async () => {
