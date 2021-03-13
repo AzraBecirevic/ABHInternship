@@ -56,6 +56,8 @@ export class SingleProduct extends Component {
       this.state.email = email;
       this.state.token = token;
 
+      this.setState({ isLoggedIn: isLoggedIn });
+
       this.setIsLoading(true);
 
       this.setState({

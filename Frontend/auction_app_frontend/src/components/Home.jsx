@@ -106,7 +106,7 @@ export class Home extends Component {
 
   fetchMoreLastChance = async () => {
     try {
-      if (this.hasMoreLastChanceData) {
+      if (this.state.hasMoreLastChanceData) {
         this.setState({ currentFetchnigLastChance: true });
         this.fetchNumber = this.fetchNumber + 1;
         const lastChanceProducts = await this.productService.getLastChance(
