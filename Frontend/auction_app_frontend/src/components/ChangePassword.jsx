@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import {
+  CONNECTION_REFUSED_MESSAGE,
+  FAILED_PASSWORD_CHANGE_MESSAGE,
+  FORBIDDEN_PASSWORD_CHANGE_MESSAGE,
   PASSWORD_FORMAT_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
+  SUCCESSFUL_PASSWORD_CHANGE_MESSAGE,
 } from "../constants/messages";
 import { PASSWORD_REGEX } from "../constants/regex";
 import { LOGIN_ROUTE, REGISTER_ROUTE } from "../constants/routes";
@@ -22,7 +26,7 @@ export class ChangePassword extends Component {
 
   componentDidMount() {
     if (localStorage.getItem("forgotPasswordEmail") == null) {
-      this.toastService.showErrorToast("Please sign up or log in to continue");
+      this.toastService.showErrorToast(FORBIDDEN_PASSWORD_CHANGE_MESSAGE);
       this.props.history.push(REGISTER_ROUTE);
     }
   }
@@ -52,19 +56,15 @@ export class ChangePassword extends Component {
         );
         if (isPasswordReset) {
           this.toastService.showSuccessToast(
-            "You have successfully changed your password."
+            SUCCESSFUL_PASSWORD_CHANGE_MESSAGE
           );
           this.props.history.push(LOGIN_ROUTE);
         } else {
-          this.toastService.showSuccessToast(
-            "Please create account if you don't have an acconut."
-          );
+          this.toastService.showErrorToast(FAILED_PASSWORD_CHANGE_MESSAGE);
           this.props.history.push(REGISTER_ROUTE);
         }
       } catch (error) {
-        this.toastService.showErrorToast(
-          "Connection refused. Please try later."
-        );
+        this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
       }
     }
   };

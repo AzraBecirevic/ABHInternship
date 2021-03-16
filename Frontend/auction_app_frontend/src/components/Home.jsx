@@ -2,6 +2,7 @@ import { Tab } from "bootstrap";
 import React, { Component } from "react";
 import { Tabs } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { CONNECTION_REFUSED_MESSAGE } from "../constants/messages";
 import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 import CategoryService from "../services/categoryService";
 import ProductService from "../services/productService";
@@ -20,7 +21,6 @@ export class Home extends Component {
   state = {
     categories: null,
     product: null,
-    products: null,
     newArrivals: null,
     lastChance: null,
     hasMoreNewArrivalsData: true,
@@ -42,25 +42,28 @@ export class Home extends Component {
       if (this._isMounted) {
         this.setIsLoading(true);
         const newArrivalsDto = await this.productService.getNewArrivals(1);
+        const product = await this.productService.getProduct();
+        const categories = await this.categoryService.getCategories();
 
         this.fetchNumber = 1;
-        this.setState({ product: await this.productService.getProduct() });
-        this.setState({
-          categories: await this.categoryService.getCategories(),
-        });
-        if (this.state.categories != null && this.state.categories.length > 9) {
-          this.setState({ categories: this.state.categories.slice(0, 10) });
+
+        if (categories != null && categories.length > 9) {
+          this.setState({ categories: categories.slice(0, 10) });
+        } else {
+          this.setState({
+            categories: categories,
+          });
         }
-        this.setState({ products: await this.productService.getProducts() });
 
         this.setState({
+          product: product,
           newArrivals: newArrivalsDto.productsList,
           hasMoreNewArrivalsData: newArrivalsDto.hasMoreData,
         });
         this.setIsLoading(false);
       }
     } catch (error) {
-      this.toastService.showErrorToast("Connection refused. Please try later.");
+      this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   };
   componentWillUnmount() {
@@ -100,7 +103,7 @@ export class Home extends Component {
         }
       }
     } catch (error) {
-      this.toastService.showErrorToast("Connection refused. Please try later.");
+      this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   };
 
@@ -133,7 +136,7 @@ export class Home extends Component {
         }
       }
     } catch (error) {
-      this.toastService.showErrorToast("Connection refused. Please try later.");
+      this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   };
 

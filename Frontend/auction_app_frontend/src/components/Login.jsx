@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {
+  EMAIL_REQUIRED_MESSAGE,
+  PASSWORD_REQUIRED_MESSAGE,
+} from "../constants/messages";
 import { FORGOT_PASSWORD_ROUTE, HOME_ROUTE } from "../constants/routes";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
 import AuthService from "../services/authService";
@@ -25,14 +29,14 @@ export class Login extends Component {
 
   validateEmail = () => {
     if (this.state.email === "") {
-      this.setState({ emailErrMess: "Email is required" });
+      this.setState({ emailErrMess: EMAIL_REQUIRED_MESSAGE });
       return false;
     }
   };
 
   validatePassword = () => {
     if (this.state.password === "") {
-      this.setState({ passwordErrMess: "Password is required" });
+      this.setState({ passwordErrMess: PASSWORD_REQUIRED_MESSAGE });
       return false;
     }
   };

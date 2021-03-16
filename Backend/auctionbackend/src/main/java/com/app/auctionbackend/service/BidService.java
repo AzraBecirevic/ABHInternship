@@ -1,5 +1,6 @@
 package com.app.auctionbackend.service;
 
+import com.app.auctionbackend.dtos.AddedBidDto;
 import com.app.auctionbackend.dtos.BidDto;
 import com.app.auctionbackend.dtos.PlaceBidDto;
 import com.app.auctionbackend.model.Bid;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.app.auctionbackend.helper.ValidationConstants.BID_MAX_PRICE;
+import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 
 @Service("bidService")
 public class BidService {
@@ -52,47 +54,70 @@ public class BidService {
         return bidDtoList;
     }
 
-    private Boolean modifyUserBid(Bid bid, PlaceBidDto placeBidDto){
-        bid.setDateOfBidPlacement(LocalDateTime.now());
-        bid.setBidPrice(placeBidDto.getBidPrice());
-        bidRepository.save(bid);
-        return true;
-    }
+   private void modifyUserBid(Bid bid, PlaceBidDto placeBidDto){
+       bid.setDateOfBidPlacement(LocalDateTime.now());
+       bid.setBidPrice(placeBidDto.getBidPrice());
+       bidRepository.save(bid);
+   }
 
-    public Boolean addBid(PlaceBidDto placeBidDto){
-        if(placeBidDto.getBidPrice() > BID_MAX_PRICE)
-            return false;
+    public AddedBidDto addBid(PlaceBidDto placeBidDto){
+        AddedBidDto addedBidDto = new AddedBidDto();
 
-         List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(placeBidDto.getProductId());
+        if(placeBidDto.getBidPrice() > BID_MAX_PRICE){
+            addedBidDto.setBidAdded(false);
+            addedBidDto.setMessage(BID_MAX_ALLOWED_PRICE_MESSAGE);
+            return addedBidDto;
+        }
+
+        List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(placeBidDto.getProductId());
 
         if(bidList != null && bidList.size() > 0){
-            if(bidList.get(bidList.size()-1).getBidPrice() > placeBidDto.getBidPrice()){
-                 return  false;
+            if(bidList.get(bidList.size()-1).getBidPrice() >= placeBidDto.getBidPrice()){
+                addedBidDto.setBidAdded(false);
+                addedBidDto.setMessage(BID_MUST_BE_BIGGER_THAN_HIGHEST_MESSAGE);
+                return addedBidDto;
             }
             for (Bid bid:bidList) {
-                 if(bid.getCustomer().getEmail().equals(placeBidDto.getCustomerEmail())){
-                   return modifyUserBid(bid, placeBidDto);
-                 }
-             }
-         }
-         Bid newBid = new Bid();
+                if(bid.getCustomer().getEmail().equals(placeBidDto.getCustomerEmail())){
+                    if(bid.getBidPrice() == bidList.get(bidList.size()-1).getBidPrice()){
+                        addedBidDto.setBidAdded(false);
+                        addedBidDto.setMessage(BID_IS_ALREADY_HIGHEST_MESSAGE);
+                        return addedBidDto;
+                    }
+                    modifyUserBid(bid, placeBidDto);
+                    addedBidDto.setBidAdded(true);
+                    addedBidDto.setMessage(BID_PLACED_SUCCESSFULLY_MESSAGE);
+                    return addedBidDto;
+                }
+            }
+        }
+        Bid newBid = new Bid();
 
-         Product product = productRepository.findById(placeBidDto.getProductId()).orElse(null);
-         Customer customer = customerRepository.findByEmail(placeBidDto.getCustomerEmail());
-         if(product == null || customer == null)
-             return false;
+        Product product = productRepository.findById(placeBidDto.getProductId()).orElse(null);
+        Customer customer = customerRepository.findByEmail(placeBidDto.getCustomerEmail());
 
-         if(product.getStartPrice() > placeBidDto.getBidPrice())
-             return false;
+        if(product == null || customer == null){
+            addedBidDto.setBidAdded(false);
+            addedBidDto.setMessage(BID_NOT_THERE_CUSTOMER_NOT_ALLOWED_MESSAGE);
+            return addedBidDto;
+        }
 
-         newBid.setProduct(product);
-         newBid.setCustomer(customer);
-         newBid.setBidPrice(placeBidDto.getBidPrice());
-         newBid.setDateOfBidPlacement(LocalDateTime.now());
+        if(product.getStartPrice() > placeBidDto.getBidPrice()){
+            addedBidDto.setBidAdded(false);
+            addedBidDto.setMessage("Enter $"+product.getStartPrice()+ " or more.");
+            return addedBidDto;
+        }
 
-         bidRepository.save(newBid);
+        newBid.setProduct(product);
+        newBid.setCustomer(customer);
+        newBid.setBidPrice(placeBidDto.getBidPrice());
+        newBid.setDateOfBidPlacement(LocalDateTime.now());
 
-         return true;
+        bidRepository.save(newBid);
+
+        addedBidDto.setBidAdded(true);
+        addedBidDto.setMessage(BID_PLACED_SUCCESSFULLY_MESSAGE);
+        return addedBidDto;
     }
-
+    
 }

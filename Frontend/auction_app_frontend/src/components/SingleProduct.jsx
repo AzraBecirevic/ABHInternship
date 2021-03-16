@@ -7,6 +7,15 @@ import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
 import Heading from "./Heading";
 import styles from "./SingleProduct.css";
+import {
+  BID_FORMAT_MESSAGE,
+  BID_PRICE_BIGGER_THAN_HIGHEST_BID_MESSAGE,
+  BID_PRICE_CAN_NOT_BE_0_MESSAGE,
+  BID_PRICE_CAN_NOT_BE_NEGATIVE,
+  BID_PRICE_REQUIRED_MESSAGE,
+  CONNECTION_REFUSED_MESSAGE,
+  MAX_ALLOWED_BID_PRICE,
+} from "../constants/messages";
 
 export class SingleProduct extends Component {
   constructor(props) {
@@ -82,7 +91,7 @@ export class SingleProduct extends Component {
       });
       this.setIsLoading(false);
     } catch (error) {
-      this.toastService.showErrorToast("Connection refused. Please try later.");
+      this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   }
 
@@ -114,30 +123,30 @@ export class SingleProduct extends Component {
 
     if (placedBid === "") {
       this.setState({
-        placeBidErrorMessage: "You need to enter bid price.",
+        placeBidErrorMessage: BID_PRICE_REQUIRED_MESSAGE,
       });
       return false;
     }
 
     if (this.validateBidFormat(placedBid) == false) {
       this.setState({
-        placeBidErrorMessage: "Bid can have up to two decimal places",
+        placeBidErrorMessage: BID_FORMAT_MESSAGE,
       });
       return false;
     } else if (placedBid > BID_MAXIMUM_PRICE) {
       this.setState({
-        placeBidErrorMessage: "Maximum allowed bid is $" + BID_MAXIMUM_PRICE,
+        placeBidErrorMessage: MAX_ALLOWED_BID_PRICE,
       });
       return false;
     } else if (placedBid == 0) {
-      this.setState({ placeBidErrorMessage: "Bid price can not be 0." });
+      this.setState({ placeBidErrorMessage: BID_PRICE_CAN_NOT_BE_0_MESSAGE });
       return false;
     } else if (placedBid < 0) {
-      this.setState({ placeBidErrorMessage: "Bid price can not be negative." });
+      this.setState({ placeBidErrorMessage: BID_PRICE_CAN_NOT_BE_NEGATIVE });
       return false;
     } else if (placedBid <= this.state.product.highestBid) {
       this.setState({
-        placeBidErrorMessage: "Enter price bigger than highest bid.",
+        placeBidErrorMessage: BID_PRICE_BIGGER_THAN_HIGHEST_BID_MESSAGE,
       });
       return false;
     } else if (this.state.product.startPrice > placedBid) {
@@ -157,28 +166,30 @@ export class SingleProduct extends Component {
     if (this.validatePlacedBid()) {
       try {
         const { productId, email, placedBid, token } = this.state;
-        const isBidAdded = await this.bidService.placeBid(
+        const BidAdded = await this.bidService.placeBid(
           productId,
           email,
           placedBid,
           token
         );
 
-        this.setState({ isBidPlaced: isBidAdded });
-        if (isBidAdded) {
+        this.setState({ isBidPlaced: BidAdded.bidAdded });
+        if (BidAdded.bidAdded) {
           this.setState({
             product: await this.productService.getProductById(productId),
             images: this.state.product.imageList.filter((image, index) => {
               return image.id != this.state.mainImage.id;
             }),
             bids: await this.bidService.getBidsByProductId(productId),
-            placeBidSuccesMessage: "Congrats! You are the highest bidder!",
+            placeBidSuccesMessage: BidAdded.message,
+          });
+        } else {
+          this.setState({
+            placeBidErrorMessage: BidAdded.message,
           });
         }
       } catch (error) {
-        this.toastService.showErrorToast(
-          "Connection refused. Please try later."
-        );
+        this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
       }
     }
   };

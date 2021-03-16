@@ -5,12 +5,13 @@ import com.app.auctionbackend.helper.Helper;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.repo.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
+
 
 @Service("customerService")
 public class CustomerService {
@@ -24,7 +25,7 @@ public class CustomerService {
         List<Customer> customers = customerRepository.findAll();
         for (Customer c:customers) {
             if (c.getEmail().equals(username))
-                throw  new Exception("Email you entered already exists");
+                throw  new Exception(EMAIL_ALREADY_EXISTS_MESSAGE);
         }
     }
 
@@ -35,12 +36,12 @@ public class CustomerService {
 
     private void validateEmailFormat(String email) throws Exception{
         if(!Helper.isEmailFormatValid(email))
-            throw  new Exception("Expected email format: example@example.com");
+            throw  new Exception(EMAIL_FORMAT_MESSAGE);
     }
 
     private void validatePasswordFormat(String password) throws Exception{
         if(!Helper.isPasswordFormatValid(password))
-            throw new Exception("Password format is not valid");
+            throw new Exception(PASSWORD_FORMAT_MESSAGE);
     }
 
 
@@ -48,15 +49,15 @@ public class CustomerService {
 
         checkIfUserAlreadyExist(customer.getEmail());
 
-        validateRequiredField(customer.getFirstName(), "First name is required");
+        validateRequiredField(customer.getFirstName(), FIRST_NAME_REQUIRED_MESSAGE);
 
-        validateRequiredField(customer.getLastName(), "Last name is required");
+        validateRequiredField(customer.getLastName(), LAST_NAME_REQUIRED_MESSAGE);
 
-        validateRequiredField(customer.getEmail(), "Email is required");
+        validateRequiredField(customer.getEmail(), EMAIL_REQUIRED_MESSAGE);
 
         validateEmailFormat(customer.getEmail());
 
-        validateRequiredField(customer.getPassword(),"Password is required");
+        validateRequiredField(customer.getPassword(), PASSWORD_REQUIRED_MESSAGE);
 
         validatePasswordFormat(customer.getPassword());
 
@@ -83,7 +84,7 @@ public class CustomerService {
     }
 
     public boolean changePassword(CustomerChangePassDto customerChangePassDto){
-        if( customerChangePassDto == null)
+        if(customerChangePassDto == null)
             return false;
 
         String email = customerChangePassDto.getEmail();

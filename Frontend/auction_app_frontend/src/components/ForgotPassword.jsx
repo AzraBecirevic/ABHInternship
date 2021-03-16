@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { EMAIL_FORMAT_MESSAGE } from "../constants/messages";
+import {
+  CONNECTION_REFUSED_MESSAGE,
+  EMAIL_FORMAT_MESSAGE,
+  EMAIL_REQUIRED_MESSAGE,
+  PASSWORD_RESET_MAIL_FAILED_SENT_MESSAGE,
+  PASSWORD_RESET_MAIL_SUCCESSFULLY_SENT_MESSAGE,
+} from "../constants/messages";
 import { EMAIL_REGEX } from "../constants/regex";
 import { REGISTER_ROUTE } from "../constants/routes";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
@@ -39,17 +45,13 @@ export class ForgotPassword extends Component {
 
         if (isEmailSent) {
           this.showSuccessMessage(
-            "We have successfully sent a password reset link to your email address"
+            PASSWORD_RESET_MAIL_SUCCESSFULLY_SENT_MESSAGE
           );
         } else {
-          this.showErrorMessage(
-            "There is no user associated with this account."
-          );
+          this.showErrorMessage(PASSWORD_RESET_MAIL_FAILED_SENT_MESSAGE);
         }
       } catch (error) {
-        this.toastService.showErrorToast(
-          "Connection refused. Please try later."
-        );
+        this.showErrorMessage(CONNECTION_REFUSED_MESSAGE);
       }
     }
   };
@@ -81,7 +83,7 @@ export class ForgotPassword extends Component {
     const { email } = this.state;
 
     if (email === "") {
-      this.setState({ emailErrMess: "Email is required" });
+      this.setState({ emailErrMess: EMAIL_REQUIRED_MESSAGE });
       return false;
     }
     if (email !== "" && this.validateEmailFormat(email) === false) {

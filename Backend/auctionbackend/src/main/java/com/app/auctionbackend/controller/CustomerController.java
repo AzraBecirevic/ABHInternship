@@ -56,7 +56,6 @@ public class CustomerController {
 
     @GetMapping(value = "/forgotPassword/{email}")
     public ResponseEntity forgotPassword(@PathVariable String email){
-
         Customer customer = customerService.findByEmail(email);
         if(customer == null){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -68,8 +67,8 @@ public class CustomerController {
         catch(Error err){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(HttpStatus.OK);
 
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @PostMapping("/changePassword")

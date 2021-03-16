@@ -7,6 +7,7 @@ import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CATEGORIES_ROUTE, SINGLE_PRODUCT_ROUTE } from "../constants/routes";
+import { CONNECTION_REFUSED_MESSAGE } from "../constants/messages";
 
 export class Categories extends Component {
   constructor(props) {
@@ -70,7 +71,7 @@ export class Categories extends Component {
 
       this.setIsLoading(false);
     } catch (error) {
-      this.toastService.showErrorToast("Connection refused. Please try later.");
+      this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   };
 

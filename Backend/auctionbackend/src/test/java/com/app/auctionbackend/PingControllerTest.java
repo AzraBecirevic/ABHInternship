@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.app.auctionbackend.TestEndpointConstants.PING_ENDPOINT;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,7 +22,7 @@ public class PingControllerTest {
 
     @Test
     public void ping() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get("/ping").accept(MediaType.TEXT_PLAIN))
+        mvc.perform(MockMvcRequestBuilders.get(PING_ENDPOINT).accept(MediaType.TEXT_PLAIN))
         .andExpect(status().isForbidden());
     }
 }

@@ -1,34 +1,43 @@
 import { ENDPOINT } from "../constants/auth";
+import {
+  GET_LAST_CHANCE_ENDPOINT,
+  GET_NEW_ARRIVALS_ENDPOINT,
+  GET_OFFERED_PRODUCTS_ENDPOINT,
+  GET_PRODUCTS_BY_CATEGORY_ENDPOINT,
+  GET_MOST_EXPENSIVE_PRODUCT_ENDPOINT,
+  GET_PRODUCT_BY_ID_ENDPOINT,
+  GET_PRODUCT_BY_NAME,
+} from "../constants/endpoints";
 
 class ProductService {
   async getProducts() {
-    return await this.getData("/product/getOffered");
+    return await this.getData(GET_OFFERED_PRODUCTS_ENDPOINT);
   }
 
   async getNewArrivals(fetchNumber) {
-    return await this.getData("/product/newArrivals/" + fetchNumber);
+    return await this.getData(GET_NEW_ARRIVALS_ENDPOINT + fetchNumber);
   }
 
   async getLastChance(fetchNumber) {
-    return await this.getData("/product/lastChance/" + fetchNumber);
+    return await this.getData(GET_LAST_CHANCE_ENDPOINT + fetchNumber);
   }
 
   async getProductsByCategoryId(chosenCategory, fetchNumber) {
     return await this.getData(
-      "/product/byCategory/" + chosenCategory + "/" + fetchNumber
+      GET_PRODUCTS_BY_CATEGORY_ENDPOINT + chosenCategory + "/" + fetchNumber
     );
   }
 
   async getProduct() {
-    return await this.getData("/product/getMostExpensive");
+    return await this.getData(GET_MOST_EXPENSIVE_PRODUCT_ENDPOINT);
   }
 
   async getProductById(productId) {
-    return await this.getData("/product/" + productId);
+    return await this.getData(GET_PRODUCT_BY_ID_ENDPOINT + productId);
   }
 
   async getProductByName(productName) {
-    return await this.getData("/product/byName/" + productName);
+    return await this.getData(GET_PRODUCT_BY_NAME + productName);
   }
 
   async getData(link) {

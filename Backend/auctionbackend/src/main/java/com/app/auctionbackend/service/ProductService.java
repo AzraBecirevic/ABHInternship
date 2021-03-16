@@ -19,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static com.app.auctionbackend.helper.InfinityScrollConstants.NUMBER_PER_CALL;
+import static com.app.auctionbackend.helper.InfinityScrollConstants.PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL;
 
 @Service("productService")
 public class ProductService {
@@ -98,15 +99,15 @@ public class ProductService {
             return productsInfiniteDto;
         }
 
-        Integer from = (number * 9) - 9;
-        Integer to = (number * 9);
+        Integer from = (number * PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL) - PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL;
+        Integer to = (number * PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL);
 
         if(from>productsByCategoryId.size()-1){
             productsInfiniteDto.setHasMoreData(false);
             return productsInfiniteDto;
         }
 
-        if(number * 9 >= productsByCategoryId.size()){
+        if(number * PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL >= productsByCategoryId.size()){
             to = productsByCategoryId.size();
             productsInfiniteDto.setHasMoreData(false);
         }

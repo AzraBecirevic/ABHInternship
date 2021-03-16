@@ -10,6 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
 import { LOGIN_ROUTE } from "../constants/routes";
 import LoadingSpinner from "./LoadingSpinner";
+import {
+  EMAIL_FORMAT_MESSAGE,
+  EMAIL_REQUIRED_MESSAGE,
+  FIRST_NAME_REQUIRED_MESSAGE,
+  LAST_NAME_REQUIRED_MESSAGE,
+  PASSWORD_FORMAT_MESSAGE,
+  PASSWORD_REQUIRED_MESSAGE,
+} from "../constants/messages";
 
 export class Register extends Component {
   constructor(props) {
@@ -42,7 +50,7 @@ export class Register extends Component {
 
   validateFirstName = () => {
     if (this.state.firstName === "") {
-      this.setState({ firstNameErrMess: "First name is required" });
+      this.setState({ firstNameErrMess: FIRST_NAME_REQUIRED_MESSAGE });
       return false;
     }
     return true;
@@ -50,7 +58,7 @@ export class Register extends Component {
 
   validateLastName = () => {
     if (this.state.lastName === "") {
-      this.setState({ lastNameErrMess: "Last name is required" });
+      this.setState({ lastNameErrMess: LAST_NAME_REQUIRED_MESSAGE });
       return false;
     }
     return true;
@@ -58,7 +66,7 @@ export class Register extends Component {
 
   validateEmail = () => {
     if (this.state.email === "") {
-      this.setState({ emailErrMess: "Email is required" });
+      this.setState({ emailErrMess: EMAIL_REQUIRED_MESSAGE });
       return false;
     }
     if (
@@ -66,7 +74,7 @@ export class Register extends Component {
       this.validateEmailFormat(this.state.email) === false
     ) {
       this.setState({
-        emailErrMess: "Expected email format: example@example.com",
+        emailErrMess: EMAIL_FORMAT_MESSAGE,
       });
       return false;
     }
@@ -75,7 +83,7 @@ export class Register extends Component {
 
   validatePassword = () => {
     if (this.state.password === "") {
-      this.setState({ passwordErrMess: "Password is required" });
+      this.setState({ passwordErrMess: PASSWORD_REQUIRED_MESSAGE });
       return false;
     }
     if (
@@ -83,8 +91,7 @@ export class Register extends Component {
       this.validatePasswordFormat(this.state.password) === false
     ) {
       this.setState({
-        passwordErrMess:
-          "Password should be 8-16 characters long, have at least one number and one special character",
+        passwordErrMess: PASSWORD_FORMAT_MESSAGE,
       });
       return false;
     }

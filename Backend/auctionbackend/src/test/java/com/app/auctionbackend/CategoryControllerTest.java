@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.app.auctionbackend.TestEndpointConstants.GET_CATEGORIES_ENDPOINT;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -19,7 +20,7 @@ public class CategoryControllerTest {
 
     @Test
     public void getCategoriesShouldReturnOk() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get("/category")
+        mvc.perform(MockMvcRequestBuilders.get(GET_CATEGORIES_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
     }

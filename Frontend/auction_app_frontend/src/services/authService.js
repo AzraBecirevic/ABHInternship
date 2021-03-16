@@ -1,5 +1,16 @@
 import { ENDPOINT } from "../constants/auth";
-import { FORGOT_PASSWORD_ENDPONT } from "../constants/endpoints";
+import {
+  CHANGE_PASSWORD_ENDPOINT,
+  FORGOT_PASSWORD_ENDPONT,
+  LOGIN_ENDPOINT,
+  REGISTER_ENDPOINT,
+} from "../constants/endpoints";
+import {
+  CONNECTION_REFUSED_MESSAGE,
+  FAIL_LOGIN_MESSAGE,
+  SUCCESSFUL_LOGIN_MESSAGE,
+  SUCCESSFUL_REGISTER_MESSAGE,
+} from "../constants/messages";
 import { FORGOT_PASSWORD_EMAIL } from "../constants/storage";
 
 class AuthService {
@@ -16,18 +27,19 @@ class AuthService {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email, password: password }),
     };
-    const response = await fetch(ENDPOINT + "/login", requestOptions).catch(
-      (error) => {
-        if (!error.response) {
-          return null;
-        } else {
-          return;
-        }
+    const response = await fetch(
+      ENDPOINT + LOGIN_ENDPOINT,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
       }
-    );
+    });
     setIsLoading(false);
     if (!response) {
-      showError("Connection refused. Please try later.");
+      showError(CONNECTION_REFUSED_MESSAGE);
       return false;
     }
     if (response.status === 200) {
@@ -38,13 +50,13 @@ class AuthService {
         sessionStorage.setItem("token", response.headers.get("authorization"));
         sessionStorage.setItem("email", email);
       }
-      showSuccess("You have successfully logged in.");
+      showSuccess(SUCCESSFUL_LOGIN_MESSAGE);
       return true;
     } else {
       if (response.status === 404) {
-        showError("Connection refused. Please try again later.");
+        showError(CONNECTION_REFUSED_MESSAGE);
       } else {
-        showError("Incorrect email or password.");
+        showError(FAIL_LOGIN_MESSAGE);
       }
 
       return false;
@@ -71,29 +83,30 @@ class AuthService {
       }),
     };
 
-    const response = await fetch(ENDPOINT + "/customer", requestOptions).catch(
-      (error) => {
-        if (!error.response) {
-          return null;
-        } else {
-          return;
-        }
+    const response = await fetch(
+      ENDPOINT + REGISTER_ENDPOINT,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
       }
-    );
+    });
     setIsLoading(false);
     if (!response) {
-      showError("Connection refused. Please try later.");
+      showError(CONNECTION_REFUSED_MESSAGE);
       return false;
     }
     if (response.status === 201) {
-      showSuccess("You have successfully registered.");
+      showSuccess(SUCCESSFUL_REGISTER_MESSAGE);
       return true;
     } else {
       try {
         var data = await response.json();
         showError(data.text);
       } catch (err) {
-        showError("Connection refused. Please try later.");
+        showError(CONNECTION_REFUSED_MESSAGE);
       }
       return false;
     }
@@ -137,7 +150,7 @@ class AuthService {
     };
 
     const response = await fetch(
-      ENDPOINT + "/customer/changePassword",
+      ENDPOINT + CHANGE_PASSWORD_ENDPOINT,
       requestOptions
     ).catch((error) => {
       if (!error.response) {

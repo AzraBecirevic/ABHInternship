@@ -1,8 +1,12 @@
 import { ENDPOINT } from "../constants/auth";
+import {
+  ADD_BID_ENDPOINT,
+  GET_BIDS_BY_PRODUCT_ID_ENDPOINT,
+} from "../constants/endpoints";
 
 class BidService {
   async getBidsByProductId(productId) {
-    return await this.getData("/bid/byProductId/" + productId);
+    return await this.getData(GET_BIDS_BY_PRODUCT_ID_ENDPOINT + productId);
   }
 
   async getData(link) {
@@ -44,15 +48,16 @@ class BidService {
       }),
     };
 
-    const response = await fetch(ENDPOINT + "/bid/add", requestOptions).catch(
-      (error) => {
-        if (!error.response) {
-          return null;
-        } else {
-          return;
-        }
+    const response = await fetch(
+      ENDPOINT + ADD_BID_ENDPOINT,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
       }
-    );
+    });
 
     if (!response || response.status === 404 || response.status === 400) {
       throw response;
