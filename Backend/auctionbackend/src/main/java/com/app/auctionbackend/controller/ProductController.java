@@ -53,7 +53,7 @@ public class ProductController {
 
     @GetMapping(value = "/byCategory/{categoryId}/{number}")
     public ResponseEntity<ProductsInfiniteDto> getProductByCategoryId(@PathVariable Integer categoryId, @PathVariable Integer number){
-        if(categoryId<=0){
+        if(categoryId <= 0){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         ProductsInfiniteDto productDtos = productService.getProductByCategoryId(categoryId, number);
