@@ -1,3 +1,4 @@
+import { Router } from "react-router";
 import { ENDPOINT } from "../constants/auth";
 import {
   GET_LAST_CHANCE_ENDPOINT,
@@ -53,7 +54,7 @@ class ProductService {
         }
       }
     );
-    if (!response || response.status === 404) {
+    if (!response) {
       throw response;
     }
 

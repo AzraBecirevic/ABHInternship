@@ -1,0 +1,97 @@
+.number404 {
+  text-align: center;
+  font-family: Lato-Regular;
+  font-size: 300px;
+  color: #8367d8;
+  letter-spacing: 10.5px;
+  text-shadow: 8px 10px 0 #dadada;
+}
+.name404 {
+  font-family: Lato-Light;
+  font-size: 24px;
+  color: #8367d8;
+  letter-spacing: 0.84px;
+}
+.heading404 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo404 {
+  width: 5%;
+  height: 12%;
+}
+
+.message404 {
+  font-family: Lato-Regular;
+  font-size: 36px;
+  color: #252525;
+  letter-spacing: 1.26px;
+  text-align: center;
+}
+
+.goBack404 {
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  height: 57px;
+  width: 179px;
+}
+
+.goBack404Div {
+  text-align: center;
+  margin-top: 48px;
+}
+div.row.row404 {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+@media (max-width: 1600px) {
+  .number404 {
+    font-size: 250px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .number404 {
+    font-size: 200px;
+  }
+  .logo404 {
+    width: 7%;
+    height: 15%;
+  }
+}
+
+@media (max-width: 1050px) {
+  .number404 {
+    font-size: 150px;
+    text-shadow: 5px 7px 0 #dadada;
+  }
+  .logo404 {
+    width: 10%;
+    height: 13%;
+  }
+}
+@media (max-width: 991.5px) {
+  .logo404 {
+    width: 3%;
+    height: 12%;
+  }
+}
+@media (max-width: 600px) {
+  .logo404 {
+    width: 5%;
+    height: 12%;
+  }
+}
+@media (max-width: 350px) {
+  .number404 {
+    font-size: 100px;
+  }
+  .logo404 {
+    width: 7%;
+    height: 12%;
+  }
+}

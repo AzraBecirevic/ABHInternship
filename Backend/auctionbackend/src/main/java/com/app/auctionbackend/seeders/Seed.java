@@ -267,11 +267,11 @@ public class Seed {
         womenShoes.setCategory(women);
         subcategoryRepository.save(womenShoes);
 
-        Image womenSneakersImg1 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
-        Image womenSneakersImg2 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
-        Image womenSneakersImg3 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
-        Image womenSneakersImg4 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
-        Image womenSneakersImg5 = getImageData("src/main/resources/images/womenPurpleSneakers.png");
+        Image womenSneakersImg1 = getImageData("src/main/resources/images/purpleSneakers.png");
+        Image womenSneakersImg2 = getImageData("src/main/resources/images/purpleSneakers.png");
+        Image womenSneakersImg3 = getImageData("src/main/resources/images/purpleSneakers.png");
+        Image womenSneakersImg4 = getImageData("src/main/resources/images/purpleSneakers.png");
+        Image womenSneakersImg5 = getImageData("src/main/resources/images/purpleSneakers.png");
 
 
         List<Image> womenSneakersImages = new ArrayList<>();

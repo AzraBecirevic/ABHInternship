@@ -16,6 +16,7 @@ import {
   CONNECTION_REFUSED_MESSAGE,
   MAX_ALLOWED_BID_PRICE,
 } from "../constants/messages";
+import { NOT_FOUND_ROUTE } from "../constants/routes";
 
 export class SingleProduct extends Component {
   constructor(props) {
@@ -85,6 +86,12 @@ export class SingleProduct extends Component {
 
       const product = await this.productService.getProductById(chosenProduct);
       const bids = await this.bidService.getBidsByProductId(chosenProduct);
+
+      if (product == null) {
+        this.setIsLoading(false);
+        this.props.history.push(NOT_FOUND_ROUTE);
+        return;
+      }
 
       this.setState({
         isLoggedIn: isLoggedIn,

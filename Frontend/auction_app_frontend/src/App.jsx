@@ -16,6 +16,7 @@ import {
   FORGOT_PASSWORD_ROUTE,
   HOME_ROUTE,
   LOGIN_ROUTE,
+  NOT_FOUND_ROUTE,
   PRIVACY_POLICY_ROUTE,
   REGISTER_ROUTE,
   SINGLE_PRODUCT_ROUTE,
@@ -33,6 +34,7 @@ import Categories from "./components/Categories";
 import SingleProduct from "./components/SingleProduct";
 import ForgotPassword from "./components/ForgotPassword";
 import ChangePassword from "./components/ChangePassword";
+import NotFound from "./components/NotFound";
 
 export class App extends Component {
   state = {
@@ -197,6 +199,7 @@ export class App extends Component {
                     />
                   )}
                 />
+                <Route path={NOT_FOUND_ROUTE} component={NotFound} />
               </div>
               <Footer openLink={this.openPage} />
             </div>
