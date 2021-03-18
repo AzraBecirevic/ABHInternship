@@ -184,7 +184,10 @@ export class Home extends Component {
                         <Link
                           className="mainProductName"
                           to={{
-                            pathname: SINGLE_PRODUCT_ROUTE,
+                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                              ":prodId",
+                              this.state.product.id
+                            ),
                             state: {
                               chosenProduct: this.state.product.id,
                               isLoggedIn: this.props.isLoggedIn,
@@ -200,7 +203,10 @@ export class Home extends Component {
                             <Link
                               className="mainProductPrice"
                               to={{
-                                pathname: SINGLE_PRODUCT_ROUTE,
+                                pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                  ":prodId",
+                                  this.state.product.id
+                                ),
                                 state: {
                                   chosenProduct: this.state.product.id,
                                   isLoggedIn: this.props.isLoggedIn,
@@ -217,7 +223,10 @@ export class Home extends Component {
                             {this.props.isLoggedIn && (
                               <Link
                                 to={{
-                                  pathname: SINGLE_PRODUCT_ROUTE,
+                                  pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                    ":prodId",
+                                    this.state.product.id
+                                  ),
                                   state: {
                                     chosenProduct: this.state.product.id,
                                     isLoggedIn: this.props.isLoggedIn,
@@ -237,7 +246,10 @@ export class Home extends Component {
                       <div className="col-lg-8 col-sm-12 image">
                         <Link
                           to={{
-                            pathname: SINGLE_PRODUCT_ROUTE,
+                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                              ":prodId",
+                              this.state.product.id
+                            ),
                             state: {
                               chosenProduct: this.state.product.id,
                               isLoggedIn: this.props.isLoggedIn,

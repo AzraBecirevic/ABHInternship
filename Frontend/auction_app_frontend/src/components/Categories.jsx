@@ -40,7 +40,6 @@ export class Categories extends Component {
   };
 
   componentDidMount = async () => {
-    this.setState({ hasMoreData: true });
     this.fetchNumber = 1;
     try {
       const {
@@ -60,13 +59,13 @@ export class Categories extends Component {
         this.state.categoryId,
         this.fetchNumber
       );
+      const categoriesList = await this.categoryService.getCategories();
 
-      this.setState({
-        categories: await this.categoryService.getCategories(),
-      });
       this.setState({
         products: productsDto.productsList,
         hasMoreData: productsDto.hasMoreData,
+        categories: categoriesList,
+        hasMoreData: true,
       });
 
       this.setIsLoading(false);
@@ -177,7 +176,10 @@ export class Categories extends Component {
                                   >
                                     <Link
                                       to={{
-                                        pathname: SINGLE_PRODUCT_ROUTE,
+                                        pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                          ":prodId",
+                                          product.id
+                                        ),
                                         state: {
                                           chosenProduct: product.id,
                                           isLoggedIn: this.state.isLoggedIn,
@@ -196,7 +198,10 @@ export class Categories extends Component {
                                       <Link
                                         className="productNameLink"
                                         to={{
-                                          pathname: SINGLE_PRODUCT_ROUTE,
+                                          pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                            ":prodId",
+                                            product.id
+                                          ),
                                           state: {
                                             chosenProduct: product.id,
                                             isLoggedIn: this.state.isLoggedIn,
@@ -211,7 +216,10 @@ export class Categories extends Component {
                                     <Link
                                       className="startsFrom"
                                       to={{
-                                        pathname: SINGLE_PRODUCT_ROUTE,
+                                        pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                          ":prodId",
+                                          product.id
+                                        ),
                                         state: {
                                           chosenProduct: product.id,
                                           isLoggedIn: this.state.isLoggedIn,

@@ -6,5 +6,5 @@ export const REGISTER_ROUTE = "/register";
 export const LOGIN_ROUTE = "/login";
 export const FORGOT_PASSWORD_ROUTE = "/forgotPassword";
 export const CATEGORIES_ROUTE = "/categories";
-export const SINGLE_PRODUCT_ROUTE = "/singleProduct";
+export const SINGLE_PRODUCT_ROUTE = "/singleProduct/:prodId";
 export const CHANGE_PASSWORD_ROUTE = "/changePassword";

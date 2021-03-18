@@ -44,51 +44,64 @@ export class SingleProduct extends Component {
   characterArrow = ">";
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (
-      prevProps.location.state.chosenProduct !==
-      this.props.location.state.chosenProduct
-    ) {
-      this.componentDidMount();
+    if (this.props.location.state != null) {
+      if (
+        prevProps.location.state.chosenProduct !==
+        this.props.location.state.chosenProduct
+      ) {
+        this.componentDidMount();
+      }
     }
   };
 
   async componentDidMount() {
     try {
-      const {
-        chosenProduct,
-        isLoggedIn,
-        email,
-        token,
-      } = this.props.location.state;
+      var chosenProduct = 0;
+      var isLoggedIn = false;
+      var email = "";
+      var token = "";
+
+      if (this.props.location == null || this.props.location.state == null) {
+        chosenProduct = this.props.match.params.prodId;
+
+        if (localStorage.getItem("token") != null) {
+          isLoggedIn = true;
+          email = localStorage.getItem("email");
+          token = localStorage.getItem("token");
+        }
+      } else {
+        chosenProduct = this.props.location.state.chosenProduct;
+        isLoggedIn = this.props.location.state.isLoggedIn;
+        email = this.props.location.state.email;
+        token = this.props.location.state.token;
+      }
+
       this.state.productId = chosenProduct;
       this.state.isLoggedIn = isLoggedIn;
       this.state.email = email;
       this.state.token = token;
 
-      this.setState({ isLoggedIn: isLoggedIn });
-
       this.setIsLoading(true);
 
+      const product = await this.productService.getProductById(chosenProduct);
+      const bids = await this.bidService.getBidsByProductId(chosenProduct);
+
       this.setState({
-        product: await this.productService.getProductById(chosenProduct),
-      });
-      this.setState({ images: this.state.product.imageList });
-      this.setState({
-        mainImage: this.state.images[this.state.mainImageIndex],
-      });
-      this.setState({
-        images: this.state.images.filter((image) => {
-          return image.id != this.state.mainImage.id;
-        }),
-      });
-      this.setState({
-        bids: await this.bidService.getBidsByProductId(chosenProduct),
-      });
-      this.setState({
+        isLoggedIn: isLoggedIn,
+        product: product,
+        bids: bids,
         placeBidErrorMessage: null,
         placeBidSuccesMessage: null,
         placedBid: "",
+        mainImage: product.imageList[this.state.mainImageIndex],
       });
+
+      this.setState({
+        images: product.imageList.filter((image) => {
+          return image.id != this.state.mainImage.id;
+        }),
+      });
+
       this.setIsLoading(false);
     } catch (error) {
       this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);

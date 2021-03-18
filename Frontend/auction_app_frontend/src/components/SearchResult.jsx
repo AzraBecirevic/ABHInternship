@@ -60,7 +60,10 @@ export class SearchResult extends Component {
                               <Link
                                 className="searchProductLink"
                                 to={{
-                                  pathname: SINGLE_PRODUCT_ROUTE,
+                                  pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                    ":prodId",
+                                    product.id
+                                  ),
                                   state: {
                                     chosenProduct: product.id,
                                     isLoggedIn: this.props.isLoggedIn,

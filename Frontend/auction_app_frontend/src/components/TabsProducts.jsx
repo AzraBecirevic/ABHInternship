@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 
 export class TabsProducts extends Component {
   constructor(props) {
     super(props);
   }
+  state = {
+    prodId: 0,
+  };
 
   render() {
     return (
@@ -39,7 +42,10 @@ export class TabsProducts extends Component {
                       >
                         <Link
                           to={{
-                            pathname: SINGLE_PRODUCT_ROUTE,
+                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                              ":prodId",
+                              product.id
+                            ),
                             state: {
                               chosenProduct: product.id,
                               isLoggedIn: this.props.isLoggedIn,
@@ -58,7 +64,10 @@ export class TabsProducts extends Component {
                           <Link
                             className="productNameLink"
                             to={{
-                              pathname: SINGLE_PRODUCT_ROUTE,
+                              pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                ":prodId",
+                                product.id
+                              ),
                               state: {
                                 chosenProduct: product.id,
                                 isLoggedIn: this.props.isLoggedIn,
@@ -73,7 +82,10 @@ export class TabsProducts extends Component {
                         <Link
                           className="startsFrom"
                           to={{
-                            pathname: SINGLE_PRODUCT_ROUTE,
+                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                              ":prodId",
+                              product.id
+                            ),
                             state: {
                               chosenProduct: product.id,
                               isLoggedIn: this.props.isLoggedIn,
