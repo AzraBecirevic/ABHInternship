@@ -608,7 +608,7 @@ public class Seed {
 
 
         Category man = new Category();
-        man.setName("Man");
+        man.setName("Men");
         categoryRepository.save(man);
 
 
