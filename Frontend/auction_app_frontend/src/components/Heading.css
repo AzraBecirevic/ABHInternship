@@ -1,0 +1,12 @@
+.pageHeadingDiv {
+  background-color: #fafafa;
+  height: 60px;
+  padding-top: 18px;
+}
+
+.pageHeadingTitle {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #252525;
+  letter-spacing: 0.63px;
+}

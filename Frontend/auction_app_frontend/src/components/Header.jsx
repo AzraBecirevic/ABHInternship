@@ -1,0 +1,31 @@
+import { Nav, Navbar } from "react-bootstrap";
+import NavbarBlack from "./NavbarBlack";
+import NavbarWhite from "./NavbarWhite";
+
+import React, { Component } from "react";
+
+export class Header extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="header">
+        <NavbarBlack
+          openWebPage={this.props.openMe}
+          isLoggedIn={this.props.isLoggedIn}
+          email={this.props.email}
+          logout={this.props.logout}
+        ></NavbarBlack>
+        <NavbarWhite
+          isLoggedIn={this.props.isLoggedIn}
+          email={this.props.email}
+          token={this.props.token}
+        ></NavbarWhite>
+      </div>
+    );
+  }
+}
+
+export default Header;

@@ -1,0 +1,52 @@
+.aboutTextDiv {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #9b9b9b;
+  letter-spacing: 0.63px;
+  line-height: 25px;
+  margin-right: 70px;
+}
+
+.aboutImageOne {
+  width: 100%;
+  margin-bottom: 11px;
+}
+
+.aboutImagesTwo {
+  width: 100%;
+}
+
+.aboutHeading {
+  font-family: Lato-Regular;
+  font-size: 46px;
+  color: #252525;
+  letter-spacing: 1.61px;
+}
+
+.aboutImage {
+  width: 100%;
+}
+
+.aboutUs {
+  margin-top: 85px;
+}
+
+@media (max-width: 991.5px) {
+  .aboutHeading {
+    margin-left: 10px;
+  }
+  .aboutTextDiv {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  div.row.about div.col-lg-8 {
+    padding-right: 0%;
+  }
+  div.row.aboutImageOne div.col-lg-12 {
+    padding-right: 0%;
+  }
+  div.row.aboutImagesTwo div.col-lg-6 {
+    padding-right: 0%;
+  }
+}
