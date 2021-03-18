@@ -31,3 +31,5 @@ export const PASSWORD_RESET_MAIL_SUCCESSFULLY_SENT_MESSAGE =
   "We have successfully sent a password reset link to your email address";
 export const PASSWORD_RESET_MAIL_FAILED_SENT_MESSAGE =
   "There is no user associated with this account.";
+export const PAGE_NOT_FOUND_MESSAGE = "Ooops! Looks like the page is Not Found";
+export const GO_BACK_MESSAGE = "GO BACK";

@@ -35,6 +35,7 @@ import SingleProduct from "./components/SingleProduct";
 import ForgotPassword from "./components/ForgotPassword";
 import ChangePassword from "./components/ChangePassword";
 import NotFound from "./components/NotFound";
+import { TOKEN, EMAIL } from "./constants/auth";
 
 export class App extends Component {
   state = {
@@ -52,11 +53,11 @@ export class App extends Component {
     var email;
     var token;
 
-    if (localStorage.getItem("token") != null) {
-      email = localStorage.getItem("email");
-      token = localStorage.getItem("token");
+    if (localStorage.getItem(TOKEN) != null) {
+      email = localStorage.getItem(EMAIL);
+      token = localStorage.getItem(TOKEN);
 
-      var decodedJWT = jwtDecoder(localStorage.getItem("token"));
+      var decodedJWT = jwtDecoder(localStorage.getItem(TOKEN));
       var exp = decodedJWT.exp;
 
       var currentDate = new Date();
@@ -68,9 +69,9 @@ export class App extends Component {
         );
       }
     }
-    if (sessionStorage.getItem("token") != null) {
-      email = sessionStorage.getItem("email");
-      token = sessionStorage.getItem("token");
+    if (sessionStorage.getItem(TOKEN) != null) {
+      email = sessionStorage.getItem(EMAIL);
+      token = sessionStorage.getItem(TOKEN);
     }
     if (email != null && token != null) {
       this.loginCustomer(email, token);

@@ -63,6 +63,7 @@ export class Home extends Component {
         this.setIsLoading(false);
       }
     } catch (error) {
+      this.setIsLoading(false);
       this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   };

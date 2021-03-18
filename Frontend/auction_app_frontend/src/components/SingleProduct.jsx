@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ThemeProvider } from "react-bootstrap";
-import { BID_REGEX } from "../constants/regex";
+import { BID_REGEX, ID_REGEX } from "../constants/regex";
 import { BID_MAXIMUM_PRICE } from "../constants/bidPrice";
 import BidService from "../services/bidService";
 import ProductService from "../services/productService";
@@ -14,9 +14,11 @@ import {
   BID_PRICE_CAN_NOT_BE_NEGATIVE,
   BID_PRICE_REQUIRED_MESSAGE,
   CONNECTION_REFUSED_MESSAGE,
+  EMAIL_FORMAT_MESSAGE,
   MAX_ALLOWED_BID_PRICE,
 } from "../constants/messages";
 import { NOT_FOUND_ROUTE } from "../constants/routes";
+import { EMAIL, TOKEN } from "../constants/auth";
 
 export class SingleProduct extends Component {
   constructor(props) {
@@ -65,10 +67,17 @@ export class SingleProduct extends Component {
       if (this.props.location == null || this.props.location.state == null) {
         chosenProduct = this.props.match.params.prodId;
 
-        if (localStorage.getItem("token") != null) {
+        const re = ID_REGEX;
+
+        if (!re.test(String(chosenProduct))) {
+          this.props.history.push(NOT_FOUND_ROUTE);
+          return;
+        }
+
+        if (localStorage.getItem(TOKEN) != null) {
           isLoggedIn = true;
-          email = localStorage.getItem("email");
-          token = localStorage.getItem("token");
+          email = localStorage.getItem(EMAIL);
+          token = localStorage.getItem(TOKEN);
         }
       } else {
         chosenProduct = this.props.location.state.chosenProduct;
@@ -111,6 +120,7 @@ export class SingleProduct extends Component {
 
       this.setIsLoading(false);
     } catch (error) {
+      this.setIsLoading(false);
       this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   }
@@ -120,15 +130,12 @@ export class SingleProduct extends Component {
   };
 
   changeToMainImage(index) {
-    this.setState({ mainImageIndex: index });
-
     this.setState({
+      mainImageIndex: index,
       mainImage: this.state.images[index],
     });
 
     this.state.images.splice(index, 1);
-    this.setState({ images: [...this.state.images] });
-
     this.setState({ images: [...this.state.images, this.state.mainImage] });
   }
 
@@ -350,7 +357,7 @@ export class SingleProduct extends Component {
                 </div>
               </div>
             )}
-            {bids != null && bids.length > 0 && (
+            {product != null && bids != null && bids.length > 0 && (
               <div className="row bidsData">
                 <div className="col-lg-12">
                   <div className="row bidDataHeading">
@@ -394,7 +401,7 @@ export class SingleProduct extends Component {
                 </div>
               </div>
             )}
-            {(bids === null || bids.length <= 0) && (
+            {product != null && (bids === null || bids.length <= 0) && (
               <div className="noBidsMessage">
                 There are still no bids for this product.
               </div>

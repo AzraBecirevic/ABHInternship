@@ -3,6 +3,7 @@ package com.app.auctionbackend.controller;
 import com.app.auctionbackend.dtos.ProductsInfiniteDto;
 import com.app.auctionbackend.dtos.ProductDetailsDto;
 import com.app.auctionbackend.dtos.ProductDto;
+import com.app.auctionbackend.helper.Helper;
 import com.app.auctionbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,10 +30,22 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDetailsDto> getProductById(@PathVariable Integer id){
-        if(id<=0)
+    public ResponseEntity<ProductDetailsDto> getProductById(@PathVariable String id){
+        if(!Helper.isIdValid(id)){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        ProductDetailsDto productDetailsDto = productService.getProductById(id);
+        }
+
+        Integer productId = 0;
+        try{
+            productId = Integer.parseInt(id);
+        }catch (NumberFormatException ex){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        if(productId <= 0)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        ProductDetailsDto productDetailsDto = productService.getProductById(productId);
         if(productDetailsDto == null)
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         return new ResponseEntity<ProductDetailsDto>(productDetailsDto, HttpStatus.OK);

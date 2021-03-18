@@ -30,4 +30,9 @@ public class Helper {
        return pat.matcher(password).matches();
    }
 
+   public static boolean isIdValid(String id){
+       if(id.matches("[0-9]+"))
+           return true;
+       return false;
+   }
 }
