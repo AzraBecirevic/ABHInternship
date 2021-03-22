@@ -118,13 +118,20 @@ export class App extends Component {
           {this.state.isLoading && <LoadingSpinner></LoadingSpinner>}
           {
             <div className="app">
-              <Header
-                openMe={this.openPage}
-                isLoggedIn={this.state.isLoggedIn}
-                email={this.email}
-                logout={this.logoutCustomer}
-                token={this.jwtToken}
+              <Route
+                path=""
+                render={(props) => (
+                  <Header
+                    {...props}
+                    openMe={this.openPage}
+                    isLoggedIn={this.state.isLoggedIn}
+                    email={this.email}
+                    logout={this.logoutCustomer}
+                    token={this.jwtToken}
+                  />
+                )}
               />
+
               <div className="containerDiv">
                 <Route
                   exact

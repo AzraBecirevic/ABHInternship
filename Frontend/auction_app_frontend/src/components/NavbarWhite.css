@@ -26,6 +26,7 @@
 .menuItem {
   color: black;
   font-family: "Lato-Regular";
+  margin-right: 10px;
 }
 
 .menuItem:hover {

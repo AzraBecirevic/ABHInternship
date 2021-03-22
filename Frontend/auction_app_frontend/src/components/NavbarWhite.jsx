@@ -1,14 +1,20 @@
 import styles from "./NavbarWhite.css";
 import { Nav, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import logo from "../assets/logo.PNG";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import React, { Component } from "react";
-import { HOME_ROUTE, SINGLE_PRODUCT_ROUTE } from "../constants/routes";
+import {
+  ABOUT_ROUTE,
+  CATEGORIES_ROUTE,
+  HOME_ROUTE,
+  SINGLE_PRODUCT_ROUTE,
+} from "../constants/routes";
 import ProductService from "../services/productService";
 import SearchResult from "./SearchResult";
+import AboutUs from "./AboutUs";
 
 export class NavbarWhite extends Component {
   constructor(props) {
@@ -29,17 +35,15 @@ export class NavbarWhite extends Component {
       [e.target.name]: e.target.value,
     });
 
-    if (e.target.value == null || e.target.value == "") {
-      return;
-    }
-    if (e.target.value.length > 50) {
-      this.setState({ products: [] });
-    }
-
-    this.setState({
-      products: await this.productService.getProductByName(
-        this.state.productName
-      ),
+    this.props.history.push({
+      pathname: CATEGORIES_ROUTE,
+      state: {
+        chosenCategory: 0,
+        isLoggedIn: this.props.isLoggedIn,
+        email: this.props.email,
+        token: this.props.token,
+        productName: this.state.productName,
+      },
     });
   };
 
@@ -97,6 +101,20 @@ export class NavbarWhite extends Component {
                         <Link to={HOME_ROUTE} className="menuItem">
                           HOME
                         </Link>
+                        <Link
+                          to={{
+                            pathname: CATEGORIES_ROUTE,
+                            state: {
+                              chosenCategory: 0,
+                              isLoggedIn: this.props.isLoggedIn,
+                              email: this.props.email,
+                              token: this.props.token,
+                            },
+                          }}
+                          className="menuItem"
+                        >
+                          SHOP
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -106,15 +124,6 @@ export class NavbarWhite extends Component {
           </div>
           <div className="col-lg-2 col-md-0 col-sm-0"></div>
         </div>
-
-        <SearchResult
-          productName={productName}
-          products={products}
-          closeSerchDiv={this.closeDiv}
-          isLoggedIn={isLoggedIn}
-          email={email}
-          token={token}
-        ></SearchResult>
       </div>
     );
   }

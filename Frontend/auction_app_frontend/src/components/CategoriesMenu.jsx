@@ -35,6 +35,7 @@ export class CategoriesMenu extends Component {
                             isLoggedIn: this.props.isLoggedIn,
                             email: this.props.email,
                             token: this.props.token,
+                            categoryName: category.name,
                           },
                         }}
                       >

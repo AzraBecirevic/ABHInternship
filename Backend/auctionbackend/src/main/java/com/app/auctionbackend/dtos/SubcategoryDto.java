@@ -5,6 +5,7 @@ public class SubcategoryDto {
     private Integer id;
     private String name;
     private Integer categoryId;
+    private Integer numberOfProducts;
 
     public Integer getId() {
         return id;
@@ -28,6 +29,14 @@ public class SubcategoryDto {
 
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public Integer getNumberOfProducts() {
+        return numberOfProducts;
+    }
+
+    public void setNumberOfProducts(Integer numberOfProducts) {
+        this.numberOfProducts = numberOfProducts;
     }
 
 }
