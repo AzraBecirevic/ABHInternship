@@ -35,16 +35,32 @@ export class NavbarWhite extends Component {
       [e.target.name]: e.target.value,
     });
 
-    this.props.history.push({
-      pathname: CATEGORIES_ROUTE,
-      state: {
-        chosenCategory: 0,
-        isLoggedIn: this.props.isLoggedIn,
-        email: this.props.email,
-        token: this.props.token,
-        productName: this.state.productName,
-      },
-    });
+    if (this.state.productName.length <= 0) {
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(":productName", ":productName"),
+        state: {
+          chosenCategory: 0,
+          isLoggedIn: this.props.isLoggedIn,
+          email: this.props.email,
+          token: this.props.token,
+          productName: this.state.productName,
+        },
+      });
+    } else {
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(
+          ":productName",
+          this.state.productName
+        ),
+        state: {
+          chosenCategory: 0,
+          isLoggedIn: this.props.isLoggedIn,
+          email: this.props.email,
+          token: this.props.token,
+          productName: this.state.productName,
+        },
+      });
+    }
   };
 
   closeDiv = () => {

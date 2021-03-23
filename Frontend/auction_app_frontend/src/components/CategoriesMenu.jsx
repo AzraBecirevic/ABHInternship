@@ -29,7 +29,10 @@ export class CategoriesMenu extends Component {
                       <Link
                         className="categoryLink"
                         to={{
-                          pathname: CATEGORIES_ROUTE,
+                          pathname: CATEGORIES_ROUTE.replace(
+                            ":categories",
+                            `${category.id}-${category.name}`
+                          ),
                           state: {
                             chosenCategory: category.id,
                             isLoggedIn: this.props.isLoggedIn,

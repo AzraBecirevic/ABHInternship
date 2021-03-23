@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import CategoryService from "../services/categoryService";
 import Heading from "./Heading";
 import styles from "./Categories.css";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import ProductService from "../services/productService";
 import ToastService from "../services/toastService";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -21,7 +21,8 @@ import {
 } from "../constants/messages";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faGavel } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SubcategoryService from "../services/subcategoryService";
 import FilteredProducts from "../model/FilteredProducts";
@@ -31,6 +32,9 @@ import {
   SUBCATEGORY_TYPE,
 } from "../constants/types";
 import { Grid, Slider, Typography } from "@material-ui/core";
+import { ThemeProvider } from "react-bootstrap";
+import { EMAIL, TOKEN } from "../constants/auth";
+import Chart from "./Chart";
 
 export class Categories extends Component {
   constructor(props) {
@@ -54,6 +58,8 @@ export class Categories extends Component {
     minText: "",
     maxText: "",
     averagePriceText: "",
+    lowerPrice: 0,
+    higherPrice: 0,
   };
 
   categoryService = new CategoryService();
@@ -62,54 +68,155 @@ export class Categories extends Component {
   subcategoryService = new SubcategoryService();
   fetchNumber = 0;
 
+  lowerPriceText = "";
+  higherPriceText = "";
+  lowerPriceValue = 0;
+  higherPriceValue = 0;
+
   filteredProducts = new FilteredProducts();
 
   componentDidUpdate = (prevProps, prevState) => {
     if (
-      prevProps.location.state.chosenCategory !==
-        this.props.location.state.chosenCategory ||
-      prevProps.location.state.productName !==
-        this.props.location.state.productName
+      prevProps.match.params.categories != this.props.match.params.categories ||
+      prevProps.match.params.subcategories !=
+        this.props.match.params.subcategories ||
+      prevProps.match.params.priceFilter !=
+        this.props.match.params.priceFilter ||
+      prevProps.match.params.productName != this.props.match.params.productName
     ) {
       this.componentDidMount();
+    } else if (this.props.location.state != null) {
+      if (
+        prevProps.location.state.chosenCategory !==
+          this.props.location.state.chosenCategory ||
+        prevProps.location.state.productName !==
+          this.props.location.state.productName ||
+        prevProps.location.state.priceFilter !==
+          this.props.location.state.priceFilter
+      ) {
+        this.componentDidMount();
+      }
     }
   };
 
   componentDidMount = async () => {
     this.fetchNumber = 1;
     try {
-      const {
-        chosenCategory,
-        isLoggedIn,
-        email,
-        token,
-        productName,
-        categoryName,
-      } = this.props.location.state;
-      this.state.categoryId = chosenCategory;
-      this.state.isLoggedIn = isLoggedIn;
-      this.state.email = email;
-      this.state.token = token;
+      var chosenCategory = 0;
+      var isLoggedIn = false;
+      var email = "";
+      var token = "";
+      var productName = "";
 
       this.setIsLoading(true);
 
       var productsDto = null;
 
-      if (this.state.categoryId > 0) {
-        this.filteredProducts.categoryIds.push(this.state.categoryId);
-        this.setState({
-          filterTags: [
-            ...this.state.filterTags,
-            {
-              id: this.state.categoryId,
-              name: categoryName,
-              type: CATEGORY_TYPE,
-            },
-          ],
-        });
+      if (this.props.location == null || this.props.location.state == null) {
+        if (localStorage.getItem(TOKEN) != null) {
+          isLoggedIn = true;
+          email = localStorage.getItem(EMAIL);
+          token = localStorage.getItem(TOKEN);
+        } else if (sessionStorage.getItem(TOKEN) != null) {
+          isLoggedIn = true;
+          email = sessionStorage.getItem(EMAIL);
+          token = sessionStorage.getItem(TOKEN);
+          chosenCategory = 0;
+        }
+      } else {
+        chosenCategory =
+          this.props.location.state.categoryId == undefined
+            ? 0
+            : this.props.location.state.categoryId;
+        isLoggedIn = this.props.location.state.isLoggedIn;
+        email = this.props.location.state.email;
+        token = this.props.location.state.token;
+        productName = this.props.location.state.productName;
       }
 
-      this.filteredProducts.productName = productName;
+      this.state.categoryId = chosenCategory;
+      this.state.isLoggedIn = isLoggedIn;
+      this.state.email = email;
+      this.state.token = token;
+      this.state.productName = productName;
+
+      this.filteredProducts = new FilteredProducts();
+
+      await this.setState({ filterTags: [] });
+
+      var categoryFiltersPath = this.props.match.params.categories;
+      if (categoryFiltersPath !== ":categories") {
+        var categoryFilters = categoryFiltersPath.split(",");
+        for (let i = 0; i < categoryFilters.length; i++) {
+          var categoryLabel = categoryFilters[i].split("-");
+
+          this.filteredProducts.categoryIds.push(categoryLabel[0]);
+          this.setState({
+            filterTags: [
+              ...this.state.filterTags,
+              {
+                id: categoryLabel[0],
+                name: categoryLabel[1],
+                type: CATEGORY_TYPE,
+              },
+            ],
+          });
+        }
+      }
+
+      var subcategoryFiltersPath = this.props.match.params.subcategories;
+      if (subcategoryFiltersPath !== ":subcategories") {
+        var subcategoryFilters = subcategoryFiltersPath.split(",");
+        for (let i = 0; i < subcategoryFilters.length; i++) {
+          var subcategoryLabel = subcategoryFilters[i].split("-");
+
+          this.filteredProducts.subcategoryIds.push(subcategoryLabel[0]);
+          this.setState({
+            filterTags: [
+              ...this.state.filterTags,
+              {
+                id: subcategoryLabel[0],
+                name: subcategoryLabel[1],
+                type: SUBCATEGORY_TYPE,
+              },
+            ],
+          });
+        }
+      }
+
+      const priceFilterData = await this.productService.getPriceFilterData();
+
+      var priceFilterPath = this.props.match.params.priceFilter;
+      if (priceFilterPath !== ":priceFilter") {
+        var priceFilter = priceFilterPath.split(",");
+        this.lowerPriceValue = priceFilter[0];
+        this.higherPriceValue = priceFilter[1];
+        this.filteredProducts.minPrice = this.lowerPriceValue;
+        this.filteredProducts.maxPrice = this.higherPriceValue;
+        if (
+          this.lowerPriceText.length <= 0 ||
+          this.higherPriceText.length <= 0
+        ) {
+          this.lowerPriceText = this.lowerPriceValue;
+          this.higherPriceText = this.higherPriceValue;
+        }
+      } else {
+        this.lowerPriceValue = priceFilterData.minPrice;
+        this.higherPriceValue = priceFilterData.maxPrice;
+        if (
+          this.lowerPriceText.length <= 0 ||
+          this.higherPriceText.length <= 0
+        ) {
+          this.lowerPriceText = priceFilterData.minPriceText;
+          this.higherPriceText = priceFilterData.maxPriceText;
+        }
+      }
+
+      var productNameFilterPath = this.props.match.params.productName;
+
+      if (productNameFilterPath !== ":productName") {
+        this.filteredProducts.productName = productNameFilterPath;
+      }
 
       productsDto = await this.productService.getFilteredProducts(
         this.filteredProducts,
@@ -118,10 +225,8 @@ export class Categories extends Component {
 
       const categoriesList = await this.categoryService.getCategories();
 
-      const priceFilterData = await this.productService.getPriceFilterData();
-
       this.setState({
-        products: productsDto.productsList,
+        products: productsDto == null ? null : productsDto.productsList,
         hasMoreData: productsDto == null ? false : productsDto.hasMoreData,
         categories: categoriesList,
         min: priceFilterData.minPrice,
@@ -183,39 +288,6 @@ export class Categories extends Component {
     });
   };
 
-  removeSubcategoryFiltersAndTags = (subcategoryList) => {
-    var subcategoryIdRemove = [];
-    var filterTagsToRemove = [];
-
-    for (let i = 0; i < subcategoryList.length; i++) {
-      for (let j = 0; j < this.filteredProducts.subcategoryIds.length; j++) {
-        if (subcategoryList[i].id == this.filteredProducts.subcategoryIds[j]) {
-          subcategoryIdRemove.push(this.filteredProducts.subcategoryIds[j]);
-        }
-      }
-      for (let k = 0; k < this.state.filterTags.length; k++) {
-        if (
-          subcategoryList[i].id == this.state.filterTags[k].id &&
-          this.state.filterTags[k].type == SUBCATEGORY_TYPE
-        ) {
-          filterTagsToRemove.push(this.state.filterTags[k]);
-        }
-      }
-    }
-
-    for (let i = 0; i < subcategoryIdRemove.length; i++) {
-      this.filteredProducts.subcategoryIds = this.filteredProducts.subcategoryIds.filter(
-        function (id) {
-          return id != subcategoryIdRemove[i];
-        }
-      );
-    }
-
-    for (let i = 0; i < filterTagsToRemove.length; i++) {
-      this.removeFilter(filterTagsToRemove[i]);
-    }
-  };
-
   checkIfCategoryIsAlreadyFiltered = (categoryId) => {
     for (let i = 0; i < this.filteredProducts.categoryIds.length; i++) {
       if (this.filteredProducts.categoryIds[i] == categoryId) {
@@ -228,25 +300,66 @@ export class Categories extends Component {
     if (this.checkIfCategoryIsAlreadyFiltered(categoryId)) {
       return;
     }
-    this.removeSubcategoryFiltersAndTags(subcategoryList);
 
-    this.filteredProducts.categoryIds.push(categoryId);
+    var filterTagsToRemove = [];
+    var removed = false;
 
-    this.fetchNumber = 1;
+    for (let i = 0; i < subcategoryList.length; i++) {
+      for (let k = 0; k < this.state.filterTags.length; k++) {
+        if (
+          subcategoryList[i].id == this.state.filterTags[k].id &&
+          this.state.filterTags[k].type == SUBCATEGORY_TYPE
+        ) {
+          filterTagsToRemove.push(this.state.filterTags[k]);
+        }
+      }
+    }
 
-    var productsDto = await this.productService.getFilteredProducts(
-      this.filteredProducts,
-      this.fetchNumber
-    );
+    for (let i = 0; i < filterTagsToRemove.length; i++) {
+      await this.setState({
+        filterTags: this.state.filterTags.filter(function (fTag) {
+          return fTag != filterTagsToRemove[i];
+        }),
+      });
+      removed = true;
+    }
 
-    this.setState({
-      products: productsDto.productsList,
-      hasMoreData: productsDto.hasMoreData,
-      filterTags: [
-        ...this.state.filterTags,
-        { id: categoryId, name: categoryName, type: CATEGORY_TYPE },
-      ],
-    });
+    var categoryLink = this.props.match.params.categories;
+    categoryLink == ":categories"
+      ? (categoryLink = categoryId + "-" + categoryName)
+      : (categoryLink += "," + categoryId + "-" + categoryName);
+
+    var subcategoryLink = "";
+    for (let i = 0; i < this.state.filterTags.length; i++) {
+      if (this.state.filterTags[i].type == SUBCATEGORY_TYPE) {
+        subcategoryLink +=
+          this.state.filterTags[i].id +
+          "-" +
+          this.state.filterTags[i].name +
+          ",";
+      }
+    }
+    subcategoryLink = subcategoryLink.substring(0, subcategoryLink.length - 1);
+
+    if (subcategoryLink == "") {
+      subcategoryLink = ":subcategories";
+    }
+
+    if (!removed) {
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(":categories", categoryLink)
+          .replace(":subcategories", this.props.match.params.subcategories)
+          .replace(":priceFilter", this.props.match.params.priceFilter)
+          .replace(":productName", this.props.match.params.productName),
+      });
+    } else {
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(":categories", categoryLink)
+          .replace(":subcategories", subcategoryLink)
+          .replace(":priceFilter", this.props.match.params.priceFilter)
+          .replace(":productName", this.props.match.params.productName),
+      });
+    }
   };
 
   checkIfSubcategoryIsAlreadyFiltered = (subcategoryId) => {
@@ -257,13 +370,18 @@ export class Categories extends Component {
     }
   };
 
-  removeCategoryFiltersAndTags = (categoryId) => {
-    this.filteredProducts.categoryIds = this.filteredProducts.categoryIds.filter(
-      function (id) {
-        return id !== categoryId;
-      }
-    );
+  subcategoryChosen = async (subcategoryId, categoryId, subcategoryName) => {
+    if (this.checkIfSubcategoryIsAlreadyFiltered(subcategoryId)) {
+      return;
+    }
 
+    var subcategoryLink = this.props.match.params.subcategories;
+
+    subcategoryLink == ":subcategories"
+      ? (subcategoryLink = subcategoryId + "-" + subcategoryName)
+      : (subcategoryLink += "," + subcategoryId + "-" + subcategoryName);
+
+    var removed = false;
     var filterTag = null;
     for (let i = 0; i < this.state.filterTags.length; i++) {
       if (
@@ -274,83 +392,118 @@ export class Categories extends Component {
       }
     }
     if (filterTag != null) {
-      this.removeFilter(filterTag);
+      await this.setState({
+        filterTags: this.state.filterTags.filter(function (fTag) {
+          return fTag != filterTag;
+        }),
+      });
+      removed = true;
     }
-  };
 
-  subcategoryChosen = async (subcategoryId, categoryId, subcategoryName) => {
-    if (this.checkIfSubcategoryIsAlreadyFiltered(subcategoryId)) {
-      return;
+    var categoryLink = "";
+
+    for (let i = 0; i < this.state.filterTags.length; i++) {
+      if (this.state.filterTags[i].type == CATEGORY_TYPE) {
+        categoryLink +=
+          this.state.filterTags[i].id +
+          "-" +
+          this.state.filterTags[i].name +
+          ",";
+      }
     }
-    this.filteredProducts.subcategoryIds.push(subcategoryId);
+    categoryLink = categoryLink.substring(0, categoryLink.length - 1);
 
-    this.removeCategoryFiltersAndTags(categoryId);
+    if (categoryLink == "") {
+      categoryLink = ":categories";
+    }
 
-    this.fetchNumber = 1;
-
-    var productsDto = await this.productService.getFilteredProducts(
-      this.filteredProducts,
-      this.fetchNumber
-    );
-
-    this.setState({
-      products: productsDto.productsList,
-      hasMoreData: productsDto.hasMoreData,
-      filterTags: [
-        ...this.state.filterTags,
-        { id: subcategoryId, name: subcategoryName, type: SUBCATEGORY_TYPE },
-      ],
-    });
+    if (!removed) {
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(":subcategories", subcategoryLink)
+          .replace(":categories", this.props.match.params.categories)
+          .replace(":priceFilter", this.props.match.params.priceFilter)
+          .replace(":productName", this.props.match.params.productName),
+      });
+    } else {
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(":subcategories", subcategoryLink)
+          .replace(":categories", categoryLink)
+          .replace(":priceFilter", this.props.match.params.priceFilter)
+          .replace(":productName", this.props.match.params.productName),
+      });
+    }
   };
 
   removeFilter = async (filterTag) => {
-    if (filterTag.type == CATEGORY_TYPE) {
-      this.filteredProducts.categoryIds = this.filteredProducts.categoryIds.filter(
-        function (id) {
-          return id != filterTag.id;
-        }
-      );
-      if (this.state.categoryId != 0) {
-        this.state.categoryId = 0;
-      }
-    } else if (filterTag.type == SUBCATEGORY_TYPE) {
-      this.filteredProducts.subcategoryIds = this.filteredProducts.subcategoryIds.filter(
-        function (id) {
-          return id != filterTag.id;
-        }
-      );
-    }
+    var filterTagsArray = this.state.filterTags;
 
-    this.fetchNumber = 1;
-
-    var productsDto = await this.productService.getFilteredProducts(
-      this.filteredProducts,
-      this.fetchNumber
-    );
-
-    this.setState({
-      filterTags: this.state.filterTags.filter(function (fTag) {
-        return fTag != filterTag;
-      }),
-      products: productsDto.productsList,
-      hasMoreData: productsDto.hasMoreData,
+    filterTagsArray = filterTagsArray.filter(function (fTag) {
+      return fTag != filterTag;
     });
+
+    if (filterTag.type == CATEGORY_TYPE) {
+      var categoryLink = "";
+      for (let i = 0; i < filterTagsArray.length; i++) {
+        if (filterTagsArray[i].type == CATEGORY_TYPE) {
+          categoryLink +=
+            filterTagsArray[i].id + "-" + filterTagsArray[i].name + ",";
+        }
+      }
+      categoryLink = categoryLink.substring(0, categoryLink.length - 1);
+
+      if (categoryLink == "") {
+        categoryLink = ":categories";
+      }
+
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(":categories", categoryLink)
+          .replace(":subcategories", this.props.match.params.subcategories)
+          .replace(":priceFilter", this.props.match.params.priceFilter)
+          .replace(":productName", this.props.match.params.productName),
+      });
+    } else if (filterTag.type == SUBCATEGORY_TYPE) {
+      var subcategoryLink = "";
+      for (let i = 0; i < filterTagsArray.length; i++) {
+        if (filterTagsArray[i].type == SUBCATEGORY_TYPE) {
+          subcategoryLink +=
+            filterTagsArray[i].id + "-" + filterTagsArray[i].name + ",";
+        }
+      }
+      subcategoryLink = subcategoryLink.substring(
+        0,
+        subcategoryLink.length - 1
+      );
+      if (subcategoryLink == "") {
+        subcategoryLink = ":subcategories";
+      }
+
+      this.props.history.push({
+        pathname: CATEGORIES_ROUTE.replace(":subcategories", subcategoryLink)
+          .replace(":categories", this.props.match.params.categories)
+          .replace(":priceFilter", this.props.match.params.priceFilter)
+          .replace(":productName", this.props.match.params.productName),
+      });
+    }
   };
 
   changePriceFilter = async (value) => {
     this.filteredProducts.minPrice = value[0];
     this.filteredProducts.maxPrice = value[1];
 
-    this.fetchNumber = 1;
+    var priceFilterLink =
+      this.filteredProducts.minPrice + "," + this.filteredProducts.maxPrice;
 
-    var productsDto = await this.productService.getFilteredProducts(
-      this.filteredProducts,
-      this.fetchNumber
-    );
+    this.lowerPriceText = value[0];
+    this.higherPriceText = value[1];
 
-    this.setState({
-      products: productsDto.productsList,
-      hasMoreData: productsDto.hasMoreData,
+    this.lowerPriceValue = value[0];
+    this.higherPriceValue = value[1];
+
+    this.props.history.push({
+      pathname: CATEGORIES_ROUTE.replace(":priceFilter", priceFilterLink)
+        .replace(":categories", this.props.match.params.categories)
+        .replace(":subcategories", this.props.match.params.subcategories)
+        .replace(":productName", this.props.match.params.productName),
     });
   };
 
@@ -372,6 +525,8 @@ export class Categories extends Component {
       isLoggedIn,
       email,
       token,
+      lowerPrice,
+      higherPrice,
     } = this.state;
     return (
       <div>
@@ -472,33 +627,28 @@ export class Categories extends Component {
                     <div className="priceFilterHeading">
                       {PRICE_FILTER_HEADING}
                     </div>
-                    <div>
-                      {" "}
-                      <Grid
-                        container
-                        justify="center"
-                        style={{ marginTop: "33px" }}
-                      >
-                        <Grid item xs={12} lg={8}>
-                          <Typography id="range-slider" gutterBottom>
-                            graph
-                          </Typography>
-                          <Slider
-                            min={min}
-                            max={max}
-                            valueLabelDisplay="auto"
-                            aria-labelledby="range-slider"
-                            defaultValue={[0, 300]}
-                            onChange={(e, val) => {
-                              this.changePriceFilter(val);
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
+                    <div className="priceSliderDiv">
+                      <div>
+                        <Chart></Chart>
+                        <Slider
+                          key={`slider-${this.lowerPriceValue}`}
+                          min={min}
+                          max={max}
+                          valueLabelDisplay="auto"
+                          aria-labelledby="range-slider"
+                          defaultValue={[
+                            this.lowerPriceValue,
+                            this.higherPriceValue,
+                          ]}
+                          onChange={(e, val) => {
+                            this.changePriceFilter(val);
+                          }}
+                        />
+                      </div>
                     </div>
                     <div className="priceFilterDetails">
                       <div>
-                        ${minText}-${maxText}
+                        ${this.lowerPriceText}-${this.higherPriceText}
                       </div>
                       <div>
                         {" "}
@@ -523,7 +673,7 @@ export class Categories extends Component {
                                   this.removeFilter(filterTag);
                                 }}
                                 style={{ color: "#ffffff" }}
-                                icon={faTimesCircle}
+                                icon={faTimes}
                                 size={"lg"}
                               ></FontAwesomeIcon>
                             </div>
@@ -575,25 +725,40 @@ export class Categories extends Component {
                                   className="col-lg-4 col-md-6 col-sm-6 product"
                                   key={index}
                                 >
-                                  <Link
-                                    to={{
-                                      pathname: SINGLE_PRODUCT_ROUTE.replace(
-                                        ":prodId",
-                                        product.id
-                                      ),
-                                      state: {
-                                        chosenProduct: product.id,
-                                        isLoggedIn: isLoggedIn,
-                                        email: email,
-                                        token: token,
-                                      },
-                                    }}
-                                  >
+                                  <div className="productImageContainer">
                                     <img
                                       className="categoryProductImage"
                                       src={`data:image/png;base64, ${product.image}`}
                                     />
-                                  </Link>
+                                    <div className="bidProductHoverDiv">
+                                      <div className="bidBtnDiv">
+                                        <Link
+                                          to={{
+                                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                              ":prodId",
+                                              product.id
+                                            ),
+                                            state: {
+                                              chosenProduct: product.id,
+                                              isLoggedIn: isLoggedIn,
+                                              email: email,
+                                              token: token,
+                                            },
+                                          }}
+                                        >
+                                          <button className="bidBtn">
+                                            Bid
+                                            <FontAwesomeIcon
+                                              className="gavelIcon"
+                                              style={{ color: "#252525" }}
+                                              icon={faGavel}
+                                              size={"sm"}
+                                            ></FontAwesomeIcon>
+                                          </button>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  </div>
 
                                   <div>
                                     <Link
