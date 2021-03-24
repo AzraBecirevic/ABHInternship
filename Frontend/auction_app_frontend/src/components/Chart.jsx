@@ -5,6 +5,10 @@ import { DIV_HIGHT } from "../constants/chart";
 import ProductService from "../services/productService";
 
 export class Chart extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   productService = new ProductService();
 
   state = {
@@ -15,7 +19,10 @@ export class Chart extends Component {
   maxProducts = 0;
 
   componentDidMount = async () => {
-    var products = await this.productService.getProducts();
+    var products =
+      this.props.productsProp == null
+        ? await this.productService.getProducts()
+        : this.props.productsProp;
 
     this.priceData = await this.productService.getPriceFilterData();
 

@@ -34,10 +34,9 @@ export class NavbarWhite extends Component {
     this.setState({
       [e.target.name]: e.target.value,
     });
-
     if (this.state.productName.length <= 0) {
       this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(":productName", ":productName"),
+        pathname: CATEGORIES_ROUTE,
         state: {
           chosenCategory: 0,
           isLoggedIn: this.props.isLoggedIn,
@@ -47,11 +46,10 @@ export class NavbarWhite extends Component {
         },
       });
     } else {
+      var route = CATEGORIES_ROUTE;
+      route += `/ProductName/${this.state.productName}`;
       this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(
-          ":productName",
-          this.state.productName
-        ),
+        pathname: route,
         state: {
           chosenCategory: 0,
           isLoggedIn: this.props.isLoggedIn,

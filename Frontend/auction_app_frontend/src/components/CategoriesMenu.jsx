@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { CATEGORIES_ROUTE } from "../constants/routes";
+import {
+  CATEGORIES_ROUTE,
+  CATEGORIES_ROUTE_CATEGORIES,
+} from "../constants/routes";
 import styles from "./CategoriesMenu.css";
 
 export class CategoriesMenu extends Component {
@@ -29,7 +32,7 @@ export class CategoriesMenu extends Component {
                       <Link
                         className="categoryLink"
                         to={{
-                          pathname: CATEGORIES_ROUTE.replace(
+                          pathname: CATEGORIES_ROUTE_CATEGORIES.replace(
                             ":categories",
                             `${category.id}-${category.name}`
                           ),

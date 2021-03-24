@@ -86,13 +86,17 @@ export class Categories extends Component {
     ) {
       this.componentDidMount();
     } else if (this.props.location.state != null) {
+      if (prevProps.location.state.chosenCategory) {
+        prevProps.location.state.chosenCategory = 0;
+      }
+      if (this.props.location.state.chosenCategory) {
+        this.props.location.state.chosenCategory = 0;
+      }
       if (
         prevProps.location.state.chosenCategory !==
           this.props.location.state.chosenCategory ||
         prevProps.location.state.productName !==
-          this.props.location.state.productName ||
-        prevProps.location.state.priceFilter !==
-          this.props.location.state.priceFilter
+          this.props.location.state.productName
       ) {
         this.componentDidMount();
       }
@@ -145,60 +149,78 @@ export class Categories extends Component {
       await this.setState({ filterTags: [] });
 
       var categoryFiltersPath = this.props.match.params.categories;
-      if (categoryFiltersPath !== ":categories") {
-        var categoryFilters = categoryFiltersPath.split(",");
-        for (let i = 0; i < categoryFilters.length; i++) {
-          var categoryLabel = categoryFilters[i].split("-");
+      if (
+        categoryFiltersPath !== undefined &&
+        categoryFiltersPath !== null &&
+        categoryFiltersPath !== ""
+      ) {
+        if (categoryFiltersPath !== ":categories") {
+          var categoryFilters = categoryFiltersPath.split(",");
+          for (let i = 0; i < categoryFilters.length; i++) {
+            var categoryLabel = categoryFilters[i].split("-");
 
-          this.filteredProducts.categoryIds.push(categoryLabel[0]);
-          this.setState({
-            filterTags: [
-              ...this.state.filterTags,
-              {
-                id: categoryLabel[0],
-                name: categoryLabel[1],
-                type: CATEGORY_TYPE,
-              },
-            ],
-          });
+            this.filteredProducts.categoryIds.push(categoryLabel[0]);
+            this.setState({
+              filterTags: [
+                ...this.state.filterTags,
+                {
+                  id: categoryLabel[0],
+                  name: categoryLabel[1],
+                  type: CATEGORY_TYPE,
+                },
+              ],
+            });
+          }
         }
       }
 
       var subcategoryFiltersPath = this.props.match.params.subcategories;
-      if (subcategoryFiltersPath !== ":subcategories") {
-        var subcategoryFilters = subcategoryFiltersPath.split(",");
-        for (let i = 0; i < subcategoryFilters.length; i++) {
-          var subcategoryLabel = subcategoryFilters[i].split("-");
+      if (
+        subcategoryFiltersPath !== undefined &&
+        subcategoryFiltersPath !== null &&
+        subcategoryFiltersPath !== ""
+      ) {
+        if (subcategoryFiltersPath !== ":subcategories") {
+          var subcategoryFilters = subcategoryFiltersPath.split(",");
+          for (let i = 0; i < subcategoryFilters.length; i++) {
+            var subcategoryLabel = subcategoryFilters[i].split("-");
 
-          this.filteredProducts.subcategoryIds.push(subcategoryLabel[0]);
-          this.setState({
-            filterTags: [
-              ...this.state.filterTags,
-              {
-                id: subcategoryLabel[0],
-                name: subcategoryLabel[1],
-                type: SUBCATEGORY_TYPE,
-              },
-            ],
-          });
+            this.filteredProducts.subcategoryIds.push(subcategoryLabel[0]);
+            this.setState({
+              filterTags: [
+                ...this.state.filterTags,
+                {
+                  id: subcategoryLabel[0],
+                  name: subcategoryLabel[1],
+                  type: SUBCATEGORY_TYPE,
+                },
+              ],
+            });
+          }
         }
       }
-
       const priceFilterData = await this.productService.getPriceFilterData();
 
+      var productNameFilterPath = this.props.match.params.productName;
       var priceFilterPath = this.props.match.params.priceFilter;
-      if (priceFilterPath !== ":priceFilter") {
-        var priceFilter = priceFilterPath.split(",");
-        this.lowerPriceValue = priceFilter[0];
-        this.higherPriceValue = priceFilter[1];
-        this.filteredProducts.minPrice = this.lowerPriceValue;
-        this.filteredProducts.maxPrice = this.higherPriceValue;
-        if (
-          this.lowerPriceText.length <= 0 ||
-          this.higherPriceText.length <= 0
-        ) {
-          this.lowerPriceText = this.lowerPriceValue;
-          this.higherPriceText = this.higherPriceValue;
+      if (
+        priceFilterPath !== undefined &&
+        priceFilterPath !== null &&
+        priceFilterPath !== ""
+      ) {
+        if (priceFilterPath !== ":priceFilter") {
+          var priceFilter = priceFilterPath.split(",");
+          this.lowerPriceValue = priceFilter[0];
+          this.higherPriceValue = priceFilter[1];
+          this.filteredProducts.minPrice = this.lowerPriceValue;
+          this.filteredProducts.maxPrice = this.higherPriceValue;
+          if (
+            this.lowerPriceText.length <= 0 ||
+            this.higherPriceText.length <= 0
+          ) {
+            this.lowerPriceText = this.lowerPriceValue;
+            this.higherPriceText = this.higherPriceValue;
+          }
         }
       } else {
         this.lowerPriceValue = priceFilterData.minPrice;
@@ -210,12 +232,26 @@ export class Categories extends Component {
           this.lowerPriceText = priceFilterData.minPriceText;
           this.higherPriceText = priceFilterData.maxPriceText;
         }
+        if (
+          priceFilterPath == undefined &&
+          subcategoryFiltersPath == undefined &&
+          categoryFiltersPath == undefined
+        ) {
+          this.lowerPriceValue = priceFilterData.minPrice;
+          this.higherPriceValue = priceFilterData.maxPrice;
+          this.lowerPriceText = priceFilterData.minPriceText;
+          this.higherPriceText = priceFilterData.maxPriceText;
+        }
       }
 
-      var productNameFilterPath = this.props.match.params.productName;
-
-      if (productNameFilterPath !== ":productName") {
-        this.filteredProducts.productName = productNameFilterPath;
+      if (
+        productNameFilterPath !== undefined &&
+        productNameFilterPath !== null &&
+        productNameFilterPath !== ""
+      ) {
+        if (productNameFilterPath !== ":productName") {
+          this.filteredProducts.productName = productNameFilterPath;
+        }
       }
 
       productsDto = await this.productService.getFilteredProducts(
@@ -325,7 +361,8 @@ export class Categories extends Component {
     }
 
     var categoryLink = this.props.match.params.categories;
-    categoryLink == ":categories"
+
+    categoryLink == undefined
       ? (categoryLink = categoryId + "-" + categoryName)
       : (categoryLink += "," + categoryId + "-" + categoryName);
 
@@ -341,23 +378,43 @@ export class Categories extends Component {
     }
     subcategoryLink = subcategoryLink.substring(0, subcategoryLink.length - 1);
 
+    var route = CATEGORIES_ROUTE + `/Categories/${categoryLink}`;
+
     if (subcategoryLink == "") {
       subcategoryLink = ":subcategories";
-    }
 
-    if (!removed) {
+      if (this.props.match.params.priceFilter !== undefined) {
+        route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+      }
+      if (this.props.match.params.productName !== undefined) {
+        route += `/ProductName/${this.props.match.params.productName}`;
+      }
+
       this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(":categories", categoryLink)
-          .replace(":subcategories", this.props.match.params.subcategories)
-          .replace(":priceFilter", this.props.match.params.priceFilter)
-          .replace(":productName", this.props.match.params.productName),
+        pathname: route,
+      });
+    } else if (!removed) {
+      route = route + `/Subcategories/${this.props.match.params.subcategories}`;
+
+      if (this.props.match.params.priceFilter !== undefined) {
+        route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+      }
+      if (this.props.match.params.productName !== undefined) {
+        route += `/ProductName/${this.props.match.params.productName}`;
+      }
+      this.props.history.push({
+        pathname: route,
       });
     } else {
+      route = route + `/Subcategories/${subcategoryLink}`;
+      if (this.props.match.params.priceFilter !== undefined) {
+        route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+      }
+      if (this.props.match.params.productName !== undefined) {
+        route += `/ProductName/${this.props.match.params.productName}`;
+      }
       this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(":categories", categoryLink)
-          .replace(":subcategories", subcategoryLink)
-          .replace(":priceFilter", this.props.match.params.priceFilter)
-          .replace(":productName", this.props.match.params.productName),
+        pathname: route,
       });
     }
   };
@@ -377,7 +434,7 @@ export class Categories extends Component {
 
     var subcategoryLink = this.props.match.params.subcategories;
 
-    subcategoryLink == ":subcategories"
+    subcategoryLink == undefined
       ? (subcategoryLink = subcategoryId + "-" + subcategoryName)
       : (subcategoryLink += "," + subcategoryId + "-" + subcategoryName);
 
@@ -413,23 +470,45 @@ export class Categories extends Component {
     }
     categoryLink = categoryLink.substring(0, categoryLink.length - 1);
 
+    var route = CATEGORIES_ROUTE;
+
     if (categoryLink == "") {
       categoryLink = ":categories";
-    }
 
-    if (!removed) {
+      route += `/Subcategories/${subcategoryLink}`;
+
+      if (this.props.match.params.priceFilter !== undefined) {
+        route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+      }
+      if (this.props.match.params.productName !== undefined) {
+        route += `/ProductName/${this.props.match.params.productName}`;
+      }
       this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(":subcategories", subcategoryLink)
-          .replace(":categories", this.props.match.params.categories)
-          .replace(":priceFilter", this.props.match.params.priceFilter)
-          .replace(":productName", this.props.match.params.productName),
+        pathname: route,
+      });
+    } else if (!removed) {
+      route += `/Categories/${this.props.match.params.categories}`;
+      route += `/Subcategories/${subcategoryLink}`;
+      if (this.props.match.params.priceFilter !== undefined) {
+        route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+      }
+      if (this.props.match.params.productName !== undefined) {
+        route += `/ProductName/${this.props.match.params.productName}`;
+      }
+      this.props.history.push({
+        pathname: route,
       });
     } else {
+      route += `/Categories/${categoryLink}`;
+      route += `/Subcategories/${subcategoryLink}`;
+      if (this.props.match.params.priceFilter !== undefined) {
+        route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+      }
+      if (this.props.match.params.productName !== undefined) {
+        route += `/ProductName/${this.props.match.params.productName}`;
+      }
       this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(":subcategories", subcategoryLink)
-          .replace(":categories", categoryLink)
-          .replace(":priceFilter", this.props.match.params.priceFilter)
-          .replace(":productName", this.props.match.params.productName),
+        pathname: route,
       });
     }
   };
@@ -451,16 +530,40 @@ export class Categories extends Component {
       }
       categoryLink = categoryLink.substring(0, categoryLink.length - 1);
 
+      var route = CATEGORIES_ROUTE;
+
       if (categoryLink == "") {
         categoryLink = ":categories";
-      }
 
-      this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(":categories", categoryLink)
-          .replace(":subcategories", this.props.match.params.subcategories)
-          .replace(":priceFilter", this.props.match.params.priceFilter)
-          .replace(":productName", this.props.match.params.productName),
-      });
+        if (this.props.match.params.subcategories !== undefined) {
+          route =
+            route + `/Subcategories/${this.props.match.params.subcategories}`;
+        }
+        if (this.props.match.params.priceFilter !== undefined) {
+          route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+        }
+        if (this.props.match.params.productName !== undefined) {
+          route += `/ProductName/${this.props.match.params.productName}`;
+        }
+        this.props.history.push({
+          pathname: route,
+        });
+      } else {
+        route += `/Categories/${categoryLink}`;
+        if (this.props.match.params.subcategories !== undefined) {
+          route =
+            route + `/Subcategories/${this.props.match.params.subcategories}`;
+        }
+        if (this.props.match.params.priceFilter !== undefined) {
+          route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+        }
+        if (this.props.match.params.productName !== undefined) {
+          route += `/ProductName/${this.props.match.params.productName}`;
+        }
+        this.props.history.push({
+          pathname: route,
+        });
+      }
     } else if (filterTag.type == SUBCATEGORY_TYPE) {
       var subcategoryLink = "";
       for (let i = 0; i < filterTagsArray.length; i++) {
@@ -473,16 +576,40 @@ export class Categories extends Component {
         0,
         subcategoryLink.length - 1
       );
+
+      var route = CATEGORIES_ROUTE;
+
       if (subcategoryLink == "") {
         subcategoryLink = ":subcategories";
-      }
 
-      this.props.history.push({
-        pathname: CATEGORIES_ROUTE.replace(":subcategories", subcategoryLink)
-          .replace(":categories", this.props.match.params.categories)
-          .replace(":priceFilter", this.props.match.params.priceFilter)
-          .replace(":productName", this.props.match.params.productName),
-      });
+        if (this.props.match.params.categories !== undefined) {
+          route += `/Categories/${this.props.match.params.categories}`;
+        }
+        if (this.props.match.params.priceFilter !== undefined) {
+          route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+        }
+        if (this.props.match.params.productName !== undefined) {
+          route += `/ProductName/${this.props.match.params.productName}`;
+        }
+        this.props.history.push({
+          pathname: route,
+        });
+      } else {
+        if (this.props.match.params.categories !== undefined) {
+          route += `/Categories/${this.props.match.params.categories}`;
+        }
+        route += `/Subcategories/${subcategoryLink}`;
+
+        if (this.props.match.params.priceFilter !== undefined) {
+          route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+        }
+        if (this.props.match.params.productName !== undefined) {
+          route += `/ProductName/${this.props.match.params.productName}`;
+        }
+        this.props.history.push({
+          pathname: route,
+        });
+      }
     }
   };
 
@@ -499,11 +626,23 @@ export class Categories extends Component {
     this.lowerPriceValue = value[0];
     this.higherPriceValue = value[1];
 
+    var route = CATEGORIES_ROUTE;
+
+    if (this.props.match.params.categories !== undefined) {
+      route += `/Categories/${this.props.match.params.categories}`;
+    }
+    if (this.props.match.params.subcategories !== undefined) {
+      route = route + `/Subcategories/${this.props.match.params.subcategories}`;
+    }
+
+    route += `/PriceFilter/${priceFilterLink}`;
+
+    if (this.props.match.params.productName !== undefined) {
+      route += `/ProductName/${this.props.match.params.productName}`;
+    }
+
     this.props.history.push({
-      pathname: CATEGORIES_ROUTE.replace(":priceFilter", priceFilterLink)
-        .replace(":categories", this.props.match.params.categories)
-        .replace(":subcategories", this.props.match.params.subcategories)
-        .replace(":productName", this.props.match.params.productName),
+      pathname: route,
     });
   };
 
@@ -629,7 +768,7 @@ export class Categories extends Component {
                     </div>
                     <div className="priceSliderDiv">
                       <div>
-                        <Chart></Chart>
+                        <Chart productsProp={products}></Chart>
                         <Slider
                           key={`slider-${this.lowerPriceValue}`}
                           min={min}
