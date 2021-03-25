@@ -12,3 +12,7 @@ export const GET_PRODUCTS_BY_CATEGORY_ENDPOINT = "/product/byCategory/";
 export const GET_MOST_EXPENSIVE_PRODUCT_ENDPOINT = "/product/getMostExpensive";
 export const GET_PRODUCT_BY_ID_ENDPOINT = "/product/";
 export const GET_PRODUCT_BY_NAME = "/product/byName/";
+export const GET_SUBCATEGORIES_BY_CATEGORY_ID_ENDPOINT =
+  "/subcategory/byCategory/";
+export const GET_FILTERED_PRODUCTS = "/product/filtered";
+export const GET_PRICE_FILTER_VALUES = "/product/getPriceFilterValues";

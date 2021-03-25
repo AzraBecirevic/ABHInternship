@@ -8,6 +8,8 @@ import {
   GET_MOST_EXPENSIVE_PRODUCT_ENDPOINT,
   GET_PRODUCT_BY_ID_ENDPOINT,
   GET_PRODUCT_BY_NAME,
+  GET_FILTERED_PRODUCTS,
+  GET_PRICE_FILTER_VALUES,
 } from "../constants/endpoints";
 
 class ProductService {
@@ -39,6 +41,46 @@ class ProductService {
 
   async getProductByName(productName) {
     return await this.getData(GET_PRODUCT_BY_NAME + productName);
+  }
+
+  async getPriceFilterData() {
+    return await this.getData(GET_PRICE_FILTER_VALUES);
+  }
+
+  async getFilteredProducts(filteredProducts, filterFetchNumber) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        categoryIds: filteredProducts.categoryIds,
+        subcategoryIds: filteredProducts.subcategoryIds,
+        productName: filteredProducts.productName,
+        fetchNumber: filterFetchNumber,
+        minPrice: filteredProducts.minPrice,
+        maxPrice: filteredProducts.maxPrice,
+      }),
+    };
+
+    const response = await fetch(
+      ENDPOINT + GET_FILTERED_PRODUCTS,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+    if (!response) {
+      throw response;
+    }
+
+    if (response.status === 200) {
+      var data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
   }
 
   async getData(link) {

@@ -14,5 +14,7 @@ public class EndpointConstants {
     public static final String GET_MOST_EXPENSIVE_PRODUCT_URL = "product/getMostExpensive";
     public static final String GET_BIDS_BY_PRODUCT_ID_URL = "/bid/byProductId/{productId}";
     public static final String GET_PRODUCT_BY_NAME_URL = "/product/byName/{productName}";
-
+    public static final String GET_SUBCATEGORIES_BY_CATEGORY_ID = "/subcategory/byCategory/{categoryId}";
+    public static final String GET_FILTERED_PRODUCTS = "/filtered";
+    public static final String GET_PRICE_FILTER_VALUES = "/getPriceFilterValues";
 }

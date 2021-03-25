@@ -36,21 +36,7 @@ public class ProductControllerTest {
     public void getProductById0ShouldReturnBadRequest() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get(GET_PRODUCT_BY_ID_ENDPOINT + "0")
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isBadRequest());
-    }
-
-    @Test
-    public void getProductByCategoryId1ShouldReturnOk() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get(GET_PRODUCT_BY_CATEGORY_ID_ENDPOINT + "1" +"/1")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
-    }
-
-    @Test
-    public void getProductByCategoryId0ShouldReturnBadRequest() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.get(GET_PRODUCT_BY_CATEGORY_ID_ENDPOINT + "0" + "/1")
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isBadRequest());
+        ).andExpect(status().isNotFound());
     }
 
     @Test
@@ -88,4 +74,25 @@ public class ProductControllerTest {
         ).andExpect(status().isForbidden());
     }
 
+    @Test
+    public void getFilteredProductsShouldReturnOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post(GET_FILTERED_PRODUCTS_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"categoryIds\": [\"1\"], \"productName\": \"\", \"fetchNumber\":\"1\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getFilteredProductsShouldReturnBadRequest() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post(GET_FILTERED_PRODUCTS_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void getPriceFilterValuesShouldReturnOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.get(GET_PRICE_FILTER_VALUES_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
 }

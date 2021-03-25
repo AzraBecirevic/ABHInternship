@@ -1,8 +1,6 @@
 package com.app.auctionbackend.service;
 
-import com.app.auctionbackend.dtos.ProductsInfiniteDto;
-import com.app.auctionbackend.dtos.ProductDetailsDto;
-import com.app.auctionbackend.dtos.ProductDto;
+import com.app.auctionbackend.dtos.*;
 import com.app.auctionbackend.model.Bid;
 import com.app.auctionbackend.model.Image;
 import com.app.auctionbackend.model.Product;
@@ -18,8 +16,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static com.app.auctionbackend.helper.InfinityScrollConstants.NUMBER_PER_CALL;
-import static com.app.auctionbackend.helper.InfinityScrollConstants.PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL;
+import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
 
 @Service("productService")
 public class ProductService {
@@ -36,7 +33,7 @@ public class ProductService {
 
         List<Product> products = productRepository.findAll();
 
-        if(products==null)
+        if(products == null)
             return null;
 
         List<ProductDto> currentOfferedProducts = changeToDto(products);
@@ -47,7 +44,7 @@ public class ProductService {
 
         Product product = productRepository.findById(id).orElse(null);
 
-        if(product!=null){
+        if(product != null){
             ModelMapper modelMapper = new ModelMapper();
             ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
 
@@ -74,12 +71,10 @@ public class ProductService {
         return null;
     }
 
-    public ProductsInfiniteDto getProductByCategoryId(Integer categoryId, Integer number){
+    public List<ProductDto> getProductsByCategoryId(Integer categoryId){
         List<Product> products = productRepository.findAll();
 
         List<Product> productsByCategoryId = new ArrayList<>();
-
-        ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
 
         for (Product product: products) {
             boolean addToList = false;
@@ -93,35 +88,9 @@ public class ProductService {
                 productsByCategoryId.add(product);
         }
 
-        List<ProductDto> productDtos = new ArrayList<>();
-        if( productsByCategoryId.size() == 0){
-            productsInfiniteDto.setHasMoreData(false);
-            return productsInfiniteDto;
-        }
+        List<ProductDto> productDtos = changeToDto(productsByCategoryId);
+        return productDtos;
 
-        Integer from = (number * PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL) - PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL;
-        Integer to = (number * PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL);
-
-        if(from>productsByCategoryId.size()-1){
-            productsInfiniteDto.setHasMoreData(false);
-            return productsInfiniteDto;
-        }
-
-        if(number * PRODUCTS_BY_CATEGORY_NUMBER_PER_CALL >= productsByCategoryId.size()){
-            to = productsByCategoryId.size();
-            productsInfiniteDto.setHasMoreData(false);
-        }
-
-        List<Product> productsByCategoryInf = new ArrayList<>();
-
-        for(int i = from; i < to; i++){
-            productsByCategoryInf.add(productsByCategoryId.get(i));
-        }
-
-        productDtos = changeToDto(productsByCategoryInf);
-
-        productsInfiniteDto.setProductsList(productDtos);
-        return productsInfiniteDto;
     }
 
     public List<ProductDto> getNewArrivals(){
@@ -131,7 +100,7 @@ public class ProductService {
         for (Product p: products) {
             LocalDateTime now = LocalDateTime.now();
             long diff = ChronoUnit.DAYS.between(p.getStartDate(),now);
-            if(diff<=3){
+            if(diff <= 3){
                 newArrivals.add(p);
             }
         }
@@ -140,8 +109,6 @@ public class ProductService {
         return productDtos;
     }
 
-
-
     public List<ProductDto> getLastChanceProducts(){
         List<Product> products = productRepository.findAll();
         List<Product> lastChance = new ArrayList<>();
@@ -149,7 +116,7 @@ public class ProductService {
         for (Product p: products) {
             LocalDateTime now = LocalDateTime.now();
             long diff = ChronoUnit.DAYS.between(now,p.getEndDate());
-            if(diff<=3){
+            if(diff <= 3){
                 lastChance.add(p);
             }
         }
@@ -171,7 +138,7 @@ public class ProductService {
         Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
         Integer to = (number * NUMBER_PER_CALL);
 
-        if(from > newArrivals.size()-1){
+        if(from > newArrivals.size() - 1){
             productsInfiniteDto.setHasMoreData(false);
             return productsInfiniteDto;
         }
@@ -203,7 +170,7 @@ public class ProductService {
         Integer from = (number * NUMBER_PER_CALL) - NUMBER_PER_CALL;
         Integer to = (number * NUMBER_PER_CALL);
 
-        if(from > lastChance.size()-1){
+        if(from > lastChance.size() - 1){
             productsInfiniteDto.setHasMoreData(false);
             return productsInfiniteDto;
         }
@@ -224,11 +191,11 @@ public class ProductService {
 
     public ProductDetailsDto getMostExpensiveProduct(){
         List<Product> products = productRepository.findByOrderByStartPrice();
-        if(products==null || products.size()==0)
+        if(products == null || products.size() == 0)
             return null;
-        Product product = products.get(products.size()-1);
+        Product product = products.get(products.size() - 1);
 
-        if(product!=null){
+        if(product != null){
             ModelMapper modelMapper = new ModelMapper();
             ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
             productDetailsDto.setStartPriceText(df.format(productDetailsDto.getStartPrice()));
@@ -241,28 +208,162 @@ public class ProductService {
     public List<ProductDto> searchProductsByName(String productName){
         List<Product> products = productRepository.findAll();
 
-       if(products==null)
+       if(products == null)
            return null;
 
         List<Product> productsWithMatchingName = new ArrayList<>();
 
-        for (Product product: products) {
+        for (Product product : products) {
             if(product.getName().toLowerCase().contains(productName.toLowerCase())){
                 productsWithMatchingName.add(product);
             }
         }
 
-        if(productsWithMatchingName.size()>10)
-            productsWithMatchingName = productsWithMatchingName.subList(0,9);
-
         List<ProductDto> productDtos = changeToDto(productsWithMatchingName);
         return productDtos;
+    }
+
+    public List<ProductDto> searchProductsByName(String productName, List<ProductDto> products){
+        List<ProductDto> productsWithMatchingName = new ArrayList<>();
+
+        for (ProductDto product : products) {
+            if(product.getName().toLowerCase().contains(productName.toLowerCase())){
+                productsWithMatchingName.add(product);
+            }
+        }
+
+        return productsWithMatchingName;
+    }
+
+    public List<ProductDto> getProductsBySubcategoryId(Integer subcategoryId){
+        List<Product> products = productRepository.findAll();
+        List<Product> subcategoryProducts = new ArrayList<>();
+        for (Product product : products) {
+            boolean hasSubcategory = false;
+            for(Subcategory subcategory : product.getSubcategories()){
+                if(subcategory.getId() == subcategoryId){
+                    hasSubcategory = true;
+                    break;
+                }
+            }
+            if(hasSubcategory)
+                subcategoryProducts.add(product);
+
+        }
+        List<ProductDto> productDtoList = changeToDto(subcategoryProducts);
+        return  productDtoList;
+    }
+
+    private double calculateAveragePrice(List<Product> products){
+        double averagePrice;
+        double sum = 0;
+        for (Product p: products) {
+            sum += p.getStartPrice();
+        }
+        averagePrice = sum / products.size();
+        return averagePrice;
+    }
+
+    private List<Product> getAvailableProducts(){
+        List<Product> products = productRepository.findAll();
+        List<Product> availableProducts = new ArrayList<>();
+        for (Product p : products) {
+            if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())){
+                availableProducts.add(p);
+            }
+        }
+        return availableProducts;
+    }
+
+    public PriceFilterDto getPriceFilterValues(){
+        PriceFilterDto priceFilterDto = new PriceFilterDto();
+        List<Product> availableProducts = getAvailableProducts();
+
+        availableProducts.sort(Comparator.comparing(Product::getStartPrice));
+        priceFilterDto.setMinPrice(availableProducts.get(0).getStartPrice());
+        priceFilterDto.setMinPriceText(df.format(priceFilterDto.getMinPrice()));
+
+        int lastIndex = availableProducts.size()-1;
+        priceFilterDto.setMaxPrice(availableProducts.get(lastIndex).getStartPrice());
+        priceFilterDto.setMaxPriceText(df.format(priceFilterDto.getMaxPrice()));
+
+        double averagePrice = calculateAveragePrice(availableProducts);
+
+        priceFilterDto.setAveragePrice(averagePrice);
+        priceFilterDto.setAveragePriceText(df.format(priceFilterDto.getAveragePrice()));
+
+        return priceFilterDto;
+    }
+
+    public ProductsInfiniteDto getFilteredProducts(FilterProductsDto filterProductsDto){
+
+        ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
+
+        List<ProductDto> filteredProducts = new ArrayList<>();
+
+        if(filterProductsDto.getSubcategoryIds() != null && !filterProductsDto.getSubcategoryIds().isEmpty()){
+            for (Integer id:filterProductsDto.getSubcategoryIds()) {
+                List<ProductDto> subcategoryProducts = getProductsBySubcategoryId(id);
+                filteredProducts.addAll(subcategoryProducts);
+            }
+        }
+        if(filterProductsDto.getCategoryIds() != null && !filterProductsDto.getCategoryIds().isEmpty()){
+            for (Integer id: filterProductsDto.getCategoryIds()) {
+                List<ProductDto> categoryProducts = getProductsByCategoryId(id);
+                filteredProducts.addAll(categoryProducts);
+            }
+        }
+        if(filterProductsDto.getProductName() != null && !filterProductsDto.getProductName().isEmpty() ){
+            if((filterProductsDto.getSubcategoryIds() !=null  && !filterProductsDto.getSubcategoryIds().isEmpty())
+                    || (filterProductsDto.getCategoryIds() != null && !filterProductsDto.getCategoryIds().isEmpty())){
+                filteredProducts = searchProductsByName(filterProductsDto.getProductName(), filteredProducts);
+            }
+            else{
+                filteredProducts = searchProductsByName(filterProductsDto.getProductName());
+            }
+        }
+
+        if(filterProductsDto.getMinPrice() >= 0){
+            filteredProducts.removeIf(p -> p.getStartPrice() < filterProductsDto.getMinPrice());
+        }
+        if(filterProductsDto.getMaxPrice() > 0){
+            filteredProducts.removeIf(p -> p.getStartPrice() > filterProductsDto.getMaxPrice());
+        }
+
+        if( filteredProducts.size() == 0){
+            productsInfiniteDto.setHasMoreData(false);
+            return productsInfiniteDto;
+        }
+
+        Integer number = filterProductsDto.getFetchNumber();
+
+        Integer from = (number * FILTERED_PRODUCTS_NUMBER_PER_CALL) - FILTERED_PRODUCTS_NUMBER_PER_CALL;
+        Integer to = (number * FILTERED_PRODUCTS_NUMBER_PER_CALL);
+
+        if(from > filteredProducts.size() - 1){
+            productsInfiniteDto.setHasMoreData(false);
+            return productsInfiniteDto;
+        }
+
+        if(to >= filteredProducts.size()){
+            to = filteredProducts.size();
+            productsInfiniteDto.setHasMoreData(false);
+        }
+
+        List<ProductDto> fetchedFilteredProducts = new ArrayList<>();
+
+        for(int i = from; i < to; i++){
+            fetchedFilteredProducts.add(filteredProducts.get(i));
+        }
+
+        productsInfiniteDto.setProductsList(fetchedFilteredProducts);
+        return productsInfiniteDto;
     }
 
     private List<ProductDto> changeToDto(List<Product>products){
         List<ProductDto> productDtos = new ArrayList<>();
 
-        for (Product p:products) {
+        for (Product p : products) {
             if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
                 ProductDto productDto = new ProductDto();
                 productDto.setId(p.getId());

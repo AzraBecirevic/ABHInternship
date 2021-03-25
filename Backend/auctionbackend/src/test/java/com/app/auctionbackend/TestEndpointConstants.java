@@ -14,4 +14,6 @@ public class TestEndpointConstants {
     public static final String GET_LAST_CHANCE_ENDPOINT = "/product/lastChance/";
     public static final String GET_MOST_EXPENSIVE_PRODUCT_ENDPOINT = "/product/getMostExpensive";
     public static final String GET_PRODUCT_BY_NAME = "/product/byName/";
+    public static final String GET_FILTERED_PRODUCTS_ENDPOINT = "/product/filtered";
+    public static final String GET_PRICE_FILTER_VALUES_ENDPOINT = "/product/getPriceFilterValues";
 }

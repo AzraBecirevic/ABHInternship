@@ -47,4 +47,5 @@ public class ProductDto {
     public void setStartPriceText(String startPriceText) {
         this.startPriceText = startPriceText;
     }
+
 }

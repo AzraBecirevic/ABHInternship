@@ -1,6 +1,6 @@
 import "./App.css";
 import Header from "./components/Header";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
 import AboutUs from "./components/AboutUs";
 import Home from "./components/Home";
@@ -21,6 +21,21 @@ import {
   REGISTER_ROUTE,
   SINGLE_PRODUCT_ROUTE,
   TEARMS_CONDITIONS_ROUTE,
+  CATEGORIES_ROUTE_CATEGORIES,
+  CATEGORIES_ROUTE_SUBCATEGORIES,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES,
+  CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER,
+  CATEGORIES_ROUTE_PRICE_FILTER,
+  CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER,
+  CATEGORIES_ROUTE_PRODUCT_NAME,
+  CATEGORIES_ROUTE_CATEGORIES_PRODUCT_NAME,
+  CATEGORIES_ROUTE_SUBCATEGORIES_PRODUCT_NAME,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME,
+  CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_PRODUCT_NAME,
+  CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME,
+  CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME,
 } from "./constants/routes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -118,13 +133,20 @@ export class App extends Component {
           {this.state.isLoading && <LoadingSpinner></LoadingSpinner>}
           {
             <div className="app">
-              <Header
-                openMe={this.openPage}
-                isLoggedIn={this.state.isLoggedIn}
-                email={this.email}
-                logout={this.logoutCustomer}
-                token={this.jwtToken}
+              <Route
+                path=""
+                render={(props) => (
+                  <Header
+                    {...props}
+                    openMe={this.openPage}
+                    isLoggedIn={this.state.isLoggedIn}
+                    email={this.email}
+                    logout={this.logoutCustomer}
+                    token={this.jwtToken}
+                  />
+                )}
               />
+
               <div className="containerDiv">
                 <Route
                   exact
@@ -165,13 +187,114 @@ export class App extends Component {
                     <Register {...props} setIsLoading={this.setIsLoading} />
                   )}
                 />
-                <Route
-                  exact
-                  path={CATEGORIES_ROUTE}
-                  render={(props) => (
-                    <Categories {...props} setIsLoading={this.setIsLoading} />
-                  )}
-                />
+                <Switch>
+                  <Route
+                    path={
+                      CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={
+                      CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={
+                      CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={
+                      CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_SUBCATEGORIES_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_SUBCATEGORIES}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                </Switch>
+
                 <Route
                   exact
                   path={SINGLE_PRODUCT_ROUTE}
