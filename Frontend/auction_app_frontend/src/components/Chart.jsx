@@ -13,16 +13,34 @@ export class Chart extends Component {
 
   state = {
     chartData: [],
+    maxProductsValue: 0,
+    products: [],
   };
 
   priceData = [];
   maxProducts = 0;
 
+  async componentWillReceiveProps(nextProps) {
+    await this.setState({
+      products: nextProps.productsProp == null ? [] : nextProps.productsProp,
+    });
+
+    this.loadData();
+  }
+
   componentDidMount = async () => {
-    var products =
-      this.props.productsProp == null
-        ? await this.productService.getProducts()
-        : this.props.productsProp;
+    await this.setState({
+      products: this.props.productsProp == null ? [] : this.props.productsProp,
+    });
+
+    this.loadData();
+  };
+
+  loadData = async () => {
+    this.maxProducts = 0;
+    this.setState({ maxProductsValue: 0 });
+
+    const { products } = this.state;
 
     this.priceData = await this.productService.getPriceFilterData();
 
@@ -57,6 +75,7 @@ export class Chart extends Component {
 
     this.setState({
       chartData: chartDataArray,
+      maxProductsValue: this.maxProducts,
     });
   };
 
@@ -68,6 +87,7 @@ export class Chart extends Component {
           borderBottom: "2px solid #D8D8D8",
           borderRadius: "1px",
         }}
+        key={this.props.productsProp}
       >
         {this.state.chartData !== undefined &&
           this.state.chartData !== null &&
@@ -84,7 +104,7 @@ export class Chart extends Component {
                       marginLeft: "0px",
                       position: "relative",
                       top: `${
-                        this.maxProducts * DIV_HIGHT -
+                        this.state.maxProductsValue * DIV_HIGHT -
                         chartData.productsArray.length * DIV_HIGHT
                       }px`,
                     }}

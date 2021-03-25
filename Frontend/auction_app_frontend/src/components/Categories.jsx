@@ -60,6 +60,8 @@ export class Categories extends Component {
     averagePriceText: "",
     lowerPrice: 0,
     higherPrice: 0,
+    textLowerPrice: "",
+    textHigherPrice: "",
   };
 
   categoryService = new CategoryService();
@@ -214,6 +216,8 @@ export class Categories extends Component {
           this.higherPriceValue = priceFilter[1];
           this.filteredProducts.minPrice = this.lowerPriceValue;
           this.filteredProducts.maxPrice = this.higherPriceValue;
+          this.lowerPriceText = this.lowerPriceValue;
+          this.higherPriceText = this.higherPriceValue;
           if (
             this.lowerPriceText.length <= 0 ||
             this.higherPriceText.length <= 0
@@ -666,6 +670,8 @@ export class Categories extends Component {
       token,
       lowerPrice,
       higherPrice,
+      textLowerPrice,
+      textHigherPrice,
     } = this.state;
     return (
       <div>
