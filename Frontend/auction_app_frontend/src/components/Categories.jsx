@@ -81,8 +81,8 @@ export class Categories extends Component {
 
   sortingTypes = [
     { id: 1, sortType: "DEFAULT_SORTING", sortName: "Default sorting" },
-    { id: 2, sortType: "ADDED", sortName: "Added" },
-    { id: 3, sortType: "TIME_LEFT", sortName: "Time left" },
+    { id: 2, sortType: "ADDED", sortName: "Sort by Newness" },
+    { id: 3, sortType: "TIME_LEFT", sortName: "Sort by Time Left" },
     { id: 4, sortType: "PRICE_LOW_TO_HIGH", sortName: "Price - low to high" },
     { id: 5, sortType: "PRICE_HIGH_TO_LOW", sortName: "Price - high to low" },
   ];
