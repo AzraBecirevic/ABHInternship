@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Product {
+public class Product extends ModelObject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +24,9 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Bid> bids = new ArrayList<>();
 
+    @Override
     public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        return this.id;
     }
 
     public List<Image> getImageList() {
@@ -95,4 +92,5 @@ public class Product {
     public void setBids(List<Bid> bids) {
         this.bids = bids;
     }
+
 }

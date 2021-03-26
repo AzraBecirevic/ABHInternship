@@ -1,6 +1,7 @@
 import { faSortNumericUpAlt } from "@fortawesome/free-solid-svg-icons";
 import { yellow } from "@material-ui/core/colors";
 import React, { Component } from "react";
+import Loader from "react-loader-spinner";
 import { DIV_HIGHT } from "../constants/chart";
 import ProductService from "../services/productService";
 

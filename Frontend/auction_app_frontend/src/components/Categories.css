@@ -148,15 +148,45 @@ div.col-lg-4.col-md-6.col-sm-6.product {
 
 .filterTagBox {
   padding: 5px;
-  margin-left: 5px;
   background-color: #8367d8;
   color: #ffffff;
   width: fit-content;
   border-radius: 13px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  margin-right: 5px;
+}
+.filterTagBoxInnerDiv {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.filterTagName {
+  text-align: center;
+  margin-right: 5px;
 }
 
-.filterTagsDiv {
-  display: flex;
+.row.filterTagDiv {
+  width: 100%;
+  margin-left: 0 !important;
+  margin-bottom: 15px;
+}
+
+.row.productOptionsDiv {
+  width: 100%;
+  margin-left: 0 !important;
+  margin-bottom: 20px;
+  font-family: Lato-Regular;
+  font-size: 16px;
+  color: #252525;
+  letter-spacing: 0.56px;
+}
+.row.productOptionsDiv div.col-lg-4.col-md-6.col-sm-6 {
+  padding-left: 0%;
 }
 
 .MuiSlider-root {
@@ -235,6 +265,42 @@ div.col-lg-4.col-md-6.col-sm-6.product {
   opacity: 1;
 }
 
+.chosenSortTypeDiv {
+  background: #ffffff;
+  border: 3px solid #ececec;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 18px;
+  padding-right: 10px;
+}
+.sortingTypesList {
+  background: #ffffff;
+  border: 3px solid #ececec;
+}
+.sortingTypesDiv {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  padding-right: 15px;
+}
+.sortingTypesItem {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 18px;
+}
+
+.sortingTypesItem:hover {
+  cursor: pointer;
+  background-color: #8367d8;
+  color: #ffffff;
+}
+
+.closeOpenSortDivIcon:hover {
+  cursor: pointer;
+}
+
 @media (min-width: 992px) and (max-width: 1250px) {
   .bidProductHoverDiv {
     padding-top: 41%;
@@ -246,6 +312,25 @@ div.col-lg-4.col-md-6.col-sm-6.product {
   .categoriesMenu {
     width: 100%;
     text-align: center;
+  }
+  .row.productOptionsDiv {
+    margin-top: 20px;
+  }
+  .row.categoriesRow {
+    display: flex;
+    flex-direction: column;
+  }
+  .row.categoriesRow div.col-lg-12.col-md-12.col-sm-12.categories {
+    order: 2;
+    margin-top: 30px;
+    padding-right: 3px;
+    padding-left: 23px;
+  }
+  .row.categoriesRow div.col-lg-3.col-md-4.col-sm-12.categories {
+    order: 1;
+  }
+  .row.categoriesRow div.col-lg-9.col-md-8.col-sm-12.categories {
+    order: 3;
   }
 }
 

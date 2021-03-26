@@ -11,11 +11,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.beancontext.BeanContextServiceRevokedEvent;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import static com.app.auctionbackend.dtos.FilterProductsDto.SortType.DEFAULT_SORTING;
 import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
 
 @Service("productService")
@@ -335,6 +337,8 @@ public class ProductService {
             return productsInfiniteDto;
         }
 
+        sortFilteredProducts(filteredProducts, filterProductsDto);
+
         Integer number = filterProductsDto.getFetchNumber();
 
         Integer from = (number * FILTERED_PRODUCTS_NUMBER_PER_CALL) - FILTERED_PRODUCTS_NUMBER_PER_CALL;
@@ -360,6 +364,19 @@ public class ProductService {
         return productsInfiniteDto;
     }
 
+    private void sortFilteredProducts(List<ProductDto> filteredProducts, FilterProductsDto filterProductsDto){
+        if(filterProductsDto.getSortType() == null)
+            return;
+
+        switch (filterProductsDto.getSortType()){
+            case ADDED: filteredProducts.sort(Comparator.comparing(ProductDto::getCreatedOn).reversed()); break;
+            case TIME_LEFT: filteredProducts.sort(Comparator.comparing(ProductDto::getEndDate)); break;
+            case PRICE_LOW_TO_HIGH: filteredProducts.sort(Comparator.comparing(ProductDto::getStartPrice)); break;
+            case PRICE_HIGH_TO_LOW: filteredProducts.sort(Comparator.comparing(ProductDto::getStartPrice).reversed()); break;
+            default: filteredProducts.sort(Comparator.comparing(ProductDto::getName)); break;
+        }
+    }
+
     private List<ProductDto> changeToDto(List<Product>products){
         List<ProductDto> productDtos = new ArrayList<>();
 
@@ -374,6 +391,8 @@ public class ProductService {
                     productDto.setImage(image.getImage());
 
                 productDto.setStartPriceText(df.format(productDto.getStartPrice()));
+                productDto.setCreatedOn(p.getCreatedOn());
+                productDto.setEndDate(p.getEndDate());
                 productDtos.add(productDto);
             }
         }

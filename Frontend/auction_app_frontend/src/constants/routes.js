@@ -50,6 +50,48 @@ export const CATEGORIES_ROUTE_PRODUCT_NAME =
 export const CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME =
   "/categories/PriceFilter/:priceFilter/ProductName/:productName";
 
+export const CATEGORIES_ROUTE_CATEGORIES_SORT =
+  "/categories/Categories/:categories/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_SUBCATEGORIES_SORT =
+  "/categories/Subcategories/:subcategories/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_PRODUCT_NAME_SORT =
+  "/categories/ProductName/:productName/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_SORT =
+  "/categories/Categories/:categories/Subcategories/:subcategories/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_CATEGORIES_PRODUCT_NAME_SORT =
+  "/categories/Categories/:categories/ProductName/:productName/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_SORT =
+  "/categories/Categories/:categories/PriceFilter/:priceFilter/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_SUBCATEGORIES_PRODUCT_NAME_SORT =
+  "/categories/Subcategories/:subcategories/ProductName/:productName/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_SORT =
+  "/categories/Subcategories/:subcategories/PriceFilter/:priceFilter/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME_SORT =
+  "/categories/PriceFilter/:priceFilter/ProductName/:productName/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_SORT =
+  "/categories/Categories/:categories/Subcategories/:subcategories/PriceFilter/:priceFilter/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT =
+  "/categories/Categories/:categories/PriceFilter/:priceFilter/ProductName/:productName/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT =
+  "/categories/Subcategories/:subcategories/PriceFilter/:priceFilter/ProductName/:productName/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_SORT =
+  "/categories/Categories/:categories/Subcategories/:subcategories/ProductName/:productName/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT =
+  "/categories/Categories/:categories/Subcategories/:subcategories/PriceFilter/:priceFilter/ProductName/:productName/Sort/:sortType";
+
 export const SINGLE_PRODUCT_ROUTE = "/singleProduct/:prodId";
 export const CHANGE_PASSWORD_ROUTE = "/changePassword";
 export const NOT_FOUND_ROUTE = "/notFound";

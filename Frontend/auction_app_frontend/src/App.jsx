@@ -36,6 +36,20 @@ import {
   CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_PRODUCT_NAME,
   CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME,
   CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME,
+  CATEGORIES_ROUTE_CATEGORIES_SORT,
+  CATEGORIES_ROUTE_SUBCATEGORIES_SORT,
+  CATEGORIES_ROUTE_PRODUCT_NAME_SORT,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_SORT,
+  CATEGORIES_ROUTE_CATEGORIES_PRODUCT_NAME_SORT,
+  CATEGORIES_ROUTE_SUBCATEGORIES_PRODUCT_NAME_SORT,
+  CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_SORT,
+  CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_SORT,
+  CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME_SORT,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_SORT,
+  CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT,
+  CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_SORT,
+  CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT,
 } from "./constants/routes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -190,7 +204,23 @@ export class App extends Component {
                 <Switch>
                   <Route
                     path={
+                      CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={
                       CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={
+                      CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_SORT
                     }
                     render={(props) => (
                       <Categories {...props} setIsLoading={this.setIsLoading} />
@@ -206,6 +236,14 @@ export class App extends Component {
                   />
                   <Route
                     path={
+                      CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_SORT
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={
                       CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME
                     }
                     render={(props) => (
@@ -213,7 +251,21 @@ export class App extends Component {
                     )}
                   />
                   <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
                     path={CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={
+                      CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT
+                    }
                     render={(props) => (
                       <Categories {...props} setIsLoading={this.setIsLoading} />
                     )}
@@ -227,7 +279,27 @@ export class App extends Component {
                     )}
                   />
                   <Route
+                    path={
+                      CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT
+                    }
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
                     path={CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_PRICE_FILTER_SORT}
                     render={(props) => (
                       <Categories {...props} setIsLoading={this.setIsLoading} />
                     )}
@@ -245,6 +317,18 @@ export class App extends Component {
                     )}
                   />
                   <Route
+                    path={CATEGORIES_ROUTE_SUBCATEGORIES_PRODUCT_NAME_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_PRODUCT_NAME_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
                     path={CATEGORIES_ROUTE_CATEGORIES_PRODUCT_NAME}
                     render={(props) => (
                       <Categories {...props} setIsLoading={this.setIsLoading} />
@@ -252,6 +336,24 @@ export class App extends Component {
                   />
                   <Route
                     path={CATEGORIES_ROUTE_SUBCATEGORIES_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_PRODUCT_NAME_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_SUBCATEGORIES_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_CATEGORIES_SORT}
                     render={(props) => (
                       <Categories {...props} setIsLoading={this.setIsLoading} />
                     )}
@@ -269,12 +371,17 @@ export class App extends Component {
                     )}
                   />
                   <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
                     path={CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME}
                     render={(props) => (
                       <Categories {...props} setIsLoading={this.setIsLoading} />
                     )}
                   />
-
                   <Route
                     path={CATEGORIES_ROUTE_PRICE_FILTER}
                     render={(props) => (

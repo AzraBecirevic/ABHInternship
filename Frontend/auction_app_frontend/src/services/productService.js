@@ -58,6 +58,7 @@ class ProductService {
         fetchNumber: filterFetchNumber,
         minPrice: filteredProducts.minPrice,
         maxPrice: filteredProducts.maxPrice,
+        sortType: filteredProducts.sortType,
       }),
     };
 
