@@ -37,6 +37,8 @@ import { Grid, Slider, Typography } from "@material-ui/core";
 import { ThemeProvider } from "react-bootstrap";
 import { EMAIL, TOKEN } from "../constants/auth";
 import Chart from "./Chart";
+import LoadingSpinner from "./LoadingSpinner";
+import Loader from "react-loader-spinner";
 
 export class Categories extends Component {
   constructor(props) {
@@ -66,6 +68,7 @@ export class Categories extends Component {
     textHigherPrice: "",
     sortingType: null,
     sortingTypesHidden: true,
+    sliderCurrentlyChanging: false,
   };
 
   categoryService = new CategoryService();
@@ -83,8 +86,16 @@ export class Categories extends Component {
     { id: 1, sortType: "DEFAULT_SORTING", sortName: "Default sorting" },
     { id: 2, sortType: "ADDED", sortName: "Sort by Newness" },
     { id: 3, sortType: "TIME_LEFT", sortName: "Sort by Time Left" },
-    { id: 4, sortType: "PRICE_LOW_TO_HIGH", sortName: "Price - low to high" },
-    { id: 5, sortType: "PRICE_HIGH_TO_LOW", sortName: "Price - high to low" },
+    {
+      id: 4,
+      sortType: "PRICE_LOW_TO_HIGH",
+      sortName: "Price - low to high",
+    },
+    {
+      id: 5,
+      sortType: "PRICE_HIGH_TO_LOW",
+      sortName: "Price - high to low",
+    },
   ];
 
   filteredProducts = new FilteredProducts();
@@ -306,6 +317,7 @@ export class Categories extends Component {
         maxText: priceFilterData.maxPriceText,
         averagePriceText: priceFilterData.averagePriceText,
         sortingType: chosenType,
+        sliderCurrentlyChanging: false,
       });
 
       this.setIsLoading(false);
@@ -680,6 +692,7 @@ export class Categories extends Component {
   };
 
   changePriceFilter = async (value) => {
+    this.setState({ sliderCurrentlyChanging: true });
     this.filteredProducts.minPrice = value[0];
     this.filteredProducts.maxPrice = value[1];
 
@@ -709,6 +722,7 @@ export class Categories extends Component {
     if (this.props.match.params.sortType !== undefined) {
       route += `/Sort/${this.props.match.params.sortType}`;
     }
+
     this.props.history.push({
       pathname: route,
     });
@@ -764,6 +778,7 @@ export class Categories extends Component {
       token,
       sortingType,
       sortingTypesHidden,
+      sliderCurrentlyChanging,
     } = this.state;
 
     return (
@@ -780,10 +795,7 @@ export class Categories extends Component {
                       filterTags.map(
                         function (filterTag, index) {
                           return (
-                            <div
-                              className="col-lg-3 col-md-3 col-sm-4 filterTagBox"
-                              key={index}
-                            >
+                            <div className="filterTagBox" key={index}>
                               <div className="filterTagBoxInnerDiv">
                                 <div className="filterTagName">
                                   {filterTag.name}
@@ -896,8 +908,22 @@ export class Categories extends Component {
                       {PRICE_FILTER_HEADING}
                     </div>
                     <div className="priceSliderDiv">
-                      <div>
-                        <Chart productsProp={products}></Chart>
+                      <div style={{ textAlign: "center" }}>
+                        <div style={{ textAlign: "center" }}>
+                          {sliderCurrentlyChanging == true && (
+                            <Loader
+                              className="loader"
+                              type="Oval"
+                              color="#8367d8"
+                              height="50px"
+                              width="50px"
+                            />
+                          )}
+                          {sliderCurrentlyChanging == false && (
+                            <Chart productsProp={products}></Chart>
+                          )}
+                        </div>
+
                         <Slider
                           key={`slider-${this.lowerPriceValue}`}
                           min={min}

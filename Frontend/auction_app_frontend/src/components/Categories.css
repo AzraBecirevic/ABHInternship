@@ -147,6 +147,7 @@ div.col-lg-4.col-md-6.col-sm-6.product {
 }
 
 .filterTagBox {
+  padding: 5px;
   background-color: #8367d8;
   color: #ffffff;
   width: fit-content;
@@ -154,15 +155,19 @@ div.col-lg-4.col-md-6.col-sm-6.product {
   margin-bottom: 5px;
   display: flex;
   justify-content: space-between;
+  margin-right: 5px;
 }
 .filterTagBoxInnerDiv {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: flex-end;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .filterTagName {
   text-align: center;
+  margin-right: 5px;
 }
 
 .row.filterTagDiv {
