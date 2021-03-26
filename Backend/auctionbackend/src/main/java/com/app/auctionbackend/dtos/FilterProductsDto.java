@@ -5,12 +5,21 @@ import java.util.List;
 
 public class FilterProductsDto {
 
+    public enum SortType{
+        DEFAULT_SORTING,
+        ADDED,
+        TIME_LEFT,
+        PRICE_LOW_TO_HIGH,
+        PRICE_HIGH_TO_LOW
+    }
+
     private List<Integer> categoryIds = new ArrayList<>();
     private List<Integer> subcategoryIds = new ArrayList<>();
     private String productName;
     private double minPrice = -1;
     private double maxPrice = -1;
     private Integer fetchNumber;
+    private SortType sortType = SortType.DEFAULT_SORTING;
 
     public List<Integer> getCategoryIds() {
         return categoryIds;
@@ -60,4 +69,11 @@ public class FilterProductsDto {
         this.fetchNumber = fetchNumber;
     }
 
+    public SortType getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(SortType sortType) {
+        this.sortType = sortType;
+    }
 }

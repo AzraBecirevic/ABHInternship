@@ -128,6 +128,9 @@ public class Seed {
         womenTShort1.setStartDate(startDateB);
         womenTShort1.setName("Black T-Shirt");
         womenTShort1.setStartPrice(50.55);
+        womenTShort1.setCreatedOn(LocalDateTime.now());
+        womenTShort1.setModifiedOn(LocalDateTime.now());
+
 
         womenTShirtImages.get(0).setProduct(womenTShort1);
         womenTShirtImages.get(1).setProduct(womenTShort1);
@@ -170,6 +173,8 @@ public class Seed {
         womenRedTShort.setStartDate(startDateR);
         womenRedTShort.setName("Red Shirt");
         womenRedTShort.setStartPrice(60);
+        womenRedTShort.setCreatedOn(LocalDateTime.now());
+        womenRedTShort.setModifiedOn(LocalDateTime.now());
 
         womenRedTShirtImages.get(0).setProduct(womenRedTShort);
         womenRedTShirtImages.get(1).setProduct(womenRedTShort);
@@ -235,6 +240,8 @@ public class Seed {
         womenWhiteTShort.setStartDate(startDateW);
         womenWhiteTShort.setName("White Shirt");
         womenWhiteTShort.setStartPrice(70);
+        womenWhiteTShort.setCreatedOn(LocalDateTime.now());
+        womenWhiteTShort.setModifiedOn(LocalDateTime.now());
 
         womenWhiteTShirtImages.get(0).setProduct(womenWhiteTShort);
         womenWhiteTShirtImages.get(1).setProduct(womenWhiteTShort);
@@ -290,6 +297,8 @@ public class Seed {
         womenSneakers.setStartDate(startDateS);
         womenSneakers.setName("Purple sneakers");
         womenSneakers.setStartPrice(200);
+        womenSneakers.setCreatedOn(LocalDateTime.now());
+        womenSneakers.setModifiedOn(LocalDateTime.now());
 
         womenSneakersImages.get(0).setProduct(womenSneakers);
         womenSneakersImages.get(1).setProduct(womenSneakers);
@@ -357,6 +366,8 @@ public class Seed {
         womenWhiteSneakers.setStartDate(startDateWS);
         womenWhiteSneakers.setName("White sneakers");
         womenWhiteSneakers.setStartPrice(150);
+        womenWhiteSneakers.setCreatedOn(LocalDateTime.now());
+        womenWhiteSneakers.setModifiedOn(LocalDateTime.now());
 
         womenWhiteSneakersImages.get(0).setProduct(womenWhiteSneakers);
         womenWhiteSneakersImages.get(1).setProduct(womenWhiteSneakers);
@@ -398,6 +409,8 @@ public class Seed {
         womenPinkSneakers.setStartDate(startDateP);
         womenPinkSneakers.setName("Pink sneakers");
         womenPinkSneakers.setStartPrice(130);
+        womenPinkSneakers.setCreatedOn(LocalDateTime.now());
+        womenPinkSneakers.setModifiedOn(LocalDateTime.now());
 
         womenPinkSneakersImages.get(0).setProduct(womenPinkSneakers);
         womenPinkSneakersImages.get(1).setProduct(womenPinkSneakers);
@@ -453,6 +466,8 @@ public class Seed {
         womenRedBag.setStartDate(startDateRB);
         womenRedBag.setName("Red bag");
         womenRedBag.setStartPrice(100);
+        womenRedBag.setCreatedOn(LocalDateTime.now());
+        womenRedBag.setModifiedOn(LocalDateTime.now());
 
         womenRedBagImages.get(0).setProduct(womenRedBag);
         womenRedBagImages.get(1).setProduct(womenRedBag);
@@ -485,7 +500,6 @@ public class Seed {
         womenCamelBagImages.add(womenCamelBagImg4);
         womenCamelBagImages.add(womenCamelBagImg5);
 
-
         Product womenCamelBag = new Product();
         womenCamelBag.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateCB = LocalDateTime.of(2021,3,30,0,0);
@@ -494,6 +508,8 @@ public class Seed {
         womenCamelBag.setStartDate(startDateCB);
         womenCamelBag.setName("Camel bag");
         womenCamelBag.setStartPrice(80);
+        womenCamelBag.setCreatedOn(LocalDateTime.now());
+        womenCamelBag.setModifiedOn(LocalDateTime.now());
 
         womenCamelBagImages.get(0).setProduct(womenCamelBag);
         womenCamelBagImages.get(1).setProduct(womenCamelBag);
@@ -536,6 +552,8 @@ public class Seed {
         womenBlackBag.setStartDate(startDateBB);
         womenBlackBag.setName("Black bag");
         womenBlackBag.setStartPrice(100);
+        womenBlackBag.setCreatedOn(LocalDateTime.now());
+        womenBlackBag.setModifiedOn(LocalDateTime.now());
 
         womenBlackBagImages.get(0).setProduct(womenBlackBag);
         womenBlackBagImages.get(1).setProduct(womenBlackBag);
@@ -568,7 +586,6 @@ public class Seed {
         womenBeigeBagImages.add(womenBeigeBagImg4);
         womenBeigeBagImages.add(womenBeigeBagImg5);
 
-
         Product womenBeigeBag = new Product();
         womenBeigeBag.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateBb = LocalDateTime.of(2021,3,30,20,30);
@@ -577,6 +594,8 @@ public class Seed {
         womenBeigeBag.setStartDate(startDateBb);
         womenBeigeBag.setName("Beige bag");
         womenBeigeBag.setStartPrice(85);
+        womenBeigeBag.setCreatedOn(LocalDateTime.now());
+        womenBeigeBag.setModifiedOn(LocalDateTime.now());
 
         womenBeigeBagImages.get(0).setProduct(womenBeigeBag);
         womenBeigeBagImages.get(1).setProduct(womenBeigeBag);
@@ -640,6 +659,8 @@ public class Seed {
         manWhiteTShirt.setStartDate(startDateWt);
         manWhiteTShirt.setName("White T-Shirt");
         manWhiteTShirt.setStartPrice(100);
+        manWhiteTShirt.setCreatedOn(LocalDateTime.now());
+        manWhiteTShirt.setModifiedOn(LocalDateTime.now());
 
         manWhiteTShirtImages.get(0).setProduct(manWhiteTShirt);
         manWhiteTShirtImages.get(1).setProduct(manWhiteTShirt);
@@ -656,7 +677,6 @@ public class Seed {
         imageRepository.save(manWhiteTShirtImg3);
         imageRepository.save(manWhiteTShirtImg4);
         imageRepository.save(manWhiteTShirtImg5);
-
 
 
         Image manBlackShirtImg1 = getImageData("src/main/resources/images/manBlackShirt.jpg");
@@ -682,6 +702,8 @@ public class Seed {
         manBlackShirt.setStartDate(startDateBS);
         manBlackShirt.setName("Black shirt");
         manBlackShirt.setStartPrice(170);
+        manBlackShirt.setCreatedOn(LocalDateTime.now());
+        manBlackShirt.setModifiedOn(LocalDateTime.now());
 
         manBlackShirtImages.get(0).setProduct(manBlackShirt);
         manBlackShirtImages.get(1).setProduct(manBlackShirt);
@@ -723,6 +745,8 @@ public class Seed {
         manBlueShirt.setStartDate(startDateBs);
         manBlueShirt.setName("Blue shirt");
         manBlueShirt.setStartPrice(155);
+        manBlueShirt.setCreatedOn(LocalDateTime.now());
+        manBlueShirt.setModifiedOn(LocalDateTime.now());
 
         manBlueShirtImages.get(0).setProduct(manBlueShirt);
         manBlueShirtImages.get(1).setProduct(manBlueShirt);
@@ -778,6 +802,8 @@ public class Seed {
         manBlackSneakers.setStartDate(startDateBl);
         manBlackSneakers.setName("Black sneakers");
         manBlackSneakers.setStartPrice(100);
+        manBlackSneakers.setCreatedOn(LocalDateTime.now());
+        manBlackSneakers.setModifiedOn(LocalDateTime.now());
 
         manBlackSneakersImages.get(0).setProduct(manBlackSneakers);
         manBlackSneakersImages.get(1).setProduct(manBlackSneakers);
@@ -818,6 +844,8 @@ public class Seed {
         manGreySneakers.setStartDate(startDateGS);
         manGreySneakers.setName("Grey sneakers");
         manGreySneakers.setStartPrice(135);
+        manGreySneakers.setCreatedOn(LocalDateTime.now());
+        manGreySneakers.setModifiedOn(LocalDateTime.now());
 
         manGreySneakersImages.get(0).setProduct(manGreySneakers);
         manGreySneakersImages.get(1).setProduct(manGreySneakers);
@@ -858,6 +886,8 @@ public class Seed {
         manOrangeSneakers.setStartDate(startDateOS);
         manOrangeSneakers.setName("White-Orange sneakers");
         manOrangeSneakers.setStartPrice(145);
+        manOrangeSneakers.setCreatedOn(LocalDateTime.now());
+        manOrangeSneakers.setModifiedOn(LocalDateTime.now());
 
         manOrangeSneakersImages.get(0).setProduct(manOrangeSneakers);
         manOrangeSneakersImages.get(1).setProduct(manOrangeSneakers);
@@ -918,6 +948,8 @@ public class Seed {
         kidsNavyTShirt.setStartDate(startDateKN);
         kidsNavyTShirt.setName("Navy-White T-Shirt");
         kidsNavyTShirt.setStartPrice(70);
+        kidsNavyTShirt.setCreatedOn(LocalDateTime.now());
+        kidsNavyTShirt.setModifiedOn(LocalDateTime.now());
 
         kidsNavyTShirtImages.get(0).setProduct(kidsNavyTShirt);
         kidsNavyTShirtImages.get(1).setProduct(kidsNavyTShirt);
@@ -959,6 +991,8 @@ public class Seed {
         kidsBlueTShirt.setStartDate(startDateBT);
         kidsBlueTShirt.setName("Blue T-Shirt");
         kidsBlueTShirt.setStartPrice(70);
+        kidsBlueTShirt.setCreatedOn(LocalDateTime.now());
+        kidsBlueTShirt.setModifiedOn(LocalDateTime.now());
 
         kidsBlueTShirtImages.get(0).setProduct(kidsBlueTShirt);
         kidsBlueTShirtImages.get(1).setProduct(kidsBlueTShirt);
@@ -1018,6 +1052,8 @@ public class Seed {
         homeDecorationCloud.setStartDate(startDateHC);
         homeDecorationCloud.setName("Cloud decoration");
         homeDecorationCloud.setStartPrice(70);
+        homeDecorationCloud.setCreatedOn(LocalDateTime.now());
+        homeDecorationCloud.setModifiedOn(LocalDateTime.now());
 
         homeDecorationCloudImages.get(0).setProduct(homeDecorationCloud);
         homeDecorationCloudImages.get(1).setProduct(homeDecorationCloud);
@@ -1056,6 +1092,8 @@ public class Seed {
         homeDecorationCandlestick.setStartDate(startDateHCs);
         homeDecorationCandlestick.setName("Candlestick");
         homeDecorationCandlestick.setStartPrice(90);
+        homeDecorationCandlestick.setCreatedOn(LocalDateTime.now());
+        homeDecorationCandlestick.setModifiedOn(LocalDateTime.now());
 
         homeDecorationCandlestickImages.get(0).setProduct(homeDecorationCandlestick);
         homeDecorationCandlestickImages.get(1).setProduct(homeDecorationCandlestick);
@@ -1115,6 +1153,8 @@ public class Seed {
         artPainting1.setStartDate(startDateAp1);
         artPainting1.setName("Flower picture");
         artPainting1.setStartPrice(70);
+        artPainting1.setCreatedOn(LocalDateTime.now());
+        artPainting1.setModifiedOn(LocalDateTime.now());
 
         artPainting1Images.get(0).setProduct(artPainting1);
         artPainting1Images.get(1).setProduct(artPainting1);
@@ -1172,6 +1212,8 @@ public class Seed {
         computer1.setStartDate(startDateC1);
         computer1.setName("Computer");
         computer1.setStartPrice(70);
+        computer1.setCreatedOn(LocalDateTime.now());
+        computer1.setModifiedOn(LocalDateTime.now());
 
         computer1Images.get(0).setProduct(computer1);
         computer1Images.get(1).setProduct(computer1);
@@ -1227,6 +1269,8 @@ public class Seed {
         mobilePhone1.setStartDate(startDateM1);
         mobilePhone1.setName("Mobile phone");
         mobilePhone1.setStartPrice(70);
+        mobilePhone1.setCreatedOn(LocalDateTime.now());
+        mobilePhone1.setModifiedOn(LocalDateTime.now());
 
         mobilePhone1Images.get(0).setProduct(mobilePhone1);
         mobilePhone1Images.get(1).setProduct(mobilePhone1);
@@ -1279,6 +1323,8 @@ public class Seed {
         mobileCase1.setStartDate(startDateMc1);
         mobileCase1.setName("Mobile case");
         mobileCase1.setStartPrice(70);
+        mobileCase1.setCreatedOn(LocalDateTime.now());
+        mobileCase1.setModifiedOn(LocalDateTime.now());
 
         mobileCase1Images.get(0).setProduct(mobileCase1);
         mobileCase1Images.get(1).setProduct(mobileCase1);
@@ -1334,6 +1380,8 @@ public class Seed {
         vacuumCleaner1.setStartDate(startDateVc1);
         vacuumCleaner1.setName("Vacuum cleaner");
         vacuumCleaner1.setStartPrice(150);
+        vacuumCleaner1.setCreatedOn(LocalDateTime.now());
+        vacuumCleaner1.setModifiedOn(LocalDateTime.now());
 
         vacuumCleaner1Images.get(0).setProduct(vacuumCleaner1);
         vacuumCleaner1Images.get(1).setProduct(vacuumCleaner1);
@@ -1372,6 +1420,8 @@ public class Seed {
         vacuumCleanerRobot.setStartDate(startDateVCr1);
         vacuumCleanerRobot.setName("Robot vacuum");
         vacuumCleanerRobot.setStartPrice(150);
+        vacuumCleanerRobot.setCreatedOn(LocalDateTime.now());
+        vacuumCleanerRobot.setModifiedOn(LocalDateTime.now());
 
         vacuumCleanerRobotImages.get(0).setProduct(vacuumCleanerRobot);
         vacuumCleanerRobotImages.get(1).setProduct(vacuumCleanerRobot);
@@ -1430,6 +1480,8 @@ public class Seed {
         football1.setStartDate(startDateF1);
         football1.setName("Ball");
         football1.setStartPrice(150);
+        football1.setCreatedOn(LocalDateTime.now());
+        football1.setModifiedOn(LocalDateTime.now());
 
         footballImages.get(0).setProduct(football1);
         footballImages.get(1).setProduct(football1);
@@ -1469,6 +1521,8 @@ public class Seed {
         basketball1.setStartDate(startDateB1);
         basketball1.setName("Ball");
         basketball1.setStartPrice(150);
+        basketball1.setCreatedOn(LocalDateTime.now());
+        basketball1.setModifiedOn(LocalDateTime.now());
 
         basketballImages.get(0).setProduct(basketball1);
         basketballImages.get(1).setProduct(basketball1);
@@ -1526,6 +1580,8 @@ public class Seed {
         mascara.setStartDate(startDate1M);
         mascara.setName("Mascara");
         mascara.setStartPrice(20);
+        mascara.setCreatedOn(LocalDateTime.now());
+        mascara.setModifiedOn(LocalDateTime.now());
 
         mascaraImages.get(0).setProduct(mascara);
         mascaraImages.get(1).setProduct(mascara);
@@ -1565,6 +1621,8 @@ public class Seed {
         bronzer.setStartDate(startDateBr1);
         bronzer.setName("Bronzer");
         bronzer.setStartPrice(20);
+        bronzer.setCreatedOn(LocalDateTime.now());
+        bronzer.setModifiedOn(LocalDateTime.now());
 
         bronzerImages.get(0).setProduct(bronzer);
         bronzerImages.get(1).setProduct(bronzer);

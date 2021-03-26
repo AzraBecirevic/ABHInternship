@@ -23,6 +23,8 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faGavel } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SubcategoryService from "../services/subcategoryService";
 import FilteredProducts from "../model/FilteredProducts";
@@ -62,6 +64,8 @@ export class Categories extends Component {
     higherPrice: 0,
     textLowerPrice: "",
     textHigherPrice: "",
+    sortingType: null,
+    sortingTypesHidden: true,
   };
 
   categoryService = new CategoryService();
@@ -75,6 +79,14 @@ export class Categories extends Component {
   lowerPriceValue = 0;
   higherPriceValue = 0;
 
+  sortingTypes = [
+    { id: 1, sortType: "DEFAULT_SORTING", sortName: "Default sorting" },
+    { id: 2, sortType: "ADDED", sortName: "Added" },
+    { id: 3, sortType: "TIME_LEFT", sortName: "Time left" },
+    { id: 4, sortType: "PRICE_LOW_TO_HIGH", sortName: "Price - low to high" },
+    { id: 5, sortType: "PRICE_HIGH_TO_LOW", sortName: "Price - high to low" },
+  ];
+
   filteredProducts = new FilteredProducts();
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -84,7 +96,9 @@ export class Categories extends Component {
         this.props.match.params.subcategories ||
       prevProps.match.params.priceFilter !=
         this.props.match.params.priceFilter ||
-      prevProps.match.params.productName != this.props.match.params.productName
+      prevProps.match.params.productName !=
+        this.props.match.params.productName ||
+      prevProps.match.params.sortType != this.props.match.params.sortType
     ) {
       this.componentDidMount();
     } else if (this.props.location.state != null) {
@@ -113,6 +127,7 @@ export class Categories extends Component {
       var email = "";
       var token = "";
       var productName = "";
+      var chosenType = null;
 
       this.setIsLoading(true);
 
@@ -257,6 +272,22 @@ export class Categories extends Component {
           this.filteredProducts.productName = productNameFilterPath;
         }
       }
+      var sortFilterPath = this.props.match.params.sortType;
+      if (
+        sortFilterPath !== undefined &&
+        sortFilterPath !== null &&
+        sortFilterPath !== "" &&
+        sortFilterPath !== ":sortType" &&
+        parseInt(sortFilterPath) >= 1 &&
+        parseInt(sortFilterPath) <= 5
+      ) {
+        chosenType = this.sortingTypes.filter(function (sortingType) {
+          return sortingType.id == sortFilterPath;
+        })[0];
+        this.filteredProducts.sortType = chosenType.sortType;
+      } else {
+        chosenType = this.sortingTypes[0];
+      }
 
       productsDto = await this.productService.getFilteredProducts(
         this.filteredProducts,
@@ -274,6 +305,7 @@ export class Categories extends Component {
         minText: priceFilterData.minPriceText,
         maxText: priceFilterData.maxPriceText,
         averagePriceText: priceFilterData.averagePriceText,
+        sortingType: chosenType,
       });
 
       this.setIsLoading(false);
@@ -393,6 +425,9 @@ export class Categories extends Component {
       if (this.props.match.params.productName !== undefined) {
         route += `/ProductName/${this.props.match.params.productName}`;
       }
+      if (this.props.match.params.sortType !== undefined) {
+        route += `/Sort/${this.props.match.params.sortType}`;
+      }
 
       this.props.history.push({
         pathname: route,
@@ -406,6 +441,9 @@ export class Categories extends Component {
       if (this.props.match.params.productName !== undefined) {
         route += `/ProductName/${this.props.match.params.productName}`;
       }
+      if (this.props.match.params.sortType !== undefined) {
+        route += `/Sort/${this.props.match.params.sortType}`;
+      }
       this.props.history.push({
         pathname: route,
       });
@@ -416,6 +454,9 @@ export class Categories extends Component {
       }
       if (this.props.match.params.productName !== undefined) {
         route += `/ProductName/${this.props.match.params.productName}`;
+      }
+      if (this.props.match.params.sortType !== undefined) {
+        route += `/Sort/${this.props.match.params.sortType}`;
       }
       this.props.history.push({
         pathname: route,
@@ -487,6 +528,9 @@ export class Categories extends Component {
       if (this.props.match.params.productName !== undefined) {
         route += `/ProductName/${this.props.match.params.productName}`;
       }
+      if (this.props.match.params.sortType !== undefined) {
+        route += `/Sort/${this.props.match.params.sortType}`;
+      }
       this.props.history.push({
         pathname: route,
       });
@@ -499,6 +543,9 @@ export class Categories extends Component {
       if (this.props.match.params.productName !== undefined) {
         route += `/ProductName/${this.props.match.params.productName}`;
       }
+      if (this.props.match.params.sortType !== undefined) {
+        route += `/Sort/${this.props.match.params.sortType}`;
+      }
       this.props.history.push({
         pathname: route,
       });
@@ -510,6 +557,9 @@ export class Categories extends Component {
       }
       if (this.props.match.params.productName !== undefined) {
         route += `/ProductName/${this.props.match.params.productName}`;
+      }
+      if (this.props.match.params.sortType !== undefined) {
+        route += `/Sort/${this.props.match.params.sortType}`;
       }
       this.props.history.push({
         pathname: route,
@@ -549,6 +599,9 @@ export class Categories extends Component {
         if (this.props.match.params.productName !== undefined) {
           route += `/ProductName/${this.props.match.params.productName}`;
         }
+        if (this.props.match.params.sortType !== undefined) {
+          route += `/Sort/${this.props.match.params.sortType}`;
+        }
         this.props.history.push({
           pathname: route,
         });
@@ -563,6 +616,9 @@ export class Categories extends Component {
         }
         if (this.props.match.params.productName !== undefined) {
           route += `/ProductName/${this.props.match.params.productName}`;
+        }
+        if (this.props.match.params.sortType !== undefined) {
+          route += `/Sort/${this.props.match.params.sortType}`;
         }
         this.props.history.push({
           pathname: route,
@@ -595,6 +651,9 @@ export class Categories extends Component {
         if (this.props.match.params.productName !== undefined) {
           route += `/ProductName/${this.props.match.params.productName}`;
         }
+        if (this.props.match.params.sortType !== undefined) {
+          route += `/Sort/${this.props.match.params.sortType}`;
+        }
         this.props.history.push({
           pathname: route,
         });
@@ -609,6 +668,9 @@ export class Categories extends Component {
         }
         if (this.props.match.params.productName !== undefined) {
           route += `/ProductName/${this.props.match.params.productName}`;
+        }
+        if (this.props.match.params.sortType !== undefined) {
+          route += `/Sort/${this.props.match.params.sortType}`;
         }
         this.props.history.push({
           pathname: route,
@@ -644,6 +706,40 @@ export class Categories extends Component {
     if (this.props.match.params.productName !== undefined) {
       route += `/ProductName/${this.props.match.params.productName}`;
     }
+    if (this.props.match.params.sortType !== undefined) {
+      route += `/Sort/${this.props.match.params.sortType}`;
+    }
+    this.props.history.push({
+      pathname: route,
+    });
+  };
+
+  showSortingTypes = () => {
+    this.setState({ sortingTypesHidden: false });
+  };
+  closeSortingTypes = () => {
+    this.setState({ sortingTypesHidden: true });
+  };
+
+  sortingTypeChosen = (sortingTypeId) => {
+    var route = CATEGORIES_ROUTE;
+
+    if (this.props.match.params.categories !== undefined) {
+      route += `/Categories/${this.props.match.params.categories}`;
+    }
+    if (this.props.match.params.subcategories !== undefined) {
+      route = route + `/Subcategories/${this.props.match.params.subcategories}`;
+    }
+    if (this.props.match.params.priceFilter !== undefined) {
+      route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+    }
+    if (this.props.match.params.productName !== undefined) {
+      route += `/ProductName/${this.props.match.params.productName}`;
+    }
+
+    route += `/Sort/${sortingTypeId}`;
+
+    this.closeSortingTypes();
 
     this.props.history.push({
       pathname: route,
@@ -657,8 +753,6 @@ export class Categories extends Component {
       subcategories,
       min,
       max,
-      minText,
-      maxText,
       averagePriceText,
       filterTags,
       categoryId,
@@ -668,18 +762,47 @@ export class Categories extends Component {
       isLoggedIn,
       email,
       token,
-      lowerPrice,
-      higherPrice,
-      textLowerPrice,
-      textHigherPrice,
+      sortingType,
+      sortingTypesHidden,
     } = this.state;
+
     return (
       <div>
         <div className="row">
           <div className="col-lg-2"></div>
           <div className="col-lg-8 categoriesColumn">
             <div className="categoriesDiv">
-              <div className="row">
+              <div className="row categoriesRow">
+                <div className="col-lg-12 col-md-12 col-sm-12 categories">
+                  <div className="row filterTagDiv">
+                    {filterTags != null &&
+                      filterTags.length > 0 &&
+                      filterTags.map(
+                        function (filterTag, index) {
+                          return (
+                            <div
+                              className="col-lg-3 col-md-3 col-sm-4 filterTagBox"
+                              key={index}
+                            >
+                              <div className="filterTagBoxInnerDiv">
+                                <div className="filterTagName">
+                                  {filterTag.name}
+                                </div>
+                                <FontAwesomeIcon
+                                  onClick={() => {
+                                    this.removeFilter(filterTag);
+                                  }}
+                                  style={{ color: "#ffffff" }}
+                                  icon={faTimes}
+                                  size={"lg"}
+                                ></FontAwesomeIcon>
+                              </div>
+                            </div>
+                          );
+                        }.bind(this)
+                      )}
+                  </div>
+                </div>
                 <div className="col-lg-3 col-md-4 col-sm-12 categories">
                   <div className="categoriesMenu">
                     <p className="categoriesMenuHeading">
@@ -805,27 +928,6 @@ export class Categories extends Component {
                   </div>
                 </div>
                 <div className="col-lg-9 col-md-8 col-sm-12 categories">
-                  <div className="filterTagsDiv">
-                    {filterTags != null &&
-                      filterTags.length > 0 &&
-                      filterTags.map(
-                        function (filterTag, index) {
-                          return (
-                            <div className="filterTagBox" key={index}>
-                              {filterTag.name}
-                              <FontAwesomeIcon
-                                onClick={() => {
-                                  this.removeFilter(filterTag);
-                                }}
-                                style={{ color: "#ffffff" }}
-                                icon={faTimes}
-                                size={"lg"}
-                              ></FontAwesomeIcon>
-                            </div>
-                          );
-                        }.bind(this)
-                      )}
-                  </div>
                   {categoryId == 0 &&
                     (products == null || products.length == 0) &&
                     this.filteredProducts.categoryIds.length <= 0 &&
@@ -843,6 +945,61 @@ export class Categories extends Component {
                         {NO_PRODUCTS_IN_PRICE_RANGE}
                       </div>
                     )}
+                  {products != null && products.length > 0 && (
+                    <div className="row productOptionsDiv">
+                      <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="chosenSortTypeDiv">
+                          <div>{sortingType.sortName}</div>
+                          <div>
+                            {sortingTypesHidden && (
+                              <FontAwesomeIcon
+                                className="closeOpenSortDivIcon"
+                                onClick={() => {
+                                  this.showSortingTypes();
+                                }}
+                                style={{ color: "#252525" }}
+                                icon={faChevronDown}
+                                size={"lg"}
+                              ></FontAwesomeIcon>
+                            )}
+                            {!sortingTypesHidden && (
+                              <FontAwesomeIcon
+                                className="closeOpenSortDivIcon"
+                                onClick={() => {
+                                  this.closeSortingTypes();
+                                }}
+                                style={{ color: "#252525" }}
+                                icon={faChevronUp}
+                                size={"lg"}
+                              ></FontAwesomeIcon>
+                            )}
+                          </div>
+                        </div>
+                        <div
+                          hidden={sortingTypesHidden}
+                          className="sortingTypesDiv"
+                        >
+                          <div className="sortingTypesList">
+                            {this.sortingTypes.map(
+                              function (sortingType, index) {
+                                return (
+                                  <div
+                                    key={index}
+                                    className="sortingTypesItem"
+                                    onClick={() =>
+                                      this.sortingTypeChosen(sortingType.id)
+                                    }
+                                  >
+                                    {sortingType.sortName}
+                                  </div>
+                                );
+                              }.bind(this)
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {products != null && products.length > 0 && (
                     <InfiniteScroll
                       dataLength={products == null ? 0 : products.length}

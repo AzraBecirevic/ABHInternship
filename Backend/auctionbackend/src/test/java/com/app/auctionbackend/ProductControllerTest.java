@@ -89,6 +89,47 @@ public class ProductControllerTest {
         ).andExpect(status().isBadRequest());
     }
 
+
+    @Test
+    public void getFilteredProductSortingAddedShouldOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post(GET_FILTERED_PRODUCTS_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"categoryIds\": [\"1\"], \"productName\": \"\", \"fetchNumber\":\"1\"}, \"sortType\": \"ADDED\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getFilteredProductSortingTimeLeftShouldOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post(GET_FILTERED_PRODUCTS_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"categoryIds\": [\"1\"], \"productName\": \"\", \"fetchNumber\":\"1\"}, \"sortType\": \"TIME_LEFT\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getFilteredProductSortingPriceLowHighShouldOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post(GET_FILTERED_PRODUCTS_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"categoryIds\": [\"1\"], \"productName\": \"\", \"fetchNumber\":\"1\"}, \"sortType\": \"PRICE_LOW_TO_HIGH\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getFilteredProductSortingPriceHighLowShouldOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post(GET_FILTERED_PRODUCTS_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"categoryIds\": [\"1\"], \"productName\": \"\", \"fetchNumber\":\"1\"}, \"sortType\": \"PRICE_HIGH_TO_LOW\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getFilteredProductSortingDefaultShouldOk() throws Exception{
+        mvc.perform(MockMvcRequestBuilders.post(GET_FILTERED_PRODUCTS_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"categoryIds\": [\"1\"], \"productName\": \"\", \"fetchNumber\":\"1\"}, \"sortType\": \"\"}")
+        ).andExpect(status().isOk());
+    }
+
     @Test
     public void getPriceFilterValuesShouldReturnOk() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get(GET_PRICE_FILTER_VALUES_ENDPOINT)
