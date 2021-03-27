@@ -44,3 +44,5 @@ export const CATEGORY_MENU_HEADING = "PRODUCT CATEGORIES";
 export const AVERAGE_PRICE_MESSAGE = "The average price is $";
 export const NO_PRODUCTS_IN_PRICE_RANGE =
   "There are no products in this price range.";
+export const GRID_VIEW = "Grid";
+export const LIST_VIEW = "List";
