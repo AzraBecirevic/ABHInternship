@@ -11,6 +11,7 @@ public class ProductDto {
     private String startPriceText;
     private LocalDateTime endDate;
     private LocalDateTime createdOn;
+    private String description;
 
     public Integer getId() {
         return id;
@@ -66,5 +67,13 @@ public class ProductDto {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

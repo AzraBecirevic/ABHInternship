@@ -393,6 +393,7 @@ public class ProductService {
                 productDto.setStartPriceText(df.format(productDto.getStartPrice()));
                 productDto.setCreatedOn(p.getCreatedOn());
                 productDto.setEndDate(p.getEndDate());
+                productDto.setDescription(p.getDescription());
                 productDtos.add(productDto);
             }
         }

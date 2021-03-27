@@ -18,6 +18,8 @@ import {
   MAX_ALLOWED_BID_PRICE,
   AVERAGE_PRICE_MESSAGE,
   NO_PRODUCTS_IN_PRICE_RANGE,
+  GRID_VIEW,
+  LIST_VIEW,
 } from "../constants/messages";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -25,6 +27,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faGavel } from "@fortawesome/free-solid-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faTh } from "@fortawesome/free-solid-svg-icons";
+import { faThList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SubcategoryService from "../services/subcategoryService";
 import FilteredProducts from "../model/FilteredProducts";
@@ -69,6 +73,7 @@ export class Categories extends Component {
     sortingType: null,
     sortingTypesHidden: true,
     sliderCurrentlyChanging: false,
+    gridChosen: true,
   };
 
   categoryService = new CategoryService();
@@ -98,6 +103,8 @@ export class Categories extends Component {
     },
   ];
 
+  viewOptions = ["Grid", "List"];
+
   filteredProducts = new FilteredProducts();
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -109,7 +116,8 @@ export class Categories extends Component {
         this.props.match.params.priceFilter ||
       prevProps.match.params.productName !=
         this.props.match.params.productName ||
-      prevProps.match.params.sortType != this.props.match.params.sortType
+      prevProps.match.params.sortType != this.props.match.params.sortType ||
+      prevProps.match.params.view != this.props.match.params.view
     ) {
       this.componentDidMount();
     } else if (this.props.location.state != null) {
@@ -139,6 +147,7 @@ export class Categories extends Component {
       var token = "";
       var productName = "";
       var chosenType = null;
+      var chosenOptionGrid = true;
 
       this.setIsLoading(true);
 
@@ -283,6 +292,7 @@ export class Categories extends Component {
           this.filteredProducts.productName = productNameFilterPath;
         }
       }
+
       var sortFilterPath = this.props.match.params.sortType;
       if (
         sortFilterPath !== undefined &&
@@ -298,6 +308,19 @@ export class Categories extends Component {
         this.filteredProducts.sortType = chosenType.sortType;
       } else {
         chosenType = this.sortingTypes[0];
+      }
+
+      var viewOptionPath = this.props.match.params.view;
+      if (
+        viewOptionPath !== undefined &&
+        viewOptionPath !== null &&
+        viewOptionPath !== ""
+      ) {
+        if (viewOptionPath == this.viewOptions[1]) {
+          chosenOptionGrid = false;
+        } else {
+          chosenOptionGrid = true;
+        }
       }
 
       productsDto = await this.productService.getFilteredProducts(
@@ -318,6 +341,7 @@ export class Categories extends Component {
         averagePriceText: priceFilterData.averagePriceText,
         sortingType: chosenType,
         sliderCurrentlyChanging: false,
+        gridChosen: chosenOptionGrid,
       });
 
       this.setIsLoading(false);
@@ -440,7 +464,9 @@ export class Categories extends Component {
       if (this.props.match.params.sortType !== undefined) {
         route += `/Sort/${this.props.match.params.sortType}`;
       }
-
+      if (this.props.match.params.view !== undefined) {
+        route += `/View/${this.props.match.params.view}`;
+      }
       this.props.history.push({
         pathname: route,
       });
@@ -456,6 +482,9 @@ export class Categories extends Component {
       if (this.props.match.params.sortType !== undefined) {
         route += `/Sort/${this.props.match.params.sortType}`;
       }
+      if (this.props.match.params.view !== undefined) {
+        route += `/View/${this.props.match.params.view}`;
+      }
       this.props.history.push({
         pathname: route,
       });
@@ -469,6 +498,9 @@ export class Categories extends Component {
       }
       if (this.props.match.params.sortType !== undefined) {
         route += `/Sort/${this.props.match.params.sortType}`;
+      }
+      if (this.props.match.params.view !== undefined) {
+        route += `/View/${this.props.match.params.view}`;
       }
       this.props.history.push({
         pathname: route,
@@ -543,6 +575,9 @@ export class Categories extends Component {
       if (this.props.match.params.sortType !== undefined) {
         route += `/Sort/${this.props.match.params.sortType}`;
       }
+      if (this.props.match.params.view !== undefined) {
+        route += `/View/${this.props.match.params.view}`;
+      }
       this.props.history.push({
         pathname: route,
       });
@@ -558,6 +593,9 @@ export class Categories extends Component {
       if (this.props.match.params.sortType !== undefined) {
         route += `/Sort/${this.props.match.params.sortType}`;
       }
+      if (this.props.match.params.view !== undefined) {
+        route += `/View/${this.props.match.params.view}`;
+      }
       this.props.history.push({
         pathname: route,
       });
@@ -572,6 +610,9 @@ export class Categories extends Component {
       }
       if (this.props.match.params.sortType !== undefined) {
         route += `/Sort/${this.props.match.params.sortType}`;
+      }
+      if (this.props.match.params.view !== undefined) {
+        route += `/View/${this.props.match.params.view}`;
       }
       this.props.history.push({
         pathname: route,
@@ -614,6 +655,9 @@ export class Categories extends Component {
         if (this.props.match.params.sortType !== undefined) {
           route += `/Sort/${this.props.match.params.sortType}`;
         }
+        if (this.props.match.params.view !== undefined) {
+          route += `/View/${this.props.match.params.view}`;
+        }
         this.props.history.push({
           pathname: route,
         });
@@ -631,6 +675,9 @@ export class Categories extends Component {
         }
         if (this.props.match.params.sortType !== undefined) {
           route += `/Sort/${this.props.match.params.sortType}`;
+        }
+        if (this.props.match.params.view !== undefined) {
+          route += `/View/${this.props.match.params.view}`;
         }
         this.props.history.push({
           pathname: route,
@@ -666,6 +713,9 @@ export class Categories extends Component {
         if (this.props.match.params.sortType !== undefined) {
           route += `/Sort/${this.props.match.params.sortType}`;
         }
+        if (this.props.match.params.view !== undefined) {
+          route += `/View/${this.props.match.params.view}`;
+        }
         this.props.history.push({
           pathname: route,
         });
@@ -683,6 +733,9 @@ export class Categories extends Component {
         }
         if (this.props.match.params.sortType !== undefined) {
           route += `/Sort/${this.props.match.params.sortType}`;
+        }
+        if (this.props.match.params.view !== undefined) {
+          route += `/View/${this.props.match.params.view}`;
         }
         this.props.history.push({
           pathname: route,
@@ -722,7 +775,9 @@ export class Categories extends Component {
     if (this.props.match.params.sortType !== undefined) {
       route += `/Sort/${this.props.match.params.sortType}`;
     }
-
+    if (this.props.match.params.view !== undefined) {
+      route += `/View/${this.props.match.params.view}`;
+    }
     this.props.history.push({
       pathname: route,
     });
@@ -753,7 +808,61 @@ export class Categories extends Component {
 
     route += `/Sort/${sortingTypeId}`;
 
+    if (this.props.match.params.view !== undefined) {
+      route += `/View/${this.props.match.params.view}`;
+    }
+
     this.closeSortingTypes();
+
+    this.props.history.push({
+      pathname: route,
+    });
+  };
+
+  chooseGridView = () => {
+    var route = CATEGORIES_ROUTE;
+
+    if (this.props.match.params.categories !== undefined) {
+      route += `/Categories/${this.props.match.params.categories}`;
+    }
+    if (this.props.match.params.subcategories !== undefined) {
+      route = route + `/Subcategories/${this.props.match.params.subcategories}`;
+    }
+    if (this.props.match.params.priceFilter !== undefined) {
+      route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+    }
+    if (this.props.match.params.productName !== undefined) {
+      route += `/ProductName/${this.props.match.params.productName}`;
+    }
+    if (this.props.match.params.sortType !== undefined) {
+      route += `/Sort/${this.props.match.params.sortType}`;
+    }
+    route += `/View/${this.viewOptions[0]}`;
+
+    this.props.history.push({
+      pathname: route,
+    });
+  };
+
+  chooseListView = () => {
+    var route = CATEGORIES_ROUTE;
+
+    if (this.props.match.params.categories !== undefined) {
+      route += `/Categories/${this.props.match.params.categories}`;
+    }
+    if (this.props.match.params.subcategories !== undefined) {
+      route = route + `/Subcategories/${this.props.match.params.subcategories}`;
+    }
+    if (this.props.match.params.priceFilter !== undefined) {
+      route += `/PriceFilter/${this.props.match.params.priceFilter}`;
+    }
+    if (this.props.match.params.productName !== undefined) {
+      route += `/ProductName/${this.props.match.params.productName}`;
+    }
+    if (this.props.match.params.sortType !== undefined) {
+      route += `/Sort/${this.props.match.params.sortType}`;
+    }
+    route += `/View/${this.viewOptions[1]}`;
 
     this.props.history.push({
       pathname: route,
@@ -779,6 +888,7 @@ export class Categories extends Component {
       sortingType,
       sortingTypesHidden,
       sliderCurrentlyChanging,
+      gridChosen,
     } = this.state;
 
     return (
@@ -1024,6 +1134,40 @@ export class Categories extends Component {
                           </div>
                         </div>
                       </div>
+                      <div className="col-lg-8 col-md-6 col-sm-6">
+                        <div className="gridListOptionsDiv">
+                          <div
+                            className={
+                              gridChosen
+                                ? "gridListOptionActive"
+                                : "gridListOption"
+                            }
+                            onClick={this.chooseGridView}
+                          >
+                            {" "}
+                            <FontAwesomeIcon
+                              icon={faTh}
+                              size={"lg"}
+                            ></FontAwesomeIcon>{" "}
+                            {GRID_VIEW}
+                          </div>
+                          <div
+                            className={
+                              gridChosen
+                                ? "gridListOption"
+                                : "gridListOptionActive"
+                            }
+                            onClick={this.chooseListView}
+                          >
+                            {" "}
+                            <FontAwesomeIcon
+                              icon={faThList}
+                              size={"lg"}
+                            ></FontAwesomeIcon>{" "}
+                            {LIST_VIEW}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
                   {products != null && products.length > 0 && (
@@ -1046,6 +1190,7 @@ export class Categories extends Component {
                     >
                       <div className="row">
                         {products != null &&
+                          gridChosen &&
                           products.map(
                             function (product, index) {
                               return (
@@ -1124,6 +1269,129 @@ export class Categories extends Component {
                                   >
                                     Starts from ${product.startPriceText}
                                   </Link>
+                                </div>
+                              );
+                            }.bind(this)
+                          )}
+
+                        {products != null &&
+                          !gridChosen &&
+                          products.map(
+                            function (product, index) {
+                              return (
+                                <div
+                                  className="col-lg-12 col-md-12 col-sm-12 product"
+                                  key={index}
+                                >
+                                  <div className="row productlListRow">
+                                    <div className="col-lg-4 col-md-4 col-sm-6 product">
+                                      <div className="productImageContainer">
+                                        <img
+                                          className="categoryProductImage"
+                                          src={`data:image/png;base64, ${product.image}`}
+                                        />
+                                        <div className="bidProductHoverDiv">
+                                          <div className="bidBtnDiv">
+                                            <Link
+                                              to={{
+                                                pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                                  ":prodId",
+                                                  product.id
+                                                ),
+                                                state: {
+                                                  chosenProduct: product.id,
+                                                  isLoggedIn: isLoggedIn,
+                                                  email: email,
+                                                  token: token,
+                                                },
+                                              }}
+                                            >
+                                              <button className="bidBtn">
+                                                Bid
+                                                <FontAwesomeIcon
+                                                  className="gavelIcon"
+                                                  style={{ color: "#252525" }}
+                                                  icon={faGavel}
+                                                  size={"sm"}
+                                                ></FontAwesomeIcon>
+                                              </button>
+                                            </Link>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="col-lg-8 col-md-8 col-sm-6 product">
+                                      {" "}
+                                      <div className="productNameListViewDiv">
+                                        <Link
+                                          className="productNameLink"
+                                          to={{
+                                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                              ":prodId",
+                                              product.id
+                                            ),
+                                            state: {
+                                              chosenProduct: product.id,
+                                              isLoggedIn: isLoggedIn,
+                                              email: email,
+                                              token: token,
+                                            },
+                                          }}
+                                        >
+                                          {product.name}
+                                        </Link>
+                                      </div>
+                                      <div className="productDescriptionDiv">
+                                        {product.description}
+                                      </div>
+                                      <div className="startsFromListViewDiv">
+                                        {" "}
+                                        <Link
+                                          className="startsFromListView"
+                                          to={{
+                                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                              ":prodId",
+                                              product.id
+                                            ),
+                                            state: {
+                                              chosenProduct: product.id,
+                                              isLoggedIn: isLoggedIn,
+                                              email: email,
+                                              token: token,
+                                            },
+                                          }}
+                                        >
+                                          Starts from ${product.startPriceText}
+                                        </Link>
+                                      </div>
+                                      <div>
+                                        <Link
+                                          to={{
+                                            pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                              ":prodId",
+                                              product.id
+                                            ),
+                                            state: {
+                                              chosenProduct: product.id,
+                                              isLoggedIn: isLoggedIn,
+                                              email: email,
+                                              token: token,
+                                            },
+                                          }}
+                                        >
+                                          <button className="bidBtnListView">
+                                            Bid
+                                            <FontAwesomeIcon
+                                              className="gavelIcon"
+                                              style={{ color: "#ECECEC" }}
+                                              icon={faGavel}
+                                              size={"sm"}
+                                            ></FontAwesomeIcon>
+                                          </button>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               );
                             }.bind(this)

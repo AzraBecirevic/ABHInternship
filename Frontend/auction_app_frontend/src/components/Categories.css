@@ -301,10 +301,92 @@ div.col-lg-4.col-md-6.col-sm-6.product {
   cursor: pointer;
 }
 
+.gridListOptionsDiv {
+  display: flex;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.gridListOption {
+  background: #ffffff;
+  font-family: Lato-Bold;
+  font-size: 16px;
+  color: #252525;
+  letter-spacing: 0.56px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 12px;
+  text-align: center;
+}
+.gridListOptionActive {
+  background: #8367d8;
+  font-family: Lato-Regular;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 0.56px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 12px;
+  text-align: center;
+}
+.gridListOption:hover {
+  cursor: pointer;
+}
+.gridListOptionActive:hover {
+  cursor: pointer;
+}
+
+.startsFromListView {
+  font-family: Lato-Regular;
+  font-size: 24px;
+  color: #8367d8;
+  letter-spacing: 0.84px;
+}
+.startsFromListView:hover {
+  color: #8367d8;
+  text-decoration: none;
+}
+
+.productDescriptionDiv {
+  font-family: Lato-Regular;
+  font-size: 16px;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  line-height: 21px;
+  margin-bottom: 20px;
+}
+.bidBtnListView {
+  background: #ffffff;
+  border: 3px solid #ececec;
+  width: 100px;
+  height: 36px;
+}
+
+.productNameListViewDiv {
+  margin-bottom: 10px;
+}
+.startsFromListViewDiv {
+  margin-bottom: 20px;
+}
+
+@media (min-width: 1250px) and (max-width: 1465px) {
+  .row div.col-lg-12.col-md-12.col-sm-12.product {
+    margin-bottom: 40px;
+  }
+}
+
 @media (min-width: 992px) and (max-width: 1250px) {
   .bidProductHoverDiv {
     padding-top: 41%;
     padding-bottom: 41%;
+  }
+  .row div.col-lg-12.col-md-12.col-sm-12.product {
+    margin-bottom: 40px;
+  }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  .row div.col-lg-12.col-md-12.col-sm-12.product {
+    margin-bottom: 40px;
   }
 }
 
