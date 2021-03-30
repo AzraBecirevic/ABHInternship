@@ -1,6 +1,7 @@
 package com.app.auctionbackend.controller;
 
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
+import com.app.auctionbackend.dtos.CustomerDetailsDto;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
 import com.app.auctionbackend.service.EmailService;
@@ -81,4 +82,12 @@ public class CustomerController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping(value = "/getInfoData/{email}")
+    public ResponseEntity<CustomerDetailsDto> getCustomerInfoData(@PathVariable String email){
+        CustomerDetailsDto customerDetailsDto = customerService.getCustomerInfoData(email);
+        if(customerDetailsDto == null)
+            return new ResponseEntity<CustomerDetailsDto>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(customerDetailsDto, HttpStatus.OK);
+    }
 }

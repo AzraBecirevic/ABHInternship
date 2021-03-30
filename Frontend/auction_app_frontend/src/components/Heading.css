@@ -10,3 +10,24 @@
   color: #252525;
   letter-spacing: 0.63px;
 }
+.pageHeadingTitle.right {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 30px;
+}
+.headingTitleDiv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+div.row.pageHeadingDivRow {
+  background-color: #fafafa;
+  /*height: 100%;*/
+}
+
+@media (max-width: 575.5px) {
+  .pageHeadingTitle.right {
+    padding-right: 0;
+  }
+}

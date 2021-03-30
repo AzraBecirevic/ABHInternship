@@ -1,10 +1,14 @@
 package com.app.auctionbackend.service;
 
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
+import com.app.auctionbackend.dtos.CustomerDetailsDto;
 import com.app.auctionbackend.helper.Helper;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.repo.CustomerRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +27,14 @@ public class CustomerService {
 
     private void checkIfUserAlreadyExist(String username)throws Exception{
         List<Customer> customers = customerRepository.findAll();
-        for (Customer c:customers) {
+        for (Customer c : customers) {
             if (c.getEmail().equals(username))
                 throw  new Exception(EMAIL_ALREADY_EXISTS_MESSAGE);
         }
     }
 
     private  void validateRequiredField(String field, String errorMessage) throws Exception{
-        if(field==null || field.isEmpty())
+        if(field == null || field.isEmpty())
             throw new Exception(errorMessage);
     }
 
@@ -104,5 +108,20 @@ public class CustomerService {
         customerRepository.save(customer);
 
         return true;
+    }
+
+    public CustomerDetailsDto getCustomerInfoData(String email){
+
+        Customer customer = findByEmail(email);
+
+        if(customer == null)
+            return null;
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        CustomerDetailsDto customerDetailsDto = modelMapper.map(customer, CustomerDetailsDto.class);
+
+        return customerDetailsDto;
+
     }
 }

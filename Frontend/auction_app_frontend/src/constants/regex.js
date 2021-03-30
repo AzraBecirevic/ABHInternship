@@ -13,3 +13,5 @@ export const PASSWORD_REGEX = new RegExp(
 export const BID_REGEX = /^-?\d+(\.\d{1,2})?$/;
 
 export const ID_REGEX = /^[0-9]+$/;
+
+export const PHONE_NUMBER_REGEX = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{3,4}$/im;

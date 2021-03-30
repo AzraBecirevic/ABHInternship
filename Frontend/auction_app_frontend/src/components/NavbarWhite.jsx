@@ -11,10 +11,13 @@ import {
   CATEGORIES_ROUTE,
   HOME_ROUTE,
   SINGLE_PRODUCT_ROUTE,
+  USER_PAGE_ROUTE,
 } from "../constants/routes";
 import ProductService from "../services/productService";
 import SearchResult from "./SearchResult";
 import AboutUs from "./AboutUs";
+import UserPageModel from "../model/UserPageModel";
+import UserAccountMenu from "./UserAccountMenu";
 
 export class NavbarWhite extends Component {
   constructor(props) {
@@ -24,6 +27,7 @@ export class NavbarWhite extends Component {
   state = {
     productName: "",
     products: null,
+    userAccountMenuHidden: true,
   };
 
   productService = new ProductService();
@@ -65,8 +69,16 @@ export class NavbarWhite extends Component {
     this.setState({ productName: "" });
   };
 
+  showMyAccountMenu = () => {
+    this.setState({ userAccountMenuHidden: false });
+  };
+
+  closeMyAccountMenu = () => {
+    this.setState({ userAccountMenuHidden: true });
+  };
+
   render() {
-    const { productName, products } = this.state;
+    const { productName, products, userAccountMenuHidden } = this.state;
 
     const { isLoggedIn, email, token } = this.props;
 
@@ -129,6 +141,23 @@ export class NavbarWhite extends Component {
                         >
                           SHOP
                         </Link>
+                        <Link
+                          onMouseOver={this.showMyAccountMenu}
+                          to={{
+                            pathname: USER_PAGE_ROUTE.replace(
+                              ":tab",
+                              "Profile"
+                            ),
+                            state: {
+                              isLoggedIn: this.props.isLoggedIn,
+                              email: this.props.email,
+                              token: this.props.token,
+                            },
+                          }}
+                          className="menuItem"
+                        >
+                          MY ACCOUNT
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -138,6 +167,14 @@ export class NavbarWhite extends Component {
           </div>
           <div className="col-lg-2 col-md-0 col-sm-0"></div>
         </div>
+        <UserAccountMenu
+          hidden={userAccountMenuHidden}
+          hideUserAccountMenu={userAccountMenuHidden}
+          closeUserAccountMenu={this.closeMyAccountMenu}
+          isLoggedIn={isLoggedIn}
+          email={email}
+          token={token}
+        ></UserAccountMenu>
       </div>
     );
   }

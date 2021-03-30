@@ -8,6 +8,9 @@ export const EMAIL_FORMAT_MESSAGE =
 export const EMAIL_REQUIRED_MESSAGE = "Email is required";
 export const FIRST_NAME_REQUIRED_MESSAGE = "First name is required";
 export const LAST_NAME_REQUIRED_MESSAGE = "Last name is required";
+export const PHONE_NUMBER_REQUIRED_MESSAGE = "Phone number is required";
+export const PHONE_NUMBER_FORMAT_MESSAGE =
+  "Expected phone number formats: 000 111 222, 000 111 2222";
 export const BID_PRICE_REQUIRED_MESSAGE = "You need to enter bid price.";
 export const BID_FORMAT_MESSAGE = "Bid can have up to two decimal places";
 export const MAX_ALLOWED_BID_PRICE =
@@ -46,3 +49,5 @@ export const NO_PRODUCTS_IN_PRICE_RANGE =
   "There are no products in this price range.";
 export const GRID_VIEW = "Grid";
 export const LIST_VIEW = "List";
+export const ACCESS_ACOUNT_PAGE = "Please login to acces your account page.";
+export const ACCOUNT_PAGE_TITLE = "My Account";

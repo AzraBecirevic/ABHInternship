@@ -78,6 +78,7 @@ import {
   CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT_VIEW,
   CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_SORT_VIEW,
   CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT_VIEW,
+  USER_PAGE_ROUTE,
 } from "./constants/routes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -93,6 +94,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import ChangePassword from "./components/ChangePassword";
 import NotFound from "./components/NotFound";
 import { TOKEN, EMAIL } from "./constants/auth";
+import UserPage from "./components/UserPage";
 
 export class App extends Component {
   state = {
@@ -655,6 +657,14 @@ export class App extends Component {
                     />
                   )}
                 />
+
+                <Route
+                  path={USER_PAGE_ROUTE}
+                  render={(props) => (
+                    <UserPage {...props} setIsLoading={this.setIsLoading} />
+                  )}
+                />
+
                 <Route path={NOT_FOUND_ROUTE} component={NotFound} />
               </div>
               <Footer openLink={this.openPage} />

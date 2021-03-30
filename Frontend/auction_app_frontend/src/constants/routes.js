@@ -179,3 +179,5 @@ export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME
 export const SINGLE_PRODUCT_ROUTE = "/singleProduct/:prodId";
 export const CHANGE_PASSWORD_ROUTE = "/changePassword";
 export const NOT_FOUND_ROUTE = "/notFound";
+
+export const USER_PAGE_ROUTE = "/userPage/:tab";

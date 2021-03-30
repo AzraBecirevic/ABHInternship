@@ -1134,7 +1134,7 @@ export class Categories extends Component {
                           </div>
                         </div>
                       </div>
-                      <div className="col-lg-8 col-md-6 col-sm-6">
+                      <div className="col-lg-8 col-md-6 col-sm-6 gridList">
                         <div className="gridListOptionsDiv">
                           <div
                             className={

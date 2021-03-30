@@ -16,7 +16,7 @@
 
 .menu {
   display: flex;
-  justify-self: end;
+  /* justify-self: end;*/
   padding: 0;
   align-items: center;
   height: 100%;
@@ -184,6 +184,72 @@ div.col-lg-12.searchProduct:hover {
   padding-right: 0 !important;
 }
 
+/**/
+
+.myAccountMenuRow {
+  background-color: yellow;
+  position: absolute;
+  width: 100%;
+}
+
+div.col-lg-3.col-md-4.col-sm-4.col-xs-12.menuDiv {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.myAccountMenu {
+  background-color: #ffffff;
+  width: fit-content;
+  z-index: 1;
+  position: absolute;
+  border: 1px solid #d8d8d8;
+  padding-top: 20px;
+}
+.myAccountMenuItem {
+  padding-left: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  color: #9b9b9b;
+  font-family: Lato-Regular;
+  letter-spacing: 0.63px;
+}
+.myAccountMenuLoginMessage {
+  padding-left: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  color: #9b9b9b;
+  font-family: Lato-Regular;
+  letter-spacing: 0.63px;
+}
+/*.myAccountMenuItem:hover {
+  color: #8367d8;
+  text-decoration: none;
+  cursor: pointer;
+}*/
+.myAccountMenuItemLink {
+  color: #9b9b9b;
+  font-family: Lato-Regular;
+  letter-spacing: 0.63px;
+}
+.myAccountMenuItemLink:hover {
+  color: #8367d8;
+  text-decoration: none;
+}
+/*
+
+
+div.col-lg-8.col-md-12.col-sm-12.myAccountMenuCol {
+}
+
+.myAccountMenuDiv {
+}
+
+div.col-lg-3.col-md-4.col-sm-4.col-xs-12.menuDiv
+
+*/
+/**/
+
 @media (min-width: 1514px) and (max-width: 1860px) {
   .saerchResultListDiv {
     width: 60%;
@@ -275,16 +341,17 @@ div.col-lg-12.searchProduct:hover {
   }
 
   div.row.secondNavRow div.col-lg-6.col-md-4.col-sm-4.col-xs-12 {
-    order: 2;
+    /* order: 2;*/
     margin-bottom: 10px;
     margin-left: 14px;
   }
 
   div.row.secondNavRow div.col-lg-3.col-md-4.col-sm-4.col-xs-12.menuDiv {
-    order: 1;
+    /* order: 1;*/
     margin-bottom: 15px;
     margin-top: 15px;
     padding-left: 30px;
+    justify-content: center;
   }
   .menu {
     display: block;

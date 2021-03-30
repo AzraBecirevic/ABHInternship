@@ -16,3 +16,5 @@ export const GET_SUBCATEGORIES_BY_CATEGORY_ID_ENDPOINT =
   "/subcategory/byCategory/";
 export const GET_FILTERED_PRODUCTS = "/product/filtered";
 export const GET_PRICE_FILTER_VALUES = "/product/getPriceFilterValues";
+export const GET_CUSTOMER_INFO_DATA = "/customer/getInfoData/";
+export const GET_GENDERS = "/gender";
