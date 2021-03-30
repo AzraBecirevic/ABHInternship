@@ -51,3 +51,8 @@ export const GRID_VIEW = "Grid";
 export const LIST_VIEW = "List";
 export const ACCESS_ACOUNT_PAGE = "Please login to acces your account page.";
 export const ACCOUNT_PAGE_TITLE = "My Account";
+export const SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE =
+  "You have successfully changed your data.";
+
+export const SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE =
+  "You have successfully changed your data. Since you have changed your email, please login with your new email.";

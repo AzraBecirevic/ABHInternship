@@ -8,6 +8,7 @@ import userImage from "../assets/userImage.png";
 import ValidationService from "../services/validationService";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
+  CONNECTION_REFUSED_MESSAGE,
   EMAIL_FORMAT_MESSAGE,
   EMAIL_REQUIRED_MESSAGE,
   FIRST_NAME_REQUIRED_MESSAGE,
@@ -16,6 +17,9 @@ import {
   PHONE_NUMBER_REQUIRED_MESSAGE,
 } from "../constants/messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ToastService from "../services/toastService";
+import AuthService from "../services/authService";
+import { LOGIN_ROUTE } from "../constants/routes";
 
 export class Profile extends Component {
   state = {
@@ -35,11 +39,15 @@ export class Profile extends Component {
     email: "",
     emailErrMess: "",
     profileImage: null,
+    chosenImage: null,
+    imgFile: null,
   };
 
   customerService = new CustomerService();
   genderService = new GenderService();
   validationService = new ValidationService();
+  toastService = new ToastService();
+  authService = new AuthService();
 
   days = [];
 
@@ -100,33 +108,36 @@ export class Profile extends Component {
   };
 
   componentDidMount = async () => {
-    const { token, email } = this.props;
-    const customer = await this.customerService.getCustomerInfoData(
-      email,
-      token
-    );
+    try {
+      const { token, userEmail } = this.props;
+      const customer = await this.customerService.getCustomerInfoData(
+        userEmail,
+        token
+      );
 
-    var genders = await this.genderService.getGenders(token);
+      var genders = await this.genderService.getGenders(token);
 
-    var dateOfBirthMonth = new Date(customer.dateOfBirth).getMonth() + 1;
-    var dateOfBirthYear = new Date(customer.dateOfBirth).getFullYear();
+      this.fillDays(customer.birthDay, customer.birthYear);
+      this.fillYears();
 
-    this.fillDays(dateOfBirthMonth, dateOfBirthYear);
-    this.fillYears();
-
-    this.setState({
-      genderList: genders,
-      firstName: customer.firstName,
-      lastName: customer.lastName,
-      email: customer.email,
-      genderId: customer.genderId,
-      dateOfBirth: customer.dateOfBirth,
-      dateDay: new Date(customer.dateOfBirth).getDate(),
-      dateMonth: dateOfBirthMonth,
-      dateYear: dateOfBirthYear,
-      phoneNumber: customer.phoneNumber,
-      profileImage: customer.profileImage,
-    });
+      this.setState({
+        genderList: genders,
+        firstName: customer.firstName,
+        lastName: customer.lastName,
+        email: customer.email,
+        genderId: customer.genderId,
+        dateOfBirth: customer.dateOfBirth,
+        dateDay: customer.birthDay,
+        dateMonth: customer.birthMonth,
+        dateYear: customer.birthYear,
+        phoneNumber: customer.phoneNumber,
+        profileImage: customer.profileImage,
+        chosenImage: userImage,
+        imgFile: null,
+      });
+    } catch (error) {
+      this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
+    }
   };
 
   onChange = (e) => {
@@ -210,7 +221,7 @@ export class Profile extends Component {
     return formIsValid;
   };
 
-  saveInfo = () => {
+  saveInfo = async () => {
     this.setState({
       firstNameErrMess: "",
       lastNameErrMess: "",
@@ -220,9 +231,78 @@ export class Profile extends Component {
     });
 
     if (this.validateData()) {
+      try {
+        const { token, userEmail } = this.props;
+        const {
+          firstName,
+          lastName,
+          genderId,
+          phoneNumber,
+          email,
+          dateDay,
+          dateMonth,
+          dateYear,
+          imgFile,
+          chosenImage,
+          profileImage,
+        } = this.state;
+
+        if (chosenImage !== userImage && profileImage == null) {
+          await this.customerService.upadateCustomerPhoto(
+            userEmail,
+            token,
+            imgFile,
+            this.showErrorMessage,
+            this.showSuccesMessage
+          );
+        }
+
+        var customer = await this.customerService.updateCustomer(
+          userEmail,
+          token,
+          firstName,
+          lastName,
+          email,
+          genderId,
+          phoneNumber,
+          dateDay,
+          dateMonth,
+          dateYear,
+          imgFile,
+          this.showSuccesMessage,
+          this.showErrorMessage
+        );
+
+        if (customer != null && userEmail !== email) {
+          this.toastService.showSuccessToast();
+          this.authService.logout();
+          this.props.history.push(LOGIN_ROUTE);
+        }
+      } catch (error) {
+        this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
+      }
     }
   };
 
+  showSuccesMessage = (successMessage) => {
+    this.toastService.showSuccessToast(successMessage);
+  };
+
+  showErrorMessage = (errorMessage) => {
+    this.toastService.showErrorToast(errorMessage);
+  };
+
+  uploadPhoto = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const img = event.target.files[0];
+
+      this.setState({
+        imgFile: img,
+        profileImage: null,
+        chosenImage: URL.createObjectURL(img),
+      });
+    }
+  };
   render() {
     const {
       firstName,
@@ -236,6 +316,7 @@ export class Profile extends Component {
       email,
       emailErrMess,
       profileImage,
+      chosenImage,
     } = this.state;
 
     return (
@@ -251,9 +332,18 @@ export class Profile extends Component {
                 />
               )}
               {profileImage == null && (
-                <img className="profileImage" src={userImage} />
+                <img className="profileImage" src={chosenImage} />
               )}
-              <button className="userChangeImgBtn">CHANGE PHOTO</button>
+              <label className="userChangeImgBtn">
+                {" "}
+                <input
+                  hidden={true}
+                  name="profileImage"
+                  type="file"
+                  onChange={this.uploadPhoto}
+                />
+                CHANGE PHOTO
+              </label>
             </div>
             <div className="col-lg-7 profileDataDiv">
               <form onSubmit={this.onSubmit}>
@@ -401,6 +491,15 @@ export class Profile extends Component {
         </div>
         <div className="userInfoDiv">
           <div className="userInfoDivHeading">OPTIONAL</div>
+          <div className="row userInfoRow">
+            <div className="col-lg-3 profileImageDiv"></div>
+            <div className="col-lg-7 profileDataDiv">
+              <div className="formDataGroup">
+                <label className="formLabel">Country</label>
+              </div>
+            </div>
+            <div className="col-lg-2 profileDataDiv"></div>
+          </div>
         </div>
         <div className="saveInfoFormDiv">
           {" "}

@@ -113,6 +113,8 @@ public class Seed {
         customer4.setGender(female);
         customerRepository.save(customer4);
 
+        Image customer5Image = getImageData("src/main/resources/images/womenTShirt.jpg");
+
         Customer customer5 = new Customer();
         customer5.setFirstName("Azra");
         customer5.setLastName("Becirevic");
@@ -122,6 +124,7 @@ public class Seed {
         customer5.setPhoneNumber("033 111 115");
         customer5.setDateOfBirth(LocalDateTime.of(2000,2,2,0,0));
         customer5.setGender(female);
+        customer5.setProfileImage(customer5Image.getImage());
         customerRepository.save(customer5);
 
         LocalDateTime currentDate = LocalDateTime.now();

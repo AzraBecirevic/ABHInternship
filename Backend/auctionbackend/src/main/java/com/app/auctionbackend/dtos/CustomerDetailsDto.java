@@ -1,5 +1,6 @@
 package com.app.auctionbackend.dtos;
 
+import java.io.File;
 import java.time.LocalDateTime;
 
 public class CustomerDetailsDto {
@@ -9,8 +10,11 @@ public class CustomerDetailsDto {
     private LocalDateTime dateOfBirth;
     private String phoneNumber;
     private String profileImage;
-   // private Gender gender;
     private Integer genderId;
+    private Integer birthDay;
+    private Integer birthMonth;
+    private Integer birthYear;
+    private File imgFile;
 
     public String getFirstName() {
         return firstName;
@@ -66,5 +70,37 @@ public class CustomerDetailsDto {
 
     public void setGenderId(Integer genderId) {
         this.genderId = genderId;
+    }
+
+    public Integer getBirthDay() {
+        return birthDay;
+    }
+
+    public Integer getBirthMonth() {
+        return birthMonth;
+    }
+
+    public Integer getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthDay(Integer birthDay) {
+        this.birthDay = birthDay;
+    }
+
+    public void setBirthMonth(Integer birthMonth) {
+        this.birthMonth = birthMonth;
+    }
+
+    public void setBirthYear(Integer birthYear) {
+        this.birthYear = birthYear;
+    }
+
+    public File getImgFile() {
+        return imgFile;
+    }
+
+    public void setImgFile(File imgFile) {
+        this.imgFile = imgFile;
     }
 }

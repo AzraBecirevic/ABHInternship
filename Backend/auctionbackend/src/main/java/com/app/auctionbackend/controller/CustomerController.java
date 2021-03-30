@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -90,4 +91,37 @@ public class CustomerController {
 
         return new ResponseEntity<>(customerDetailsDto, HttpStatus.OK);
     }
+
+    @PostMapping(value = "/update/{email}")
+    public ResponseEntity updateCustomer(@PathVariable String email, @RequestBody CustomerDetailsDto customerData){
+        try{
+            CustomerDetailsDto updatedCustomer = customerService.updateCustomer(email, customerData);
+            if(updatedCustomer != null){
+                return new ResponseEntity(updatedCustomer,HttpStatus.OK);
+            }
+        }
+        catch (Exception ex){
+            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(new Message("Something went wrong"), HttpStatus.BAD_REQUEST);
+
+    }
+
+    @PostMapping(value = "/updatePhoto/{email}")
+    public ResponseEntity updateCustomerPhoto(@PathVariable String email, @RequestParam MultipartFile imgFile){
+        try{
+            CustomerDetailsDto updatedCustomer = customerService.updateCustomerPhoto(email, imgFile);
+            if(updatedCustomer != null){
+                return new ResponseEntity(updatedCustomer,HttpStatus.OK);
+            }
+        }
+        catch (Exception ex){
+            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(new Message("Image can not be changed"), HttpStatus.BAD_REQUEST);
+
+    }
+
 }

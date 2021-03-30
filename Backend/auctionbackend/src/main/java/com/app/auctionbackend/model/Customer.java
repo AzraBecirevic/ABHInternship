@@ -20,6 +20,7 @@ public class Customer {
     private LocalDateTime dateOfBirth;
     private String phoneNumber;
     private Boolean active;
+    @Column(name = "ProfileImage", length = 10485760)
     private String profileImage;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)

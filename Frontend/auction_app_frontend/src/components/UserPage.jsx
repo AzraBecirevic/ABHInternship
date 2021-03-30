@@ -15,6 +15,7 @@ import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { USER_PAGE_ROUTE, USER_PAGE_ROUTE_TAB } from "../constants/routes";
 import Profile from "./Profile";
+import { Route } from "react-router";
 
 export class UserPage extends Component {
   state = {
@@ -28,15 +29,8 @@ export class UserPage extends Component {
 
   checkStorageLoginData() {
     if (localStorage.getItem(TOKEN) != null) {
-      /*isLoggedIn = true;
-      email = localStorage.getItem(EMAIL);
-      token = localStorage.getItem(TOKEN);*/
       return true;
     } else if (sessionStorage.getItem(TOKEN) != null) {
-      /*isLoggedIn = true;
-      email = sessionStorage.getItem(EMAIL);
-      token = sessionStorage.getItem(TOKEN);
-      chosenCategory = 0;*/
       return true;
     }
     return false;
@@ -155,7 +149,16 @@ export class UserPage extends Component {
                     </div>
                     <div>
                       {tabToShow == "Profile" && (
-                        <Profile email={email} token={token}></Profile>
+                        <Route
+                          path=""
+                          render={(props) => (
+                            <Profile
+                              {...props}
+                              userEmail={email}
+                              token={token}
+                            />
+                          )}
+                        />
                       )}
                     </div>
                   </div>

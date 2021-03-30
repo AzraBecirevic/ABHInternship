@@ -35,4 +35,13 @@ public class Helper {
            return true;
        return false;
    }
+   public static boolean isPhoneNumberFormatValid(String phoneNumber){
+       String phoneNumberRegex = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{3,4}$";
+
+       Pattern pat = Pattern.compile(phoneNumberRegex);
+       if (phoneNumber == null)
+           return false;
+       return pat.matcher(phoneNumber).matches();
+   }
+
 }
