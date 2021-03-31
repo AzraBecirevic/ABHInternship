@@ -46,8 +46,8 @@ export class Chart extends Component {
     this.priceData = await this.productService.getPriceFilterData();
 
     var chartDataArray = [];
-    var min = this.priceData.minPrice;
-    var max = this.priceData.maxPrice;
+    var min = this.priceData == null ? 0 : this.priceData.minPrice;
+    var max = this.priceData == null ? 0 : this.priceData.maxPrice;
     var incrementValue = 20;
 
     while (min < max) {
@@ -55,7 +55,8 @@ export class Chart extends Component {
       chartDataArray.push({ groupTopValue: min, productsArray: [] });
     }
 
-    var lastGroupTopValue = this.priceData.minPrice - 1;
+    var lastGroupTopValue =
+      this.priceData == null ? 0 : this.priceData.minPrice - 1;
     for (let i = 0; i < chartDataArray.length; i++) {
       var groupTopValue = chartDataArray[i].groupTopValue;
 
