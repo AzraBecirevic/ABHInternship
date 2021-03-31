@@ -2,6 +2,7 @@ package com.app.auctionbackend.service;
 
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
 import com.app.auctionbackend.dtos.CustomerDetailsDto;
+import com.app.auctionbackend.dtos.DeliveryDataDto;
 import com.app.auctionbackend.helper.Helper;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.model.Gender;
@@ -144,7 +145,6 @@ public class CustomerService {
     }
 
     public CustomerDetailsDto getCustomerInfoData(String email){
-
         Customer customer = findByEmail(email);
 
         if(customer == null)
@@ -163,13 +163,12 @@ public class CustomerService {
         customerDetailsDto.setProfileImage(customer.getProfileImage());
 
         return customerDetailsDto;
-
     }
 
     private void checkIfUserExist(String email)throws Exception{
         Customer customer = customerRepository.findByEmail(email);
         if(customer == null)
-            throw  new Exception(USER_DOES_NOT_EXIST);
+            throw new Exception(USER_DOES_NOT_EXIST);
     }
 
     public CustomerDetailsDto updateCustomer(String email,CustomerDetailsDto customerData) throws Exception{
@@ -212,38 +211,52 @@ public class CustomerService {
         return getCustomerInfoData(customer.getEmail());
     }
 
-    private File convertToFile(MultipartFile photo){
-        try{
-            File convFile = new File( photo.getOriginalFilename() );
-            FileOutputStream fos = new FileOutputStream( convFile );
-            fos.write(photo.getBytes() );
-            fos.close();
-            return convFile;
-        }
-        catch (Exception ex){return  null;}
-    }
     public CustomerDetailsDto updateCustomerPhoto(String email, MultipartFile photo){
-
         Customer customer = customerRepository.findByEmail(email);
-        if(customer==null)
+        if(customer == null)
             return null;
 
-        File imgFile = convertToFile(photo);
-
-
         try{
-            byte[] fileContent = FileUtils.readFileToByteArray( imgFile );
+            byte[] fileContent = photo.getBytes();
             String encodedString = Base64.getEncoder().encodeToString(fileContent);
 
             customer.setProfileImage(encodedString);
-
         }
-        catch (Exception exception){
-
-        }
+        catch (Exception exception){}
 
         customerRepository.save(customer);
 
         return getCustomerInfoData(customer.getEmail());
+    }
+
+   /*public DeliveryDataDto saveCustomerDeliveryData(DeliveryDataDto deliveryDataDto, String email){
+        Customer customer = findByEmail(email);
+
+        if(customer == null || deliveryDataDto==null)
+            return null;
+    }*/
+
+    public DeliveryDataDto getCustomerDeliveryData(String email){
+        Customer customer = findByEmail(email);
+
+        if(customer == null)
+            return null;
+
+        DeliveryDataDto deliveryDataDto = new DeliveryDataDto();
+
+        if(customer.getDeliveryAddress() != null){
+            try {
+                deliveryDataDto.setStreet(customer.getDeliveryAddress().getStreet());
+                deliveryDataDto.setZipCode(customer.getDeliveryAddress().getZipCode().getZipCode());
+                deliveryDataDto.setCity(customer.getDeliveryAddress().getCity().getName());
+                deliveryDataDto.setRegion(customer.getDeliveryAddress().getCity().getState().getName());
+                deliveryDataDto.setCountry(customer.getDeliveryAddress().getCity().getState().getCountry().getName());
+            }
+           catch (Exception ex){
+                return null;
+           }
+            return deliveryDataDto;
+        }
+       return null;
     }
 }

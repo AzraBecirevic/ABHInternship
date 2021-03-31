@@ -1,5 +1,11 @@
 import { parseJSON } from "jquery";
-import { EMAIL_REGEX, PHONE_NUMBER_REGEX } from "../constants/regex";
+import {
+  CITY_REGEX,
+  EMAIL_REGEX,
+  PHONE_NUMBER_REGEX,
+  STREET_REGEX,
+  ZIP_CODE_REGEX,
+} from "../constants/regex";
 
 class ValidationService {
   validateFirstName = (firstName) => {
@@ -55,5 +61,75 @@ class ValidationService {
     }
     return true;
   }
+
+  validateCity = (city) => {
+    if (city === "") {
+      return false;
+    }
+    return true;
+  };
+
+  validateCityFormat = (city) => {
+    if (city !== "" && this.validateFormatCity(city) == false) {
+      return false;
+    }
+    return true;
+  };
+  validateFormatCity(city) {
+    const re = CITY_REGEX;
+    return re.test(String(city).toLowerCase());
+  }
+
+  validateZipCode = (zipCode) => {
+    if (zipCode === "") {
+      return false;
+    }
+    return true;
+  };
+
+  validateZipCodeFormat = (zipCode) => {
+    if (zipCode !== "" && this.validateFormatZipCode(zipCode) == false) {
+      return false;
+    }
+    return true;
+  };
+
+  validateFormatZipCode(zipCode) {
+    const re = ZIP_CODE_REGEX;
+    return re.test(String(zipCode).toLowerCase());
+  }
+
+  validateStreet = (street) => {
+    if (street === "") {
+      return false;
+    }
+    return true;
+  };
+
+  validateStreetFormat = (street) => {
+    if (street !== "" && this.validateFormatStreet(street) == false) {
+      return false;
+    }
+    return true;
+  };
+
+  validateFormatStreet(street) {
+    const re = STREET_REGEX;
+    return re.test(String(street).toLowerCase());
+  }
+
+  validateCountry = (country) => {
+    if (country === "") {
+      return false;
+    }
+    return true;
+  };
+
+  validateRegion = (region) => {
+    if (region === "") {
+      return false;
+    }
+    return true;
+  };
 }
 export default ValidationService;

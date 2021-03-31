@@ -31,6 +31,16 @@
 .selectGenderDiv {
   width: 50% !important;
 }
+.cityInput {
+  width: 48%;
+}
+
+.cityZipCodeDiv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .selectMonthYearDiv {
   width: 30% !important;
   margin-right: 10px;
@@ -48,6 +58,16 @@
     no-repeat right;
   background-position-x: 95%;
 }
+.selectDataDropdown {
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
+    no-repeat right;
+  background-position-x: 97%;
+}
+
 .profileImage {
   width: 100%;
   margin-bottom: 10px;

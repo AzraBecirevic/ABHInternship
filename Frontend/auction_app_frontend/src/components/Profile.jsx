@@ -8,18 +8,31 @@ import userImage from "../assets/userImage.png";
 import ValidationService from "../services/validationService";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
+  CITY_FORMAT_MESSAGE,
+  CITY_REQUIRED_MESSAGE,
   CONNECTION_REFUSED_MESSAGE,
+  COUNTRY_REQUIRED_MESSAGE,
   EMAIL_FORMAT_MESSAGE,
   EMAIL_REQUIRED_MESSAGE,
   FIRST_NAME_REQUIRED_MESSAGE,
   LAST_NAME_REQUIRED_MESSAGE,
   PHONE_NUMBER_FORMAT_MESSAGE,
   PHONE_NUMBER_REQUIRED_MESSAGE,
+  REGION_REQUIRED_MESSAGE,
+  STREET_FORMAT_MESSAGE,
+  STREET_REQUIRED_MESSAGE,
+  ZIP_CODE_FORMAT_MESSAGE,
+  ZIP_CODE_REQUIRED_MESSAGE,
 } from "../constants/messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ToastService from "../services/toastService";
 import AuthService from "../services/authService";
 import { LOGIN_ROUTE } from "../constants/routes";
+import {
+  CountryDropdown,
+  RegionDropdown,
+  CountryRegionData,
+} from "react-country-region-selector";
 
 export class Profile extends Component {
   state = {
@@ -41,6 +54,16 @@ export class Profile extends Component {
     profileImage: null,
     chosenImage: null,
     imgFile: null,
+    country: "",
+    region: "",
+    city: "",
+    zipCode: "",
+    street: "",
+    cityErrMess: "",
+    zipCodeErrMess: "",
+    streetErrMess: "",
+    countryErrMess: "",
+    regionErrMess: "",
   };
 
   customerService = new CustomerService();
@@ -199,6 +222,113 @@ export class Profile extends Component {
     return true;
   };
 
+  validateZipCode = () => {
+    if (this.validationService.validateZipCode(this.state.zipCode) == false) {
+      this.setState({ zipCodeErrMess: ZIP_CODE_REQUIRED_MESSAGE });
+      return false;
+    }
+
+    if (
+      this.validationService.validateZipCodeFormat(this.state.zipCode) == false
+    ) {
+      this.setState({
+        zipCodeErrMess: ZIP_CODE_FORMAT_MESSAGE,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  validateCity = () => {
+    if (this.validationService.validateCity(this.state.city) == false) {
+      this.setState({ cityErrMess: CITY_REQUIRED_MESSAGE });
+      return false;
+    }
+
+    if (this.validationService.validateCityFormat(this.state.city) == false) {
+      this.setState({
+        cityErrMess: CITY_FORMAT_MESSAGE,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  validateCountry = () => {
+    if (this.validationService.validateCountry(this.state.country) == false) {
+      this.setState({ countryErrMess: COUNTRY_REQUIRED_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateRegion = () => {
+    if (this.validationService.validateRegion(this.state.region) == false) {
+      this.setState({ regionErrMess: REGION_REQUIRED_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateStreet = () => {
+    if (this.validationService.validateStreet(this.state.street) == false) {
+      this.setState({ streetErrMess: STREET_REQUIRED_MESSAGE });
+      return false;
+    }
+
+    if (
+      this.validationService.validateStreetFormat(this.state.street) == false
+    ) {
+      this.setState({
+        streetErrMess: STREET_FORMAT_MESSAGE,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  validateDeliveryAddress() {
+    var deliveryAddressFormIsValid = true;
+
+    if (this.validateCity() === false) {
+      deliveryAddressFormIsValid = false;
+    }
+
+    if (this.validateZipCode() === false) {
+      deliveryAddressFormIsValid = false;
+    }
+
+    if (this.validateStreet() === false) {
+      deliveryAddressFormIsValid = false;
+    }
+
+    if (this.validateCountry() == false) {
+      deliveryAddressFormIsValid = false;
+    }
+
+    if (this.validateRegion() == false) {
+      deliveryAddressFormIsValid = false;
+    }
+
+    return deliveryAddressFormIsValid;
+  }
+  isDeliveryFormChanged = () => {
+    const { country, region, city, zipCode, street } = this.state;
+    if (
+      country.length > 0 ||
+      region.length > 0 ||
+      city.length > 0 ||
+      zipCode.length > 0 ||
+      street.length > 0
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   validateData = () => {
     var formIsValid = true;
 
@@ -217,6 +347,11 @@ export class Profile extends Component {
     if (this.validatePhone() === false) {
       formIsValid = false;
     }
+    if (this.isDeliveryFormChanged()) {
+      if (this.validateDeliveryAddress() === false) {
+        formIsValid = false;
+      }
+    }
 
     return formIsValid;
   };
@@ -228,6 +363,11 @@ export class Profile extends Component {
       emailErrMess: "",
       dateOfBirthErrMess: "",
       phoneNumberErrMess: "",
+      cityErrMess: "",
+      zipCodeErrMess: "",
+      streetErrMess: "",
+      countryErrMess: "",
+      regionErrMess: "",
     });
 
     if (this.validateData()) {
@@ -303,6 +443,21 @@ export class Profile extends Component {
       });
     }
   };
+
+  selectCountry(val) {
+    if (val == "") {
+      this.setState({ region: "" });
+    }
+    this.setState({ country: val });
+  }
+
+  selectRegion(val) {
+    if (val == "") {
+      this.setState({ country: "" });
+    }
+    this.setState({ region: val });
+  }
+
   render() {
     const {
       firstName,
@@ -317,6 +472,16 @@ export class Profile extends Component {
       emailErrMess,
       profileImage,
       chosenImage,
+      country,
+      region,
+      city,
+      zipCode,
+      street,
+      cityErrMess,
+      zipCodeErrMess,
+      streetErrMess,
+      countryErrMess,
+      regionErrMess,
     } = this.state;
 
     return (
@@ -496,6 +661,74 @@ export class Profile extends Component {
             <div className="col-lg-7 profileDataDiv">
               <div className="formDataGroup">
                 <label className="formLabel">Country</label>
+
+                <CountryDropdown
+                  className="form-control selectDataDropdown"
+                  value={country}
+                  onChange={(val) => this.selectCountry(val)}
+                />
+                <small className="errorMessage" hidden={countryErrMess === ""}>
+                  {countryErrMess}
+                </small>
+              </div>
+              <div className="formDataGroup">
+                <label className="formLabel">State</label>
+                <RegionDropdown
+                  className="form-control selectDataDropdown"
+                  country={country}
+                  value={region}
+                  onChange={(val) => this.selectRegion(val)}
+                />
+                <small className="errorMessage" hidden={regionErrMess === ""}>
+                  {regionErrMess}
+                </small>
+              </div>
+
+              <div className="formDataGroup">
+                <div className="cityZipCodeDiv">
+                  <div className="cityInput">
+                    <label className="formLabel">City</label>
+                    <input
+                      type="text"
+                      name="city"
+                      className="form-control"
+                      value={city}
+                      onChange={this.onChange}
+                    />
+                    <small className="errorMessage" hidden={cityErrMess === ""}>
+                      {cityErrMess}
+                    </small>
+                  </div>
+                  <div className="cityInput">
+                    <label className="formLabel">Zip Code</label>
+                    <input
+                      type="text"
+                      name="zipCode"
+                      className="form-control"
+                      value={zipCode}
+                      onChange={this.onChange}
+                    />
+                    <small
+                      className="errorMessage"
+                      hidden={zipCodeErrMess === ""}
+                    >
+                      {zipCodeErrMess}
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div className="formDataGroup">
+                <label className="formLabel">Street</label>
+                <input
+                  type="text"
+                  name="street"
+                  className="form-control"
+                  value={street}
+                  onChange={this.onChange}
+                />
+                <small className="errorMessage" hidden={streetErrMess === ""}>
+                  {streetErrMess}
+                </small>
               </div>
             </div>
             <div className="col-lg-2 profileDataDiv"></div>

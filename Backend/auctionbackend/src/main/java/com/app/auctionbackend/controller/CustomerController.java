@@ -2,6 +2,7 @@ package com.app.auctionbackend.controller;
 
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
 import com.app.auctionbackend.dtos.CustomerDetailsDto;
+import com.app.auctionbackend.dtos.DeliveryDataDto;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
 import com.app.auctionbackend.service.EmailService;
@@ -121,7 +122,15 @@ public class CustomerController {
         }
 
         return new ResponseEntity<>(new Message("Image can not be changed"), HttpStatus.BAD_REQUEST);
+    }
 
+    @GetMapping(value = "/getDeliveryData/{email}")
+    public ResponseEntity<DeliveryDataDto> getCustomerDeliveryData(@PathVariable String email){
+        DeliveryDataDto deliveryDataDto = customerService.getCustomerDeliveryData(email);
+        if(deliveryDataDto == null)
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<DeliveryDataDto>(deliveryDataDto, HttpStatus.OK);
     }
 
 }
