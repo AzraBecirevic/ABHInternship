@@ -1,5 +1,7 @@
 package com.app.auctionbackend.dtos;
 
+import java.time.LocalDateTime;
+
 public class ProductDto {
 
     private Integer id;
@@ -7,6 +9,9 @@ public class ProductDto {
     private double startPrice;
     private String image;
     private String startPriceText;
+    private LocalDateTime endDate;
+    private LocalDateTime createdOn;
+    private String description;
 
     public Integer getId() {
         return id;
@@ -46,5 +51,29 @@ public class ProductDto {
 
     public void setStartPriceText(String startPriceText) {
         this.startPriceText = startPriceText;
+    }
+
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -11,11 +11,10 @@ public class ProductDetailsDto {
     private String description;
     private double highestBid;
     private Integer numberOfBids=0;
-    private long timeLeft=0; //days
+    private long timeLeft=0;
     private List<ImageDto> imageList = new ArrayList<>();
     private String startPriceText;
     private String highestBidText;
-
 
     public Integer getId() {
         return id;
@@ -96,4 +95,5 @@ public class ProductDetailsDto {
     public void setHighestBidText(String highestBidText) {
         this.highestBidText = highestBidText;
     }
+
 }

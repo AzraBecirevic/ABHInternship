@@ -33,3 +33,16 @@ export const PASSWORD_RESET_MAIL_FAILED_SENT_MESSAGE =
   "There is no user associated with this account.";
 export const PAGE_NOT_FOUND_MESSAGE = "Ooops! Looks like the page is Not Found";
 export const GO_BACK_MESSAGE = "GO BACK";
+export const START_CHOSING_FILTERS =
+  "Start by chosing a category or subcategory";
+export const NO_MORE_PRODUCTS_MESSAGE = "There are no more products to show.";
+export const NO_PRODUCTS_IN_CATEGORY_MESSAGE =
+  "There are no products in this category.";
+export const LOADING_PRODUCTS_MESSAGE = "Loading...";
+export const PRICE_FILTER_HEADING = "FILTER BY PRICE";
+export const CATEGORY_MENU_HEADING = "PRODUCT CATEGORIES";
+export const AVERAGE_PRICE_MESSAGE = "The average price is $";
+export const NO_PRODUCTS_IN_PRICE_RANGE =
+  "There are no products in this price range.";
+export const GRID_VIEW = "Grid";
+export const LIST_VIEW = "List";
