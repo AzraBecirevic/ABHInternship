@@ -1,7 +1,9 @@
 import { faPhabricator } from "@fortawesome/free-brands-svg-icons";
 import { ENDPOINT } from "../constants/auth";
 import {
+  GET_CUSTOMER_DELIVERY_DATA_ENDPOINT,
   GET_CUSTOMER_INFO_DATA,
+  UPDATE_CUSTOMER_DELIVERY_DATA_ENDPOINT,
   UPDATE_CUSTOMER_ENDPOINT,
   UPDATE_CUSTOMER_PHOTO_ENDPOINT,
 } from "../constants/endpoints";
@@ -16,7 +18,14 @@ class CustomerService {
     return await this.getData(GET_CUSTOMER_INFO_DATA + email, token);
   }
 
-  async upadateCustomerPhoto(email, token, imgFile, showError, showSuccess) {
+  async getCustomerDeliveryData(email, token) {
+    return await this.getData(
+      GET_CUSTOMER_DELIVERY_DATA_ENDPOINT + email,
+      token
+    );
+  }
+
+  async upadateCustomerPhoto(email, token, imgFile, showError) {
     const formData = new FormData();
     formData.append("imgFile", imgFile);
 
@@ -49,8 +58,61 @@ class CustomerService {
       try {
         var data = await response.json();
         showError(data.text);
+        return null;
       } catch (err) {}
-      return false;
+      return null;
+    }
+  }
+
+  async updateCustomerDeliveryData(
+    email,
+    token,
+    country,
+    region,
+    city,
+    zipCode,
+    street,
+    showError
+  ) {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        street: street,
+        zipCode: zipCode,
+        city: city,
+        region: region,
+        country: country,
+      }),
+    };
+
+    const response = await fetch(
+      ENDPOINT + UPDATE_CUSTOMER_DELIVERY_DATA_ENDPOINT + email,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+
+    if (!response) {
+      throw response;
+    }
+    if (response.status === 200) {
+      var data = await response.json();
+      return data;
+    } else {
+      try {
+        var data = await response.json();
+        showError(data.text);
+        return null;
+      } catch (err) {}
+      return null;
     }
   }
 
@@ -65,8 +127,6 @@ class CustomerService {
     birthDay,
     birthMonth,
     birthYear,
-    imgFile,
-    showSuccess,
     showError
   ) {
     const requestOptions = {
@@ -101,22 +161,21 @@ class CustomerService {
     if (!response) {
       throw response;
     }
-    if (response.status === 200) {
-      if (email != newEmail) {
-        showSuccess(SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE);
-      } else {
-        showSuccess(SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE);
-      }
 
+    if (response.status === 200) {
       var data = await response.json();
       return data;
     } else {
       try {
         var data = await response.json();
-        showError(data.text);
+
+        showError(data.text); // ?
+
         return null;
-      } catch (err) {}
-      return false;
+      } catch (err) {
+        //showError("greska"); //
+      }
+      return null;
     }
   }
 
@@ -142,7 +201,6 @@ class CustomerService {
 
     if (response.status === 200) {
       var data = await response.json();
-
       return data;
     } else {
       return null;

@@ -133,4 +133,21 @@ public class CustomerController {
         return new ResponseEntity<DeliveryDataDto>(deliveryDataDto, HttpStatus.OK);
     }
 
+
+
+    @PostMapping(value = "/saveDeliveryData/{email}")
+    public ResponseEntity saveCustomerDeliveryData(@PathVariable String email, @RequestBody DeliveryDataDto deliveryDataDto){
+        try{
+            DeliveryDataDto savedDeliveryData = customerService.saveCustomerDeliveryData(deliveryDataDto, email);
+            if(savedDeliveryData != null){
+                return new ResponseEntity(savedDeliveryData,HttpStatus.OK);
+            }
+        }
+        catch (Exception ex){
+            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(new Message("Delivery data can not be saved"), HttpStatus.BAD_REQUEST);
+    }
+
 }

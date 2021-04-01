@@ -20,3 +20,6 @@ export const GET_CUSTOMER_INFO_DATA = "/customer/getInfoData/";
 export const GET_GENDERS = "/gender";
 export const UPDATE_CUSTOMER_ENDPOINT = "/customer/update/";
 export const UPDATE_CUSTOMER_PHOTO_ENDPOINT = "/customer/updatePhoto/";
+export const UPDATE_CUSTOMER_DELIVERY_DATA_ENDPOINT =
+  "/customer/saveDeliveryData/";
+export const GET_CUSTOMER_DELIVERY_DATA_ENDPOINT = "/customer/getDeliveryData/";

@@ -21,6 +21,8 @@ import {
   REGION_REQUIRED_MESSAGE,
   STREET_FORMAT_MESSAGE,
   STREET_REQUIRED_MESSAGE,
+  SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE,
+  SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE,
   ZIP_CODE_FORMAT_MESSAGE,
   ZIP_CODE_REQUIRED_MESSAGE,
 } from "../constants/messages";
@@ -140,6 +142,11 @@ export class Profile extends Component {
 
       var genders = await this.genderService.getGenders(token);
 
+      var deliveryData = await this.customerService.getCustomerDeliveryData(
+        userEmail,
+        token
+      );
+
       this.fillDays(customer.birthDay, customer.birthYear);
       this.fillYears();
 
@@ -158,6 +165,17 @@ export class Profile extends Component {
         chosenImage: userImage,
         imgFile: null,
       });
+
+      /// try, catch, message ??
+      if (deliveryData !== null) {
+        this.setState({
+          country: deliveryData.country,
+          region: deliveryData.region,
+          city: deliveryData.city,
+          zipCode: deliveryData.zipCode,
+          street: deliveryData.street,
+        });
+      }
     } catch (error) {
       this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
@@ -371,32 +389,59 @@ export class Profile extends Component {
     });
 
     if (this.validateData()) {
-      try {
-        const { token, userEmail } = this.props;
-        const {
-          firstName,
-          lastName,
-          genderId,
-          phoneNumber,
-          email,
-          dateDay,
-          dateMonth,
-          dateYear,
-          imgFile,
-          chosenImage,
-          profileImage,
-        } = this.state;
+      //try {
 
-        if (chosenImage !== userImage && profileImage == null) {
-          await this.customerService.upadateCustomerPhoto(
-            userEmail,
-            token,
-            imgFile,
-            this.showErrorMessage,
-            this.showSuccesMessage
-          );
+      const { token, userEmail } = this.props;
+      const {
+        firstName,
+        lastName,
+        genderId,
+        phoneNumber,
+        email,
+        dateDay,
+        dateMonth,
+        dateYear,
+        imgFile,
+        chosenImage,
+        profileImage,
+        country,
+        region,
+        city,
+        zipCode,
+        street,
+      } = this.state;
+
+      var showSucces = true;
+
+      if (this.isDeliveryFormChanged()) {
+        var deliveryData = await this.customerService.updateCustomerDeliveryData(
+          userEmail,
+          token,
+          country,
+          region,
+          city,
+          zipCode,
+          street,
+          this.showErrorMessage
+        );
+        if (deliveryData == null) {
+          showSucces = false;
         }
+      }
 
+      if (showSucces && chosenImage !== userImage && profileImage == null) {
+        var photo = await this.customerService.upadateCustomerPhoto(
+          userEmail,
+          token,
+          imgFile,
+          this.showErrorMessage
+        );
+        if (photo == null) {
+          showSucces = false;
+        }
+      }
+
+      if (showSucces) {
         var customer = await this.customerService.updateCustomer(
           userEmail,
           token,
@@ -409,18 +454,26 @@ export class Profile extends Component {
           dateMonth,
           dateYear,
           imgFile,
-          this.showSuccesMessage,
           this.showErrorMessage
         );
 
-        if (customer != null && userEmail !== email) {
-          this.toastService.showSuccessToast();
-          this.authService.logout();
-          this.props.history.push(LOGIN_ROUTE);
+        if (customer == null) {
+          showSucces = false;
         }
-      } catch (error) {
-        this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
       }
+
+      if (showSucces && userEmail !== email) {
+        this.toastService.showSuccessToast(
+          SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE
+        );
+        this.authService.logout();
+        this.props.history.push(LOGIN_ROUTE);
+      } else if (showSucces) {
+        this.toastService.showSuccessToast(SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE);
+      }
+      //  } catch (error) {
+      //   this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
+      // }
     }
   };
 

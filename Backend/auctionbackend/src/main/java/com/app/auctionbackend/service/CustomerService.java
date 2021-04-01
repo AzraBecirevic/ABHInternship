@@ -4,8 +4,7 @@ import com.app.auctionbackend.dtos.CustomerChangePassDto;
 import com.app.auctionbackend.dtos.CustomerDetailsDto;
 import com.app.auctionbackend.dtos.DeliveryDataDto;
 import com.app.auctionbackend.helper.Helper;
-import com.app.auctionbackend.model.Customer;
-import com.app.auctionbackend.model.Gender;
+import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.CustomerRepository;
 import com.app.auctionbackend.repo.GenderRepository;
 import org.apache.commons.io.FileUtils;
@@ -40,6 +39,21 @@ public class CustomerService {
 
     @Autowired
     private GenderRepository genderRepository;
+
+    @Autowired
+    private CountryService countryService;
+
+    @Autowired
+    private StateService stateService;
+
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private ZipCodeService zipCodeService;
+
+    @Autowired
+    private DeliveryAddressService deliveryAddressService;
 
     final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -229,12 +243,20 @@ public class CustomerService {
         return getCustomerInfoData(customer.getEmail());
     }
 
-   /*public DeliveryDataDto saveCustomerDeliveryData(DeliveryDataDto deliveryDataDto, String email){
+   public DeliveryDataDto saveCustomerDeliveryData(DeliveryDataDto deliveryDataDto, String email){
         Customer customer = findByEmail(email);
 
         if(customer == null || deliveryDataDto==null)
             return null;
-    }*/
+
+       Country country = countryService.saveCountry(deliveryDataDto.getCountry());
+       State state = stateService.saveState(deliveryDataDto.getRegion(), country);
+       City city = cityService.saveCity(deliveryDataDto.getCity(), state);
+       ZipCode zipCode = zipCodeService.saveZipCode(deliveryDataDto.getZipCode());
+       DeliveryAddress deliveryAddress = deliveryAddressService.saveDeliveryAdress(deliveryDataDto.getStreet(),zipCode,city, customer);
+
+       return deliveryDataDto;
+    }
 
     public DeliveryDataDto getCustomerDeliveryData(String email){
         Customer customer = findByEmail(email);
