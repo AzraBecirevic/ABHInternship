@@ -165,7 +165,7 @@ public class Seed {
         womenTShort1.setStartPrice(50.55);
         womenTShort1.setCreatedOn(LocalDateTime.now());
         womenTShort1.setModifiedOn(LocalDateTime.now());
-
+        womenTShort1.setCustomer(customer5);
 
         womenTShirtImages.get(0).setProduct(womenTShort1);
         womenTShirtImages.get(1).setProduct(womenTShort1);
@@ -210,6 +210,7 @@ public class Seed {
         womenRedTShort.setStartPrice(60);
         womenRedTShort.setCreatedOn(LocalDateTime.now());
         womenRedTShort.setModifiedOn(LocalDateTime.now());
+        womenRedTShort.setCustomer(customer5);
 
         womenRedTShirtImages.get(0).setProduct(womenRedTShort);
         womenRedTShirtImages.get(1).setProduct(womenRedTShort);
@@ -395,7 +396,7 @@ public class Seed {
 
         Product womenWhiteSneakers = new Product();
         womenWhiteSneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateWS = LocalDateTime.of(2021,4,27,0,0);
+        LocalDateTime endDateWS = LocalDateTime.of(2021,3,31,0,0);
         womenWhiteSneakers.setEndDate(endDateWS);
         LocalDateTime startDateWS = LocalDateTime.of(2021,3,18,0,0);
         womenWhiteSneakers.setStartDate(startDateWS);
@@ -403,6 +404,7 @@ public class Seed {
         womenWhiteSneakers.setStartPrice(150);
         womenWhiteSneakers.setCreatedOn(LocalDateTime.now());
         womenWhiteSneakers.setModifiedOn(LocalDateTime.now());
+        womenWhiteSneakers.setCustomer(customer5);
 
         womenWhiteSneakersImages.get(0).setProduct(womenWhiteSneakers);
         womenWhiteSneakersImages.get(1).setProduct(womenWhiteSneakers);

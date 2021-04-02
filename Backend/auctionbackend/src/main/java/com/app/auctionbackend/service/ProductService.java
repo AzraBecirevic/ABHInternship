@@ -1,11 +1,9 @@
 package com.app.auctionbackend.service;
 
 import com.app.auctionbackend.dtos.*;
-import com.app.auctionbackend.model.Bid;
-import com.app.auctionbackend.model.Image;
-import com.app.auctionbackend.model.Product;
-import com.app.auctionbackend.model.Subcategory;
+import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
+import com.app.auctionbackend.repo.CustomerRepository;
 import com.app.auctionbackend.repo.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,9 @@ public class ProductService {
     @Autowired
     BidRepository bidRepository;
 
+    @Autowired
+    CustomerService customerService;
+
     DecimalFormat df = new DecimalFormat("#0.00");
 
     public List<ProductDto> getProducts(){
@@ -47,6 +48,12 @@ public class ProductService {
         Product product = productRepository.findById(id).orElse(null);
 
         if(product != null){
+
+            if(product.getEndDate().isBefore(LocalDateTime.now()) ||
+            product.getStartDate().isAfter(LocalDateTime.now())){
+                return null;
+            }
+
             ModelMapper modelMapper = new ModelMapper();
             ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
 
@@ -375,6 +382,132 @@ public class ProductService {
             case PRICE_HIGH_TO_LOW: filteredProducts.sort(Comparator.comparing(ProductDto::getStartPrice).reversed()); break;
             default: filteredProducts.sort(Comparator.comparing(ProductDto::getName)); break;
         }
+    }
+
+    public Boolean hasCustomerSellingProducts(Integer id){
+        List<Product> products = productRepository.findByCustomerId(id);
+        if(products != null && products.size() >0) {
+            return true;
+        }
+        return false;
+    }
+
+    private SellProductDto makeSellProductDto(Product p){
+        SellProductDto sellProductDto = new SellProductDto();
+        sellProductDto.setImage(p.getImageList().get(0).getImage());
+        sellProductDto.setId(p.getId());
+        sellProductDto.setName(p.getName());
+        sellProductDto.setStartPrice(df.format(p.getStartPrice()));
+
+        List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+        if(bidList == null || bidList.size() == 0){
+            sellProductDto.setHighestBid(df.format(0));
+            sellProductDto.setNumberOfBids(df.format(0));
+            sellProductDto.setHighestBidValue(0);
+        }
+        else{
+            Bid highestBid = bidList.get(bidList.size()-1);
+            sellProductDto.setHighestBid(df.format(highestBid.getBidPrice()));
+            sellProductDto.setHighestBidValue(highestBid.getBidPrice());
+            Integer numberOfBids = bidList.size();
+            sellProductDto.setNumberOfBids(numberOfBids.toString());
+
+        }
+
+        long timeLeft = ChronoUnit.DAYS.between(LocalDateTime.now(),p.getEndDate());
+        sellProductDto.setTimeLeft(timeLeft);
+        return sellProductDto;
+    }
+
+    private void calculateHighestBid(List<SellProductDto> sellProductDtoList){
+        double highestBid = 0;
+        Integer indexOfProductWithHighestBid=-1;
+        for (int i = 0; i < sellProductDtoList.size(); i++) {
+            if(sellProductDtoList.get(i).getHighestBidValue() > highestBid){
+                highestBid=sellProductDtoList.get(i).getHighestBidValue();
+                indexOfProductWithHighestBid=i;
+            }
+        }
+        if(indexOfProductWithHighestBid != -1)
+            sellProductDtoList.get(indexOfProductWithHighestBid).setBidHighest(true);
+    }
+
+    public List<SellProductDto> getActiveProducts(String customerEmail){
+
+        Customer customer = customerService.findByEmail(customerEmail);
+        if(customer==null)
+            return null;
+
+        List<Product> products = productRepository.findByCustomerId(customer.getId());
+        if(products == null)
+            return null;
+
+        List<SellProductDto> sellProductDtoList = new ArrayList<>();
+
+
+        for (Product p:products) {
+            if(p.getEndDate().isAfter(LocalDateTime.now())){
+              SellProductDto sellProductDto = makeSellProductDto(p);
+              sellProductDtoList.add(sellProductDto);
+            }
+        }
+       calculateHighestBid(sellProductDtoList);
+
+        return sellProductDtoList;
+    }
+
+    public List<SellProductDto> getSoldProducts(String customerEmail){
+        Customer customer = customerService.findByEmail(customerEmail);
+        if(customer==null)
+            return null;
+
+        List<Product> products = productRepository.findByCustomerId(customer.getId());
+        if(products == null)
+            return null;
+
+        List<SellProductDto> sellProductDtoList = new ArrayList<>();
+
+        for (Product p:products) {
+            if(p.getEndDate().isBefore(LocalDateTime.now())){
+                SellProductDto sellProductDto = makeSellProductDto(p);
+                sellProductDtoList.add(sellProductDto);
+            }
+        }
+
+        calculateHighestBid(sellProductDtoList);
+
+        return sellProductDtoList;
+    }
+
+    public List<SellProductDto> getBidProducts(String customerEmail){
+       Customer customer = customerService.findByEmail(customerEmail);
+        if(customer == null)
+            return null;
+
+        List<Bid> bids = bidRepository.findByCustomerIdOrderByBidPrice(customer.getId());
+        if(bids == null || bids.size()<=0){
+            return null;
+        }
+
+        List<SellProductDto> bidProducts = new ArrayList<>();
+
+       for (Bid b : bids) {
+           Product p = b.getProduct();
+           SellProductDto sellProductDto = makeSellProductDto(p);
+           double customerBidPrice = b.getBidPrice();
+           sellProductDto.setCustomerBidPrice(df.format(customerBidPrice));
+
+           List<Bid> productBids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+           double highestProductBid = productBids.get(productBids.size()-1).getBidPrice();
+           sellProductDto.setHighestBid(df.format(highestProductBid));
+           if(customerBidPrice == highestProductBid){
+               sellProductDto.setCustomerPriceHighestBid(true);
+           }
+
+           bidProducts.add(sellProductDto);
+       }
+
+        return bidProducts;
     }
 
     private List<ProductDto> changeToDto(List<Product>products){

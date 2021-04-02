@@ -69,3 +69,13 @@ export const STREET_FORMAT_MESSAGE =
   "Characters, numbers, dots and commas allowed, 60 characters is maximum";
 export const COUNTRY_REQUIRED_MESSAGE = "Country is required";
 export const REGION_REQUIRED_MESSAGE = "State is required";
+export const NO_ITEMS_FOR_SALE_MESSAGE =
+  "You do not have any scheduled items for sale.";
+export const NO_PRODUCTS_TO_SHOW_MESSAGE = "There are no products to show.";
+export const DEACTIVATE_ACCOUNT_QUESTION_MESSAGE =
+  "Do you want to deactivate account?";
+
+export const SUCCESSFULLY_DEACTIVATED_ACOUNT_MESSAGE =
+  "Your account has been successfully deactivated";
+export const NOT_DEACTIVATED_ACOUNT_MESSAGE =
+  "Your account can not be deactivated right now. Please try later";

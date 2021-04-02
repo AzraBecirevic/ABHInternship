@@ -35,6 +35,7 @@ import {
   RegionDropdown,
   CountryRegionData,
 } from "react-country-region-selector";
+import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
 
 export class Profile extends Component {
   state = {
@@ -66,6 +67,7 @@ export class Profile extends Component {
     streetErrMess: "",
     countryErrMess: "",
     regionErrMess: "",
+    disabledSaveInfoBtn: false,
   };
 
   customerService = new CustomerService();
@@ -147,7 +149,7 @@ export class Profile extends Component {
         token
       );
 
-      this.fillDays(customer.birthDay, customer.birthYear);
+      this.fillDays(customer.birthMonth, customer.birthYear);
       this.fillYears();
 
       this.setState({
@@ -166,7 +168,6 @@ export class Profile extends Component {
         imgFile: null,
       });
 
-      /// try, catch, message ??
       if (deliveryData !== null) {
         this.setState({
           country: deliveryData.country,
@@ -389,100 +390,103 @@ export class Profile extends Component {
     });
 
     if (this.validateData()) {
-      //try {
-
-      const { token, userEmail } = this.props;
-      const {
-        firstName,
-        lastName,
-        genderId,
-        phoneNumber,
-        email,
-        dateDay,
-        dateMonth,
-        dateYear,
-        imgFile,
-        chosenImage,
-        profileImage,
-        country,
-        region,
-        city,
-        zipCode,
-        street,
-      } = this.state;
-
-      var showSucces = true;
-
-      if (this.isDeliveryFormChanged()) {
-        var deliveryData = await this.customerService.updateCustomerDeliveryData(
-          userEmail,
-          token,
+      try {
+        this.setState({ disabledSaveInfoBtn: true });
+        const { token, userEmail } = this.props;
+        const {
+          firstName,
+          lastName,
+          genderId,
+          phoneNumber,
+          email,
+          dateDay,
+          dateMonth,
+          dateYear,
+          imgFile,
+          chosenImage,
+          profileImage,
           country,
           region,
           city,
           zipCode,
           street,
-          this.showErrorMessage
-        );
-        if (deliveryData == null) {
-          showSucces = false;
+        } = this.state;
+
+        this.setIsLoading(true);
+
+        var showSucces = true;
+
+        if (this.isDeliveryFormChanged()) {
+          var deliveryData = await this.customerService.updateCustomerDeliveryData(
+            userEmail,
+            token,
+            country,
+            region,
+            city,
+            zipCode,
+            street
+          );
+          if (deliveryData == null) {
+            showSucces = false;
+          }
         }
-      }
 
-      if (showSucces && chosenImage !== userImage && profileImage == null) {
-        var photo = await this.customerService.upadateCustomerPhoto(
-          userEmail,
-          token,
-          imgFile,
-          this.showErrorMessage
-        );
-        if (photo == null) {
-          showSucces = false;
+        if (showSucces && chosenImage !== userImage && profileImage == null) {
+          var photo = await this.customerService.upadateCustomerPhoto(
+            userEmail,
+            token,
+            imgFile
+          );
+          if (photo == null) {
+            showSucces = false;
+          }
         }
-      }
 
-      if (showSucces) {
-        var customer = await this.customerService.updateCustomer(
-          userEmail,
-          token,
-          firstName,
-          lastName,
-          email,
-          genderId,
-          phoneNumber,
-          dateDay,
-          dateMonth,
-          dateYear,
-          imgFile,
-          this.showErrorMessage
-        );
+        if (showSucces) {
+          var customer = await this.customerService.updateCustomer(
+            userEmail,
+            token,
+            firstName,
+            lastName,
+            email,
+            genderId,
+            phoneNumber,
+            dateDay,
+            dateMonth,
+            dateYear,
+            imgFile,
+            this.showErrorMessage
+          );
 
-        if (customer == null) {
-          showSucces = false;
+          if (customer == null) {
+            showSucces = false;
+          }
         }
-      }
+        this.setState({ disabledSaveInfoBtn: false });
+        this.setIsLoading(false);
 
-      if (showSucces && userEmail !== email) {
-        this.toastService.showSuccessToast(
-          SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE
-        );
-        this.authService.logout();
-        this.props.history.push(LOGIN_ROUTE);
-      } else if (showSucces) {
-        this.toastService.showSuccessToast(SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE);
+        if (showSucces && userEmail !== email) {
+          this.toastService.showSuccessToast(
+            SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE
+          );
+          this.authService.logout();
+          this.props.history.push(LOGIN_ROUTE);
+        } else if (showSucces) {
+          this.toastService.showSuccessToast(
+            SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE
+          );
+        }
+      } catch (error) {
+        this.setState({ disabledSaveInfoBtn: false });
+        this.setIsLoading(false);
+
+        this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
       }
-      //  } catch (error) {
-      //   this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
-      // }
     }
   };
 
-  showSuccesMessage = (successMessage) => {
-    this.toastService.showSuccessToast(successMessage);
-  };
-
-  showErrorMessage = (errorMessage) => {
-    this.toastService.showErrorToast(errorMessage);
+  setIsLoading = (isLoadingValue) => {
+    this.props.setIsLoading(isLoadingValue);
   };
 
   uploadPhoto = (event) => {
@@ -535,6 +539,7 @@ export class Profile extends Component {
       streetErrMess,
       countryErrMess,
       regionErrMess,
+      disabledSaveInfoBtn,
     } = this.state;
 
     return (
@@ -789,7 +794,11 @@ export class Profile extends Component {
         </div>
         <div className="saveInfoFormDiv">
           {" "}
-          <button className="saveInfoFormBtn" onClick={this.saveInfo}>
+          <button
+            disabled={disabledSaveInfoBtn}
+            className="saveInfoFormBtn"
+            onClick={this.saveInfo}
+          >
             SAVE INFO{" "}
             <FontAwesomeIcon
               icon={faChevronRight}

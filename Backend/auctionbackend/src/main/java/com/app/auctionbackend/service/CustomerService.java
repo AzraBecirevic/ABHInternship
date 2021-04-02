@@ -50,6 +50,9 @@ public class CustomerService {
     private CityService cityService;
 
     @Autowired
+    private ProductService productService;
+
+    @Autowired
     private ZipCodeService zipCodeService;
 
     @Autowired
@@ -95,6 +98,19 @@ public class CustomerService {
             throw new Exception(DATE_OF_BIRTH_REQUIRED_MESSAGE);
         if(dateOfBirth.getYear() + USER_MIN_AGE > LocalDateTime.now().getYear())
             throw new Exception(USER_MIN_AGE_MESSAGE);
+    }
+
+    private void validateCityFormat(String city) throws Exception{
+        if(!Helper.isCityFormatValid(city))
+            throw new Exception(CITY_FORMAT_MESSAGE);
+    }
+    private void validateZipCodeFormat(String zipCode) throws Exception{
+        if(!Helper.isZipCodeFormatValid(zipCode))
+            throw new Exception(ZIP_CODE_FORMAT_MESSAGE);
+    }
+    private void validateStreetFormat(String street) throws Exception{
+        if(!Helper.isStreetFormatValid(street))
+            throw new Exception(STREET_FORMAT_MESSAGE);
     }
 
     public Customer registerCustomer(Customer customer) throws Exception{
@@ -243,11 +259,20 @@ public class CustomerService {
         return getCustomerInfoData(customer.getEmail());
     }
 
-   public DeliveryDataDto saveCustomerDeliveryData(DeliveryDataDto deliveryDataDto, String email){
-        Customer customer = findByEmail(email);
+   public DeliveryDataDto saveCustomerDeliveryData(DeliveryDataDto deliveryDataDto, String email) throws Exception{
+       Customer customer = findByEmail(email);
 
-        if(customer == null || deliveryDataDto==null)
-            return null;
+       if(customer == null || deliveryDataDto==null)
+           return null;
+
+       validateRequiredField(deliveryDataDto.getCountry(),COUNTRY_REQUIRED_MESSAGE);
+       validateRequiredField(deliveryDataDto.getRegion(), REGION_REQUIRED_MESSAGE);
+       validateRequiredField(deliveryDataDto.getCity(), CITY_REQUIRED_MESSAGE);
+       validateRequiredField(deliveryDataDto.getZipCode(), ZIP_CODE_REQUIRED_MESSAGE);
+       validateRequiredField(deliveryDataDto.getStreet(), STREET_REQUIRED_MESSAGE);
+       validateCityFormat(deliveryDataDto.getCity());
+       validateZipCodeFormat(deliveryDataDto.getZipCode());
+       validateStreetFormat(deliveryDataDto.getStreet());
 
        Country country = countryService.saveCountry(deliveryDataDto.getCountry());
        State state = stateService.saveState(deliveryDataDto.getRegion(), country);
@@ -280,5 +305,29 @@ public class CustomerService {
             return deliveryDataDto;
         }
        return null;
+    }
+
+
+    public Boolean isCustomerSellingProducts(String email){
+        Customer customer = findByEmail(email);
+
+        if(customer == null)
+            return false;
+
+        if(productService.hasCustomerSellingProducts(customer.getId()))
+            return true;
+
+        return false;
+    }
+
+    public Boolean deactivateAccount(String email){
+        Customer customer = findByEmail(email);
+
+        if(customer == null)
+            return false;
+
+        customer.setActive(false);
+        customerRepository.save(customer);
+        return true;
     }
 }

@@ -128,11 +128,10 @@ public class CustomerController {
     public ResponseEntity<DeliveryDataDto> getCustomerDeliveryData(@PathVariable String email){
         DeliveryDataDto deliveryDataDto = customerService.getCustomerDeliveryData(email);
         if(deliveryDataDto == null)
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 
         return new ResponseEntity<DeliveryDataDto>(deliveryDataDto, HttpStatus.OK);
     }
-
 
 
     @PostMapping(value = "/saveDeliveryData/{email}")
@@ -144,10 +143,23 @@ public class CustomerController {
             }
         }
         catch (Exception ex){
-            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(new Message("Delivery data can not be saved"), HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping(value = "/hasSellingProducts/{email}")
+    public ResponseEntity<Boolean> isCustomerSellingProducts(@PathVariable String email){
+
+        Boolean sellingProducts = customerService.isCustomerSellingProducts(email);
+        return new ResponseEntity<Boolean>(sellingProducts, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/deactivateAccount/{email}" )
+    public ResponseEntity<Boolean> deactivateAccount(@PathVariable String email){
+
+        Boolean accountDeactivated = customerService.deactivateAccount(email);
+        return new ResponseEntity<Boolean>(accountDeactivated, HttpStatus.OK);
+    }
 }

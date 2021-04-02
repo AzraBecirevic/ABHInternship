@@ -6,16 +6,17 @@ import UserPageModel from "../model/UserPageModel";
 import Heading from "./Heading";
 import styles from "./UserPage.css";
 import { faUserAlt } from "@fortawesome/free-solid-svg-icons";
-import { faMinus } from "@fortawesome/free-solid-svg-icons";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faGavel } from "@fortawesome/free-solid-svg-icons";
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import { USER_PAGE_ROUTE, USER_PAGE_ROUTE_TAB } from "../constants/routes";
 import Profile from "./Profile";
 import { Route } from "react-router";
+import Seller from "./Seller";
+import CustomerService from "../services/customerService";
+import Sell from "./Sell";
+import Bids from "./Bids";
+import Settings from "./Settings";
 
 export class UserPage extends Component {
   state = {
@@ -23,9 +24,12 @@ export class UserPage extends Component {
     email: "",
     token: "",
     tabToShow: "",
+    hasSellingProducts: true,
+    isLoggedIn: false,
   };
 
   userPageModel = new UserPageModel();
+  customerService = new CustomerService();
 
   checkStorageLoginData() {
     if (localStorage.getItem(TOKEN) != null) {
@@ -46,7 +50,8 @@ export class UserPage extends Component {
     this.loadData();
   }
 
-  loadData = () => {
+  loadData = async () => {
+    this.setState({ hasSellingProducts: true });
     if (
       (this.props.location.state != undefined &&
         this.props.location.state.isLoggedIn == false) ||
@@ -58,16 +63,20 @@ export class UserPage extends Component {
     var email;
     var token;
     var showTab = "";
+    var isLoggedIn = false;
     if (this.props.location.state !== undefined) {
       email = this.props.location.state.email;
       token = this.props.location.state.token;
+      isLoggedIn = this.props.location.state.isLoggedIn;
     } else {
       if (localStorage.getItem(TOKEN) !== null) {
         email = localStorage.getItem(EMAIL);
         token = localStorage.getItem(TOKEN);
+        isLoggedIn = true;
       } else if (sessionStorage.getItem(TOKEN) != null) {
         email = sessionStorage.getItem(EMAIL);
         token = sessionStorage.getItem(TOKEN);
+        isLoggedIn = true;
       }
     }
 
@@ -80,7 +89,21 @@ export class UserPage extends Component {
       showTab = pathTabParam;
     }
 
-    this.setState({ email: email, token: token, tabToShow: showTab });
+    if (showTab == "Seller") {
+      var hasProducts = await this.customerService.hasCustomerSellingProducts(
+        email,
+        token
+      );
+
+      this.setState({ hasSellingProducts: hasProducts });
+    }
+
+    this.setState({
+      email: email,
+      token: token,
+      tabToShow: showTab,
+      isLoggedIn: isLoggedIn,
+    });
   };
 
   findTabIcon(tabName) {
@@ -103,7 +126,14 @@ export class UserPage extends Component {
   }
 
   render() {
-    const { showLoginDiv, tabToShow, email, token } = this.state;
+    const {
+      showLoginDiv,
+      tabToShow,
+      email,
+      token,
+      hasSellingProducts,
+      isLoggedIn,
+    } = this.state;
     return (
       <div>
         {showLoginDiv && (
@@ -112,8 +142,16 @@ export class UserPage extends Component {
         {!showLoginDiv && (
           <div>
             <Heading
-              title={tabToShow.toUpperCase()}
-              secondTitle={`${ACCOUNT_PAGE_TITLE} / ${tabToShow}`.toUpperCase()}
+              title={
+                tabToShow === "Seller"
+                  ? "BECOME " + tabToShow.toUpperCase()
+                  : tabToShow.toUpperCase()
+              }
+              secondTitle={`${ACCOUNT_PAGE_TITLE} / ${
+                tabToShow === "Seller"
+                  ? "BECOME " + tabToShow.toUpperCase()
+                  : tabToShow.toUpperCase()
+              }`.toUpperCase()}
             ></Heading>
 
             <div className="row userAccountPageRow">
@@ -122,30 +160,31 @@ export class UserPage extends Component {
                 <div className="row">
                   <div className="col-lg-12">
                     <div className="tabsDiv">
-                      {this.userPageModel.UserPageTabs.map(
-                        function (userPageTab, index) {
-                          return (
-                            <div
-                              key={index}
-                              className={
-                                tabToShow == userPageTab.tabName
-                                  ? "tabDivActive"
-                                  : "tabDiv"
-                              }
-                              onClick={() =>
-                                this.chosenTab(userPageTab.tabName)
-                              }
-                            >
-                              <FontAwesomeIcon
-                                className="tabDivIcon"
-                                icon={this.findTabIcon(userPageTab.tabName)}
-                                size={"lg"}
-                              ></FontAwesomeIcon>
-                              {userPageTab.tabName}
-                            </div>
-                          );
-                        }.bind(this)
-                      )}
+                      {hasSellingProducts &&
+                        this.userPageModel.UserPageTabs.map(
+                          function (userPageTab, index) {
+                            return (
+                              <div
+                                key={index}
+                                className={
+                                  tabToShow == userPageTab.tabName
+                                    ? "tabDivActive"
+                                    : "tabDiv"
+                                }
+                                onClick={() =>
+                                  this.chosenTab(userPageTab.tabName)
+                                }
+                              >
+                                <FontAwesomeIcon
+                                  className="tabDivIcon"
+                                  icon={this.findTabIcon(userPageTab.tabName)}
+                                  size={"lg"}
+                                ></FontAwesomeIcon>
+                                {userPageTab.tabName}
+                              </div>
+                            );
+                          }.bind(this)
+                        )}
                     </div>
                     <div>
                       {tabToShow == "Profile" && (
@@ -156,6 +195,50 @@ export class UserPage extends Component {
                               {...props}
                               userEmail={email}
                               token={token}
+                              setIsLoading={this.props.setIsLoading}
+                            />
+                          )}
+                        />
+                      )}
+                      {tabToShow == "Seller" && !hasSellingProducts && (
+                        <Route
+                          path=""
+                          render={(props) => <Sell {...props} />}
+                        />
+                      )}
+                      {tabToShow == "Seller" && hasSellingProducts && (
+                        <Route
+                          path=""
+                          render={(props) => (
+                            <Seller
+                              {...props}
+                              userEmail={email}
+                              token={token}
+                              isLoggedIn={isLoggedIn}
+                              setIsLoading={this.props.setIsLoading}
+                            />
+                          )}
+                        />
+                      )}
+                      {tabToShow == "Bids" && (
+                        <Bids
+                          email={email}
+                          token={token}
+                          isLoggedIn={isLoggedIn}
+                          setIsLoading={this.props.setIsLoading}
+                        />
+                      )}
+
+                      {tabToShow == "Settings" && (
+                        <Route
+                          path=""
+                          render={(props) => (
+                            <Settings
+                              {...props}
+                              email={email}
+                              token={token}
+                              isLoggedIn={isLoggedIn}
+                              setIsLoading={this.props.setIsLoading}
                             />
                           )}
                         />

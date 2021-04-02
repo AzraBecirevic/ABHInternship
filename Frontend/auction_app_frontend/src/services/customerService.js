@@ -1,8 +1,10 @@
 import { faPhabricator } from "@fortawesome/free-brands-svg-icons";
 import { ENDPOINT } from "../constants/auth";
 import {
+  DEACTIVATE_ACCOUNT_ENDPOINT,
   GET_CUSTOMER_DELIVERY_DATA_ENDPOINT,
   GET_CUSTOMER_INFO_DATA,
+  IS_CUSTOMER_SELLING_PRODUCTS_ENDPOINT,
   UPDATE_CUSTOMER_DELIVERY_DATA_ENDPOINT,
   UPDATE_CUSTOMER_ENDPOINT,
   UPDATE_CUSTOMER_PHOTO_ENDPOINT,
@@ -11,9 +13,13 @@ import {
   SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE,
   CONNECTION_REFUSED_MESSAGE,
   SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE,
+  EMAIL_REQUIRED_MESSAGE,
 } from "../constants/messages";
+import ToastService from "./toastService";
 
 class CustomerService {
+  toastService = new ToastService();
+
   async getCustomerInfoData(email, token) {
     return await this.getData(GET_CUSTOMER_INFO_DATA + email, token);
   }
@@ -25,7 +31,18 @@ class CustomerService {
     );
   }
 
-  async upadateCustomerPhoto(email, token, imgFile, showError) {
+  async hasCustomerSellingProducts(email, token) {
+    return await this.getData(
+      IS_CUSTOMER_SELLING_PRODUCTS_ENDPOINT + email,
+      token
+    );
+  }
+
+  async deactivateAccount(email, token) {
+    return await this.getData(DEACTIVATE_ACCOUNT_ENDPOINT + email, token);
+  }
+
+  async upadateCustomerPhoto(email, token, imgFile) {
     const formData = new FormData();
     formData.append("imgFile", imgFile);
 
@@ -57,7 +74,7 @@ class CustomerService {
     } else {
       try {
         var data = await response.json();
-        showError(data.text);
+        this.toastService.showErrorToast(data.text);
         return null;
       } catch (err) {}
       return null;
@@ -71,8 +88,7 @@ class CustomerService {
     region,
     city,
     zipCode,
-    street,
-    showError
+    street
   ) {
     const requestOptions = {
       method: "POST",
@@ -109,7 +125,7 @@ class CustomerService {
     } else {
       try {
         var data = await response.json();
-        showError(data.text);
+        this.toastService.showErrorToast(data.text);
         return null;
       } catch (err) {}
       return null;
@@ -126,8 +142,7 @@ class CustomerService {
     phoneNumber,
     birthDay,
     birthMonth,
-    birthYear,
-    showError
+    birthYear
   ) {
     const requestOptions = {
       method: "POST",
@@ -168,13 +183,9 @@ class CustomerService {
     } else {
       try {
         var data = await response.json();
-
-        showError(data.text); // ?
-
+        this.toastService.showErrorToast(data.text);
         return null;
-      } catch (err) {
-        //showError("greska"); //
-      }
+      } catch (err) {}
       return null;
     }
   }

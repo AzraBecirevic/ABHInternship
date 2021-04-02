@@ -95,6 +95,7 @@ import ChangePassword from "./components/ChangePassword";
 import NotFound from "./components/NotFound";
 import { TOKEN, EMAIL } from "./constants/auth";
 import UserPage from "./components/UserPage";
+import Sell from "./components/Sell";
 
 export class App extends Component {
   state = {

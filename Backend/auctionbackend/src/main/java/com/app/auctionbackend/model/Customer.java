@@ -33,6 +33,9 @@ public class Customer {
     @OneToOne(mappedBy = "customer")
     private DeliveryAddress deliveryAddress;
 
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
+
     public Integer getId() {
         return id;
     }
@@ -127,5 +130,13 @@ public class Customer {
 
     public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

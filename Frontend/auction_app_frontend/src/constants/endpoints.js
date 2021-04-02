@@ -23,3 +23,10 @@ export const UPDATE_CUSTOMER_PHOTO_ENDPOINT = "/customer/updatePhoto/";
 export const UPDATE_CUSTOMER_DELIVERY_DATA_ENDPOINT =
   "/customer/saveDeliveryData/";
 export const GET_CUSTOMER_DELIVERY_DATA_ENDPOINT = "/customer/getDeliveryData/";
+export const IS_CUSTOMER_SELLING_PRODUCTS_ENDPOINT =
+  "/customer/hasSellingProducts/";
+export const GET_ACTIVE_PRODUCTS_ENDPOINT = "/product/getActiveProducts/";
+export const GET_SOLD_PRODUCTS_ENDPOINT = "/product/getSoldProducts/";
+export const GET_PRODUCTS_CUSTOMER_DID_BID_ENDPOINT =
+  "/product/getBidProducts/";
+export const DEACTIVATE_ACCOUNT_ENDPOINT = "/customer/deactivateAccount/";
