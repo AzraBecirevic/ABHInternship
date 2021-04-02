@@ -15,6 +15,7 @@ public class ProductDetailsDto {
     private List<ImageDto> imageList = new ArrayList<>();
     private String startPriceText;
     private String highestBidText;
+    private Boolean activeProduct = true;
 
     public Integer getId() {
         return id;
@@ -96,4 +97,11 @@ public class ProductDetailsDto {
         this.highestBidText = highestBidText;
     }
 
+    public Boolean getActiveProduct() {
+        return activeProduct;
+    }
+
+    public void setActiveProduct(Boolean activeProduct) {
+        this.activeProduct = activeProduct;
+    }
 }

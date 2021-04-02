@@ -1,6 +1,7 @@
 import { ENDPOINT } from "../constants/auth";
 import {
   CHANGE_PASSWORD_ENDPOINT,
+  CHECK_IF_ACCOUNT_IS_ACTIVE,
   FORGOT_PASSWORD_ENDPONT,
   LOGIN_ENDPOINT,
   REGISTER_ENDPOINT,
@@ -8,12 +9,39 @@ import {
 import {
   CONNECTION_REFUSED_MESSAGE,
   FAIL_LOGIN_MESSAGE,
+  NOT_ACTIVE_ACCOUNT_MESSAGE,
   SUCCESSFUL_LOGIN_MESSAGE,
   SUCCESSFUL_REGISTER_MESSAGE,
 } from "../constants/messages";
 import { FORGOT_PASSWORD_EMAIL } from "../constants/storage";
 
 class AuthService {
+  async isUserActive(email) {
+    const requestOptions = {
+      method: "GET",
+    };
+    const response = await fetch(
+      ENDPOINT + CHECK_IF_ACCOUNT_IS_ACTIVE + email,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+    if (!response) {
+      throw response;
+    }
+
+    if (response.status === 200) {
+      var data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+
   async login(
     email,
     password,
@@ -43,6 +71,11 @@ class AuthService {
       return false;
     }
     if (response.status === 200) {
+      var accountActive = await this.isUserActive(email);
+      if (accountActive !== true) {
+        showError(NOT_ACTIVE_ACCOUNT_MESSAGE);
+        return false;
+      }
       if (rememberMe) {
         localStorage.setItem("token", response.headers.get("authorization"));
         localStorage.setItem("email", email);

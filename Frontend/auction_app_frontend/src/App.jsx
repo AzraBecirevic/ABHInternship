@@ -96,6 +96,7 @@ import NotFound from "./components/NotFound";
 import { TOKEN, EMAIL } from "./constants/auth";
 import UserPage from "./components/UserPage";
 import Sell from "./components/Sell";
+import Settings from "./components/Settings";
 
 export class App extends Component {
   state = {
@@ -662,7 +663,11 @@ export class App extends Component {
                 <Route
                   path={USER_PAGE_ROUTE}
                   render={(props) => (
-                    <UserPage {...props} setIsLoading={this.setIsLoading} />
+                    <UserPage
+                      {...props}
+                      setIsLoading={this.setIsLoading}
+                      logoutCustomer={this.logoutCustomer}
+                    />
                   )}
                 />
 

@@ -11,7 +11,6 @@ import ToastService from "../services/toastService";
 
 export class Settings extends Component {
   customerService = new CustomerService();
-  authService = new AuthService();
   toastService = new ToastService();
 
   deactivateAccount = async () => {
@@ -23,10 +22,11 @@ export class Settings extends Component {
     );
 
     if (deactivated) {
-      var message = { SUCCESSFULLY_DEACTIVATED_ACOUNT_MESSAGE };
-      this.toastService.showSuccessToast(message);
-      this.authService.logout();
+      this.toastService.showSuccessToast(
+        SUCCESSFULLY_DEACTIVATED_ACOUNT_MESSAGE
+      );
 
+      this.props.logOutCustomer();
       this.props.history.push({
         pathname: HOME_ROUTE,
         state: {
@@ -36,8 +36,7 @@ export class Settings extends Component {
         },
       });
     } else {
-      var message = { NOT_DEACTIVATED_ACOUNT_MESSAGE };
-      this.toastService.showErrorToast(message);
+      this.toastService.showErrorToast(NOT_DEACTIVATED_ACOUNT_MESSAGE);
     }
   };
 

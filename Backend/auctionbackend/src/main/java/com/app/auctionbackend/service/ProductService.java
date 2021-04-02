@@ -3,19 +3,17 @@ package com.app.auctionbackend.service;
 import com.app.auctionbackend.dtos.*;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
-import com.app.auctionbackend.repo.CustomerRepository;
 import com.app.auctionbackend.repo.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.beans.beancontext.BeanContextServiceRevokedEvent;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static com.app.auctionbackend.dtos.FilterProductsDto.SortType.DEFAULT_SORTING;
+
 import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
 
 @Service("productService")
@@ -49,10 +47,6 @@ public class ProductService {
 
         if(product != null){
 
-            if(product.getEndDate().isBefore(LocalDateTime.now()) ||
-            product.getStartDate().isAfter(LocalDateTime.now())){
-                return null;
-            }
 
             ModelMapper modelMapper = new ModelMapper();
             ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
@@ -74,6 +68,12 @@ public class ProductService {
 
             long diff = ChronoUnit.DAYS.between(LocalDateTime.now(),product.getEndDate());
             productDetailsDto.setTimeLeft(diff);
+
+            if(product.getEndDate().isBefore(LocalDateTime.now()) ||
+                    product.getStartDate().isAfter(LocalDateTime.now())){
+                productDetailsDto.setActiveProduct(false);
+                productDetailsDto.setTimeLeft(0);
+            }
 
             return productDetailsDto;
         }

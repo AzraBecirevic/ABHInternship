@@ -29,5 +29,7 @@ div.row.pageHeadingDivRow {
 @media (max-width: 575.5px) {
   .pageHeadingTitle.right {
     padding-right: 0;
+    display: block;
+    justify-content: start;
   }
 }

@@ -21,8 +21,8 @@ export class UserAccountMenu extends Component {
         <div className="col-lg-8 col-md-12 col-sm-12 myAccountMenuCol">
           <div className="row">
             <div className="col-lg-3 col-md-4 col-sm-4"></div>
-            <div className="col-lg-6 col-md-4 col-sm-4 col-xs-12"></div>
-            <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12 menuDiv">
+            <div className="col-lg-5 col-md-4 col-sm-4 col-xs-12"></div>
+            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12 menuDiv">
               {" "}
               <UserMenu
                 hideUserAccountMenu={hideUserAccountMenu}

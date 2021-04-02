@@ -162,4 +162,11 @@ public class CustomerController {
         Boolean accountDeactivated = customerService.deactivateAccount(email);
         return new ResponseEntity<Boolean>(accountDeactivated, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/checkIsAccountActive/{email}" )
+    public ResponseEntity<Boolean> chekIsAccountActive(@PathVariable String email){
+
+        Boolean accountActive = customerService.checkIsAccountActive(email);
+        return new ResponseEntity<Boolean>(accountActive, HttpStatus.OK);
+    }
 }

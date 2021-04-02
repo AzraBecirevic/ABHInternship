@@ -30,3 +30,4 @@ export const GET_SOLD_PRODUCTS_ENDPOINT = "/product/getSoldProducts/";
 export const GET_PRODUCTS_CUSTOMER_DID_BID_ENDPOINT =
   "/product/getBidProducts/";
 export const DEACTIVATE_ACCOUNT_ENDPOINT = "/customer/deactivateAccount/";
+export const CHECK_IF_ACCOUNT_IS_ACTIVE = "/customer/checkIsAccountActive/";

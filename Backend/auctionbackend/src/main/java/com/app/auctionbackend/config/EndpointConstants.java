@@ -17,4 +17,5 @@ public class EndpointConstants {
     public static final String GET_SUBCATEGORIES_BY_CATEGORY_ID = "/subcategory/byCategory/{categoryId}";
     public static final String GET_FILTERED_PRODUCTS = "/filtered";
     public static final String GET_PRICE_FILTER_VALUES = "/getPriceFilterValues";
+    public static final String CHECK_IS_ACCOUNT_ACTIVE_ENDPOINT = "/customer/checkIsAccountActive/{email}";
 }

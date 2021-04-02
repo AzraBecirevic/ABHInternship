@@ -307,7 +307,6 @@ public class CustomerService {
        return null;
     }
 
-
     public Boolean isCustomerSellingProducts(String email){
         Customer customer = findByEmail(email);
 
@@ -329,5 +328,15 @@ public class CustomerService {
         customer.setActive(false);
         customerRepository.save(customer);
         return true;
+    }
+
+    public Boolean checkIsAccountActive(String email){
+        Customer customer = findByEmail(email);
+
+        if(customer == null)
+            return false;
+
+        Boolean activeAccount = customer.getActive();
+        return activeAccount;
     }
 }

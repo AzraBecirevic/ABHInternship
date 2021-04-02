@@ -53,17 +53,13 @@ export const ACCESS_ACOUNT_PAGE = "Please login to acces your account page.";
 export const ACCOUNT_PAGE_TITLE = "My Account";
 export const SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE =
   "You have successfully changed your data.";
-
 export const SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE =
   "You have successfully changed your data. Since you have changed your email, please login with your new email.";
-
 export const CITY_REQUIRED_MESSAGE = "City is required";
 export const CITY_FORMAT_MESSAGE = "Only characters, maximum 40";
-
 export const ZIP_CODE_REQUIRED_MESSAGE = "Zip code is required";
 export const ZIP_CODE_FORMAT_MESSAGE =
   "Expected zip code format: 11111 or 11111-1111";
-
 export const STREET_REQUIRED_MESSAGE = "Street is required";
 export const STREET_FORMAT_MESSAGE =
   "Characters, numbers, dots and commas allowed, 60 characters is maximum";
@@ -74,8 +70,13 @@ export const NO_ITEMS_FOR_SALE_MESSAGE =
 export const NO_PRODUCTS_TO_SHOW_MESSAGE = "There are no products to show.";
 export const DEACTIVATE_ACCOUNT_QUESTION_MESSAGE =
   "Do you want to deactivate account?";
-
 export const SUCCESSFULLY_DEACTIVATED_ACOUNT_MESSAGE =
-  "Your account has been successfully deactivated";
+  "Your account has been successfully deactivated.";
 export const NOT_DEACTIVATED_ACOUNT_MESSAGE =
-  "Your account can not be deactivated right now. Please try later";
+  "Your account can not be deactivated right now. Please try later.";
+export const NOT_ACTIVE_ACCOUNT_MESSAGE =
+  "Your acount is deactivated. You can not log in.";
+export const PRODUCT_IS_NOT_ACTIVE =
+  "Product is not available for bidding anymore.";
+export const LOGIN_TO_BID_PRODUCT_MESSAGE =
+  "If you would like to place a bid, please log in.";

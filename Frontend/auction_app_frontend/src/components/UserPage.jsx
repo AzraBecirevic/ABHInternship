@@ -239,6 +239,7 @@ export class UserPage extends Component {
                               token={token}
                               isLoggedIn={isLoggedIn}
                               setIsLoading={this.props.setIsLoading}
+                              logOutCustomer={this.props.logoutCustomer}
                             />
                           )}
                         />

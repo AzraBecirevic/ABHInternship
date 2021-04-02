@@ -17,6 +17,7 @@
   padding-right: 20px;
   margin-right: 10px;
 }
+
 .tabDivActive {
   background-color: #8367d8;
   font-family: Lato-Bold;
@@ -38,9 +39,11 @@
 .tabDivIcon {
   margin-right: 10px;
 }
+
 .userAccountPageRow {
   margin-top: 40px;
 }
+
 .tabsDiv {
   display: flex;
   flex-wrap: wrap;
@@ -64,6 +67,7 @@
   margin: auto;
   margin-bottom: 120px;
 }
+
 .startSelling {
   text-align: center;
 }
@@ -75,6 +79,7 @@
   margin-top: 50px;
   margin-bottom: 100px;
 }
+
 .startSellingMessage {
   margin-bottom: 50px;
 }
@@ -87,8 +92,8 @@
 .settingsDiv {
   background: #ffffff;
   border: 1px solid #d8d8d8;
-  /*text-align: center;*/
 }
+
 .deactivateBtn {
   background: #ffffff;
   border: 3px solid #e3e3e3;
@@ -99,10 +104,22 @@
   padding-bottom: 5px;
   margin-top: 28px;
 }
+
 .settingsMessageBtnDiv {
   padding-left: 20px;
   margin-top: 30px;
   margin-bottom: 80px;
+}
+
+@media (max-width: 517.5px) {
+  .tabDiv {
+    margin-right: 0;
+    width: 50%;
+  }
+  .tabDivActive {
+    margin-right: 0;
+    width: 50%;
+  }
 }
 
 @media (max-width: 515.5px) {

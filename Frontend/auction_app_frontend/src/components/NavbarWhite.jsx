@@ -102,7 +102,7 @@ export class NavbarWhite extends Component {
                     </div>
                   </div>
 
-                  <div className="col-lg-6 col-md-4 col-sm-4 col-xs-12">
+                  <div className="col-lg-5 col-md-4 col-sm-4 col-xs-12">
                     <div className="row searchBar" style={{ display: "flex" }}>
                       <input
                         type="text"
@@ -121,7 +121,7 @@ export class NavbarWhite extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12 menuDiv">
+                  <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12 menuDiv">
                     <div className="menu">
                       <div className="menuDiv">
                         <Link to={HOME_ROUTE} className="menuItem">
@@ -154,7 +154,7 @@ export class NavbarWhite extends Component {
                               token: this.props.token,
                             },
                           }}
-                          className="menuItem"
+                          className="menuItem last"
                         >
                           MY ACCOUNT
                         </Link>
