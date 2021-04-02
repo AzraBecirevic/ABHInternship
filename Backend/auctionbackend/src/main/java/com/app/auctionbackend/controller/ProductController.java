@@ -87,21 +87,18 @@ public class ProductController {
 
     @GetMapping(value = "/getActiveProducts/{email}")
     public List<SellProductDto> getActiveProducts(@PathVariable String email){
-
         List<SellProductDto> sellProductDto = productService.getActiveProducts(email);
         return sellProductDto;
     }
 
     @GetMapping(value = "/getSoldProducts/{email}")
     public List<SellProductDto> getSoldProducts(@PathVariable String email){
-
         List<SellProductDto> sellProductDto = productService.getSoldProducts(email);
         return sellProductDto;
     }
 
     @GetMapping(value = "/getBidProducts/{email}")
     public List<SellProductDto> getBidProducts(@PathVariable String email){
-
         List<SellProductDto> sellProductDto = productService.getBidProducts(email);
         return sellProductDto;
     }

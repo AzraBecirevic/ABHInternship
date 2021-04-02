@@ -10,7 +10,7 @@ export const FIRST_NAME_REQUIRED_MESSAGE = "First name is required";
 export const LAST_NAME_REQUIRED_MESSAGE = "Last name is required";
 export const PHONE_NUMBER_REQUIRED_MESSAGE = "Phone number is required";
 export const PHONE_NUMBER_FORMAT_MESSAGE =
-  "Expected phone number formats: 000 111 222, 000 111 2222";
+  "Please provide correct phone number format of your country.";
 export const BID_PRICE_REQUIRED_MESSAGE = "You need to enter bid price.";
 export const BID_FORMAT_MESSAGE = "Bid can have up to two decimal places";
 export const MAX_ALLOWED_BID_PRICE =
@@ -80,3 +80,13 @@ export const PRODUCT_IS_NOT_ACTIVE =
   "Product is not available for bidding anymore.";
 export const LOGIN_TO_BID_PRODUCT_MESSAGE =
   "If you would like to place a bid, please log in.";
+export const DEACTIVATE = "DEACTIVATE";
+export const ACTIVE = "Active";
+export const SOLD_ITEMS = "Sold";
+export const ADD_ITEM = "ADD ITEM";
+export const START_SELLING = "START SELLING";
+export const REQUIRED = "REQUIRED";
+export const CHANGE_PHOTO = "CHANGE PHOTO";
+export const CARD_INFORMATION = "CARD INFORMATION";
+export const OPTIONAL = "OPTIONAL";
+export const SAVE_INFO = "SAVE INFO";

@@ -3,6 +3,7 @@
   border: 1px solid #d8d8d8;
   margin-bottom: 20px;
 }
+
 .userInfoDivHeading {
   background-color: #f0f0f0;
   font-family: Lato-Bold;
@@ -13,6 +14,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 .userChangeImgBtn {
   background: #ffffff;
   border: 3px solid #e3e3e3;
@@ -28,9 +30,11 @@
 .formDataGroup {
   margin-bottom: 15px;
 }
+
 .selectGenderDiv {
   width: 50% !important;
 }
+
 .cityInput {
   width: 48%;
 }
@@ -45,10 +49,12 @@
   width: 30% !important;
   margin-right: 10px;
 }
+
 .selectDayDiv {
   width: 20% !important;
   margin-right: 10px;
 }
+
 .selectData {
   border: none;
   outline: none;
@@ -58,6 +64,7 @@
     no-repeat right;
   background-position-x: 95%;
 }
+
 .selectDataDropdown {
   border: none;
   outline: none;
@@ -72,6 +79,7 @@
   width: 100%;
   margin-bottom: 10px;
 }
+
 div.col-lg-3.profileImageDiv {
   text-align: center;
   padding-left: 40px;
@@ -81,10 +89,12 @@ div.col-lg-3.profileImageDiv {
 div.col-lg-7.profileDataDiv {
   padding-left: 30px;
 }
+
 .row.userInfoRow {
   margin-bottom: 40px;
   margin-top: 30px;
 }
+
 .saveInfoFormBtn {
   background: #ffffff;
   border: 3px solid #8367d8;
@@ -99,12 +109,36 @@ div.col-lg-7.profileDataDiv {
   padding-bottom: 8px;
   margin-bottom: 120px;
 }
+
 .saveInfoFormBtnDiv {
   display: flex;
 }
 
 .saveInfoFormDiv {
   text-align: end;
+}
+
+.PhoneInputCountryIconImg {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.PhoneInputInput,
+.PhoneInputCountrySelect {
+  background-color: #fcfcfc !important;
+  border: 1px solid #d8d8d8 !important;
+  border-radius: 0 !important;
+  height: 40px;
+}
+
+.PhoneInputCountrySelect {
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
+    no-repeat right;
+  background-position-x: 95%;
 }
 
 @media (max-width: 991.5px) {

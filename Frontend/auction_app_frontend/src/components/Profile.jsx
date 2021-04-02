@@ -8,6 +8,8 @@ import userImage from "../assets/userImage.png";
 import ValidationService from "../services/validationService";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
+  CARD_INFORMATION,
+  CHANGE_PHOTO,
   CITY_FORMAT_MESSAGE,
   CITY_REQUIRED_MESSAGE,
   CONNECTION_REFUSED_MESSAGE,
@@ -16,9 +18,12 @@ import {
   EMAIL_REQUIRED_MESSAGE,
   FIRST_NAME_REQUIRED_MESSAGE,
   LAST_NAME_REQUIRED_MESSAGE,
+  OPTIONAL,
   PHONE_NUMBER_FORMAT_MESSAGE,
   PHONE_NUMBER_REQUIRED_MESSAGE,
   REGION_REQUIRED_MESSAGE,
+  REQUIRED,
+  SAVE_INFO,
   STREET_FORMAT_MESSAGE,
   STREET_REQUIRED_MESSAGE,
   SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE,
@@ -36,6 +41,7 @@ import {
   CountryRegionData,
 } from "react-country-region-selector";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 
 export class Profile extends Component {
   state = {
@@ -68,6 +74,7 @@ export class Profile extends Component {
     countryErrMess: "",
     regionErrMess: "",
     disabledSaveInfoBtn: false,
+    phoneCountry: "",
   };
 
   customerService = new CustomerService();
@@ -137,6 +144,8 @@ export class Profile extends Component {
   componentDidMount = async () => {
     try {
       const { token, userEmail } = this.props;
+
+      this.setIsLoading(true);
       const customer = await this.customerService.getCustomerInfoData(
         userEmail,
         token
@@ -177,14 +186,16 @@ export class Profile extends Component {
           street: deliveryData.street,
         });
       }
+      this.setIsLoading(false);
     } catch (error) {
+      this.setIsLoading(false);
       this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
     }
   };
 
   onChange = (e) => {
     if (e.target.name == "dateMonth") {
-      this.fillDays(e.target.value);
+      this.fillDays(e.target.value, this.state.dateYear);
     }
     if (e.target.name == "dateYear") {
       this.fillDays(this.state.dateMonth, e.target.value);
@@ -225,19 +236,24 @@ export class Profile extends Component {
   };
 
   validatePhone = () => {
-    if (this.validationService.validatePhone(this.state.phoneNumber) == false) {
+    if (
+      this.validationService.validatePhone(this.state.phoneNumber) == false ||
+      this.state.phoneNumber == undefined
+    ) {
       this.setState({ phoneNumberErrMess: PHONE_NUMBER_REQUIRED_MESSAGE });
       return false;
     }
     if (
-      this.validationService.validatePhoneFormat(this.state.phoneNumber) ==
-      false
+      this.state.phoneNumber != undefined &&
+      this.state.phoneNumber.length > 0 &&
+      isValidPhoneNumber(this.state.phoneNumber) == false
     ) {
       this.setState({
         phoneNumberErrMess: PHONE_NUMBER_FORMAT_MESSAGE,
       });
       return false;
     }
+
     return true;
   };
 
@@ -284,7 +300,11 @@ export class Profile extends Component {
   };
 
   validateRegion = () => {
-    if (this.validationService.validateRegion(this.state.region) == false) {
+    if (
+      this.validationService.validateRegion(this.state.region) == false ||
+      this.state.region.length <= 0 ||
+      this.state.region == "Select Region"
+    ) {
       this.setState({ regionErrMess: REGION_REQUIRED_MESSAGE });
       return false;
     }
@@ -336,6 +356,7 @@ export class Profile extends Component {
   }
   isDeliveryFormChanged = () => {
     const { country, region, city, zipCode, street } = this.state;
+
     if (
       country.length > 0 ||
       region.length > 0 ||
@@ -502,10 +523,7 @@ export class Profile extends Component {
   };
 
   selectCountry(val) {
-    if (val == "") {
-      this.setState({ region: "" });
-    }
-    this.setState({ country: val });
+    this.setState({ country: val, region: "" });
   }
 
   selectRegion(val) {
@@ -540,12 +558,13 @@ export class Profile extends Component {
       countryErrMess,
       regionErrMess,
       disabledSaveInfoBtn,
+      phoneCountry,
     } = this.state;
 
     return (
       <div className="profileDiv">
         <div className="userInfoDiv">
-          <div className="userInfoDivHeading">REQUIRED</div>
+          <div className="userInfoDivHeading">{REQUIRED}</div>
           <div className="row userInfoRow">
             <div className="col-lg-3 profileImageDiv">
               {profileImage != null && (
@@ -565,7 +584,7 @@ export class Profile extends Component {
                   type="file"
                   onChange={this.uploadPhoto}
                 />
-                CHANGE PHOTO
+                {CHANGE_PHOTO}
               </label>
             </div>
             <div className="col-lg-7 profileDataDiv">
@@ -677,13 +696,14 @@ export class Profile extends Component {
                 </div>
                 <div className="formDataGroup">
                   <label className="formLabel">Phone Number</label>
-                  <input
-                    type="text"
+                  <PhoneInput
                     name="phoneNumber"
-                    className="form-control"
+                    country={this.state.phoneCountry}
                     value={phoneNumber}
-                    onChange={this.onChange}
-                  />
+                    onChange={(phoneNumber, country) =>
+                      this.setState({ phoneNumber, phoneCountry })
+                    }
+                  ></PhoneInput>
                   <small
                     className="errorMessage"
                     hidden={phoneNumberErrMess === ""}
@@ -710,10 +730,10 @@ export class Profile extends Component {
           </div>
         </div>
         <div className="userInfoDiv">
-          <div className="userInfoDivHeading">CARD INFORMATION</div>
+          <div className="userInfoDivHeading">{CARD_INFORMATION}</div>
         </div>
         <div className="userInfoDiv">
-          <div className="userInfoDivHeading">OPTIONAL</div>
+          <div className="userInfoDivHeading">{OPTIONAL}</div>
           <div className="row userInfoRow">
             <div className="col-lg-3 profileImageDiv"></div>
             <div className="col-lg-7 profileDataDiv">
@@ -799,7 +819,7 @@ export class Profile extends Component {
             className="saveInfoFormBtn"
             onClick={this.saveInfo}
           >
-            SAVE INFO{" "}
+            {SAVE_INFO}{" "}
             <FontAwesomeIcon
               icon={faChevronRight}
               size={"sm"}

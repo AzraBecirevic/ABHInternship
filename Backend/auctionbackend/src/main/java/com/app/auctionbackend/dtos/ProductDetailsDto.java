@@ -104,4 +104,5 @@ public class ProductDetailsDto {
     public void setActiveProduct(Boolean activeProduct) {
         this.activeProduct = activeProduct;
     }
+
 }

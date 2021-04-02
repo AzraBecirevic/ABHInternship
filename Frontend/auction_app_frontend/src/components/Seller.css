@@ -11,6 +11,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 .activeSoldOptionActive {
   background: #8367d8;
   border: 1px solid #8367d8;
@@ -25,15 +26,18 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 .activeSoldOption,
 .activeSoldOptionActive:hover {
   cursor: pointer;
 }
+
 .sellerOptionsDiv {
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
 }
+
 .activeSoldOptionsDiv {
   display: flex;
 }
@@ -42,6 +46,7 @@
   background: #ffffff;
   border: 1px solid #d8d8d8;
 }
+
 .addItemOptionDiv {
   background: #8367d8;
   border: 3px solid #8367d8;
@@ -56,6 +61,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
 .addItemOptionDiv:hover {
   cursor: pointer;
 }
@@ -80,6 +86,7 @@
   color: #252525;
   letter-spacing: 0.63px;
 }
+
 .activeSoldNoProductsMessage {
   color: #8367d8;
   text-align: center;
@@ -99,6 +106,7 @@
   padding-left: 20px;
   padding-right: 20px;
 }
+
 .highestBidTd {
   color: #6cc047;
   font-family: Lato-Bold;
@@ -125,6 +133,7 @@ table > tbody > tr.no-border > td,
   color: #252525;
   letter-spacing: 0.63px;
 }
+
 .activeSoldProductName:hover {
   color: #8367d8;
   text-decoration: none;

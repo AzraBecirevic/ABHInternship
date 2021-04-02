@@ -57,7 +57,7 @@ public class ProductService {
                 productDetailsDto.setNumberOfBids(0);
             }
             else{
-                Bid highestBid = bidList.get(bidList.size()-1);
+                Bid highestBid = bidList.get(bidList.size() - 1);
                 productDetailsDto.setHighestBid(highestBid.getBidPrice());
                 productDetailsDto.setNumberOfBids(bidList.size());
             }
@@ -106,7 +106,7 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         List<Product> newArrivals = new ArrayList<>();
 
-        for (Product p: products) {
+        for (Product p : products) {
             LocalDateTime now = LocalDateTime.now();
             long diff = ChronoUnit.DAYS.between(p.getStartDate(),now);
             if(diff <= 3){
@@ -122,7 +122,7 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
         List<Product> lastChance = new ArrayList<>();
 
-        for (Product p: products) {
+        for (Product p : products) {
             LocalDateTime now = LocalDateTime.now();
             long diff = ChronoUnit.DAYS.between(now,p.getEndDate());
             if(diff <= 3){
@@ -386,7 +386,7 @@ public class ProductService {
 
     public Boolean hasCustomerSellingProducts(Integer id){
         List<Product> products = productRepository.findByCustomerId(id);
-        if(products != null && products.size() >0) {
+        if(products != null && products.size() > 0) {
             return true;
         }
         return false;
@@ -406,7 +406,7 @@ public class ProductService {
             sellProductDto.setHighestBidValue(0);
         }
         else{
-            Bid highestBid = bidList.get(bidList.size()-1);
+            Bid highestBid = bidList.get(bidList.size() - 1);
             sellProductDto.setHighestBid(df.format(highestBid.getBidPrice()));
             sellProductDto.setHighestBidValue(highestBid.getBidPrice());
             Integer numberOfBids = bidList.size();
@@ -421,11 +421,11 @@ public class ProductService {
 
     private void calculateHighestBid(List<SellProductDto> sellProductDtoList){
         double highestBid = 0;
-        Integer indexOfProductWithHighestBid=-1;
+        Integer indexOfProductWithHighestBid = -1;
         for (int i = 0; i < sellProductDtoList.size(); i++) {
             if(sellProductDtoList.get(i).getHighestBidValue() > highestBid){
-                highestBid=sellProductDtoList.get(i).getHighestBidValue();
-                indexOfProductWithHighestBid=i;
+                highestBid = sellProductDtoList.get(i).getHighestBidValue();
+                indexOfProductWithHighestBid = i;
             }
         }
         if(indexOfProductWithHighestBid != -1)
@@ -435,7 +435,7 @@ public class ProductService {
     public List<SellProductDto> getActiveProducts(String customerEmail){
 
         Customer customer = customerService.findByEmail(customerEmail);
-        if(customer==null)
+        if(customer == null)
             return null;
 
         List<Product> products = productRepository.findByCustomerId(customer.getId());
@@ -445,7 +445,7 @@ public class ProductService {
         List<SellProductDto> sellProductDtoList = new ArrayList<>();
 
 
-        for (Product p:products) {
+        for (Product p : products) {
             if(p.getEndDate().isAfter(LocalDateTime.now())){
               SellProductDto sellProductDto = makeSellProductDto(p);
               sellProductDtoList.add(sellProductDto);
@@ -458,7 +458,7 @@ public class ProductService {
 
     public List<SellProductDto> getSoldProducts(String customerEmail){
         Customer customer = customerService.findByEmail(customerEmail);
-        if(customer==null)
+        if(customer == null)
             return null;
 
         List<Product> products = productRepository.findByCustomerId(customer.getId());
@@ -485,7 +485,7 @@ public class ProductService {
             return null;
 
         List<Bid> bids = bidRepository.findByCustomerIdOrderByBidPrice(customer.getId());
-        if(bids == null || bids.size()<=0){
+        if(bids == null || bids.size() <= 0){
             return null;
         }
 

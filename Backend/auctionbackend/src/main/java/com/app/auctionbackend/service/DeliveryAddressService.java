@@ -24,6 +24,7 @@ public class DeliveryAddressService {
             deliveryAddress.setZipCode(zipCode);
 
             deliveryAddressRepository.save(deliveryAddress);
+            customer.setDeliveryAddress(deliveryAddress); //?
             return deliveryAddress;
         }
 

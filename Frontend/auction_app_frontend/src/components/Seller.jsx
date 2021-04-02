@@ -2,7 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { NO_PRODUCTS_TO_SHOW_MESSAGE } from "../constants/messages";
+import {
+  ACTIVE,
+  ADD_ITEM,
+  NO_PRODUCTS_TO_SHOW_MESSAGE,
+  SOLD_ITEMS,
+} from "../constants/messages";
 import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 import CustomerService from "../services/customerService";
 import ProductService from "../services/productService";
@@ -58,7 +63,7 @@ export class Seller extends Component {
               }
               onClick={this.chooseActive}
             >
-              Active
+              {ACTIVE}
             </div>
             <div
               className={
@@ -66,7 +71,7 @@ export class Seller extends Component {
               }
               onClick={this.chooseSold}
             >
-              Sold
+              {SOLD_ITEMS}
             </div>
           </div>
           <div className="addItemOptionDiv">
@@ -75,7 +80,7 @@ export class Seller extends Component {
               icon={faPlus}
               size={"sm"}
             ></FontAwesomeIcon>{" "}
-            ADD ITEM
+            {ADD_ITEM}
           </div>
         </div>
         {products !== null && products.length > 0 && (

@@ -101,5 +101,6 @@ public class SellProductDto {
     public void setCustomerPriceHighestBid(Boolean customerPriceHighestBid) {
         isCustomerPriceHighestBid = customerPriceHighestBid;
     }
+
 }
 

@@ -75,7 +75,6 @@ public class Seed {
         customer.setEmail("mableLambert@mail.com");
         customer.setPassword(passwordEncoder.encode("mojpass123@"));
         customer.setActive(true);
-        customer.setPhoneNumber("033 111 111");
         customer.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
         customer.setGender(male);
         customerRepository.save(customer);
@@ -86,7 +85,6 @@ public class Seed {
         customer2.setEmail("miltonWarren@mail.com");
         customer2.setPassword(passwordEncoder.encode("mojpass123@"));
         customer2.setActive(true);
-        customer2.setPhoneNumber("033 111 112");
         customer2.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
         customer2.setGender(male);
         customerRepository.save(customer2);
@@ -97,7 +95,6 @@ public class Seed {
         customer3.setEmail("loydParks@mail.com");
         customer3.setPassword(passwordEncoder.encode("mojpass123@"));
         customer3.setActive(true);
-        customer3.setPhoneNumber("033 111 113");
         customer3.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
         customer3.setGender(male);
         customerRepository.save(customer3);
@@ -108,12 +105,10 @@ public class Seed {
         customer4.setEmail("charlieFuller@mail.com");
         customer4.setPassword(passwordEncoder.encode("mojpass123@"));
         customer4.setActive(true);
-        customer4.setPhoneNumber("033 111 114");
         customer4.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
         customer4.setGender(female);
         customerRepository.save(customer4);
 
-        Image customer5Image = getImageData("src/main/resources/images/womenTShirt.jpg");
 
         Customer customer5 = new Customer();
         customer5.setFirstName("Azra");
@@ -121,10 +116,8 @@ public class Seed {
         customer5.setEmail("azra.becirevic1998@gmail.com");
         customer5.setPassword(passwordEncoder.encode("mojpass123@"));
         customer5.setActive(true);
-        customer5.setPhoneNumber("033 111 115");
         customer5.setDateOfBirth(LocalDateTime.of(2000,2,2,0,0));
         customer5.setGender(female);
-        customer5.setProfileImage(customer5Image.getImage());
         customerRepository.save(customer5);
 
         LocalDateTime currentDate = LocalDateTime.now();

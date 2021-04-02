@@ -78,11 +78,6 @@ public class CustomerService {
             throw  new Exception(EMAIL_FORMAT_MESSAGE);
     }
 
-    private void validatePhoneNumberFormat(String phoneNumber) throws Exception{
-        if(!Helper.isPhoneNumberFormatValid(phoneNumber))
-            throw  new Exception(PHONE_NUMBER_FORMAT_MESSAGE);
-    }
-
     private void validatePasswordFormat(String password) throws Exception{
         if(!Helper.isPasswordFormatValid(password))
             throw new Exception(PASSWORD_FORMAT_MESSAGE);
@@ -205,19 +200,12 @@ public class CustomerService {
         checkIfUserExist(email);
 
         validateRequiredField(customerData.getFirstName(), FIRST_NAME_REQUIRED_MESSAGE);
-
         validateRequiredField(customerData.getLastName(), LAST_NAME_REQUIRED_MESSAGE);
-
         validateRequiredField(customerData.getEmail(), EMAIL_REQUIRED_MESSAGE);
-
         validateEmailFormat(customerData.getEmail());
-
         validateGender(customerData.getGenderId());
-
         validateDateOfBirth(LocalDateTime.of(customerData.getBirthYear(), customerData.getBirthMonth(), customerData.getBirthDay(),0,0));
-
         validateRequiredField(customerData.getPhoneNumber(), PHONE_NUMBER_REQUIRED_MESSAGE);
-        validatePhoneNumberFormat(customerData.getPhoneNumber());
 
         Customer customer = findByEmail(email);
 
@@ -262,7 +250,7 @@ public class CustomerService {
    public DeliveryDataDto saveCustomerDeliveryData(DeliveryDataDto deliveryDataDto, String email) throws Exception{
        Customer customer = findByEmail(email);
 
-       if(customer == null || deliveryDataDto==null)
+       if(customer == null || deliveryDataDto == null)
            return null;
 
        validateRequiredField(deliveryDataDto.getCountry(),COUNTRY_REQUIRED_MESSAGE);
@@ -278,7 +266,7 @@ public class CustomerService {
        State state = stateService.saveState(deliveryDataDto.getRegion(), country);
        City city = cityService.saveCity(deliveryDataDto.getCity(), state);
        ZipCode zipCode = zipCodeService.saveZipCode(deliveryDataDto.getZipCode());
-       DeliveryAddress deliveryAddress = deliveryAddressService.saveDeliveryAdress(deliveryDataDto.getStreet(),zipCode,city, customer);
+       DeliveryAddress deliveryAddress = deliveryAddressService.saveDeliveryAdress(deliveryDataDto.getStreet(), zipCode, city, customer);
 
        return deliveryDataDto;
     }

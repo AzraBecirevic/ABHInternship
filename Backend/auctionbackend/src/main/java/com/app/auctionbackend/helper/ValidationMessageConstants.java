@@ -19,7 +19,6 @@ public class ValidationMessageConstants {
     public static final String USER_MIN_AGE_MESSAGE = "You must be older than 18";
     public static final String DATE_OF_BIRTH_REQUIRED_MESSAGE = "Date of birth is required";
     public static final String PHONE_NUMBER_REQUIRED_MESSAGE = "Phone number is required";
-    public static final String PHONE_NUMBER_FORMAT_MESSAGE = "Excpected phone number format: 000 111 222, 000 111 2222";
     public static final String BID_NOT_THERE_CUSTOMER_NOT_ALLOWED_MESSAGE = "You are not allowed to bid product or there is no specified product.";
     public static final String COUNTRY_REQUIRED_MESSAGE = "Country is required";
     public static final String REGION_REQUIRED_MESSAGE = "State is required";

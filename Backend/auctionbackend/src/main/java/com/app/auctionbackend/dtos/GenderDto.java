@@ -1,6 +1,7 @@
 package com.app.auctionbackend.dtos;
 
 public class GenderDto {
+
     private Integer id;
     private String name;
 
@@ -19,4 +20,5 @@ public class GenderDto {
     public void setName(String name) {
         this.name = name;
     }
+
 }

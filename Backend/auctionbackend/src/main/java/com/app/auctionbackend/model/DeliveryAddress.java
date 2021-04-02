@@ -14,7 +14,6 @@ public class DeliveryAddress {
     @ManyToOne
     @JoinColumn(name = "city_id", nullable = true)
     private City city;
-
     @OneToOne()
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;

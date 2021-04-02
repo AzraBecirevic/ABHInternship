@@ -9,12 +9,7 @@ import {
   UPDATE_CUSTOMER_ENDPOINT,
   UPDATE_CUSTOMER_PHOTO_ENDPOINT,
 } from "../constants/endpoints";
-import {
-  SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE,
-  CONNECTION_REFUSED_MESSAGE,
-  SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE,
-  EMAIL_REQUIRED_MESSAGE,
-} from "../constants/messages";
+
 import ToastService from "./toastService";
 
 class CustomerService {

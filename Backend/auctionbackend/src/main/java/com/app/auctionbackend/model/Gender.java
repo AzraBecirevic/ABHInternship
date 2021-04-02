@@ -10,7 +10,6 @@ public class Gender {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-
     @OneToMany(mappedBy = "gender", fetch = FetchType.LAZY)
     private List<Customer> customerList = new ArrayList<>();
 

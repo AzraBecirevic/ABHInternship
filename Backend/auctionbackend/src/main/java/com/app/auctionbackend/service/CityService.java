@@ -19,7 +19,7 @@ public class CityService {
         List<City> cityList = cityRepository.findAll();
 
         for (City c : cityList) {
-            if(c.getName().toLowerCase().equals(cityName.toLowerCase())){
+            if(c.getName().toLowerCase().equals(cityName.toLowerCase()) && c.getState().getId()==state.getId()){
                 return c;
             }
         }

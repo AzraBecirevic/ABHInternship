@@ -35,14 +35,6 @@ public class Helper {
            return true;
        return false;
    }
-   public static boolean isPhoneNumberFormatValid(String phoneNumber){
-       String phoneNumberRegex = "^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{3,4}$";
-
-       Pattern pat = Pattern.compile(phoneNumberRegex);
-       if (phoneNumber == null)
-           return false;
-       return pat.matcher(phoneNumber).matches();
-   }
 
     public static boolean isCityFormatValid(String city){
         String cityRegex = "^[a-zA-Z]{1}[a-zA-Z ]{0,39}$";
@@ -70,4 +62,5 @@ public class Helper {
             return false;
         return pat.matcher(street).matches();
     }
+
 }

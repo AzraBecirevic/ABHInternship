@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import { NO_ITEMS_FOR_SALE_MESSAGE } from "../constants/messages";
+import {
+  NO_ITEMS_FOR_SALE_MESSAGE,
+  START_SELLING,
+} from "../constants/messages";
 import shoppingBagImage from "../assets/shoppingBagImage.PNG";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
@@ -19,7 +22,7 @@ export class Sell extends Component {
             </div>
             <button className="startSellingBtn" onClick={this.startSelling}>
               {" "}
-              START SELLING{" "}
+              {START_SELLING}{" "}
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={"sm"}

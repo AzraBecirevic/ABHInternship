@@ -3,6 +3,7 @@ import {
   DEACTIVATE_ACCOUNT_QUESTION_MESSAGE,
   SUCCESSFULLY_DEACTIVATED_ACOUNT_MESSAGE,
   NOT_DEACTIVATED_ACOUNT_MESSAGE,
+  DEACTIVATE,
 } from "../constants/messages";
 import { HOME_ROUTE } from "../constants/routes";
 import AuthService from "../services/authService";
@@ -47,7 +48,7 @@ export class Settings extends Component {
         <div className="settingsMessageBtnDiv">
           <div>{DEACTIVATE_ACCOUNT_QUESTION_MESSAGE}</div>
           <button onClick={this.deactivateAccount} className="deactivateBtn">
-            DEACTIVATE
+            {DEACTIVATE}
           </button>
         </div>
       </div>

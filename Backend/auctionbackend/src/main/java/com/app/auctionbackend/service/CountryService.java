@@ -16,7 +16,7 @@ public class CountryService {
     Country saveCountry(String countryName){
         List<Country> countryList = countryRepository.findAll();
 
-        for (Country c:countryList) {
+        for (Country c : countryList) {
             if(c.getName().toLowerCase().equals(countryName.toLowerCase())){
                 return c;
             }

@@ -1,4 +1,5 @@
 import { parseJSON } from "jquery";
+import { EMAIL } from "../constants/auth";
 import {
   CITY_REGEX,
   EMAIL_REGEX,
@@ -26,15 +27,16 @@ class ValidationService {
     if (email === "") {
       return false;
     }
+    return true;
   };
 
-  validateFormatEmail(email) {
-    const re = EMAIL_REGEX;
-    return re.test(String(email).toLowerCase());
+  validateFormat(text, regex) {
+    const re = regex;
+    return re.test(String(text).toLowerCase());
   }
 
   validateEmailFormat(email) {
-    if (email !== "" && this.validateFormatEmail(email) === false) {
+    if (email !== "" && this.validateFormat(email, EMAIL_REGEX) === false) {
       return false;
     }
     return true;
@@ -47,15 +49,10 @@ class ValidationService {
     return true;
   };
 
-  validateFormatPhoneNumber(phoneNumber) {
-    const re = PHONE_NUMBER_REGEX;
-    return re.test(String(phoneNumber).toLowerCase());
-  }
-
   validatePhoneFormat(phoneNumber) {
     if (
       phoneNumber !== "" &&
-      this.validateFormatPhoneNumber(phoneNumber) === false
+      this.validateFormat(phoneNumber, PHONE_NUMBER_REGEX) === false
     ) {
       return false;
     }
@@ -70,15 +67,11 @@ class ValidationService {
   };
 
   validateCityFormat = (city) => {
-    if (city !== "" && this.validateFormatCity(city) == false) {
+    if (city !== "" && this.validateFormat(city, CITY_REGEX) == false) {
       return false;
     }
     return true;
   };
-  validateFormatCity(city) {
-    const re = CITY_REGEX;
-    return re.test(String(city).toLowerCase());
-  }
 
   validateZipCode = (zipCode) => {
     if (zipCode === "") {
@@ -88,16 +81,14 @@ class ValidationService {
   };
 
   validateZipCodeFormat = (zipCode) => {
-    if (zipCode !== "" && this.validateFormatZipCode(zipCode) == false) {
+    if (
+      zipCode !== "" &&
+      this.validateFormat(zipCode, ZIP_CODE_REGEX) == false
+    ) {
       return false;
     }
     return true;
   };
-
-  validateFormatZipCode(zipCode) {
-    const re = ZIP_CODE_REGEX;
-    return re.test(String(zipCode).toLowerCase());
-  }
 
   validateStreet = (street) => {
     if (street === "") {
@@ -107,16 +98,11 @@ class ValidationService {
   };
 
   validateStreetFormat = (street) => {
-    if (street !== "" && this.validateFormatStreet(street) == false) {
+    if (street !== "" && this.validateFormat(street, STREET_REGEX) == false) {
       return false;
     }
     return true;
   };
-
-  validateFormatStreet(street) {
-    const re = STREET_REGEX;
-    return re.test(String(street).toLowerCase());
-  }
 
   validateCountry = (country) => {
     if (country === "") {
