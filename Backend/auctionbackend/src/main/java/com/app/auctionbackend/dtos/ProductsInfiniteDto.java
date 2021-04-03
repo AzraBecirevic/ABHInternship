@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsInfiniteDto {
+
     List<ProductDto> productsList = new ArrayList<>();
     Boolean hasMoreData = true;
 
@@ -22,4 +23,5 @@ public class ProductsInfiniteDto {
     public void setProductsList(List<ProductDto> productsList) {
         this.productsList = productsList;
     }
+
 }

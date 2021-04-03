@@ -15,7 +15,9 @@ import {
   BID_PRICE_REQUIRED_MESSAGE,
   CONNECTION_REFUSED_MESSAGE,
   EMAIL_FORMAT_MESSAGE,
+  LOGIN_TO_BID_PRODUCT_MESSAGE,
   MAX_ALLOWED_BID_PRICE,
+  PRODUCT_IS_NOT_ACTIVE,
 } from "../constants/messages";
 import { NOT_FOUND_ROUTE } from "../constants/routes";
 import { EMAIL, TOKEN } from "../constants/auth";
@@ -296,7 +298,7 @@ export class SingleProduct extends Component {
                   <div className="productStartsFrom">
                     Starts from - ${product.startPriceText}
                   </div>
-                  {isLoggedIn && (
+                  {isLoggedIn && product.activeProduct && (
                     <div className="placeBidDiv">
                       <form onSubmit={this.onSubmit}>
                         <div>
@@ -328,9 +330,14 @@ export class SingleProduct extends Component {
                       </form>
                     </div>
                   )}
-                  {isLoggedIn === false && (
+                  {isLoggedIn === false && product.activeProduct && (
                     <div className="loginMessageDiv">
-                      If you would like to place a bid, please log in.
+                      {LOGIN_TO_BID_PRODUCT_MESSAGE}
+                    </div>
+                  )}
+                  {!product.activeProduct && (
+                    <div className="loginMessageDiv">
+                      {PRODUCT_IS_NOT_ACTIVE}
                     </div>
                   )}
                   <div className="productBidDetails">

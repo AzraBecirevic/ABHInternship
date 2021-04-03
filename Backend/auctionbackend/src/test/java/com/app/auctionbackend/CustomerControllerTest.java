@@ -1,5 +1,7 @@
 package com.app.auctionbackend;
 
+import com.app.auctionbackend.config.SecretKeyHandler;
+import com.app.auctionbackend.config.SecurityConstants;
 import com.app.auctionbackend.helper.TestEmailHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.app.auctionbackend.TestEndpointConstants.FORGOT_PASSWORD_ENDPOINT;
-import static com.app.auctionbackend.TestEndpointConstants.REGISTER_ENDPOINT;
+import static com.app.auctionbackend.TestEndpointConstants.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -85,6 +86,118 @@ public class CustomerControllerTest {
         mvc.perform(MockMvcRequestBuilders.get(FORGOT_PASSWORD_ENDPOINT + email)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getCustomerInfoDataShouldReturnOk() throws Exception{
+
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+
+        String email = testEmailHandler.testEmail;
+
+        mvc.perform(MockMvcRequestBuilders.get(GET_CUSTOMER_INFO_ENDPOINT + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getCustomerInfoDataShouldReturnBadRequest() throws Exception{
+
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+
+        String email = testEmailHandler.testNonExistentEmail;
+
+        mvc.perform(MockMvcRequestBuilders.get(GET_CUSTOMER_INFO_ENDPOINT + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateCustomerShouldReturnBadRequest() throws Exception{
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+
+        String email = testEmailHandler.testEmail;
+
+
+        mvc.perform(MockMvcRequestBuilders.post(UPDATE_CUSTOMER_ENDPOINT + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content("{\"firstName\": \"Name\", \"lastName\": \"Lastname\", \"genderId\": \"0\", \"phoneNumber\": \"111 222 333\", \"email\":\""+ email +"\", \"birthDay\":\"1\", \"birthMonth\":\"1\", \"birthYear\":\"2000\", \"imgFile\":\"null\"}")
+        ).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void updateCustomerShouldReturnOk() throws Exception{
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+
+        String email = testEmailHandler.testEmail;
+
+
+        mvc.perform(MockMvcRequestBuilders.post(UPDATE_CUSTOMER_ENDPOINT + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content("{\"firstName\": \"Name\", \"lastName\": \"Lastname\", \"genderId\": \"2\", \"phoneNumber\": \"111 222 333\", \"email\":\""+ email +"\", \"birthDay\":\"1\", \"birthMonth\":\"1\", \"birthYear\":\"2000\", \"imgFile\":\"null\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void saveCustomerDeliveryDataShouldReturnOK() throws Exception{
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+
+        String email = testEmailHandler.testEmail;
+
+
+        mvc.perform(MockMvcRequestBuilders.post(SAVE_DELIVERY_DATA_ENDPOINT + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content("{\"street\": \"Street 1\", \"zipCode\": \"12345\", \"city\": \"Sarajevo\", \"region\": \"Federacija Bosne i Hercegovine\", \"country\":\"Bosnia and Herzegovina\"}")
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void saveCustomerDeliveryDataShouldReturnBadRequest() throws Exception{
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+
+        String email = testEmailHandler.testEmail;
+
+
+        mvc.perform(MockMvcRequestBuilders.post(SAVE_DELIVERY_DATA_ENDPOINT + email)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content("{\"street\": \"Street 1\", \"zipCode\": \"12345678901122345567899765\", \"city\": \"Sarajevo\", \"region\": \"Federacija Bosne i Hercegovine\", \"country\":\"Bosnia and Herzegovina\"}")
+        ).andExpect(status().isBadRequest());
     }
 }
 

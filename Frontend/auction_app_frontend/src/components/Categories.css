@@ -436,4 +436,31 @@ div.col-lg-4.col-md-6.col-sm-6.product {
   div.col-lg-8.categoriesColumn {
     padding-right: 0%;
   }
+
+  div.col-lg-8.col-md-6.col-sm-6.gridList {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .gridListOptionsDiv {
+    justify-content: unset;
+    height: 100%;
+    padding-left: 0;
+    display: block;
+    /*width: 100%;
+    /*display: flex;*/
+  }
+  .gridListOption {
+    padding-bottom: 12px;
+  }
+  .gridListOptionActive {
+    padding-bottom: 12px;
+  }
+  .row.productOptionsDiv div.col-lg-4.col-md-6.col-sm-6 {
+    padding-right: 1px;
+    margin-bottom: 20px;
+  }
+  .sortingTypesDiv {
+    padding-right: 0;
+  }
 }

@@ -10,41 +10,123 @@ import {
   GET_PRODUCT_BY_NAME,
   GET_FILTERED_PRODUCTS,
   GET_PRICE_FILTER_VALUES,
+  GET_ACTIVE_PRODUCTS_ENDPOINT,
+  GET_SOLD_PRODUCTS_ENDPOINT,
+  GET_PRODUCTS_CUSTOMER_DID_BID_ENDPOINT,
 } from "../constants/endpoints";
 
 class ProductService {
   async getProducts() {
-    return await this.getData(GET_OFFERED_PRODUCTS_ENDPOINT);
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(GET_OFFERED_PRODUCTS_ENDPOINT, requestOptions);
   }
 
   async getNewArrivals(fetchNumber) {
-    return await this.getData(GET_NEW_ARRIVALS_ENDPOINT + fetchNumber);
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(
+      GET_NEW_ARRIVALS_ENDPOINT + fetchNumber,
+      requestOptions
+    );
   }
 
   async getLastChance(fetchNumber) {
-    return await this.getData(GET_LAST_CHANCE_ENDPOINT + fetchNumber);
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(
+      GET_LAST_CHANCE_ENDPOINT + fetchNumber,
+      requestOptions
+    );
   }
 
   async getProductsByCategoryId(chosenCategory, fetchNumber) {
+    const requestOptions = {
+      method: "GET",
+    };
     return await this.getData(
-      GET_PRODUCTS_BY_CATEGORY_ENDPOINT + chosenCategory + "/" + fetchNumber
+      GET_PRODUCTS_BY_CATEGORY_ENDPOINT + chosenCategory + "/" + fetchNumber,
+      requestOptions
     );
   }
 
   async getProduct() {
-    return await this.getData(GET_MOST_EXPENSIVE_PRODUCT_ENDPOINT);
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(
+      GET_MOST_EXPENSIVE_PRODUCT_ENDPOINT,
+      requestOptions
+    );
   }
 
   async getProductById(productId) {
-    return await this.getData(GET_PRODUCT_BY_ID_ENDPOINT + productId);
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(
+      GET_PRODUCT_BY_ID_ENDPOINT + productId,
+      requestOptions
+    );
   }
 
   async getProductByName(productName) {
-    return await this.getData(GET_PRODUCT_BY_NAME + productName);
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(
+      GET_PRODUCT_BY_NAME + productName,
+      requestOptions
+    );
   }
 
   async getPriceFilterData() {
-    return await this.getData(GET_PRICE_FILTER_VALUES);
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(GET_PRICE_FILTER_VALUES, requestOptions);
+  }
+
+  async getActiveProducts(userEmail, token) {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    };
+    return await this.getData(
+      GET_ACTIVE_PRODUCTS_ENDPOINT + userEmail,
+      requestOptions
+    );
+  }
+
+  async getSoldProducts(userEmail, token) {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    };
+    return await this.getData(
+      GET_SOLD_PRODUCTS_ENDPOINT + userEmail,
+      requestOptions
+    );
+  }
+
+  async getBidedProducts(email, token) {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    };
+    return await this.getData(
+      GET_PRODUCTS_CUSTOMER_DID_BID_ENDPOINT + email,
+      requestOptions
+    );
   }
 
   async getFilteredProducts(filteredProducts, filterFetchNumber) {
@@ -84,10 +166,7 @@ class ProductService {
     }
   }
 
-  async getData(link) {
-    const requestOptions = {
-      method: "GET",
-    };
+  async getData(link, requestOptions) {
     const response = await fetch(ENDPOINT + link, requestOptions).catch(
       (error) => {
         if (!error.response) {

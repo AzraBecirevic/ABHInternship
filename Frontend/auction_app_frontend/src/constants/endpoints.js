@@ -16,3 +16,18 @@ export const GET_SUBCATEGORIES_BY_CATEGORY_ID_ENDPOINT =
   "/subcategory/byCategory/";
 export const GET_FILTERED_PRODUCTS = "/product/filtered";
 export const GET_PRICE_FILTER_VALUES = "/product/getPriceFilterValues";
+export const GET_CUSTOMER_INFO_DATA = "/customer/getInfoData/";
+export const GET_GENDERS = "/gender";
+export const UPDATE_CUSTOMER_ENDPOINT = "/customer/update/";
+export const UPDATE_CUSTOMER_PHOTO_ENDPOINT = "/customer/updatePhoto/";
+export const UPDATE_CUSTOMER_DELIVERY_DATA_ENDPOINT =
+  "/customer/saveDeliveryData/";
+export const GET_CUSTOMER_DELIVERY_DATA_ENDPOINT = "/customer/getDeliveryData/";
+export const IS_CUSTOMER_SELLING_PRODUCTS_ENDPOINT =
+  "/customer/hasSellingProducts/";
+export const GET_ACTIVE_PRODUCTS_ENDPOINT = "/product/getActiveProducts/";
+export const GET_SOLD_PRODUCTS_ENDPOINT = "/product/getSoldProducts/";
+export const GET_PRODUCTS_CUSTOMER_DID_BID_ENDPOINT =
+  "/product/getBidProducts/";
+export const DEACTIVATE_ACCOUNT_ENDPOINT = "/customer/deactivateAccount/";
+export const CHECK_IF_ACCOUNT_IS_ACTIVE = "/customer/checkIsAccountActive/";

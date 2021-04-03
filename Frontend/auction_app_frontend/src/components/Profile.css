@@ -1,0 +1,162 @@
+.userInfoDiv {
+  background: #ffffff;
+  border: 1px solid #d8d8d8;
+  margin-bottom: 20px;
+}
+
+.userInfoDivHeading {
+  background-color: #f0f0f0;
+  font-family: Lato-Bold;
+  font-size: 16px;
+  color: #252525;
+  letter-spacing: 0.56px;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.userChangeImgBtn {
+  background: #ffffff;
+  border: 3px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  font-family: Lato-Bold;
+  font-size: 14px;
+  color: #252525;
+  letter-spacing: 0.56px;
+  width: 100%;
+}
+
+.formDataGroup {
+  margin-bottom: 15px;
+}
+
+.selectGenderDiv {
+  width: 50% !important;
+}
+
+.cityInput {
+  width: 48%;
+}
+
+.cityZipCodeDiv {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectMonthYearDiv {
+  width: 30% !important;
+  margin-right: 10px;
+}
+
+.selectDayDiv {
+  width: 20% !important;
+  margin-right: 10px;
+}
+
+.selectData {
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
+    no-repeat right;
+  background-position-x: 95%;
+}
+
+.selectDataDropdown {
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
+    no-repeat right;
+  background-position-x: 97%;
+}
+
+.profileImage {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+div.col-lg-3.profileImageDiv {
+  text-align: center;
+  padding-left: 40px;
+  padding-right: 0;
+}
+
+div.col-lg-7.profileDataDiv {
+  padding-left: 30px;
+}
+
+.row.userInfoRow {
+  margin-bottom: 40px;
+  margin-top: 30px;
+}
+
+.saveInfoFormBtn {
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  font-family: Lato-Bold;
+  font-size: 18px;
+  color: #252525;
+  letter-spacing: 0.63px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 120px;
+}
+
+.saveInfoFormBtnDiv {
+  display: flex;
+}
+
+.saveInfoFormDiv {
+  text-align: end;
+}
+
+.PhoneInputCountry {
+  display: flex;
+  flex-direction: row;
+}
+.PhoneInputCountryIconImg {
+  width: 50px !important;
+  height: 40px !important;
+  margin-right: 2px;
+}
+.PhoneInputInput {
+  margin-top: 10px;
+}
+
+.PhoneInputInput,
+.PhoneInputCountrySelect {
+  background-color: #fcfcfc !important;
+  border: 1px solid #d8d8d8 !important;
+  border-radius: 0 !important;
+  height: 40px;
+}
+
+.PhoneInputCountrySelect {
+  order: 2;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png)
+    no-repeat right;
+  background-position-x: 95%;
+}
+
+@media (max-width: 991.5px) {
+  div.col-lg-7.profileDataDiv {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  div.col-lg-3.profileImageDiv {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

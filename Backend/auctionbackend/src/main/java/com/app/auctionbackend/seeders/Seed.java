@@ -37,6 +37,9 @@ public class Seed {
     @Autowired
     BidRepository bidRepository;
 
+    @Autowired
+    GenderRepository genderRepository;
+
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
@@ -57,11 +60,23 @@ public class Seed {
     @EventListener
     public void seed(ContextRefreshedEvent event) {
 
+        Gender female = new Gender();
+        female.setName("Female");
+
+        Gender male = new Gender();
+        male.setName("Male");
+
+        genderRepository.save(female);
+        genderRepository.save(male);
+
         Customer customer = new Customer();
         customer.setFirstName("Mable");
         customer.setLastName("Labmert");
         customer.setEmail("mableLambert@mail.com");
         customer.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer.setActive(true);
+        customer.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer.setGender(male);
         customerRepository.save(customer);
 
         Customer customer2 = new Customer();
@@ -69,6 +84,9 @@ public class Seed {
         customer2.setLastName("Warren");
         customer2.setEmail("miltonWarren@mail.com");
         customer2.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer2.setActive(true);
+        customer2.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer2.setGender(male);
         customerRepository.save(customer2);
 
         Customer customer3 = new Customer();
@@ -76,6 +94,9 @@ public class Seed {
         customer3.setLastName("Parks");
         customer3.setEmail("loydParks@mail.com");
         customer3.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer3.setActive(true);
+        customer3.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer3.setGender(male);
         customerRepository.save(customer3);
 
         Customer customer4 = new Customer();
@@ -83,13 +104,20 @@ public class Seed {
         customer4.setLastName("Fuller");
         customer4.setEmail("charlieFuller@mail.com");
         customer4.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer4.setActive(true);
+        customer4.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer4.setGender(female);
         customerRepository.save(customer4);
+
 
         Customer customer5 = new Customer();
         customer5.setFirstName("Azra");
         customer5.setLastName("Becirevic");
         customer5.setEmail("azra.becirevic1998@gmail.com");
         customer5.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer5.setActive(true);
+        customer5.setDateOfBirth(LocalDateTime.of(2000,2,2,0,0));
+        customer5.setGender(female);
         customerRepository.save(customer5);
 
         LocalDateTime currentDate = LocalDateTime.now();
@@ -130,7 +158,7 @@ public class Seed {
         womenTShort1.setStartPrice(50.55);
         womenTShort1.setCreatedOn(LocalDateTime.now());
         womenTShort1.setModifiedOn(LocalDateTime.now());
-
+        womenTShort1.setCustomer(customer5);
 
         womenTShirtImages.get(0).setProduct(womenTShort1);
         womenTShirtImages.get(1).setProduct(womenTShort1);
@@ -175,6 +203,7 @@ public class Seed {
         womenRedTShort.setStartPrice(60);
         womenRedTShort.setCreatedOn(LocalDateTime.now());
         womenRedTShort.setModifiedOn(LocalDateTime.now());
+        womenRedTShort.setCustomer(customer5);
 
         womenRedTShirtImages.get(0).setProduct(womenRedTShort);
         womenRedTShirtImages.get(1).setProduct(womenRedTShort);
@@ -360,7 +389,7 @@ public class Seed {
 
         Product womenWhiteSneakers = new Product();
         womenWhiteSneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateWS = LocalDateTime.of(2021,4,27,0,0);
+        LocalDateTime endDateWS = LocalDateTime.of(2021,3,31,0,0);
         womenWhiteSneakers.setEndDate(endDateWS);
         LocalDateTime startDateWS = LocalDateTime.of(2021,3,18,0,0);
         womenWhiteSneakers.setStartDate(startDateWS);
@@ -368,6 +397,7 @@ public class Seed {
         womenWhiteSneakers.setStartPrice(150);
         womenWhiteSneakers.setCreatedOn(LocalDateTime.now());
         womenWhiteSneakers.setModifiedOn(LocalDateTime.now());
+        womenWhiteSneakers.setCustomer(customer5);
 
         womenWhiteSneakersImages.get(0).setProduct(womenWhiteSneakers);
         womenWhiteSneakersImages.get(1).setProduct(womenWhiteSneakers);

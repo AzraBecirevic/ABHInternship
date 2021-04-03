@@ -1,6 +1,9 @@
 package com.app.auctionbackend.model;
 
+import com.sun.istack.Nullable;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +17,24 @@ public class Customer {
     private String lastName;
     private String email;
     private String password;
+    private LocalDateTime dateOfBirth;
+    private String phoneNumber;
+    private Boolean active;
+    @Column(name = "ProfileImage", length = 10485760)
+    private String profileImage;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Bid> bids = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "gender_id", nullable = true)
+    private Gender gender;
+
+    @OneToOne(mappedBy = "customer")
+    private DeliveryAddress deliveryAddress;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -64,5 +82,61 @@ public class Customer {
 
     public void setBids(List<Bid> bids) {
         this.bids = bids;
+    }
+
+    public LocalDateTime getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public DeliveryAddress getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }
