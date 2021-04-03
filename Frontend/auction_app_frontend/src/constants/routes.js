@@ -50,6 +50,11 @@ export const CATEGORIES_ROUTE_PRODUCT_NAME =
 export const CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME =
   "/categories/PriceFilter/:priceFilter/ProductName/:productName";
 
+export const CATEGORIES_ROUTE_SORT = "/categories/Sort/:sortType";
+
+export const CATEGORIES_ROUTE_PRICE_FILTER_SORT =
+  "/categories/PriceFilter/:priceFilter/Sort/:sortType";
+
 export const CATEGORIES_ROUTE_CATEGORIES_SORT =
   "/categories/Categories/:categories/Sort/:sortType";
 
@@ -92,6 +97,14 @@ export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_SORT =
 export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT =
   "/categories/Categories/:categories/Subcategories/:subcategories/PriceFilter/:priceFilter/ProductName/:productName/Sort/:sortType";
 
+export const CATEGORIES_ROUTE_VIEW = "/categories/View/:view";
+
+export const CATEGORIES_ROUTE_SORT_VIEW =
+  "/categories/Sort/:sortType/View/:view";
+
+export const CATEGORIES_ROUTE_PRICE_FILTER_VIEW =
+  "/categories/PriceFilter/:priceFilter/View/:view";
+
 export const CATEGORIES_ROUTE_CATEGORIES_VIEW =
   "/categories/Categories/:categories/View/:view";
 
@@ -133,6 +146,9 @@ export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_VIEW =
 
 export const CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_VIEW =
   "/categories/Categories/:categories/Subcategories/:subcategories/PriceFilter/:priceFilter/ProductName/:productName/View/:view";
+
+export const CATEGORIES_ROUTE_PRICE_FILTER_SORT_VIEW =
+  "/categories/PriceFilter/:priceFilter/Sort/:sortType/View/:view";
 
 export const CATEGORIES_ROUTE_CATEGORIES_SORT_VIEW =
   "/categories/Categories/:categories/Sort/:sortType/View/:view";

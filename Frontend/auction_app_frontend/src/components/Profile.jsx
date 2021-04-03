@@ -17,7 +17,9 @@ import {
   EMAIL_FORMAT_MESSAGE,
   EMAIL_REQUIRED_MESSAGE,
   FIRST_NAME_REQUIRED_MESSAGE,
+  GENDER_REQIURED_MESSAGE,
   LAST_NAME_REQUIRED_MESSAGE,
+  MUST_BE_OLDER_THAN_MESSAGE,
   OPTIONAL,
   PHONE_NUMBER_FORMAT_MESSAGE,
   PHONE_NUMBER_REQUIRED_MESSAGE,
@@ -73,6 +75,7 @@ export class Profile extends Component {
     streetErrMess: "",
     countryErrMess: "",
     regionErrMess: "",
+    genderErrMeess: "",
     disabledSaveInfoBtn: false,
     phoneCountry: "",
   };
@@ -134,7 +137,11 @@ export class Profile extends Component {
     }
   };
 
-  fillYears = () => {
+  fillYears = (birthYear) => {
+    if (birthYear >= new Date().getFullYear()) {
+      this.years.push(birthYear);
+    }
+
     var currentYear = new Date().getFullYear();
     for (let i = 1900; i <= currentYear - MIN_AGE; i++) {
       this.years.push(i);
@@ -159,7 +166,7 @@ export class Profile extends Component {
       );
 
       this.fillDays(customer.birthMonth, customer.birthYear);
-      this.fillYears();
+      this.fillYears(customer.birthYear);
 
       this.setState({
         genderList: genders,
@@ -251,6 +258,24 @@ export class Profile extends Component {
       this.setState({
         phoneNumberErrMess: PHONE_NUMBER_FORMAT_MESSAGE,
       });
+      return false;
+    }
+
+    return true;
+  };
+
+  validateGender = () => {
+    if (this.state.genderId <= 0) {
+      this.setState({ genderErrMeess: GENDER_REQIURED_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateDateOfBirth = () => {
+    const { dateYear } = this.state;
+    if (+dateYear + MIN_AGE > new Date().getFullYear()) {
+      this.setState({ dateOfBirthErrMess: MUST_BE_OLDER_THAN_MESSAGE });
       return false;
     }
 
@@ -387,6 +412,15 @@ export class Profile extends Component {
     if (this.validatePhone() === false) {
       formIsValid = false;
     }
+
+    if (this.validateGender() == false) {
+      formIsValid = false;
+    }
+
+    if (this.validateDateOfBirth() == false) {
+      formIsValid = false;
+    }
+
     if (this.isDeliveryFormChanged()) {
       if (this.validateDeliveryAddress() === false) {
         formIsValid = false;
@@ -408,6 +442,7 @@ export class Profile extends Component {
       streetErrMess: "",
       countryErrMess: "",
       regionErrMess: "",
+      genderErrMeess: "",
     });
 
     if (this.validateData()) {
@@ -541,6 +576,7 @@ export class Profile extends Component {
       lastNameErrMess,
       genderList,
       genderId,
+      genderErrMeess,
       phoneNumber,
       phoneNumberErrMess,
       email,
@@ -559,6 +595,10 @@ export class Profile extends Component {
       regionErrMess,
       disabledSaveInfoBtn,
       phoneCountry,
+      dateOfBirthErrMess,
+      dateMonth,
+      dateDay,
+      dateYear,
     } = this.state;
 
     return (
@@ -630,6 +670,10 @@ export class Profile extends Component {
                     value={genderId}
                     onChange={this.onChange}
                   >
+                    <option value={0} defaultValue={genderId == 0}>
+                      {" "}
+                      -{" "}
+                    </option>
                     {genderList !== null &&
                       genderList.map(function (gender, index) {
                         return (
@@ -639,6 +683,12 @@ export class Profile extends Component {
                         );
                       })}
                   </select>
+                  <small
+                    className="errorMessage"
+                    hidden={genderErrMeess === ""}
+                  >
+                    {genderErrMeess}
+                  </small>
                 </div>
                 <div className="formDataGroup">
                   <label className="formLabel">Date of birth</label>
@@ -646,7 +696,7 @@ export class Profile extends Component {
                     <select
                       name="dateMonth"
                       className="form-control selectMonthYearDiv selectData"
-                      value={this.state.dateMonth}
+                      value={dateMonth}
                       onChange={this.onChange}
                     >
                       {" "}
@@ -661,7 +711,7 @@ export class Profile extends Component {
                     <select
                       className="form-control selectDayDiv selectData"
                       name="dateDay"
-                      value={this.state.dateDay}
+                      value={dateDay}
                       onChange={this.onChange}
                     >
                       {this.days.map(function (dateDay, index) {
@@ -675,7 +725,7 @@ export class Profile extends Component {
                     <select
                       className="form-control selectMonthYearDiv selectData"
                       name="dateYear"
-                      value={this.state.dateYear}
+                      value={dateYear}
                       onChange={this.onChange}
                     >
                       {this.years.map(function (dateYear, index) {
@@ -689,9 +739,9 @@ export class Profile extends Component {
                   </div>
                   <small
                     className="errorMessage"
-                    hidden={this.state.dateOfBirthErrMess === ""}
+                    hidden={dateOfBirthErrMess === ""}
                   >
-                    {this.state.dateOfBirthErrMess}
+                    {dateOfBirthErrMess}
                   </small>
                 </div>
                 <div className="formDataGroup">

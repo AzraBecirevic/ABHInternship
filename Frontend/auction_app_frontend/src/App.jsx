@@ -79,6 +79,12 @@ import {
   CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_SORT_VIEW,
   CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT_VIEW,
   USER_PAGE_ROUTE,
+  CATEGORIES_ROUTE_SORT,
+  CATEGORIES_ROUTE_VIEW,
+  CATEGORIES_ROUTE_PRICE_FILTER_SORT,
+  CATEGORIES_ROUTE_PRICE_FILTER_VIEW,
+  CATEGORIES_ROUTE_SORT_VIEW,
+  CATEGORIES_ROUTE_PRICE_FILTER_SORT_VIEW,
 } from "./constants/routes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -607,6 +613,44 @@ export class App extends Component {
                   />
                   <Route
                     path={CATEGORIES_ROUTE_PRICE_FILTER_PRODUCT_NAME}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_SORT_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+
+                  <Route
+                    path={CATEGORIES_ROUTE_SORT_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_SORT}
                     render={(props) => (
                       <Categories {...props} setIsLoading={this.setIsLoading} />
                     )}

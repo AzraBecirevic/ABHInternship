@@ -47,7 +47,6 @@ public class ProductService {
 
         if(product != null){
 
-
             ModelMapper modelMapper = new ModelMapper();
             ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
 
@@ -309,6 +308,13 @@ public class ProductService {
         ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
 
         List<ProductDto> filteredProducts = new ArrayList<>();
+
+        if((filterProductsDto.getSubcategoryIds() == null || filterProductsDto.getSubcategoryIds().isEmpty()) &&
+                (filterProductsDto.getCategoryIds() == null || filterProductsDto.getCategoryIds().isEmpty()) &&
+                (filterProductsDto.getProductName().isEmpty() || filterProductsDto.getProductName().equals(""))
+        ){
+           filteredProducts = getProducts();
+        }
 
         if(filterProductsDto.getSubcategoryIds() != null && !filterProductsDto.getSubcategoryIds().isEmpty()){
             for (Integer id:filterProductsDto.getSubcategoryIds()) {

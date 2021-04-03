@@ -1,4 +1,5 @@
 import { BID_MAXIMUM_PRICE } from "./bidPrice";
+import { MIN_AGE } from "./userData";
 
 export const PASSWORD_FORMAT_MESSAGE =
   "Password should be 8-16 characters long, have at least one number and one special character";
@@ -11,6 +12,9 @@ export const LAST_NAME_REQUIRED_MESSAGE = "Last name is required";
 export const PHONE_NUMBER_REQUIRED_MESSAGE = "Phone number is required";
 export const PHONE_NUMBER_FORMAT_MESSAGE =
   "Please provide correct phone number format of your country.";
+export const GENDER_REQIURED_MESSAGE = "Gender is required.";
+export const MUST_BE_OLDER_THAN_MESSAGE =
+  "Please provide your date of birth. You must be older than " + MIN_AGE;
 export const BID_PRICE_REQUIRED_MESSAGE = "You need to enter bid price.";
 export const BID_FORMAT_MESSAGE = "Bid can have up to two decimal places";
 export const MAX_ALLOWED_BID_PRICE =
@@ -90,3 +94,4 @@ export const CHANGE_PHOTO = "CHANGE PHOTO";
 export const CARD_INFORMATION = "CARD INFORMATION";
 export const OPTIONAL = "OPTIONAL";
 export const SAVE_INFO = "SAVE INFO";
+export const NO_SEARCHED_PRODUCTS = "There are no searched products.";

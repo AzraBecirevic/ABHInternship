@@ -125,6 +125,7 @@ public class CustomerService {
         validatePasswordFormat(customer.getPassword());
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setActive(true);
 
         customerRepository.save(customer);
 
@@ -176,16 +177,32 @@ public class CustomerService {
             return null;
 
         CustomerDetailsDto customerDetailsDto = new CustomerDetailsDto();
-        customerDetailsDto.setBirthDay(customer.getDateOfBirth().getDayOfMonth());
-        customerDetailsDto.setBirthMonth(customer.getDateOfBirth().getMonthValue());
-        customerDetailsDto.setBirthYear(customer.getDateOfBirth().getYear());
-        customerDetailsDto.setDateOfBirth(customer.getDateOfBirth());
+
         customerDetailsDto.setEmail(customer.getEmail());
         customerDetailsDto.setFirstName(customer.getFirstName());
-        customerDetailsDto.setGenderId(customer.getGender().getId());
         customerDetailsDto.setLastName(customer.getLastName());
         customerDetailsDto.setPhoneNumber(customer.getPhoneNumber());
         customerDetailsDto.setProfileImage(customer.getProfileImage());
+
+        if(customer.getDateOfBirth() != null){
+            customerDetailsDto.setBirthDay(customer.getDateOfBirth().getDayOfMonth());
+            customerDetailsDto.setBirthMonth(customer.getDateOfBirth().getMonthValue());
+            customerDetailsDto.setBirthYear(customer.getDateOfBirth().getYear());
+            customerDetailsDto.setDateOfBirth(customer.getDateOfBirth());
+        }
+        else {
+            LocalDateTime dateOfBirth = LocalDateTime.now() ;
+            customerDetailsDto.setDateOfBirth(dateOfBirth);
+            customerDetailsDto.setBirthDay(dateOfBirth.getDayOfMonth());
+            customerDetailsDto.setBirthMonth(dateOfBirth.getMonthValue());
+            customerDetailsDto.setBirthYear(dateOfBirth.getYear());
+        }
+      if(customer.getGender() != null){
+        customerDetailsDto.setGenderId(customer.getGender().getId());
+       }
+       else {
+           customerDetailsDto.setGenderId(0);
+       }
 
         return customerDetailsDto;
     }

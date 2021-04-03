@@ -10,16 +10,15 @@ import { CATEGORIES_ROUTE, SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 import {
   CONNECTION_REFUSED_MESSAGE,
   NO_MORE_PRODUCTS_MESSAGE,
-  START_CHOSING_FILTERS,
   NO_PRODUCTS_IN_CATEGORY_MESSAGE,
   LOADING_PRODUCTS_MESSAGE,
   PRICE_FILTER_HEADING,
   CATEGORY_MENU_HEADING,
-  MAX_ALLOWED_BID_PRICE,
   AVERAGE_PRICE_MESSAGE,
   NO_PRODUCTS_IN_PRICE_RANGE,
   GRID_VIEW,
   LIST_VIEW,
+  NO_SEARCHED_PRODUCTS,
 } from "../constants/messages";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -74,6 +73,7 @@ export class Categories extends Component {
     sortingTypesHidden: true,
     sliderCurrentlyChanging: false,
     gridChosen: true,
+    productName: "",
   };
 
   categoryService = new CategoryService();
@@ -342,6 +342,7 @@ export class Categories extends Component {
         sortingType: chosenType,
         sliderCurrentlyChanging: false,
         gridChosen: chosenOptionGrid,
+        productName: productNameFilterPath,
       });
 
       this.setIsLoading(false);
@@ -889,6 +890,7 @@ export class Categories extends Component {
       sortingTypesHidden,
       sliderCurrentlyChanging,
       gridChosen,
+      productName,
     } = this.state;
 
     return (
@@ -1064,18 +1066,17 @@ export class Categories extends Component {
                   </div>
                 </div>
                 <div className="col-lg-9 col-md-8 col-sm-12 categories">
-                  {categoryId == 0 &&
-                    (products == null || products.length == 0) &&
-                    this.filteredProducts.categoryIds.length <= 0 &&
-                    this.filteredProducts.subcategoryIds <= 0 && (
+                  {productName !== undefined &&
+                    productName.length > 0 &&
+                    this.filteredProducts.minPrice == -1 &&
+                    this.filteredProducts.maxPrice == -1 &&
+                    (products == null || products.length == 0) && (
                       <div className="infErrorMessage">
-                        {START_CHOSING_FILTERS}
+                        {NO_SEARCHED_PRODUCTS}
                       </div>
                     )}
-                  {(this.filteredProducts.categoryIds.length > 0 ||
-                    this.filteredProducts.subcategoryIds > 0) &&
-                    (this.filteredProducts.minPrice != -1 ||
-                      this.filteredProducts.maxPrice != -1) &&
+                  {(this.filteredProducts.minPrice != -1 ||
+                    this.filteredProducts.maxPrice != -1) &&
                     (products == null || products.length == 0) && (
                       <div className="infErrorMessage">
                         {NO_PRODUCTS_IN_PRICE_RANGE}

@@ -10,24 +10,15 @@ import {
 
 class ValidationService {
   validateFirstName = (firstName) => {
-    if (firstName === "") {
-      return false;
-    }
-    return true;
+    return firstName !== "";
   };
 
   validateLastName = (lastName) => {
-    if (lastName === "") {
-      return false;
-    }
-    return true;
+    return lastName !== "";
   };
 
   validateEmail = (email) => {
-    if (email === "") {
-      return false;
-    }
-    return true;
+    return email !== "";
   };
 
   validateFormat(text, regex) {
@@ -43,10 +34,7 @@ class ValidationService {
   }
 
   validatePhone = (phoneNumber) => {
-    if (phoneNumber === "") {
-      return false;
-    }
-    return true;
+    return phoneNumber !== "";
   };
 
   validatePhoneFormat(phoneNumber) {
@@ -60,10 +48,7 @@ class ValidationService {
   }
 
   validateCity = (city) => {
-    if (city === "") {
-      return false;
-    }
-    return true;
+    return city !== "";
   };
 
   validateCityFormat = (city) => {
@@ -74,10 +59,7 @@ class ValidationService {
   };
 
   validateZipCode = (zipCode) => {
-    if (zipCode === "") {
-      return false;
-    }
-    return true;
+    return zipCode !== "";
   };
 
   validateZipCodeFormat = (zipCode) => {
@@ -91,10 +73,7 @@ class ValidationService {
   };
 
   validateStreet = (street) => {
-    if (street === "") {
-      return false;
-    }
-    return true;
+    return street !== "";
   };
 
   validateStreetFormat = (street) => {
@@ -105,17 +84,11 @@ class ValidationService {
   };
 
   validateCountry = (country) => {
-    if (country === "") {
-      return false;
-    }
-    return true;
+    return country !== "";
   };
 
   validateRegion = (region) => {
-    if (region === "") {
-      return false;
-    }
-    return true;
+    return region !== "";
   };
 }
 export default ValidationService;
