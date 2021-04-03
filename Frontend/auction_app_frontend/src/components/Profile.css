@@ -118,9 +118,17 @@ div.col-lg-7.profileDataDiv {
   text-align: end;
 }
 
+.PhoneInputCountry {
+  display: flex;
+  flex-direction: row;
+}
 .PhoneInputCountryIconImg {
   width: 50px !important;
-  height: 50px !important;
+  height: 40px !important;
+  margin-right: 2px;
+}
+.PhoneInputInput {
+  margin-top: 10px;
 }
 
 .PhoneInputInput,
@@ -132,6 +140,7 @@ div.col-lg-7.profileDataDiv {
 }
 
 .PhoneInputCountrySelect {
+  order: 2;
   border: none;
   outline: none;
   -webkit-appearance: none;

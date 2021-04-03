@@ -44,6 +44,8 @@ import {
 } from "react-country-region-selector";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import csc from "country-state-city";
+import { ICountry, IState, ICity } from "country-state-city";
 
 export class Profile extends Component {
   state = {
@@ -78,6 +80,15 @@ export class Profile extends Component {
     genderErrMeess: "",
     disabledSaveInfoBtn: false,
     phoneCountry: "",
+    countryList: [],
+    stateList: [],
+    cityList: [],
+    chosenCoutryCode: "",
+    chosenCountryName: "",
+    chosenStateCode: "",
+    chosenStateName: "",
+    chosenCityCode: "",
+    chosenCityName: "",
   };
 
   customerService = new CustomerService();
@@ -148,9 +159,92 @@ export class Profile extends Component {
     }
   };
 
+  loadCountries() {
+    var countries = [{ name: " - ", isoCode: "-" }];
+    var cscCountries = csc.getAllCountries();
+    var transfomedCountries = cscCountries.map(function (c) {
+      return { name: c.name, isoCode: c.isoCode };
+    });
+
+    for (let i = 0; i < transfomedCountries.length; i++) {
+      countries.push(transfomedCountries[i]);
+    }
+
+    return countries;
+  }
+
+  loadStatesByCode(code) {
+    var states = [{ name: " - ", isoCode: "-", countryCode: "-" }];
+    var cscStates = csc.getStatesOfCountry(code);
+    var transfomedStates = cscStates.map(function (c) {
+      return { name: c.name, isoCode: c.isoCode, countryCode: c.countryCode };
+    });
+
+    for (let i = 0; i < transfomedStates.length; i++) {
+      states.push(transfomedStates[i]);
+    }
+
+    return states;
+  }
+
+  loadStates(countryName) {
+    var countryCode = "";
+    for (let i = 0; i < this.state.countryList.length; i++) {
+      if (this.state.countryList[i].name === countryName) {
+        countryCode = this.state.countryList[i].isoCode;
+        break;
+      }
+    }
+    if (countryCode !== "") {
+      var states = this.loadStatesByCode(countryCode);
+      this.setState({ stateList: states });
+      this.setState({
+        city: "",
+        region: "",
+        cityList: [{ name: " - ", stateCode: "-", countryCode: "-" }],
+      });
+    }
+  }
+
+  loadCitiesByCode(stateCode, countryCode) {
+    var cities = [{ name: " - ", stateCode: "-", countryCode: "-" }];
+    var cscCities = csc.getCitiesOfState(countryCode, stateCode);
+    var transfomedCities = cscCities.map(function (c) {
+      return {
+        name: c.name,
+        stateCode: c.stateCode,
+        countryCode: c.countryCode,
+      };
+    });
+
+    for (let i = 0; i < transfomedCities.length; i++) {
+      cities.push(transfomedCities[i]);
+    }
+
+    return cities;
+  }
+
+  loadCities(stateName) {
+    var countryCode = "";
+    var stateCode = "";
+    for (let i = 0; i < this.state.stateList.length; i++) {
+      if (this.state.stateList[i].name === stateName) {
+        stateCode = this.state.stateList[i].isoCode;
+        countryCode = this.state.stateList[i].countryCode;
+        break;
+      }
+    }
+    if (stateCode !== "" && countryCode !== "") {
+      var cities = this.loadCitiesByCode(stateCode, countryCode);
+      this.setState({ cityList: cities, city: "" });
+    }
+  }
+
   componentDidMount = async () => {
     try {
       const { token, userEmail } = this.props;
+
+      var countries = this.loadCountries();
 
       this.setIsLoading(true);
       const customer = await this.customerService.getCustomerInfoData(
@@ -182,9 +276,18 @@ export class Profile extends Component {
         profileImage: customer.profileImage,
         chosenImage: userImage,
         imgFile: null,
+        countryList: countries,
       });
+      var states;
+      var cities;
 
       if (deliveryData !== null) {
+        if (deliveryData.country !== null && deliveryData.country.length > 0) {
+          states = this.loadStates(deliveryData.country);
+        }
+        if (deliveryData.region !== null && deliveryData.region.length > 0) {
+          cities = this.loadCities(deliveryData.region);
+        }
         this.setState({
           country: deliveryData.country,
           region: deliveryData.region,
@@ -203,10 +306,14 @@ export class Profile extends Component {
   onChange = (e) => {
     if (e.target.name == "dateMonth") {
       this.fillDays(e.target.value, this.state.dateYear);
-    }
-    if (e.target.name == "dateYear") {
+    } else if (e.target.name == "dateYear") {
       this.fillDays(this.state.dateMonth, e.target.value);
+    } else if (e.target.name == "country") {
+      this.loadStates(e.target.value);
+    } else if (e.target.name == "region") {
+      this.loadCities(e.target.value);
     }
+
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -299,17 +406,18 @@ export class Profile extends Component {
 
     return true;
   };
-
-  validateCity = () => {
-    if (this.validationService.validateCity(this.state.city) == false) {
-      this.setState({ cityErrMess: CITY_REQUIRED_MESSAGE });
+  validateCityConutryRegionFormat = (text) => {
+    if (text === " - ") {
       return false;
     }
-
-    if (this.validationService.validateCityFormat(this.state.city) == false) {
-      this.setState({
-        cityErrMess: CITY_FORMAT_MESSAGE,
-      });
+    return true;
+  };
+  validateCity = () => {
+    if (
+      this.validationService.validateCity(this.state.city) == false ||
+      !this.validateCityConutryRegionFormat(this.state.city)
+    ) {
+      this.setState({ cityErrMess: CITY_REQUIRED_MESSAGE });
       return false;
     }
 
@@ -317,7 +425,10 @@ export class Profile extends Component {
   };
 
   validateCountry = () => {
-    if (this.validationService.validateCountry(this.state.country) == false) {
+    if (
+      this.validationService.validateCountry(this.state.country) == false ||
+      !this.validateCityConutryRegionFormat(this.state.country)
+    ) {
       this.setState({ countryErrMess: COUNTRY_REQUIRED_MESSAGE });
       return false;
     }
@@ -327,8 +438,7 @@ export class Profile extends Component {
   validateRegion = () => {
     if (
       this.validationService.validateRegion(this.state.region) == false ||
-      this.state.region.length <= 0 ||
-      this.state.region == "Select Region"
+      !this.validateCityConutryRegionFormat(this.state.region)
     ) {
       this.setState({ regionErrMess: REGION_REQUIRED_MESSAGE });
       return false;
@@ -599,6 +709,9 @@ export class Profile extends Component {
       dateMonth,
       dateDay,
       dateYear,
+      countryList,
+      stateList,
+      cityList,
     } = this.state;
 
     return (
@@ -747,6 +860,7 @@ export class Profile extends Component {
                 <div className="formDataGroup">
                   <label className="formLabel">Phone Number</label>
                   <PhoneInput
+                    international
                     name="phoneNumber"
                     country={this.state.phoneCountry}
                     value={phoneNumber}
@@ -789,40 +903,69 @@ export class Profile extends Component {
             <div className="col-lg-7 profileDataDiv">
               <div className="formDataGroup">
                 <label className="formLabel">Country</label>
-
-                <CountryDropdown
-                  className="form-control selectDataDropdown"
+                <select
+                  name="country"
                   value={country}
-                  onChange={(val) => this.selectCountry(val)}
-                />
+                  className="form-control selectDataDropdown"
+                  onChange={this.onChange}
+                >
+                  {countryList != null &&
+                    countryList.map(function (c, index) {
+                      return (
+                        <option key={index} value={c.name}>
+                          {c.name}
+                        </option>
+                      );
+                    })}
+                </select>
                 <small className="errorMessage" hidden={countryErrMess === ""}>
                   {countryErrMess}
                 </small>
               </div>
+
               <div className="formDataGroup">
                 <label className="formLabel">State</label>
-                <RegionDropdown
-                  className="form-control selectDataDropdown"
-                  country={country}
+                <select
+                  name="region"
                   value={region}
-                  onChange={(val) => this.selectRegion(val)}
-                />
+                  className="form-control selectDataDropdown"
+                  onChange={this.onChange}
+                >
+                  {stateList != null &&
+                    stateList.map(function (s, index) {
+                      return (
+                        <option key={index} value={s.name}>
+                          {s.name}
+                        </option>
+                      );
+                    })}
+                </select>
                 <small className="errorMessage" hidden={regionErrMess === ""}>
                   {regionErrMess}
                 </small>
               </div>
 
+              <div className="formDataGroup"></div>
+
               <div className="formDataGroup">
                 <div className="cityZipCodeDiv">
                   <div className="cityInput">
                     <label className="formLabel">City</label>
-                    <input
-                      type="text"
+                    <select
                       name="city"
-                      className="form-control"
                       value={city}
+                      className="form-control selectDataDropdown"
                       onChange={this.onChange}
-                    />
+                    >
+                      {cityList != null &&
+                        cityList.map(function (c, index) {
+                          return (
+                            <option key={index} value={c.name}>
+                              {c.name}
+                            </option>
+                          );
+                        })}
+                    </select>
                     <small className="errorMessage" hidden={cityErrMess === ""}>
                       {cityErrMess}
                     </small>

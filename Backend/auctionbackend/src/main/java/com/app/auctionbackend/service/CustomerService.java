@@ -95,10 +95,6 @@ public class CustomerService {
             throw new Exception(USER_MIN_AGE_MESSAGE);
     }
 
-    private void validateCityFormat(String city) throws Exception{
-        if(!Helper.isCityFormatValid(city))
-            throw new Exception(CITY_FORMAT_MESSAGE);
-    }
     private void validateZipCodeFormat(String zipCode) throws Exception{
         if(!Helper.isZipCodeFormatValid(zipCode))
             throw new Exception(ZIP_CODE_FORMAT_MESSAGE);
@@ -275,7 +271,6 @@ public class CustomerService {
        validateRequiredField(deliveryDataDto.getCity(), CITY_REQUIRED_MESSAGE);
        validateRequiredField(deliveryDataDto.getZipCode(), ZIP_CODE_REQUIRED_MESSAGE);
        validateRequiredField(deliveryDataDto.getStreet(), STREET_REQUIRED_MESSAGE);
-       validateCityFormat(deliveryDataDto.getCity());
        validateZipCodeFormat(deliveryDataDto.getZipCode());
        validateStreetFormat(deliveryDataDto.getStreet());
 
