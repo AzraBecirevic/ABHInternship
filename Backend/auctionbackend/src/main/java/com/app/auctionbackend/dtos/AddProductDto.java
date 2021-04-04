@@ -18,7 +18,6 @@ public class AddProductDto {
     private Integer startDateDay;
     private Integer startDateMonth;
     private Integer startDateYear;
-
     private LocalDateTime endDate;
     private Integer endDateDay;
     private Integer endDateMonth;
@@ -58,4 +57,77 @@ public class AddProductDto {
     public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
     }
+
+    public double getStartPrice() {
+        return startPrice;
+    }
+
+    public void setStartPrice(double startPrice) {
+        this.startPrice = startPrice;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public Integer getStartDateDay() {
+        return startDateDay;
+    }
+
+    public void setStartDateDay(Integer startDateDay) {
+        this.startDateDay = startDateDay;
+    }
+
+    public Integer getStartDateMonth() {
+        return startDateMonth;
+    }
+
+    public void setStartDateMonth(Integer startDateMonth) {
+        this.startDateMonth = startDateMonth;
+    }
+
+    public Integer getStartDateYear() {
+        return startDateYear;
+    }
+
+    public void setStartDateYear(Integer startDateYear) {
+        this.startDateYear = startDateYear;
+    }
+
+    public Integer getEndDateDay() {
+        return endDateDay;
+    }
+
+    public void setEndDateDay(Integer endDateDay) {
+        this.endDateDay = endDateDay;
+    }
+
+    public Integer getEndDateMonth() {
+        return endDateMonth;
+    }
+
+    public void setEndDateMonth(Integer endDateMonth) {
+        this.endDateMonth = endDateMonth;
+    }
+
+    public Integer getEndDateYear() {
+        return endDateYear;
+    }
+
+    public void setEndDateYear(Integer endDateYear) {
+        this.endDateYear = endDateYear;
+    }
+
+    public Integer getSubcategoryId() {
+        return subcategoryId;
+    }
+
+    public void setSubcategoryId(Integer subcategoryId) {
+        this.subcategoryId = subcategoryId;
+    }
+
 }

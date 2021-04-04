@@ -150,7 +150,7 @@ public class Seed {
 
         Product womenTShort1 = new Product();
         womenTShort1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateB = LocalDateTime.of(2021,4,30,0,0);
+        LocalDateTime endDateB = LocalDateTime.of(2021,4,7,0,0);
         womenTShort1.setEndDate(endDateB);
         LocalDateTime startDateB = LocalDateTime.of(2021,3,30,0,0);
         womenTShort1.setStartDate(startDateB);
@@ -197,7 +197,7 @@ public class Seed {
         womenRedTShort.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateR = LocalDateTime.of(2021,4,30,0,0);
         womenRedTShort.setEndDate(endDateR);
-        LocalDateTime startDateR = LocalDateTime.of(2021,3,30,0,0);
+        LocalDateTime startDateR = LocalDateTime.of(2021,4,4,0,0);
         womenRedTShort.setStartDate(startDateR);
         womenRedTShort.setName("Red Shirt");
         womenRedTShort.setStartPrice(60);
@@ -263,9 +263,9 @@ public class Seed {
 
         Product womenWhiteTShort = new Product();
         womenWhiteTShort.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateW = LocalDateTime.of(2021,4,3,0,0);
+        LocalDateTime endDateW = LocalDateTime.of(2021,4,30,0,0);
         womenWhiteTShort.setEndDate(endDateW);
-        LocalDateTime startDateW = LocalDateTime.of(2021,3,5,0,0);
+        LocalDateTime startDateW = LocalDateTime.of(2021,4,4,0,0);
         womenWhiteTShort.setStartDate(startDateW);
         womenWhiteTShort.setName("White Shirt");
         womenWhiteTShort.setStartPrice(70);
@@ -389,7 +389,7 @@ public class Seed {
 
         Product womenWhiteSneakers = new Product();
         womenWhiteSneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateWS = LocalDateTime.of(2021,3,31,0,0);
+        LocalDateTime endDateWS = LocalDateTime.of(2021,4,7,0,0);
         womenWhiteSneakers.setEndDate(endDateWS);
         LocalDateTime startDateWS = LocalDateTime.of(2021,3,18,0,0);
         womenWhiteSneakers.setStartDate(startDateWS);
@@ -490,7 +490,7 @@ public class Seed {
 
         Product womenRedBag = new Product();
         womenRedBag.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateRB = LocalDateTime.of(2021,4,3,0,0);
+        LocalDateTime endDateRB = LocalDateTime.of(2021,4,7,0,0);
         womenRedBag.setEndDate(endDateRB);
         LocalDateTime startDateRB = LocalDateTime.of(2021,3,10,0,0);
         womenRedBag.setStartDate(startDateRB);
@@ -534,7 +534,7 @@ public class Seed {
         womenCamelBag.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateCB = LocalDateTime.of(2021,4,30,0,0);
         womenCamelBag.setEndDate(endDateCB);
-        LocalDateTime startDateCB = LocalDateTime.of(2021,3,10,0,0);
+        LocalDateTime startDateCB = LocalDateTime.of(2021,4,3,0,0);
         womenCamelBag.setStartDate(startDateCB);
         womenCamelBag.setName("Camel bag");
         womenCamelBag.setStartPrice(80);
@@ -728,7 +728,7 @@ public class Seed {
         manBlackShirt.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateBS = LocalDateTime.of(2021,4,30,0,0);
         manBlackShirt.setEndDate(endDateBS);
-        LocalDateTime startDateBS = LocalDateTime.of(2021,3,4,0,0);
+        LocalDateTime startDateBS = LocalDateTime.of(2021,4,3,0,0);
         manBlackShirt.setStartDate(startDateBS);
         manBlackShirt.setName("Black shirt");
         manBlackShirt.setStartPrice(170);
@@ -828,7 +828,7 @@ public class Seed {
         manBlackSneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateBl = LocalDateTime.of(2021,4,30,0,0);
         manBlackSneakers.setEndDate(endDateBl);
-        LocalDateTime startDateBl = LocalDateTime.of(2021,3,5,0,0);
+        LocalDateTime startDateBl = LocalDateTime.of(2021,3,3,0,0);
         manBlackSneakers.setStartDate(startDateBl);
         manBlackSneakers.setName("Black sneakers");
         manBlackSneakers.setStartPrice(100);

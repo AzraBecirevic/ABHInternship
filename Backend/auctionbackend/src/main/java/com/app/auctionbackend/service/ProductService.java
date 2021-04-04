@@ -15,6 +15,7 @@ import java.util.*;
 
 
 import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
+import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 
 @Service("productService")
 public class ProductService {
@@ -28,7 +29,31 @@ public class ProductService {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    SubcategoryService subcategoryService;
+
     DecimalFormat df = new DecimalFormat("#0.00");
+
+    private  void validateRequiredField(String field, String errorMessage) throws Exception{
+        if(field == null || field.isEmpty())
+            throw new Exception(errorMessage);
+    }
+    private void validateStartPrice(double startPrice, String errorMessage)throws Exception{
+        if(startPrice <= 0)
+            throw new Exception(errorMessage);
+    }
+    private void validateDescriptionFormat(String description, String errorMessage)throws Exception {
+        if(description.length() > 700)
+            throw new Exception(errorMessage);
+    }
+    private void validateSubcategoryRequired(Integer id, String errorMessage)throws Exception{
+        if(id == null)
+            throw new Exception(errorMessage);
+    }
+    private void validateSubcategoryFormat(Integer id, String errorMessage)throws Exception{
+        if(id <= 0 || subcategoryService.findById(id) == null)
+            throw new Exception(errorMessage);
+    }
 
     public List<ProductDto> getProducts(){
 
@@ -514,6 +539,36 @@ public class ProductService {
        }
 
         return bidProducts;
+    }
+
+    public Integer addProduct(AddProductDto addProductDto) throws Exception{
+     Customer customer = customerService.findByEmail(addProductDto.getCustomerEmail());
+     if(customer == null)
+         throw new Exception(USER_DOES_NOT_EXIST);
+
+     validateRequiredField(addProductDto.getName(), PRODUCT_NAME_REQUIRED_MESSAGE);
+     validateRequiredField(addProductDto.getDescription(), DESCRIPTION_REQUIRED_MESSAGE);
+     validateStartPrice(addProductDto.getStartPrice(), START_PRICE_BIGGER_THAN_0_MESSAGE);
+     validateDescriptionFormat(addProductDto.getDescription(), DESCRIPTION_FORMAT_MESSAGE );
+     validateSubcategoryRequired(addProductDto.getSubcategoryId(), SUBCATEGORY_REQUIRED_MESSAGE);
+     validateSubcategoryFormat(addProductDto.getSubcategoryId(), SUBCATEGORY_DOES_NOT_EXIST_MESSAGE);
+             // validatedates ;
+
+     Product product = new Product();
+     product.setCustomer(customer);
+     product.setCreatedOn(LocalDateTime.now());
+     product.setModifiedOn(LocalDateTime.now());
+     product.setStartPrice(addProductDto.getStartPrice());
+     product.setName(addProductDto.getName());
+     product.setDescription(addProductDto.getDescription());
+     // set endDate. startDate
+     List<Subcategory> subcategories = new ArrayList<>();
+     Subcategory subcategory = subcategoryService.findById(addProductDto.getSubcategoryId());
+     subcategories.add(subcategory);
+     product.setSubcategories(subcategories);
+
+     productRepository.save(product);
+     return product.getId();
     }
 
     private List<ProductDto> changeToDto(List<Product>products){

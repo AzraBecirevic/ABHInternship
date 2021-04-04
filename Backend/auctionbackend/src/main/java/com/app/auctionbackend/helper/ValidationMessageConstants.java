@@ -25,7 +25,13 @@ public class ValidationMessageConstants {
     public static final String CITY_REQUIRED_MESSAGE = "City is required";
     public static final String ZIP_CODE_REQUIRED_MESSAGE = "Zip code is required";
     public static final String STREET_REQUIRED_MESSAGE = "Street is required";
-    public static final String CITY_FORMAT_MESSAGE = "Only characters, maximum 40";
     public static final String ZIP_CODE_FORMAT_MESSAGE = "Expected zip code format: 11111 or 11111-1111";
     public static final String STREET_FORMAT_MESSAGE = "Characters, numbers, dots and commas allowed, 60 characters is maximum";
+    public static final String PRODUCT_NAME_REQUIRED_MESSAGE = "Product name is required";
+    public static final String DESCRIPTION_REQUIRED_MESSAGE = "Product description is required";
+    public static final String START_PRICE_BIGGER_THAN_0_MESSAGE = "You need to enter start price bigger than zero";
+    public static final String DESCRIPTION_FORMAT_MESSAGE = "Product description can have 700 character maximum";
+    public static final String SUBCATEGORY_REQUIRED_MESSAGE = "Subcategory is required";
+    public static final String SUBCATEGORY_DOES_NOT_EXIST_MESSAGE = "Specified subcategory does not exist";
+
 }

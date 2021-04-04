@@ -15,6 +15,14 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
+    public class Message {
+        public String text;
+
+        public Message(String text) {
+            this.text = text;
+        }
+    }
+
     @Autowired
     private ProductService productService;
 
@@ -103,7 +111,26 @@ public class ProductController {
         return sellProductDto;
     }
 
-   /* @PostMapping("/addProduct")
-    public ProductDto addProduct()*/
+    @PostMapping("/addProduct")
+    public ResponseEntity addProduct(@RequestBody AddProductDto addProductDto){
+        try{
+        Integer productId = productService.addProduct(addProductDto);
+        /*
+        if(productId!=0)
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(registeredCustomer.getId())
+                        .toUri();
+
+                return new ResponseEntity(location,HttpStatus.CREATED);
+        */
+        return new ResponseEntity<>(productId, HttpStatus.CREATED);
+        }
+        catch (Exception ex){
+            return new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+        //return new ResponseEntity<>(new Message("Product data can not be saved"), HttpStatus.BAD_REQUEST);
+    }
 
 }

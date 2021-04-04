@@ -37,5 +37,8 @@ public class SubcategoryService {
 
         return subcategoryDtos;
     }
-
+    public Subcategory findById(Integer id){
+        Subcategory subcategory = subcategoryRepository.findById(id).orElse(null);
+        return subcategory;
+    }
 }
