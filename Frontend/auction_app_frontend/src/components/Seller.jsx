@@ -8,11 +8,12 @@ import {
   NO_PRODUCTS_TO_SHOW_MESSAGE,
   SOLD_ITEMS,
 } from "../constants/messages";
-import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
+import { ADD_ITEM_ROUTE, SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 import CustomerService from "../services/customerService";
 import ProductService from "../services/productService";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Seller.css";
+import AddItem from "./AddItem";
 
 export class Seller extends Component {
   state = { products: null, activeChosen: true };
@@ -74,14 +75,26 @@ export class Seller extends Component {
               {SOLD_ITEMS}
             </div>
           </div>
-          <div className="addItemOptionDiv">
-            <FontAwesomeIcon
-              className="tabDivIcon"
-              icon={faPlus}
-              size={"sm"}
-            ></FontAwesomeIcon>{" "}
-            {ADD_ITEM}
-          </div>
+          <Link
+            className="addItemOptionLink"
+            to={{
+              pathname: ADD_ITEM_ROUTE,
+              state: {
+                isLoggedIn: isLoggedIn,
+                email: userEmail,
+                token: token,
+              },
+            }}
+          >
+            <div className="addItemOptionDiv">
+              <FontAwesomeIcon
+                className="tabDivIcon"
+                icon={faPlus}
+                size={"sm"}
+              ></FontAwesomeIcon>{" "}
+              {ADD_ITEM}
+            </div>
+          </Link>
         </div>
         {products !== null && products.length > 0 && (
           <div className="activeSoldProductsDiv">

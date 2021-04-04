@@ -197,3 +197,4 @@ export const CHANGE_PASSWORD_ROUTE = "/changePassword";
 export const NOT_FOUND_ROUTE = "/notFound";
 
 export const USER_PAGE_ROUTE = "/userPage/:tab";
+export const ADD_ITEM_ROUTE = "/addItem";

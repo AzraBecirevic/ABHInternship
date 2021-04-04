@@ -85,6 +85,7 @@ import {
   CATEGORIES_ROUTE_PRICE_FILTER_VIEW,
   CATEGORIES_ROUTE_SORT_VIEW,
   CATEGORIES_ROUTE_PRICE_FILTER_SORT_VIEW,
+  ADD_ITEM_ROUTE,
 } from "./constants/routes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -103,6 +104,8 @@ import { TOKEN, EMAIL } from "./constants/auth";
 import UserPage from "./components/UserPage";
 import Sell from "./components/Sell";
 import Settings from "./components/Settings";
+import { ADD_ITEM } from "./constants/messages";
+import AddItem from "./components/AddItem";
 
 export class App extends Component {
   state = {
@@ -674,7 +677,6 @@ export class App extends Component {
                     )}
                   />
                 </Switch>
-
                 <Route
                   exact
                   path={SINGLE_PRODUCT_ROUTE}
@@ -703,7 +705,6 @@ export class App extends Component {
                     />
                   )}
                 />
-
                 <Route
                   path={USER_PAGE_ROUTE}
                   render={(props) => (
@@ -715,6 +716,10 @@ export class App extends Component {
                   )}
                 />
 
+                <Route
+                  path={ADD_ITEM_ROUTE}
+                  render={(props) => <AddItem {...props} />}
+                />
                 <Route path={NOT_FOUND_ROUTE} component={NotFound} />
               </div>
               <Footer openLink={this.openPage} />

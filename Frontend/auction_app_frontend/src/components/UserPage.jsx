@@ -203,7 +203,15 @@ export class UserPage extends Component {
                       {tabToShow == "Seller" && !hasSellingProducts && (
                         <Route
                           path=""
-                          render={(props) => <Sell {...props} />}
+                          render={(props) => (
+                            <Sell
+                              {...props}
+                              email={email}
+                              token={token}
+                              isLoggedIn={isLoggedIn}
+                              setIsLoading={this.props.setIsLoading}
+                            />
+                          )}
                         />
                       )}
                       {tabToShow == "Seller" && hasSellingProducts && (
