@@ -1,6 +1,7 @@
 import { parseJSON } from "jquery";
 import { EMAIL } from "../constants/auth";
 import {
+  BID_REGEX,
   CITY_REGEX,
   EMAIL_REGEX,
   PHONE_NUMBER_REGEX,
@@ -89,6 +90,38 @@ class ValidationService {
 
   validateRegion = (region) => {
     return region !== "";
+  };
+
+  validateProductNameFormat = (productName) => {
+    if (productName !== "" && productName.length > 60) {
+      return false;
+    }
+    return true;
+  };
+
+  validateDescriptionFormat = (description) => {
+    if (description !== "" && description.length > 700) {
+      return false;
+    }
+    return true;
+  };
+
+  validateStartPriceFormat = (startPrice) => {
+    if (
+      startPrice !== "" &&
+      this.validateFormat(startPrice, BID_REGEX) == false
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  validateStartDate = (startDate) => {
+    return startDate !== "";
+  };
+
+  validateRequiredFiled = (text) => {
+    return text !== "";
   };
 }
 export default ValidationService;

@@ -2,11 +2,42 @@ import React, { Component } from "react";
 import Heading from "./Heading";
 import CategoryService from "../services/categoryService";
 import SubcategoryService from "../services/subcategoryService";
-
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "./AddItem.css";
 import InputGroupWithExtras from "react-bootstrap/esm/InputGroup";
 import { TextField } from "@material-ui/core";
-import { FormText } from "react-bootstrap";
+import { FormText, ThemeProvider } from "react-bootstrap";
+import {
+  DESCRIPTION_RULE_MESSAGE,
+  MAX_ALLOWED_START_PRICE,
+  PRODUCT_DATES_RULE_MESSAGE,
+  PRODUCT_NAME_FORMAT_MESSAGE,
+  PRODUCT_NAME_REQUIRED_MESSAGE,
+  PRODUCT_NAME_RULE_MESSAGE,
+  START_PRICE_FORMAT_MESSAGE,
+  START_PRICE_MUST_BE_BIGGER_THAN_0_MESSAGE,
+  CATEGORY_REQUIRED_MESSAGE,
+  SUBCATEGORY_REQUIRED_MESSAGE,
+  DESCRIPTION_REQUIRED_MESSAGE,
+  DESCRIPTION_FORMAT_MESSAGE,
+  START_PRICE_REQUIRED_MESSAGE,
+  START_DATE_REQUIRED_MESSAGE,
+  END_DATE_REQUIRED_MESSAGE,
+  START_DATE_MIN_VALUE_MESSAGE,
+  END_DATE_MIN_VALUE_MESSAGE,
+  PRODUCT_ACTIVE_VALUE_MESSAGE,
+} from "../constants/messages";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AddItemSetPrice from "./AddItemSetPrice";
+import AddItemInfo from "./AddItemInfo";
+import ValidationService from "../services/validationService";
+import {
+  BID_MAXIMUM_PRICE,
+  START_PRICE_MAXIMUM_VALUE,
+} from "../constants/bidPrice";
 
 export class AddItem extends Component {
   state = {
@@ -45,6 +76,7 @@ export class AddItem extends Component {
 
   categoryService = new CategoryService();
   subcategoryService = new SubcategoryService();
+  validationService = new ValidationService();
 
   componentDidMount = async () => {
     var categories = await this.categoryService.getCategories();
@@ -63,16 +95,221 @@ export class AddItem extends Component {
   };
 
   onChange = (e) => {
-    console.log(e.target.value); //
     if (e.target.name == "chosenCategoryId") {
       this.loadSubcategories(e.target.value);
     }
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state.chosenCategoryId); //
   };
 
-  goToSetPricesTab = () => {
-    this.setState({ currentTab: "setPricesTab" });
+  validateProductName = () => {
+    const { productName } = this.state;
+    if (this.validationService.validateRequiredFiled(productName) == false) {
+      this.setState({ productNameErrMess: PRODUCT_NAME_REQUIRED_MESSAGE });
+      return false;
+    }
+    if (
+      this.validationService.validateProductNameFormat(productName) == false
+    ) {
+      this.setState({ productNameErrMess: PRODUCT_NAME_FORMAT_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateChosenCategoryId = () => {
+    const { chosenCategoryId } = this.state;
+    if (chosenCategoryId <= 0) {
+      this.setState({ chosenCategoryIdErrMess: CATEGORY_REQUIRED_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateChosenSubcategoryId = () => {
+    const { chosenSubcategoryId } = this.state;
+    if (chosenSubcategoryId <= 0) {
+      this.setState({
+        chosenSubcategoryIdErrMess: SUBCATEGORY_REQUIRED_MESSAGE,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  validateDescription = () => {
+    const { description } = this.state;
+    if (this.validationService.validateRequiredFiled(description) == false) {
+      this.setState({ descriptionErrMess: DESCRIPTION_REQUIRED_MESSAGE });
+      return false;
+    }
+    if (
+      this.validationService.validateDescriptionFormat(description) == false
+    ) {
+      this.setState({ descriptionErrMess: DESCRIPTION_FORMAT_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateAddItemTab = () => {
+    this.setState({
+      productNameErrMess: "",
+      chosenCategoryIdErrMess: "",
+      chosenSubcategoryIdErrMess: "",
+      descriptionErrMess: "",
+    });
+    var addItemtabValid = true;
+    if (this.validateProductName() == false) {
+      addItemtabValid = false;
+    }
+    if (this.validateChosenCategoryId() == false) {
+      addItemtabValid = false;
+    }
+    if (this.validateChosenSubcategoryId() == false) {
+      addItemtabValid = false;
+    }
+    if (this.validateDescription() == false) {
+      addItemtabValid = false;
+    }
+    return addItemtabValid;
+  };
+
+  validateStartPrice = () => {
+    const { startPrice } = this.state;
+
+    if (this.validationService.validateRequiredFiled(startPrice) == false) {
+      this.setState({ startPriceErrMessage: START_PRICE_REQUIRED_MESSAGE });
+      return false;
+    }
+    if (this.validationService.validateStartPriceFormat(startPrice) == false) {
+      this.setState({
+        startPriceErrMessage: START_PRICE_FORMAT_MESSAGE,
+      });
+      return false;
+    }
+    if (startPrice <= 0) {
+      this.setState({
+        startPriceErrMessage: START_PRICE_MUST_BE_BIGGER_THAN_0_MESSAGE,
+      });
+      return false;
+    }
+    if (startPrice > START_PRICE_MAXIMUM_VALUE) {
+      this.setState({
+        startPriceErrMessage: MAX_ALLOWED_START_PRICE,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  validateStartDate = () => {
+    const { startDate } = this.state;
+
+    if (this.validationService.validateStartDate(startDate) == false) {
+      this.setState({ startDateErrMess: START_DATE_REQUIRED_MESSAGE });
+      return false;
+    }
+
+    return true;
+  };
+
+  validateEndDate = () => {
+    const { endDate } = this.state;
+
+    if (this.validationService.validateStartDate(endDate) == false) {
+      this.setState({ endDateErrMess: END_DATE_REQUIRED_MESSAGE });
+      return false;
+    }
+
+    return true;
+  };
+  validateStartEndDatesValues = () => {
+    const { endDate, startDate } = this.state;
+
+    if (
+      new Date().toLocaleDateString() > new Date(startDate).toLocaleDateString()
+    ) {
+      this.setState({ startDateErrMess: START_DATE_MIN_VALUE_MESSAGE });
+      return false;
+    }
+
+    if (
+      startDate !== "" &&
+      endDate !== "" &&
+      (new Date(startDate).toJSON().slice(0, 10) >
+        new Date(endDate).toJSON().slice(0, 10) ||
+        new Date(startDate).toJSON().slice(0, 10) ==
+          new Date(endDate).toJSON().slice(0, 10))
+    ) {
+      this.setState({
+        endDateErrMess: END_DATE_MIN_VALUE_MESSAGE,
+      });
+      return false;
+    }
+
+    var currentYear = new Date().getFullYear();
+    var date = new Date(startDate);
+    date.setFullYear(currentYear + 1);
+
+    if (
+      endDate != "" &&
+      new Date(endDate).toJSON().slice(0, 10) >
+        new Date(date).toJSON().slice(0, 10)
+    ) {
+      this.setState({
+        endDateErrMess: PRODUCT_ACTIVE_VALUE_MESSAGE,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  validateSetPricesTab = () => {
+    this.setState({
+      startPriceErrMessage: "",
+      startDateErrMess: "",
+      endDateErrMess: "",
+    });
+    var setPricesTabValid = true;
+    if (this.validateStartPrice() == false) {
+      setPricesTabValid = false;
+    }
+    if (this.validateStartDate() == false) {
+      setPricesTabValid = false;
+    }
+    if (this.validateEndDate() == false) {
+      setPricesTabValid = false;
+    }
+    if (this.validateStartEndDatesValues() == false) {
+      setPricesTabValid = false;
+    }
+
+    return setPricesTabValid;
+  };
+
+  done = () => {
+    if (this.validateSetPricesTab()) {
+      console.log("validno");
+    }
+  };
+
+  goBack = () => {
+    const { currentTab } = this.state;
+
+    if (currentTab == "setPricesTab") {
+      this.setState({ currentTab: "addItemTab" });
+    }
+  };
+
+  goToNext = () => {
+    const { currentTab } = this.state;
+
+    if (currentTab == "addItemTab") {
+      if (this.validateAddItemTab()) {
+        this.setState({ currentTab: "setPricesTab" });
+      }
+    }
   };
 
   render() {
@@ -107,213 +344,33 @@ export class AddItem extends Component {
                   <div className="col-lg-2"></div>
                   <div className="col-lg-8">
                     {currentTab == "addItemTab" && (
-                      <div className="userInfoDiv">
-                        <div className="userInfoDivHeading startSelling">
-                          ADD ITEM
-                        </div>
-                        <div className="tabFormDiv">
-                          <form>
-                            <div className="formDataGroup">
-                              <label className="formLabel">
-                                What do you sell?
-                              </label>
-                              <input
-                                type="text"
-                                name="productName"
-                                className="form-control"
-                                value={productName}
-                                onChange={this.onChange}
-                              />
-                              <small
-                                className="errorMessage"
-                                hidden={productNameErrMess === ""}
-                              >
-                                {productNameErrMess}
-                              </small>
-                            </div>
-
-                            <div className="formDataGroup">
-                              <label className="formLabel"></label>
-
-                              <select
-                                className="form-control selectCategoryDiv selectData"
-                                name="chosenCategoryId"
-                                value={chosenCategoryId}
-                                onChange={this.onChange}
-                              >
-                                <option
-                                  value={0}
-                                  defaultValue={chosenCategoryId == 0}
-                                >
-                                  Select category
-                                </option>
-                                {categoryList !== null &&
-                                  categoryList.map(function (category, index) {
-                                    return (
-                                      <option value={category.id} key={index}>
-                                        {category.name}
-                                      </option>
-                                    );
-                                  })}
-                              </select>
-                              <small
-                                className="errorMessage"
-                                hidden={chosenCategoryIdErrMess === ""}
-                              >
-                                {chosenCategoryIdErrMess}
-                              </small>
-                            </div>
-                            {chosenCategoryId !== 0 && (
-                              <div className="formDataGroup">
-                                <label className="formLabel"></label>
-
-                                <select
-                                  className="form-control selectCategoryDiv selectData"
-                                  name="chosenSubcategoryId"
-                                  value={chosenSubcategoryId}
-                                  onChange={this.onChange}
-                                >
-                                  <option
-                                    value={0}
-                                    defaultValue={chosenSubcategoryId == 0}
-                                  >
-                                    Select subcategory
-                                  </option>
-                                  {subcategoryList !== null &&
-                                    subcategoryList.map(function (
-                                      subcategory,
-                                      index
-                                    ) {
-                                      return (
-                                        <option
-                                          value={subcategory.id}
-                                          key={index}
-                                        >
-                                          {subcategory.name}
-                                        </option>
-                                      );
-                                    })}
-                                </select>
-                                <small
-                                  className="errorMessage"
-                                  hidden={chosenSubcategoryIdErrMess === ""}
-                                >
-                                  {chosenSubcategoryIdErrMess}
-                                </small>
-                              </div>
-                            )}
-                            <div className="formDataGroup">
-                              <label className="formLabel">Description</label>
-                              <textarea
-                                name="description"
-                                rows={5}
-                                className="form-control"
-                                value={description}
-                                onChange={this.onChange}
-                              />
-                              <small
-                                className="errorMessage"
-                                hidden={descriptionErrMess === ""}
-                              >
-                                {descriptionErrMess}
-                              </small>
-                            </div>
-                            <div>Upload photos</div>
-                          </form>
-                          <div className="nextBackDoneBtnDivAddItem">
-                            <button
-                              className="btnBackNext nextBtnAddItem"
-                              onClick={this.goToSetPricesTab}
-                            >
-                              NEXT
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      <AddItemInfo
+                        productName={productName}
+                        productNameErrMess={productNameErrMess}
+                        categoryList={categoryList}
+                        chosenCategoryId={chosenCategoryId}
+                        chosenCategoryIdErrMess={chosenCategoryIdErrMess}
+                        subcategoryList={subcategoryList}
+                        chosenSubcategoryId={chosenSubcategoryId}
+                        chosenSubcategoryIdErrMess={chosenSubcategoryIdErrMess}
+                        description={description}
+                        descriptionErrMess={descriptionErrMess}
+                        onChange={this.onChange}
+                        goToNext={this.goToNext}
+                      ></AddItemInfo>
                     )}
                     {currentTab == "setPricesTab" && (
-                      <div className="userInfoDiv">
-                        <div className="userInfoDivHeading startSelling">
-                          SET PRICES
-                        </div>
-                        <div className="tabFormDiv">
-                          <form>
-                            <div className="formDataGroup">
-                              <label className="formLabel">
-                                Your start price
-                              </label>
-                              <div className="startPriceInputDiv">
-                                <div className="starPriceValuteDiv">$</div>
-                                <input
-                                  type="number"
-                                  name="startPrice"
-                                  className="form-control setPrices"
-                                  value={startPrice}
-                                  onChange={this.onChange}
-                                />
-                              </div>
-
-                              <small
-                                className="errorMessage"
-                                hidden={startPriceErrMessage === ""}
-                              >
-                                {startPriceErrMessage}
-                              </small>
-                            </div>
-                            <div className="formDataGroup">
-                              <div className="cityZipCodeDiv">
-                                <div className="cityInput">
-                                  <label className="formLabel">
-                                    Start date
-                                  </label>
-                                  <input
-                                    type="date"
-                                    name="startDate"
-                                    className="form-control setPrices"
-                                    value={startDate}
-                                    onChange={this.onChange}
-                                  />
-                                  <small
-                                    className="errorMessage"
-                                    hidden={startDateErrMess === ""}
-                                  >
-                                    {startDateErrMess}
-                                  </small>
-                                </div>
-                                <div className="cityInput">
-                                  <label className="formLabel">End date</label>
-                                  <input
-                                    type="date"
-                                    name="endDate"
-                                    className="form-control setPrices"
-                                    value={endDate}
-                                    onChange={this.onChange}
-                                  />
-                                  <small
-                                    className="errorMessage"
-                                    hidden={endDateErrMess === ""}
-                                  >
-                                    {endDateErrMess}
-                                  </small>
-                                </div>
-                              </div>
-                              <div className="startEndDateMessageDiv">
-                                The auction will be automatically closed when
-                                the end time comes. The highest bid will win the
-                                auction.
-                              </div>
-                            </div>
-                          </form>
-                          <div className="nextBackDoneBtnDivSetPrices">
-                            <button className="btnBackNext backBtnAddItem">
-                              BACK
-                            </button>
-                            <button className="btnBackNext nextBtnAddItem">
-                              NEXT
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      <AddItemSetPrice
+                        startPrice={startPrice}
+                        startPriceErrMessage={startPriceErrMessage}
+                        startDate={startDate}
+                        startDateErrMess={startDateErrMess}
+                        endDate={endDate}
+                        endDateErrMess={endDateErrMess}
+                        onChange={this.onChange}
+                        goBack={this.goBack}
+                        done={this.done}
+                      ></AddItemSetPrice>
                     )}
                   </div>
                   <div className="col-lg-2"></div>
