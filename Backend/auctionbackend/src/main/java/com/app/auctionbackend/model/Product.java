@@ -15,6 +15,7 @@ public class Product extends ModelObject {
     private double startPrice;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    @Column(name = "Description", length = 700)
     private String description;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Image> imageList = new ArrayList<>();

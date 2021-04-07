@@ -151,13 +151,6 @@ export class AddItemInfo extends Component {
               >
                 {descriptionErrMess}
               </small>
-              <Editor
-                name="description"
-                plugins="block inline"
-                toolbar={{ htop: "block inline" }}
-                value={description}
-                onChange={(val) => this.props.handleDescriptionChange(val)}
-              />
             </div>
             <div
               className={

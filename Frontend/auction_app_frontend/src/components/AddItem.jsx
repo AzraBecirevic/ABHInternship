@@ -36,6 +36,9 @@ import {
   PRODUCT_DATA_SAVED_SUCCESSFULLY,
   CHARACTERS_LEFT_MESSAGE,
   CONNECTION_REFUSED_MESSAGE,
+  PRODUCT_NAME_MIN_WORDS_MESSAGE,
+  DESCRIPTION_MAX_WORDS_MESSAGE,
+  PRODUCT_NAME_MAX_WORDS_MESSAGE,
 } from "../constants/messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddItemSetPrice from "./AddItemSetPrice";
@@ -55,12 +58,17 @@ import {
   PRODUCT_NAME_MAX_CHARACTERS,
 } from "../constants/product";
 import { EMAIL, TOKEN } from "../constants/auth";
-import { NOT_FOUND_ROUTE } from "../constants/routes";
+import {
+  HOME_ROUTE,
+  NOT_FOUND_ROUTE,
+  SINGLE_PRODUCT_ROUTE,
+} from "../constants/routes";
 
 export class AddItem extends Component {
   state = {
     email: "",
     token: "",
+    isLoggedIn: false,
     currentTab: "",
     productName: "",
     productNameErrMess: "",
@@ -106,16 +114,20 @@ export class AddItem extends Component {
 
     var email = "";
     var token = "";
+    var isLoggedIn = false;
 
     if (this.props.location == null || this.props.location.state == null) {
       if (localStorage.getItem(TOKEN) != null) {
+        isLoggedIn = true;
         email = localStorage.getItem(EMAIL);
         token = localStorage.getItem(TOKEN);
       } else if (sessionStorage.getItem(TOKEN) != null) {
+        isLoggedIn = true;
         email = sessionStorage.getItem(EMAIL);
         token = sessionStorage.getItem(TOKEN);
       }
     } else {
+      isLoggedIn = true;
       email = this.props.location.state.email;
       token = this.props.location.state.token;
     }
@@ -129,6 +141,7 @@ export class AddItem extends Component {
       categoryList: categories,
       email: email,
       token: token,
+      isLoggedIn: isLoggedIn,
       productNameRule: PRODUCT_NAME_RULE_MESSAGE,
       descriptionRule: DESCRIPTION_RULE_MESSAGE,
     });
@@ -211,6 +224,19 @@ export class AddItem extends Component {
       this.setState({ productNameErrMess: PRODUCT_NAME_FORMAT_MESSAGE });
       return false;
     }
+    var name = productName;
+    if (name.trim().indexOf(" ") == -1) {
+      this.setState({
+        productNameErrMess: PRODUCT_NAME_MIN_WORDS_MESSAGE,
+      });
+      return false;
+    }
+    if (name.split(" ").length > 5) {
+      this.setState({
+        productNameErrMess: PRODUCT_NAME_MAX_WORDS_MESSAGE,
+      });
+      return false;
+    }
     return true;
   };
 
@@ -244,6 +270,13 @@ export class AddItem extends Component {
       this.validationService.validateDescriptionFormat(description) == false
     ) {
       this.setState({ descriptionErrMess: DESCRIPTION_FORMAT_MESSAGE });
+      return false;
+    }
+
+    if (description.split(" ").length > 100) {
+      this.setState({
+        descriptionErrMess: DESCRIPTION_MAX_WORDS_MESSAGE,
+      });
       return false;
     }
     return true;
@@ -424,6 +457,7 @@ export class AddItem extends Component {
         const {
           email,
           token,
+          isLoggedIn,
           productName,
           chosenSubcategoryId,
           description,
@@ -474,6 +508,15 @@ export class AddItem extends Component {
               this.toastService.showSuccessToast(
                 PRODUCT_DATA_SAVED_SUCCESSFULLY
               );
+              this.props.history.push({
+                pathname: SINGLE_PRODUCT_ROUTE.replace(":prodId", productId),
+                state: {
+                  chosenProduct: productId,
+                  isLoggedIn: isLoggedIn,
+                  email: email,
+                  token: token,
+                },
+              });
             }
           }
         }

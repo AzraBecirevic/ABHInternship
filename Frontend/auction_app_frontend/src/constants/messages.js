@@ -139,3 +139,9 @@ export const MAX_PHOTOS_NUMBER_MESSAGE =
 export const PRODUCT_DATA_SAVED_SUCCESSFULLY =
   "Product data saved successfully";
 export const CHARACTERS_LEFT_MESSAGE = "characters left";
+export const PRODUCT_NAME_MIN_WORDS_MESSAGE =
+  "Product name need to have at least two words";
+export const PRODUCT_NAME_MAX_WORDS_MESSAGE =
+  "Product name can have maximum 5 words";
+export const DESCRIPTION_MAX_WORDS_MESSAGE =
+  "Description can have maximum 100 words ";
