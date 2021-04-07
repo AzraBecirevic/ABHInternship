@@ -47,6 +47,7 @@
   color: #9b9b9b;
   letter-spacing: 0.56px;
 }
+
 .starPriceValuteDiv {
   background: #fcfcfc;
   border: 1px solid #d8d8d8;
@@ -98,4 +99,63 @@
   color: #9b9b9b;
   letter-spacing: 0.56px;
   text-align: right;
+}
+
+.productImgPreview {
+  width: 200px;
+  height: 200px;
+}
+
+.dragDropDiv {
+  background: #fcfcfc;
+  border: 1px dashed #d8d8d8;
+  text-align: center;
+  min-height: 300px;
+  margin-top: 70px;
+}
+
+.dragDropDivEmpty {
+  background: #fcfcfc;
+  text-align: center;
+  margin-top: 70px;
+}
+
+.dragDropInputDivEmpty {
+  border: 1px dashed #d8d8d8;
+  height: 300px;
+  padding-top: 115.7px;
+}
+
+.dragDropInputDiv {
+  border-bottom: 1px dashed #d8d8d8;
+  height: 300px;
+  padding-top: 115.7px;
+}
+
+.purpleDropText {
+  font-family: Lato-Bold;
+  font-size: 14px;
+  color: #8367d8;
+  letter-spacing: 0.49px;
+  margin-right: 5px;
+}
+.purpleDropText:hover {
+  cursor: pointer;
+}
+
+.normalDropText {
+  font-family: Lato-Regular;
+  font-size: 14px;
+  color: #252525;
+  letter-spacing: 0.49px;
+}
+
+.imgPreviewDiv {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.imgPreviewTitle {
+  font-size: 14px;
+  letter-spacing: 0.49px;
 }

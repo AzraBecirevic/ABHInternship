@@ -718,7 +718,9 @@ export class App extends Component {
 
                 <Route
                   path={ADD_ITEM_ROUTE}
-                  render={(props) => <AddItem {...props} />}
+                  render={(props) => (
+                    <AddItem {...props} setIsLoading={this.setIsLoading} />
+                  )}
                 />
                 <Route path={NOT_FOUND_ROUTE} component={NotFound} />
               </div>

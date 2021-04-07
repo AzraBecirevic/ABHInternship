@@ -1,4 +1,10 @@
 import { BID_MAXIMUM_PRICE, START_PRICE_MAXIMUM_VALUE } from "./bidPrice";
+import {
+  DESCRIPTION_MAX_CHARACTERS,
+  MAX_PHOTOS,
+  MIN_PHOTOS,
+  PRODUCT_NAME_MAX_CHARACTERS,
+} from "./product";
 import { MIN_AGE } from "./userData";
 
 export const PASSWORD_FORMAT_MESSAGE =
@@ -95,8 +101,8 @@ export const CARD_INFORMATION = "CARD INFORMATION";
 export const OPTIONAL = "OPTIONAL";
 export const SAVE_INFO = "SAVE INFO";
 export const NO_SEARCHED_PRODUCTS = "There are no searched products.";
-export const PRODUCT_NAME_RULE_MESSAGE = "2-5 words (60 characters)";
-export const DESCRIPTION_RULE_MESSAGE = "100 words (700 characters)";
+export const PRODUCT_NAME_RULE_MESSAGE = "2-5 words";
+export const DESCRIPTION_RULE_MESSAGE = "100 words";
 export const PRODUCT_DATES_RULE_MESSAGE =
   "The auction will be automatically closed when the end time comes. The highest bid will win the auction.";
 export const START_PRICE_REQUIRED_MESSAGE = "Start price is required";
@@ -119,4 +125,17 @@ export const START_DATE_MIN_VALUE_MESSAGE =
 export const END_DATE_MIN_VALUE_MESSAGE =
   "End date must be later than start date";
 export const PRODUCT_ACTIVE_VALUE_MESSAGE =
-  "Your product can not be active more than 1 year.";
+  "Your product can not be active more than 1 year";
+export const START_DATE_MAX_VALUE_MESSAGE =
+  "You can start your product auction maximum 1 year from now";
+export const UPLOAD_PHOTOS_MESSAGE = "Upload Photos";
+export const OR_DRAG_AND_DROP_MESSAGE = "or just drag and drop";
+export const MIN_PHOTOS_NUMBER_MESSAGE =
+  "+ Add at least " + MIN_PHOTOS + " photos";
+export const MIN_PHOTOS_NUMER_ERR_MESSAGE =
+  "Please add at least " + MIN_PHOTOS + " photos";
+export const MAX_PHOTOS_NUMBER_MESSAGE =
+  "You can add " + MAX_PHOTOS + " photos at most";
+export const PRODUCT_DATA_SAVED_SUCCESSFULLY =
+  "Product data saved successfully";
+export const CHARACTERS_LEFT_MESSAGE = "characters left";

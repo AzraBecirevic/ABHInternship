@@ -33,5 +33,11 @@ public class ValidationMessageConstants {
     public static final String DESCRIPTION_FORMAT_MESSAGE = "Product description can have 700 character maximum";
     public static final String SUBCATEGORY_REQUIRED_MESSAGE = "Subcategory is required";
     public static final String SUBCATEGORY_DOES_NOT_EXIST_MESSAGE = "Specified subcategory does not exist";
-
+    public static final String START_DATE_REQUIRED_MESSAGE = "Start date is required";
+    public static final String START_DATE_MIN_VALUE_MESSAGE = "Start date can not be before today";
+    public static final String START_DATE_MAX_VALUE_MESSAGE =  "You can start your product auction maximum 1 year from now";
+    public static final String END_DATE_REQUIRED_MESSAGE = "End date is required";
+    public static final String END_DATE_MIN_VALUE_MESSAGE = "End date must be later than start date";
+    public static final String PRODUCT_ACTIVE_VALUE_MESSAGE = "Your product can not be active more than 1 year";
+    public static final String CUSTOMER_CAN_NOT_BID_PRODUCT = "You can not bid your own product.";
 }

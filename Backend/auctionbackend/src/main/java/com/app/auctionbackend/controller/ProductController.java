@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
 
     @GetMapping("/getOffered")
     public List<ProductDto> getProducts(){
@@ -114,23 +116,24 @@ public class ProductController {
     @PostMapping("/addProduct")
     public ResponseEntity addProduct(@RequestBody AddProductDto addProductDto){
         try{
-        Integer productId = productService.addProduct(addProductDto);
-        /*
-        if(productId!=0)
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                        .path("/{id}")
-                        .buildAndExpand(registeredCustomer.getId())
-                        .toUri();
-
-                return new ResponseEntity(location,HttpStatus.CREATED);
-        */
-        return new ResponseEntity<>(productId, HttpStatus.CREATED);
+            Integer productId = productService.addProduct(addProductDto);
+            return new ResponseEntity<>(productId, HttpStatus.CREATED);
         }
         catch (Exception ex){
             return new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
 
-        //return new ResponseEntity<>(new Message("Product data can not be saved"), HttpStatus.BAD_REQUEST);
+    @PostMapping(value = "/addProductPhotos/{id}")
+    public ResponseEntity addProductPhotos(@PathVariable Integer id, @RequestParam MultipartFile[] imgFiles){
+        var photoAdded = false;
+        try{
+            photoAdded = productService.addProductPhotos(id, imgFiles);
+            return new ResponseEntity(photoAdded, HttpStatus.OK);
+        }
+        catch (Exception exception){
+            return new ResponseEntity(photoAdded, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

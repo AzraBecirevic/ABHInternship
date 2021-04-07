@@ -14,11 +14,11 @@ public class AddProductDto {
 
     private String name;
     private double startPrice;
-    private LocalDateTime startDate;
+    private String startDate;
     private Integer startDateDay;
     private Integer startDateMonth;
     private Integer startDateYear;
-    private LocalDateTime endDate;
+    private String endDate;
     private Integer endDateDay;
     private Integer endDateMonth;
     private Integer endDateYear;
@@ -42,11 +42,11 @@ public class AddProductDto {
         this.description = description;
     }
 
-    public LocalDateTime getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -66,11 +66,11 @@ public class AddProductDto {
         this.startPrice = startPrice;
     }
 
-    public LocalDateTime getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 

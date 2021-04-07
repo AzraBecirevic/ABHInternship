@@ -16,6 +16,7 @@ export class AddItemSetPrice extends Component {
       startDateErrMess,
       endDate,
       endDateErrMess,
+      doneBtnDisabled,
     } = this.props;
     return (
       <div className="userInfoDiv">
@@ -94,8 +95,13 @@ export class AddItemSetPrice extends Component {
               BACK
             </button>
             <button
-              className="btnBackNext nextBtnAddItem"
+              className={
+                doneBtnDisabled
+                  ? "btnBackNext backBtnAddItem"
+                  : "btnBackNext nextBtnAddItem"
+              }
               onClick={this.props.done}
+              disabled={doneBtnDisabled}
             >
               DONE{" "}
               <FontAwesomeIcon

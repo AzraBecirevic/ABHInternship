@@ -29,18 +29,38 @@ import {
   START_DATE_MIN_VALUE_MESSAGE,
   END_DATE_MIN_VALUE_MESSAGE,
   PRODUCT_ACTIVE_VALUE_MESSAGE,
+  MIN_PHOTOS_NUMBER_MESSAGE,
+  MIN_PHOTOS_NUMER_ERR_MESSAGE,
+  MAX_PHOTOS_NUMBER_MESSAGE,
+  START_DATE_MAX_VALUE_MESSAGE,
+  PRODUCT_DATA_SAVED_SUCCESSFULLY,
+  CHARACTERS_LEFT_MESSAGE,
+  CONNECTION_REFUSED_MESSAGE,
 } from "../constants/messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddItemSetPrice from "./AddItemSetPrice";
 import AddItemInfo from "./AddItemInfo";
 import ValidationService from "../services/validationService";
+
 import {
   BID_MAXIMUM_PRICE,
   START_PRICE_MAXIMUM_VALUE,
 } from "../constants/bidPrice";
+import ProductService from "../services/productService";
+import ToastService from "../services/toastService";
+import {
+  DESCRIPTION_MAX_CHARACTERS,
+  MAX_PHOTOS,
+  MIN_PHOTOS,
+  PRODUCT_NAME_MAX_CHARACTERS,
+} from "../constants/product";
+import { EMAIL, TOKEN } from "../constants/auth";
+import { NOT_FOUND_ROUTE } from "../constants/routes";
 
 export class AddItem extends Component {
   state = {
+    email: "",
+    token: "",
     currentTab: "",
     productName: "",
     productNameErrMess: "",
@@ -50,7 +70,7 @@ export class AddItem extends Component {
     chosenSubcategoryIdErrMess: "",
     description: "",
     descriptionErrMess: "",
-    imgFiles: null,
+    imgFiles: [],
     imgFilesErrMess: "",
     startPrice: "",
     startPriceErrMessage: "",
@@ -70,18 +90,48 @@ export class AddItem extends Component {
     regionErrMess: "",
     categoryList: null,
     subcategoryList: null,
+    productNameRule: "",
+    descriptionRule: "",
+    doneBtnDisabled: false,
   };
-
-  // currentTabs = ["addItem", "setPrices", "locationShipping"];
 
   categoryService = new CategoryService();
   subcategoryService = new SubcategoryService();
   validationService = new ValidationService();
+  productService = new ProductService();
+  toastService = new ToastService();
 
   componentDidMount = async () => {
     var categories = await this.categoryService.getCategories();
 
-    this.setState({ currentTab: "addItemTab", categoryList: categories });
+    var email = "";
+    var token = "";
+
+    if (this.props.location == null || this.props.location.state == null) {
+      if (localStorage.getItem(TOKEN) != null) {
+        email = localStorage.getItem(EMAIL);
+        token = localStorage.getItem(TOKEN);
+      } else if (sessionStorage.getItem(TOKEN) != null) {
+        email = sessionStorage.getItem(EMAIL);
+        token = sessionStorage.getItem(TOKEN);
+      }
+    } else {
+      email = this.props.location.state.email;
+      token = this.props.location.state.token;
+    }
+
+    if (email == "" || token == "") {
+      this.props.history.push(NOT_FOUND_ROUTE);
+    }
+
+    this.setState({
+      currentTab: "addItemTab",
+      categoryList: categories,
+      email: email,
+      token: token,
+      productNameRule: PRODUCT_NAME_RULE_MESSAGE,
+      descriptionRule: DESCRIPTION_RULE_MESSAGE,
+    });
   };
 
   loadSubcategories = async (categoryId) => {
@@ -94,9 +144,49 @@ export class AddItem extends Component {
     }
   };
 
+  addChosenImage = (img) => {
+    const { imgFiles } = this.state;
+    if (imgFiles.length >= MAX_PHOTOS) {
+      this.setState({ imgFilesErrMess: MAX_PHOTOS_NUMBER_MESSAGE });
+      return;
+    }
+
+    this.setState({
+      imgFiles: [
+        ...this.state.imgFiles,
+        { imgFile: img, imgPreview: URL.createObjectURL(img) },
+      ],
+    });
+  };
+
   onChange = (e) => {
     if (e.target.name == "chosenCategoryId") {
       this.loadSubcategories(e.target.value);
+    }
+
+    if (e.target.name == "productName") {
+      var nameLength = e.target.value.length;
+      var charactersLeft = +PRODUCT_NAME_MAX_CHARACTERS - nameLength;
+      this.setState({
+        productNameRule:
+          PRODUCT_NAME_RULE_MESSAGE +
+          " (" +
+          charactersLeft +
+          CHARACTERS_LEFT_MESSAGE +
+          ")",
+      });
+    }
+    if (e.target.name == "description") {
+      var descriptionLength = e.target.value.length;
+      var charactersLeft = +DESCRIPTION_MAX_CHARACTERS - descriptionLength;
+      this.setState({
+        descriptionRule:
+          DESCRIPTION_RULE_MESSAGE +
+          " (" +
+          charactersLeft +
+          CHARACTERS_LEFT_MESSAGE +
+          ")",
+      });
     }
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -151,12 +241,22 @@ export class AddItem extends Component {
     return true;
   };
 
+  validateAddedImages = () => {
+    const { imgFiles } = this.state;
+    if (imgFiles.length < MIN_PHOTOS) {
+      this.setState({ imgFilesErrMess: MIN_PHOTOS_NUMER_ERR_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
   validateAddItemTab = () => {
     this.setState({
       productNameErrMess: "",
       chosenCategoryIdErrMess: "",
       chosenSubcategoryIdErrMess: "",
       descriptionErrMess: "",
+      imgFilesErrMess: "",
     });
     var addItemtabValid = true;
     if (this.validateProductName() == false) {
@@ -169,6 +269,9 @@ export class AddItem extends Component {
       addItemtabValid = false;
     }
     if (this.validateDescription() == false) {
+      addItemtabValid = false;
+    }
+    if (this.validateAddedImages() == false) {
       addItemtabValid = false;
     }
     return addItemtabValid;
@@ -227,9 +330,26 @@ export class AddItem extends Component {
     const { endDate, startDate } = this.state;
 
     if (
-      new Date().toLocaleDateString() > new Date(startDate).toLocaleDateString()
+      startDate != "" &&
+      new Date().toJSON().slice(0, 10) >
+        new Date(startDate).toJSON().slice(0, 10)
     ) {
       this.setState({ startDateErrMess: START_DATE_MIN_VALUE_MESSAGE });
+      return false;
+    }
+
+    var currentYear = new Date().getFullYear();
+    var date = new Date();
+    date.setFullYear(currentYear + 1);
+
+    if (
+      startDate != "" &&
+      new Date(startDate).toJSON().slice(0, 10) >
+        new Date(date).toJSON().slice(0, 10)
+    ) {
+      this.setState({
+        startDateErrMess: START_DATE_MAX_VALUE_MESSAGE,
+      });
       return false;
     }
 
@@ -247,19 +367,21 @@ export class AddItem extends Component {
       return false;
     }
 
-    var currentYear = new Date().getFullYear();
-    var date = new Date(startDate);
-    date.setFullYear(currentYear + 1);
+    if (startDate != "" && startDate != null) {
+      var startDateYear = new Date(startDate).getFullYear();
+      var date = new Date(startDate);
+      date.setFullYear(startDateYear + 1);
 
-    if (
-      endDate != "" &&
-      new Date(endDate).toJSON().slice(0, 10) >
-        new Date(date).toJSON().slice(0, 10)
-    ) {
-      this.setState({
-        endDateErrMess: PRODUCT_ACTIVE_VALUE_MESSAGE,
-      });
-      return false;
+      if (
+        endDate != "" &&
+        new Date(endDate).toJSON().slice(0, 10) >
+          new Date(date).toJSON().slice(0, 10)
+      ) {
+        this.setState({
+          endDateErrMess: PRODUCT_ACTIVE_VALUE_MESSAGE,
+        });
+        return false;
+      }
     }
 
     return true;
@@ -288,10 +410,75 @@ export class AddItem extends Component {
     return setPricesTabValid;
   };
 
-  done = () => {
+  done = async () => {
     if (this.validateSetPricesTab()) {
-      console.log("validno");
+      try {
+        const {
+          email,
+          token,
+          productName,
+          chosenSubcategoryId,
+          description,
+          startPrice,
+          startDate,
+          endDate,
+          imgFiles,
+        } = this.state;
+
+        var startDateValue = new Date(startDate);
+        var endDateValue = new Date(endDate);
+
+        var product = {
+          name: productName,
+          startPrice: startPrice,
+          startDate: startDate,
+          startDateDay: startDateValue.getDate(),
+          startDateMonth: startDateValue.getMonth() + 1,
+          startDateYear: startDateValue.getFullYear(),
+          endDate: endDate,
+          endDateDay: endDateValue.getDate(),
+          endDateMonth: endDateValue.getMonth() + 1,
+          endDateYear: endDateValue.getFullYear(),
+          description: description,
+          subcategoryId: chosenSubcategoryId,
+        };
+
+        this.setIsLoading(true);
+        this.setState({ doneBtnDisabled: true });
+
+        var productId = await this.productService.addProduct(
+          product,
+          email,
+          token,
+          this.setIsLoading
+        );
+
+        if (productId != null && productId != 0) {
+          if (this.state.imgFiles != 0 && this.state.imgFiles.length > 0) {
+            var photosSaved = await this.productService.savePhotos(
+              imgFiles,
+              productId,
+              token,
+              this.setIsLoading
+            );
+            if (photosSaved == true) {
+              this.setState({ doneBtnDisabled: false });
+              this.toastService.showSuccessToast(
+                PRODUCT_DATA_SAVED_SUCCESSFULLY
+              );
+            }
+          }
+        }
+        this.setIsLoading(false);
+      } catch (error) {
+        this.setIsLoading(false);
+        this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
+      }
     }
+  };
+
+  setIsLoading = (isLoadingValue) => {
+    this.props.setIsLoading(isLoadingValue);
   };
 
   goBack = () => {
@@ -299,6 +486,7 @@ export class AddItem extends Component {
 
     if (currentTab == "setPricesTab") {
       this.setState({ currentTab: "addItemTab" });
+      window.scrollTo(0, 0);
     }
   };
 
@@ -308,7 +496,22 @@ export class AddItem extends Component {
     if (currentTab == "addItemTab") {
       if (this.validateAddItemTab()) {
         this.setState({ currentTab: "setPricesTab" });
+        window.scrollTo(0, 0);
       }
+    }
+  };
+
+  handleDescriptionChange = (val) => {
+    if (
+      val !==
+      undefined /*&&
+      /*val.doc !== undefined &&
+      val.doc.content !== undefined &&
+      val.doc.content[0].content*/
+    ) {
+      this.setState({ description: "vrijednost" }); //val.doc.content[0].content[0].text
+    } else {
+      this.setState({ description: "null" });
     }
   };
 
@@ -331,6 +534,11 @@ export class AddItem extends Component {
       startDateErrMess,
       endDate,
       endDateErrMess,
+      imgFiles,
+      imgFilesErrMess,
+      productNameRule,
+      descriptionRule,
+      doneBtnDisabled,
     } = this.state;
     return (
       <div>
@@ -357,6 +565,12 @@ export class AddItem extends Component {
                         descriptionErrMess={descriptionErrMess}
                         onChange={this.onChange}
                         goToNext={this.goToNext}
+                        handleDescriptionChange={this.handleDescriptionChange}
+                        addChosenImage={this.addChosenImage}
+                        imgFiles={imgFiles}
+                        imgFilesErrMess={imgFilesErrMess}
+                        productNameRule={productNameRule}
+                        descriptionRule={descriptionRule}
                       ></AddItemInfo>
                     )}
                     {currentTab == "setPricesTab" && (
@@ -367,6 +581,7 @@ export class AddItem extends Component {
                         startDateErrMess={startDateErrMess}
                         endDate={endDate}
                         endDateErrMess={endDateErrMess}
+                        doneBtnDisabled={doneBtnDisabled}
                         onChange={this.onChange}
                         goBack={this.goBack}
                         done={this.done}

@@ -3,10 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { Component } from "react";
 import {
   DESCRIPTION_RULE_MESSAGE,
+  MIN_PHOTOS_NUMBER_MESSAGE,
+  OR_DRAG_AND_DROP_MESSAGE,
   PRODUCT_NAME_RULE_MESSAGE,
+  UPLOAD_PHOTOS_MESSAGE,
 } from "../constants/messages";
+import Editor from "nib-core";
+import Dropzone from "react-dropzone";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export class AddItemInfo extends Component {
+  saveFiles = (acceptedFiles) => {
+    var array = [];
+    for (let i = 0; i < acceptedFiles.length; i++) {
+      array.push(acceptedFiles[i]);
+    }
+
+    this.props.addChosenImage(array[0]);
+  };
+
   render() {
     const {
       productName,
@@ -19,6 +35,10 @@ export class AddItemInfo extends Component {
       chosenSubcategoryIdErrMess,
       description,
       descriptionErrMess,
+      imgFiles,
+      imgFilesErrMess,
+      productNameRule,
+      descriptionRule,
     } = this.props;
 
     return (
@@ -31,11 +51,12 @@ export class AddItemInfo extends Component {
               <input
                 type="text"
                 name="productName"
+                maxLength="60"
                 className="form-control"
                 value={productName}
                 onChange={this.props.onChange}
               />
-              <div className="ruleMessage">{PRODUCT_NAME_RULE_MESSAGE}</div>
+              <div className="ruleMessage">{productNameRule}</div>
               <small
                 className="errorMessage"
                 hidden={productNameErrMess === ""}
@@ -114,17 +135,114 @@ export class AddItemInfo extends Component {
                 rows={5}
                 className="form-control"
                 value={description}
+                maxLength="700"
                 onChange={this.props.onChange}
               />
-              <div className="ruleMessage">{DESCRIPTION_RULE_MESSAGE}</div>
+              <div id="example"></div>
+              <div className="ruleMessage">{descriptionRule}</div>
               <small
                 className="errorMessage"
                 hidden={descriptionErrMess === ""}
               >
                 {descriptionErrMess}
               </small>
+              <Editor
+                name="description"
+                plugins="block inline"
+                toolbar={{ htop: "block inline" }}
+                value={description}
+                onChange={(val) => this.props.handleDescriptionChange(val)}
+              />
+              <CKEditor
+                name="description"
+                editor={ClassicEditor}
+                data={description}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  //console.log("Editor is ready to use!", editor);
+                }}
+                /* onChange={(val) =>
+                  this.props.handleDescriptionChange(editor.getData())
+                }*/
+
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  console.log({ event, editor, data });
+                }}
+              >
+                {" "}
+                <textarea
+                  defaultValue={description}
+                  onChange={this.props.onChange}
+                />
+              </CKEditor>
             </div>
-            <div>Upload photos</div>
+            <div
+              className={
+                imgFiles == null || imgFiles.length <= 0
+                  ? "dragDropDivEmpty"
+                  : "dragDropDiv"
+              }
+            >
+              <Dropzone
+                accept="image/*"
+                onDrop={(acceptedFiles) => {
+                  console.log(acceptedFiles);
+                  this.saveFiles(acceptedFiles);
+                }}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <div
+                        className={
+                          imgFiles == null || imgFiles.length <= 0
+                            ? "dragDropInputDivEmpty"
+                            : "dragDropInputDiv"
+                        }
+                      >
+                        <div className="dragDropTextDiv">
+                          {" "}
+                          <p>
+                            <span className="purpleDropText">
+                              {UPLOAD_PHOTOS_MESSAGE}
+                            </span>
+                            {"  "}
+                            <span className="normalDropText">
+                              {OR_DRAG_AND_DROP_MESSAGE}
+                            </span>
+                          </p>
+                          <p className="normalDropText">
+                            {MIN_PHOTOS_NUMBER_MESSAGE}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+              <div className="imgPreviewDiv">
+                <p
+                  className="imgPreviewTitle"
+                  hidden={imgFiles == null || imgFiles.length <= 0}
+                >
+                  Image preview
+                </p>
+                {imgFiles != null &&
+                  imgFiles.map(function (img) {
+                    return (
+                      <img
+                        className="productImgPreview"
+                        src={img.imgPreview}
+                      ></img>
+                    );
+                  })}
+              </div>
+            </div>
+            <small className="errorMessage" hidden={imgFilesErrMess === ""}>
+              {imgFilesErrMess}
+            </small>
           </form>
           <div className="nextBackDoneBtnDivAddItem">
             <button
