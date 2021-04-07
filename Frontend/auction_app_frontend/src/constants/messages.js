@@ -138,7 +138,7 @@ export const MAX_PHOTOS_NUMBER_MESSAGE =
   "You can add " + MAX_PHOTOS + " photos at most";
 export const PRODUCT_DATA_SAVED_SUCCESSFULLY =
   "Product data saved successfully";
-export const CHARACTERS_LEFT_MESSAGE = "characters left";
+export const CHARACTERS_LEFT_MESSAGE = " characters left";
 export const PRODUCT_NAME_MIN_WORDS_MESSAGE =
   "Product name need to have at least two words";
 export const PRODUCT_NAME_MAX_WORDS_MESSAGE =

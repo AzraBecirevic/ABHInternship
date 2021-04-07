@@ -39,5 +39,5 @@ public class ValidationMessageConstants {
     public static final String END_DATE_REQUIRED_MESSAGE = "End date is required";
     public static final String END_DATE_MIN_VALUE_MESSAGE = "End date must be later than start date";
     public static final String PRODUCT_ACTIVE_VALUE_MESSAGE = "Your product can not be active more than 1 year";
-    public static final String CUSTOMER_CAN_NOT_BID_PRODUCT = "You can not bid your own product.";
+    public static final String CUSTOMER_CAN_NOT_BID_PRODUCT = "You can not bid on your own product.";
 }

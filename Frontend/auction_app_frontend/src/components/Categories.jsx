@@ -1046,7 +1046,7 @@ export class Categories extends Component {
                             this.lowerPriceValue,
                             this.higherPriceValue,
                           ]}
-                          onChange={(e, val) => {
+                          onChangeCommitted={(e, val) => {
                             this.changePriceFilter(val);
                           }}
                         />
