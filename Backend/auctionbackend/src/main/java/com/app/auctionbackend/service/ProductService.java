@@ -3,10 +3,12 @@ package com.app.auctionbackend.service;
 import com.app.auctionbackend.dtos.*;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
+import com.app.auctionbackend.repo.ImageRepository;
 import com.app.auctionbackend.repo.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ import java.util.*;
 
 
 import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
+import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 
 @Service("productService")
 public class ProductService {
@@ -28,7 +31,62 @@ public class ProductService {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    SubcategoryService subcategoryService;
+
+    @Autowired
+    ImageService imageService;
+
     DecimalFormat df = new DecimalFormat("#0.00");
+
+    private  void validateRequiredField(String field, String errorMessage) throws Exception{
+        if(field == null || field.isEmpty())
+            throw new Exception(errorMessage);
+    }
+
+    private void validateStartPrice(double startPrice, String errorMessage)throws Exception{
+        if(startPrice <= 0)
+            throw new Exception(errorMessage);
+    }
+
+    private void validateDescriptionFormat(String description, String errorMessage)throws Exception {
+        if(description.length() > 700)
+            throw new Exception(errorMessage);
+    }
+
+    private void validateSubcategoryRequired(Integer id, String errorMessage)throws Exception{
+        if(id == null)
+            throw new Exception(errorMessage);
+    }
+
+    private void validateSubcategoryFormat(Integer id, String errorMessage)throws Exception{
+        if(id <= 0 || subcategoryService.findById(id) == null)
+            throw new Exception(errorMessage);
+    }
+
+    private void validateProductStartDateMinValue(LocalDateTime date, String errorMessage) throws Exception{
+        LocalDateTime now = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
+        if(date.isBefore(now))
+            throw new Exception(errorMessage);
+    }
+
+    private void validateProductStartDateMaxValue(LocalDateTime date, String errorMessage)throws Exception{
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime max = LocalDateTime.of(now.getYear()+1, date.getMonth(), date.getDayOfMonth(),0,0);
+        if(date.isAfter(max))
+            throw new Exception(errorMessage);
+    }
+
+    private void validateProductEndDateMinValue(LocalDateTime startDate, LocalDateTime endDate, String errorMessage)throws Exception{
+        if(startDate.isAfter(endDate) || startDate.equals(endDate))
+            throw new Exception(errorMessage);
+    }
+
+    private void validateProductActiveTime(LocalDateTime startDate, LocalDateTime endDate, String errorMessage)throws Exception{
+        LocalDateTime max = LocalDateTime.of(startDate.getYear()+1, startDate.getMonth(), startDate.getDayOfMonth(),0,0);
+        if(endDate.isAfter(max))
+            throw new Exception(errorMessage);
+    }
 
     public List<ProductDto> getProducts(){
 
@@ -400,7 +458,10 @@ public class ProductService {
 
     private SellProductDto makeSellProductDto(Product p){
         SellProductDto sellProductDto = new SellProductDto();
-        sellProductDto.setImage(p.getImageList().get(0).getImage());
+        if(p.getImageList() == null || p.getImageList().size() <= 0)
+            sellProductDto.setImage(null);
+        else
+            sellProductDto.setImage(p.getImageList().get(0).getImage());
         sellProductDto.setId(p.getId());
         sellProductDto.setName(p.getName());
         sellProductDto.setStartPrice(df.format(p.getStartPrice()));
@@ -514,6 +575,92 @@ public class ProductService {
        }
 
         return bidProducts;
+    }
+
+    public Integer addProduct(AddProductDto addProductDto) throws Exception{
+     Customer customer = customerService.findByEmail(addProductDto.getCustomerEmail());
+     if(customer == null)
+         throw new Exception(USER_DOES_NOT_EXIST);
+
+     validateRequiredField(addProductDto.getName(), PRODUCT_NAME_REQUIRED_MESSAGE);
+     validateRequiredField(addProductDto.getDescription(), DESCRIPTION_REQUIRED_MESSAGE);
+     validateStartPrice(addProductDto.getStartPrice(), START_PRICE_BIGGER_THAN_0_MESSAGE);
+     validateDescriptionFormat(addProductDto.getDescription(), DESCRIPTION_FORMAT_MESSAGE );
+     validateSubcategoryRequired(addProductDto.getSubcategoryId(), SUBCATEGORY_REQUIRED_MESSAGE);
+     validateSubcategoryFormat(addProductDto.getSubcategoryId(), SUBCATEGORY_DOES_NOT_EXIST_MESSAGE);
+
+     LocalDateTime start_date;
+     try{
+         start_date = LocalDateTime.of(addProductDto.getStartDateYear(),addProductDto.getStartDateMonth(), addProductDto.getStartDateDay(),0,0);
+     }
+     catch (Exception ex){
+         throw new Exception(START_DATE_REQUIRED_MESSAGE);
+     }
+
+     LocalDateTime end_date;
+     try{
+         end_date = LocalDateTime.of(addProductDto.getEndDateYear(), addProductDto.getEndDateMonth(), addProductDto.getEndDateDay(),0,0);
+     }
+     catch (Exception ex){
+         throw new Exception(END_DATE_REQUIRED_MESSAGE);
+     }
+
+     validateProductStartDateMinValue(start_date,START_DATE_MIN_VALUE_MESSAGE);
+     validateProductStartDateMaxValue(start_date,START_DATE_MAX_VALUE_MESSAGE);
+     validateProductEndDateMinValue(start_date, end_date, END_DATE_MIN_VALUE_MESSAGE);
+     validateProductActiveTime(start_date, end_date, PRODUCT_ACTIVE_VALUE_MESSAGE);
+
+     Product product = new Product();
+     product.setCustomer(customer);
+     product.setCreatedOn(LocalDateTime.now());
+     product.setModifiedOn(LocalDateTime.now());
+     product.setStartPrice(addProductDto.getStartPrice());
+     product.setName(addProductDto.getName());
+     product.setDescription(addProductDto.getDescription());
+     product.setStartDate(start_date);
+     product.setEndDate(end_date);
+     List<Subcategory> subcategories = new ArrayList<>();
+     Subcategory subcategory = subcategoryService.findById(addProductDto.getSubcategoryId());
+     subcategories.add(subcategory);
+     product.setSubcategories(subcategories);
+
+     productRepository.save(product);
+     List<Product> subcategoryProducts = subcategory.getProducts();
+     subcategoryProducts.add(product);
+     subcategoryService.save(subcategory);
+
+     return product.getId();
+    }
+
+    public Boolean addProductPhotos(Integer productId,MultipartFile[] imgFiles) throws Exception{
+
+        Product product = productRepository.findById(productId).orElse(null);
+        if(product == null){
+            return false;
+        }
+        try{
+
+            List<Image> imageList = new ArrayList<>();
+
+            for(int i = 0; i < imgFiles.length; i++){
+                byte[] fileContent = imgFiles[i].getBytes();
+                String encodedString = Base64.getEncoder().encodeToString(fileContent);
+
+                Image image = new Image();
+                image.setImage(encodedString);
+                image.setProduct(product);
+
+                imageService.saveImage(image);
+
+                imageList.add(image);
+            }
+            product.setImageList(imageList);
+            productRepository.save(product);
+            return true;
+        }
+        catch (Exception exception){
+            return  false;
+        }
     }
 
     private List<ProductDto> changeToDto(List<Product>products){

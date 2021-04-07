@@ -6,10 +6,19 @@ import {
 import shoppingBagImage from "../assets/shoppingBagImage.PNG";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { HOME_ROUTE } from "../constants/routes";
+import { ADD_ITEM_ROUTE, HOME_ROUTE } from "../constants/routes";
 
 export class Sell extends Component {
-  startSelling = () => {};
+  startSelling = () => {
+    this.props.history.push({
+      pathname: ADD_ITEM_ROUTE,
+      state: {
+        isLoggedIn: this.props.isLoggedIn,
+        email: this.props.email,
+        token: this.props.token,
+      },
+    });
+  };
   render() {
     return (
       <div>

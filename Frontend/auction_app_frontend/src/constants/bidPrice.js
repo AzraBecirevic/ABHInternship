@@ -1,1 +1,2 @@
 export const BID_MAXIMUM_PRICE = 99999;
+export const START_PRICE_MAXIMUM_VALUE = 90000;

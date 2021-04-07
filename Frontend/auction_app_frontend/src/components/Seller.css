@@ -139,3 +139,7 @@ table > tbody > tr.no-border > td,
   text-decoration: none;
   cursor: pointer;
 }
+
+.addItemOptionLink:hover {
+  text-decoration: none;
+}

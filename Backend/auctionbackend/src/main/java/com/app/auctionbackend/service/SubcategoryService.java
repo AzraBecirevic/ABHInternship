@@ -37,5 +37,26 @@ public class SubcategoryService {
 
         return subcategoryDtos;
     }
+    public Subcategory findById(Integer id){
+        Subcategory subcategory = subcategoryRepository.findById(id).orElse(null);
+        return subcategory;
+    }
 
+    public Subcategory save(Subcategory subcategory){
+        Subcategory subcategory1 = findById(subcategory.getId());
+        if(subcategory1 != null){
+            subcategory1.setName(subcategory.getName());
+            subcategory1.setCategory(subcategory.getCategory());
+            subcategory1.setProducts(subcategory.getProducts());
+            subcategoryRepository.save(subcategory1);
+            return subcategory1;
+        }
+
+        Subcategory newSubcategory = new Subcategory();
+        newSubcategory.setName(subcategory.getName());
+        newSubcategory.setProducts(subcategory.getProducts());
+        newSubcategory.setCategory(subcategory.getCategory());
+        subcategoryRepository.save(newSubcategory);
+        return newSubcategory;
+    }
 }

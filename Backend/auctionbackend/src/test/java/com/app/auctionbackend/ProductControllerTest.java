@@ -1,9 +1,13 @@
 package com.app.auctionbackend;
 
+import com.app.auctionbackend.config.SecretKeyHandler;
+import com.app.auctionbackend.config.SecurityConstants;
+import com.app.auctionbackend.helper.TestEmailHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -17,6 +21,9 @@ public class ProductControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private ApplicationContext context;
 
     @Test
     public void getProductsShouldReturnOk() throws Exception{
@@ -135,5 +142,39 @@ public class ProductControllerTest {
         mvc.perform(MockMvcRequestBuilders.get(GET_PRICE_FILTER_VALUES_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void addProductShouldReturnCreated() throws Exception{
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+        String email = testEmailHandler.testEmail;
+
+        mvc.perform(MockMvcRequestBuilders.post(ADD_PRODUCT_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content("{\"name\": \"Shoes\", \"startPrice\": \"20\", \"startDateDay\":\"19\", \"startDateMonth\": \"4\", \"startDateYear\":\"2021\", \"endDateDay\":\"30\", \"endDateMonth\":\"4\" , \"endDateYear\":\"2021\", \"description\":\"women shoes\" , \"subcategoryId\":\"2\", \"customerEmail\":\""+email+"\"}")
+        ).andExpect(status().isCreated());
+    }
+
+    @Test
+    public void addProductShouldReturnBadRequest() throws Exception{
+        SecretKeyHandler skh = (SecretKeyHandler) context.getBean("secretKeyHandler");
+        SecurityConstants.SECRET = skh.tokenKey;
+
+        String token = skh.jwtToken;
+
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+        String email = testEmailHandler.testEmail;
+
+        mvc.perform(MockMvcRequestBuilders.post(ADD_PRODUCT_ENDPOINT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content("{\"name\": \"Shoes\", \"startPrice\": \"20\", \"startDateDay\":\"19\", \"startDateMonth\": \"20\", \"startDateYear\":\"2021\", \"endDateDay\":\"30\", \"endDateMonth\":\"4\" , \"endDateYear\":\"2021\", \"description\":\"women shoes\" , \"subcategoryId\":\"2\", \"customerEmail\":\""+email+"\"}")
+        ).andExpect(status().isBadRequest());
     }
 }
