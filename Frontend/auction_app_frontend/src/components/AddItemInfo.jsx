@@ -10,8 +10,6 @@ import {
 } from "../constants/messages";
 import Editor from "nib-core";
 import Dropzone from "react-dropzone";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export class AddItemInfo extends Component {
   saveFiles = (acceptedFiles) => {
@@ -21,6 +19,13 @@ export class AddItemInfo extends Component {
     }
 
     this.props.addChosenImage(array[0]);
+  };
+
+  removeImage = (img) => {
+    this.props.removeImage(img);
+  };
+  onSubmit = (e) => {
+    e.preventDefault();
   };
 
   render() {
@@ -45,7 +50,7 @@ export class AddItemInfo extends Component {
       <div className="userInfoDiv">
         <div className="userInfoDivHeading startSelling">ADD ITEM</div>
         <div className="tabFormDiv">
-          <form>
+          <form onSubmit={this.onSubmit}>
             <div className="formDataGroup">
               <label className="formLabel">What do you sell?</label>
               <input
@@ -153,29 +158,6 @@ export class AddItemInfo extends Component {
                 value={description}
                 onChange={(val) => this.props.handleDescriptionChange(val)}
               />
-              <CKEditor
-                name="description"
-                editor={ClassicEditor}
-                data={description}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                  //console.log("Editor is ready to use!", editor);
-                }}
-                /* onChange={(val) =>
-                  this.props.handleDescriptionChange(editor.getData())
-                }*/
-
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  console.log({ event, editor, data });
-                }}
-              >
-                {" "}
-                <textarea
-                  defaultValue={description}
-                  onChange={this.props.onChange}
-                />
-              </CKEditor>
             </div>
             <div
               className={
@@ -229,15 +211,27 @@ export class AddItemInfo extends Component {
                 >
                   Image preview
                 </p>
-                {imgFiles != null &&
-                  imgFiles.map(function (img) {
-                    return (
-                      <img
-                        className="productImgPreview"
-                        src={img.imgPreview}
-                      ></img>
-                    );
-                  })}
+                <div className="imgPreviewListDiv">
+                  {imgFiles != null &&
+                    imgFiles.map(
+                      function (img) {
+                        return (
+                          <div>
+                            <img
+                              className="productImgPreview"
+                              src={img.imgPreview}
+                            ></img>
+                            <div
+                              className="imgPreviewRemove"
+                              onClick={() => this.removeImage(img)}
+                            >
+                              Remove
+                            </div>
+                          </div>
+                        );
+                      }.bind(this)
+                    )}
+                </div>
               </div>
             </div>
             <small className="errorMessage" hidden={imgFilesErrMess === ""}>

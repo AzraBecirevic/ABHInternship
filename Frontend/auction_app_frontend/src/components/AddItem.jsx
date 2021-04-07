@@ -159,6 +159,14 @@ export class AddItem extends Component {
     });
   };
 
+  removeImage = (img) => {
+    this.setState({
+      imgFiles: this.state.imgFiles.filter((image) => {
+        return image != img;
+      }),
+    });
+  };
+
   onChange = (e) => {
     if (e.target.name == "chosenCategoryId") {
       this.loadSubcategories(e.target.value);
@@ -503,15 +511,14 @@ export class AddItem extends Component {
 
   handleDescriptionChange = (val) => {
     if (
-      val !==
-      undefined /*&&
-      /*val.doc !== undefined &&
+      val !== undefined &&
+      val.doc !== undefined &&
       val.doc.content !== undefined &&
-      val.doc.content[0].content*/
+      val.doc.content[0].content
     ) {
-      this.setState({ description: "vrijednost" }); //val.doc.content[0].content[0].text
+      this.setState({ description: val.doc.content[0].content[0].text });
     } else {
-      this.setState({ description: "null" });
+      this.setState({ description: "" });
     }
   };
 
@@ -571,6 +578,7 @@ export class AddItem extends Component {
                         imgFilesErrMess={imgFilesErrMess}
                         productNameRule={productNameRule}
                         descriptionRule={descriptionRule}
+                        removeImage={this.removeImage}
                       ></AddItemInfo>
                     )}
                     {currentTab == "setPricesTab" && (

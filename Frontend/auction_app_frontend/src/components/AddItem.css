@@ -107,27 +107,30 @@
 }
 
 .dragDropDiv {
-  background: #fcfcfc;
-  border: 1px dashed #d8d8d8;
+  /*background: #fcfcfc;*/
+  /*border: 1px dashed #d8d8d8;*/
   text-align: center;
   min-height: 300px;
   margin-top: 70px;
 }
 
 .dragDropDivEmpty {
-  background: #fcfcfc;
+  /* background: #fcfcfc;*/
   text-align: center;
   margin-top: 70px;
 }
 
 .dragDropInputDivEmpty {
+  background: #fcfcfc;
   border: 1px dashed #d8d8d8;
   height: 300px;
   padding-top: 115.7px;
 }
 
 .dragDropInputDiv {
-  border-bottom: 1px dashed #d8d8d8;
+  background: #fcfcfc;
+  /*border-bottom: 1px dashed #d8d8d8;*/
+  border: 1px dashed #d8d8d8;
   height: 300px;
   padding-top: 115.7px;
 }
@@ -158,4 +161,18 @@
 .imgPreviewTitle {
   font-size: 14px;
   letter-spacing: 0.49px;
+}
+
+.imgPreviewListDiv {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.imgPreviewRemove {
+  font-size: 14px;
+  letter-spacing: 0.49px;
+}
+.imgPreviewRemove:hover {
+  cursor: pointer;
 }
