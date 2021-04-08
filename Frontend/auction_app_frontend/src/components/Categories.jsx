@@ -74,6 +74,7 @@ export class Categories extends Component {
     sliderCurrentlyChanging: false,
     gridChosen: true,
     productName: "",
+    didYouMeanName: "",
   };
 
   categoryService = new CategoryService();
@@ -328,6 +329,11 @@ export class Categories extends Component {
         this.fetchNumber
       );
 
+      var didYouMeanText = "";
+      if (productsDto.didYouMean !== null) {
+        didYouMeanText = productsDto.didYouMean;
+      }
+
       const categoriesList = await this.categoryService.getCategories();
 
       this.setState({
@@ -343,6 +349,7 @@ export class Categories extends Component {
         sliderCurrentlyChanging: false,
         gridChosen: chosenOptionGrid,
         productName: productNameFilterPath,
+        didYouMeanName: didYouMeanText,
       });
 
       this.setIsLoading(false);
@@ -891,10 +898,17 @@ export class Categories extends Component {
       sliderCurrentlyChanging,
       gridChosen,
       productName,
+      didYouMeanName,
     } = this.state;
 
     return (
       <div>
+        {didYouMeanName !== "" && (
+          <Heading
+            didYouMeanMessage="Did you mean?"
+            didYouMeanValue={didYouMeanName}
+          ></Heading>
+        )}
         <div className="row">
           <div className="col-lg-2"></div>
           <div className="col-lg-8 categoriesColumn">

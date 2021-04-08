@@ -11,6 +11,17 @@ export class Heading extends Component {
             <div className="row">
               <div className="col-lg-6 col-sm-6">
                 <div className="pageHeadingTitle">{this.props.title}</div>
+                {this.props.didYouMeanMessage !== "" && (
+                  <div>
+                    <span className="didYouMeanMessage">
+                      {this.props.didYouMeanMessage}
+                      <span>{"  "}</span>
+                    </span>
+                    <span className="didYouMeanValue">
+                      {this.props.didYouMeanValue}
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="col-lg-6 col-sm-6 ">
                 {" "}

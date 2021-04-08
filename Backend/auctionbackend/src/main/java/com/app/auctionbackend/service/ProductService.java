@@ -1,15 +1,18 @@
 package com.app.auctionbackend.service;
 
 import com.app.auctionbackend.dtos.*;
+import com.app.auctionbackend.helper.FuzzyScore;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
 import com.app.auctionbackend.repo.ImageRepository;
 import com.app.auctionbackend.repo.ProductRepository;
+import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -361,6 +364,91 @@ public class ProductService {
         return priceFilterDto;
     }
 
+    private String getDidYouMeanMostMatchingString(String searchName){
+        List<Product> products = productRepository.findAll();
+        List<String> availableProductNames = new ArrayList<>();
+
+        if(products == null || products.size() <= 0)
+            return null;
+
+        FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
+
+        for (Product p : products){
+            if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
+                availableProductNames.add(p.getName());
+            }
+        }
+
+        if(availableProductNames == null || availableProductNames.size() <= 0)
+            return null;
+
+        List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
+        for (String productName : availableProductNames) {
+            int distance = fuzzyScore.fuzzyScore(productName, searchName);
+            availableProductNameFuzzyScore.add(distance);
+        }
+
+        Integer maximumScore = Integer.MIN_VALUE;
+        Integer indexOfMaximumScore = -1;
+
+        for(int i = 0; i < availableProductNameFuzzyScore.size(); i++){
+            if(availableProductNameFuzzyScore.get(i) > maximumScore){
+                maximumScore = availableProductNameFuzzyScore.get(i);
+                indexOfMaximumScore = i;
+            }
+        }
+
+        List<Integer> maxScoreIndexes = new ArrayList<>();
+        for(int i = 0; i<availableProductNameFuzzyScore.size(); i++){
+            if(availableProductNameFuzzyScore.get(i) == maximumScore){
+                maxScoreIndexes.add(i);
+            }
+        }
+
+        List<String> matchingProductNames = new ArrayList<>();
+        for (Integer index: maxScoreIndexes) {
+            matchingProductNames.add(availableProductNames.get(index));
+        }
+
+        List<String> words = new ArrayList<>();
+        for (String name: matchingProductNames) {
+            if(name.contains(" ")){
+                String[] wordParts = name.split(" ");
+                for (int i = 0; i < wordParts.length; i++){
+                    words.add(wordParts[i]);
+                }
+            }
+            else{
+                words.add(name);
+            }
+        }
+
+        List<Integer> wordsSimilarityScores = new ArrayList<>();
+        for(String word: words){
+            int score = fuzzyScore.fuzzyScore(word,searchName);
+            wordsSimilarityScores.add(score);
+        }
+
+        Integer maxWordsScore = Integer.MIN_VALUE;
+        Integer indexOfMaxWordScore = -1;
+
+        for(int i = 0; i <  wordsSimilarityScores.size(); i++){
+            if(wordsSimilarityScores.get(i) > maxWordsScore){
+                maxWordsScore = wordsSimilarityScores.get(i);
+                indexOfMaxWordScore = i;
+            }
+        }
+
+        if(indexOfMaxWordScore != -1){
+            String mostSimilarWord = words.get(indexOfMaxWordScore);
+            String mostSimilar = mostSimilarWord.substring(0, 1).toUpperCase() + mostSimilarWord.substring(1);
+            return mostSimilar;
+        }
+
+        return null;
+    }
+
+
     public ProductsInfiniteDto getFilteredProducts(FilterProductsDto filterProductsDto){
 
         ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
@@ -394,6 +482,14 @@ public class ProductService {
             else{
                 filteredProducts = searchProductsByName(filterProductsDto.getProductName());
             }
+            if(filteredProducts.size() == 0){
+                String didYouMeanName = getDidYouMeanMostMatchingString(filterProductsDto.getProductName());
+                if(didYouMeanName != null){
+                    filteredProducts = searchProductsByName(didYouMeanName);
+                    productsInfiniteDto.setDidYouMean(didYouMeanName);
+                }
+            }
+
         }
 
         if(filterProductsDto.getMinPrice() >= 0){
