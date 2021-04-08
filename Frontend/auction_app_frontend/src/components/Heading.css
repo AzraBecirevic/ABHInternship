@@ -37,6 +37,15 @@ div.row.pageHeadingDivRow {
   letter-spacing: 0.63px;
 }
 
+.col-lg-9.didYouMeanCol {
+  padding-left: 0;
+}
+@media (max-width: 991.5px) {
+  .col-lg-9.didYouMeanCol {
+    padding-left: 20px;
+  }
+}
+
 @media (max-width: 575.5px) {
   .pageHeadingTitle.right {
     padding-right: 0;

@@ -378,15 +378,15 @@ public class ProductService {
             }
         }
 
-        if(availableProductNames == null || availableProductNames.size() <= 0)
+        if(availableProductNames.size() <= 0)
             return null;
 
         FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
 
         List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
         for (String productName : availableProductNames) {
-            int distance = fuzzyScore.fuzzyScore(productName, searchName);
-            availableProductNameFuzzyScore.add(distance);
+            int score = fuzzyScore.fuzzyScore(productName, searchName);
+            availableProductNameFuzzyScore.add(score);
         }
 
         Integer maximumScore = Integer.MIN_VALUE;
@@ -454,7 +454,6 @@ public class ProductService {
         return null;
     }
 
-
     public ProductsInfiniteDto getFilteredProducts(FilterProductsDto filterProductsDto){
 
         ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
@@ -483,19 +482,31 @@ public class ProductService {
         if(filterProductsDto.getProductName() != null && !filterProductsDto.getProductName().isEmpty() ){
             if((filterProductsDto.getSubcategoryIds() !=null  && !filterProductsDto.getSubcategoryIds().isEmpty())
                     || (filterProductsDto.getCategoryIds() != null && !filterProductsDto.getCategoryIds().isEmpty())){
-                filteredProducts = searchProductsByName(filterProductsDto.getProductName(), filteredProducts);
+
+                List<ProductDto> filteredProductsByName = searchProductsByName(filterProductsDto.getProductName(), filteredProducts);
+
+                if(filteredProductsByName.size() <= 0){
+                    String didYouMeanName = getDidYouMeanMostMatchingString(filterProductsDto.getProductName());
+                    if(didYouMeanName != null){
+                        filteredProducts = searchProductsByName(didYouMeanName, filteredProducts);
+                        productsInfiniteDto.setDidYouMean(didYouMeanName);
+                    }
+                }
+                else {
+                    filteredProducts = filteredProductsByName;
+                }
             }
             else{
                 filteredProducts = searchProductsByName(filterProductsDto.getProductName());
-            }
-            if(filteredProducts.size() == 0){
-                String didYouMeanName = getDidYouMeanMostMatchingString(filterProductsDto.getProductName());
-                if(didYouMeanName != null){
-                    filteredProducts = searchProductsByName(didYouMeanName);
-                    productsInfiniteDto.setDidYouMean(didYouMeanName);
+
+                if(filteredProducts.size() == 0){
+                    String didYouMeanName = getDidYouMeanMostMatchingString(filterProductsDto.getProductName());
+                    if(didYouMeanName != null){
+                        filteredProducts = searchProductsByName(didYouMeanName);
+                        productsInfiniteDto.setDidYouMean(didYouMeanName);
+                    }
                 }
             }
-
         }
 
         if(filterProductsDto.getMinPrice() >= 0){
