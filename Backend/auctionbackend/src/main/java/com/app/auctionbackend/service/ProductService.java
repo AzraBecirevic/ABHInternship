@@ -473,6 +473,9 @@ public class ProductService {
 
         Integer maximumScore = getAvailableProductNameFuzzyScoreMaximumScore(availableProductNameFuzzyScore);
 
+        if(maximumScore == 0)
+            return null;
+
         List<Integer> maxScoreIndexes = getAvailableProductFuzzyScoreMaxIndexes(availableProductNameFuzzyScore, maximumScore);
 
         List<String> matchingProductNames = getMatchingProductNames(maxScoreIndexes, availableProductNames);
