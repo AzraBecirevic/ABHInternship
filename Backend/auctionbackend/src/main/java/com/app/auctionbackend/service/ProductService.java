@@ -430,7 +430,11 @@ public class ProductService {
     List<Integer> getWordsSimilarityScores(List<String> words, FuzzyScore fuzzyScore, String searchName) {
         List<Integer> wordsSimilarityScores = new ArrayList<>();
         for (String word : words) {
-            int score = fuzzyScore.fuzzyScore(searchName, word);
+
+            int score1 = fuzzyScore.fuzzyScore(word, searchName);
+            int score2 = fuzzyScore.fuzzyScore(searchName, word);
+
+            int score = Integer.max(score1,score2);
             wordsSimilarityScores.add(score);
         }
         return wordsSimilarityScores;
