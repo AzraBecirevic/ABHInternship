@@ -145,3 +145,4 @@ export const PRODUCT_NAME_MAX_WORDS_MESSAGE =
   "Product name can have maximum 5 words";
 export const DESCRIPTION_MAX_WORDS_MESSAGE =
   "Description can have maximum 100 words ";
+export const DID_YOU_MEAN_MESSAGE = "Did you mean?";

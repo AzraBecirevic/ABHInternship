@@ -19,6 +19,7 @@ import {
   GRID_VIEW,
   LIST_VIEW,
   NO_SEARCHED_PRODUCTS,
+  DID_YOU_MEAN_MESSAGE,
 } from "../constants/messages";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -905,7 +906,7 @@ export class Categories extends Component {
       <div>
         {didYouMeanName !== "" && (
           <Heading
-            didYouMeanMessage="Did you mean?"
+            didYouMeanMessage={DID_YOU_MEAN_MESSAGE}
             didYouMeanValue={didYouMeanName}
           ></Heading>
         )}

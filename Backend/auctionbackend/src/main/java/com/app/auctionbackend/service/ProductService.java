@@ -409,7 +409,6 @@ public class ProductService {
             matchingProductNames.add(availableProductNames.get(index));
         }
 
-
         List<String> words = new ArrayList<>();
         for (String name : matchingProductNames) {
 
@@ -499,7 +498,7 @@ public class ProductService {
             else{
                 filteredProducts = searchProductsByName(filterProductsDto.getProductName());
 
-                if(filteredProducts.size() == 0){
+                if(filteredProducts.size() <= 0){
                     String didYouMeanName = getDidYouMeanMostMatchingString(filterProductsDto.getProductName());
                     if(didYouMeanName != null){
                         filteredProducts = searchProductsByName(didYouMeanName);
