@@ -454,6 +454,18 @@ public class ProductService {
         return indexOfMaxWordsScore;
     }
 
+    private Boolean checkIfHasMoreMaxScores(List<Integer> wordsSimilarityScores){
+        int maxScore = Collections.max(wordsSimilarityScores);
+        int maxScoreCount = 0;
+        for (Integer score: wordsSimilarityScores) {
+            if(score == maxScore)
+                maxScoreCount++;
+        }
+        if(maxScoreCount > 1)
+            return true;
+        return false;
+    }
+
     private String getDidYouMeanMostMatchingString(String searchName){
         List<Product> products = productRepository.findAll();
 
@@ -487,6 +499,20 @@ public class ProductService {
         List<String> words = getMatchingProductNameWords(matchingProductNames, searchName);
 
         List<Integer> wordsSimilarityScores = getWordsSimilarityScores(words, fuzzyScore, searchName);
+
+
+        if(checkIfHasMoreMaxScores(wordsSimilarityScores) && searchName.contains(" ")){
+            String newSearchName = searchName.replaceAll("\\s", "");
+            List<String> newWords = getMatchingProductNameWords(words, newSearchName);
+            List<Integer> newWordsSimilarityScores = getWordsSimilarityScores(newWords, fuzzyScore,searchName);
+            Integer indexOfMaxWordScore = getIndexOfMaxWordScore(newWordsSimilarityScores);
+
+            if(indexOfMaxWordScore != -1){
+                String mostSimilarWord = newWords.get(indexOfMaxWordScore);
+                String mostSimilar = mostSimilarWord.substring(0, 1).toUpperCase() + mostSimilarWord.substring(1);
+                return mostSimilar;
+            }
+        }
 
         Integer indexOfMaxWordScore = getIndexOfMaxWordScore(wordsSimilarityScores);
 
