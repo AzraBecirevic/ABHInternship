@@ -6,6 +6,7 @@ import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
 import com.app.auctionbackend.repo.ImageRepository;
 import com.app.auctionbackend.repo.ProductRepository;
+import io.swagger.models.auth.In;
 import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -364,6 +365,91 @@ public class ProductService {
         return priceFilterDto;
     }
 
+    private List<Integer> getAvailableProductFuzzyScore(FuzzyScore fuzzyScore, List<String> availableProductNames, String searchName){
+        List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
+        for (String productName : availableProductNames) {
+            int score = fuzzyScore.fuzzyScore(productName, searchName);
+            availableProductNameFuzzyScore.add(score);
+        }
+        return availableProductNameFuzzyScore;
+    }
+
+    private Integer getAvailableProductNameFuzzyScoreMaximumScore(List<Integer> availableProductNameFuzzyScore){
+        Integer maximumScore = Integer.MIN_VALUE;
+
+        for(int i = 0; i < availableProductNameFuzzyScore.size(); i++){
+            if(availableProductNameFuzzyScore.get(i) > maximumScore){
+                maximumScore = availableProductNameFuzzyScore.get(i);
+            }
+        }
+        return maximumScore;
+    }
+
+    private List<Integer> getAvailableProductFuzzyScoreMaxIndexes(List<Integer> availableProductNameFuzzyScore, Integer maximumScore){
+        List<Integer> maxScoreIndexes = new ArrayList<>();
+        for(int i = 0; i < availableProductNameFuzzyScore.size(); i++){
+            if(availableProductNameFuzzyScore.get(i) == maximumScore){
+                maxScoreIndexes.add(i);
+            }
+        }
+        return maxScoreIndexes;
+    }
+
+    private List<String> getMatchingProductNames(List<Integer> maxScoreIndexes, List<String> availableProductNames){
+        List<String> matchingProductNames = new ArrayList<>();
+        for (Integer index : maxScoreIndexes) {
+            matchingProductNames.add(availableProductNames.get(index));
+        }
+        return matchingProductNames;
+    }
+
+    public List<String> getMatchingProductNameWords(List<String> matchingProductNames, String searchName){
+        List<String> words = new ArrayList<>();
+
+        if(searchName.contains(" ")){
+            for (String name : matchingProductNames) {
+                words.add(name);
+            }
+        }
+        else{
+            for (String name : matchingProductNames) {
+                if(name.contains(" ")){
+                    String[] wordParts = name.split(" ");
+                    for (int i = 0; i < wordParts.length; i++){
+                        words.add(wordParts[i]);
+                    }
+                }
+                else{
+                    words.add(name);
+                }
+            }
+        }
+        return words;
+    }
+
+    List<Integer> getWordsSimilarityScores(List<String> words, FuzzyScore fuzzyScore, String searchName) {
+        List<Integer> wordsSimilarityScores = new ArrayList<>();
+        for (String word : words) {
+            int score = fuzzyScore.fuzzyScore(searchName, word);
+            wordsSimilarityScores.add(score);
+        }
+        return wordsSimilarityScores;
+    }
+
+    Integer getIndexOfMaxWordScore(List<Integer> wordsSimilarityScores) {
+
+        Integer maxWordsScore = Integer.MIN_VALUE;
+        Integer indexOfMaxWordsScore = -1;
+
+        for (int i = 0; i < wordsSimilarityScores.size(); i++) {
+            if (wordsSimilarityScores.get(i) > maxWordsScore) {
+                maxWordsScore = wordsSimilarityScores.get(i);
+                indexOfMaxWordsScore = i;
+            }
+        }
+        return indexOfMaxWordsScore;
+    }
+
     private String getDidYouMeanMostMatchingString(String searchName){
         List<Product> products = productRepository.findAll();
 
@@ -383,66 +469,19 @@ public class ProductService {
 
         FuzzyScore fuzzyScore = new FuzzyScore(Locale.getDefault());
 
-        List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
-        for (String productName : availableProductNames) {
-            int score = fuzzyScore.fuzzyScore(productName, searchName);
-            availableProductNameFuzzyScore.add(score);
-        }
+        List<Integer> availableProductNameFuzzyScore = getAvailableProductFuzzyScore(fuzzyScore ,availableProductNames, searchName);
 
-        Integer maximumScore = Integer.MIN_VALUE;
+        Integer maximumScore = getAvailableProductNameFuzzyScoreMaximumScore(availableProductNameFuzzyScore);
 
-        for(int i = 0; i < availableProductNameFuzzyScore.size(); i++){
-            if(availableProductNameFuzzyScore.get(i) > maximumScore){
-                maximumScore = availableProductNameFuzzyScore.get(i);
-            }
-        }
+        List<Integer> maxScoreIndexes = getAvailableProductFuzzyScoreMaxIndexes(availableProductNameFuzzyScore, maximumScore);
 
-        List<Integer> maxScoreIndexes = new ArrayList<>();
-        for(int i = 0; i < availableProductNameFuzzyScore.size(); i++){
-            if(availableProductNameFuzzyScore.get(i) == maximumScore){
-                maxScoreIndexes.add(i);
-            }
-        }
+        List<String> matchingProductNames = getMatchingProductNames(maxScoreIndexes, availableProductNames);
 
-        List<String> matchingProductNames = new ArrayList<>();
-        for (Integer index : maxScoreIndexes) {
-            matchingProductNames.add(availableProductNames.get(index));
-        }
+        List<String> words = getMatchingProductNameWords(matchingProductNames, searchName);
 
-        List<String> words = new ArrayList<>();
-        for (String name : matchingProductNames) {
+        List<Integer> wordsSimilarityScores = getWordsSimilarityScores(words, fuzzyScore, searchName);
 
-            if(searchName.contains(" ")){
-                words.add(name);
-            }
-            else{
-                if(name.contains(" ")){
-                    String[] wordParts = name.split(" ");
-                    for (int i = 0; i < wordParts.length; i++){
-                        words.add(wordParts[i]);
-                    }
-                }
-                else{
-                    words.add(name);
-                }
-            }
-        }
-
-        List<Integer> wordsSimilarityScores = new ArrayList<>();
-        for(String word : words){
-            int score = fuzzyScore.fuzzyScore(searchName, word);
-            wordsSimilarityScores.add(score);
-        }
-
-        Integer maxWordsScore = Integer.MIN_VALUE;
-        Integer indexOfMaxWordScore = -1;
-
-        for(int i = 0; i <  wordsSimilarityScores.size(); i++){
-            if(wordsSimilarityScores.get(i) > maxWordsScore){
-                maxWordsScore = wordsSimilarityScores.get(i);
-                indexOfMaxWordScore = i;
-            }
-        }
+        Integer indexOfMaxWordScore = getIndexOfMaxWordScore(wordsSimilarityScores);
 
         if(indexOfMaxWordScore != -1){
             String mostSimilarWord = words.get(indexOfMaxWordScore);
