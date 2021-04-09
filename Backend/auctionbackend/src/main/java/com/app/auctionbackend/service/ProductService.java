@@ -587,7 +587,9 @@ public class ProductService {
                     List<ProductDto> matchingProducts = getProductsWithCategoryId(category.getId(), filteredProducts);
                     didYouMeanDto.setMatchingProducts(matchingProducts);
                 }
-                didYouMeanDto.setDidYouMeanString(null);
+                else{
+                    didYouMeanDto.setDidYouMeanString(null);
+                }
             }
             return didYouMeanDto;
         }
