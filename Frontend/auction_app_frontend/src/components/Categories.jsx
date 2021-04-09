@@ -76,6 +76,7 @@ export class Categories extends Component {
     gridChosen: true,
     productName: "",
     didYouMeanName: "",
+    didYouMeanClickable: false,
   };
 
   categoryService = new CategoryService();
@@ -331,8 +332,16 @@ export class Categories extends Component {
       );
 
       var didYouMeanText = "";
+      var didYouMeanClick = false;
       if (productsDto.didYouMean !== null) {
         didYouMeanText = productsDto.didYouMean;
+        if (
+          productsDto.productsList !== undefined &&
+          productsDto.productsList !== null &&
+          productsDto.productsList.length == 1
+        ) {
+          didYouMeanClick = true;
+        }
       }
 
       const categoriesList = await this.categoryService.getCategories();
@@ -351,6 +360,7 @@ export class Categories extends Component {
         gridChosen: chosenOptionGrid,
         productName: productNameFilterPath,
         didYouMeanName: didYouMeanText,
+        didYouMeanClickable: didYouMeanClick,
       });
 
       this.setIsLoading(false);
@@ -362,6 +372,28 @@ export class Categories extends Component {
 
   setIsLoading = (isLoadingValue) => {
     this.props.setIsLoading(isLoadingValue);
+  };
+
+  openDidYouMeanLink = () => {
+    const {
+      didYouMeanClickable,
+      email,
+      token,
+      isLoggedIn,
+      products,
+    } = this.state;
+    if (didYouMeanClickable) {
+      var product = products[0];
+      this.props.history.push({
+        pathname: SINGLE_PRODUCT_ROUTE.replace(":prodId", product.id),
+        state: {
+          chosenProduct: product.id,
+          isLoggedIn: isLoggedIn,
+          email: email,
+          token: token,
+        },
+      });
+    }
   };
 
   exploreMore = async () => {
@@ -900,6 +932,7 @@ export class Categories extends Component {
       gridChosen,
       productName,
       didYouMeanName,
+      didYouMeanClickable,
     } = this.state;
 
     return (
@@ -908,6 +941,8 @@ export class Categories extends Component {
           <Heading
             didYouMeanMessage={DID_YOU_MEAN_MESSAGE}
             didYouMeanValue={didYouMeanName}
+            openDidYouMeanLink={this.openDidYouMeanLink}
+            didYouMeanClickable={didYouMeanClickable}
           ></Heading>
         )}
         <div className="row">

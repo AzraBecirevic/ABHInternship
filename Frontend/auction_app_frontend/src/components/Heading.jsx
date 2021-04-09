@@ -17,7 +17,14 @@ export class Heading extends Component {
                       <span className="didYouMeanMessage">
                         {this.props.didYouMeanMessage}
                       </span>
-                      <span className="didYouMeanValue">
+                      <span
+                        className={
+                          this.props.didYouMeanClickable
+                            ? "didYouMeanClickable"
+                            : "didYouMeanValue"
+                        }
+                        onClick={this.props.openDidYouMeanLink}
+                      >
                         {`${"  "} ${this.props.didYouMeanValue}`}
                       </span>
                     </div>
