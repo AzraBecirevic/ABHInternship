@@ -50,18 +50,23 @@ export class NavbarWhite extends Component {
         },
       });
     } else {
-      var route = CATEGORIES_ROUTE;
-      route += `/ProductName/${this.state.productName}`;
-      this.props.history.push({
-        pathname: route,
-        state: {
-          chosenCategory: 0,
-          isLoggedIn: this.props.isLoggedIn,
-          email: this.props.email,
-          token: this.props.token,
-          productName: this.state.productName,
-        },
-      });
+      setTimeout(
+        function () {
+          var route = CATEGORIES_ROUTE;
+          route += `/ProductName/${this.state.productName}`;
+          this.props.history.push({
+            pathname: route,
+            state: {
+              chosenCategory: 0,
+              isLoggedIn: this.props.isLoggedIn,
+              email: this.props.email,
+              token: this.props.token,
+              productName: this.state.productName,
+            },
+          });
+        }.bind(this),
+        3000
+      );
     }
   };
 
