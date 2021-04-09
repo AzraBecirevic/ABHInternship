@@ -65,7 +65,7 @@ export class NavbarWhite extends Component {
             },
           });
         }.bind(this),
-        3000
+        800
       );
     }
   };
