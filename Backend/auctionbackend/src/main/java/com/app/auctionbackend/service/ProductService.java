@@ -522,8 +522,15 @@ public class ProductService {
                     matchingProducts = searchProductsByName(mostSimilar);
                 else
                     matchingProducts = searchProductsByName(mostSimilar, filteredProducts);
-                didYouMeanDto.setDidYouMeanString(mostSimilar);
+
                 didYouMeanDto.setMatchingProducts(matchingProducts);
+
+                if(matchingProducts == null || matchingProducts.size() <= 0){
+                    didYouMeanDto.setDidYouMeanString(null);
+                }
+                else{
+                    didYouMeanDto.setDidYouMeanString(mostSimilar);
+                }
 
                 return didYouMeanDto;
             }
@@ -538,11 +545,18 @@ public class ProductService {
             List<ProductDto> matchingProducts;
             if(filteredProducts == null)
                 matchingProducts = searchProductsByName(mostSimilar);
-            else
+            else{
                 matchingProducts = searchProductsByName(mostSimilar, filteredProducts);
+            }
 
-            didYouMeanDto.setDidYouMeanString(mostSimilar);
             didYouMeanDto.setMatchingProducts(matchingProducts);
+
+            if(matchingProducts == null || matchingProducts.size() <= 0){
+                didYouMeanDto.setDidYouMeanString(null);
+            }
+            else{
+                didYouMeanDto.setDidYouMeanString(mostSimilar);
+            }
 
             return didYouMeanDto;
         }
@@ -573,6 +587,7 @@ public class ProductService {
                     List<ProductDto> matchingProducts = getProductsWithCategoryId(category.getId(), filteredProducts);
                     didYouMeanDto.setMatchingProducts(matchingProducts);
                 }
+                didYouMeanDto.setDidYouMeanString(null);
             }
             return didYouMeanDto;
         }
@@ -588,13 +603,13 @@ public class ProductService {
             String mostSimilarWord = subcategoryNames.get(indexOfMaxWordScore);
             String mostSimilar = mostSimilarWord.substring(0, 1).toUpperCase() + mostSimilarWord.substring(1);
 
-            didYouMeanDto.setDidYouMeanString(mostSimilar);
 
             if(filteredProducts == null){
                 Subcategory subcategory = subcategoryService.getSubcategoryByName(mostSimilar);
                 if(subcategory != null){
                     List<ProductDto> matchingProducts = getProductsBySubcategoryId(subcategory.getId());
                     didYouMeanDto.setMatchingProducts(matchingProducts);
+                    didYouMeanDto.setDidYouMeanString(mostSimilar);
                 }
             }
             return didYouMeanDto;
@@ -725,22 +740,17 @@ public class ProductService {
             }
         }
         if(filterProductsDto.getProductName() != null && !filterProductsDto.getProductName().isEmpty() ){
-            if((filterProductsDto.getSubcategoryIds() !=null  && !filterProductsDto.getSubcategoryIds().isEmpty())
+            if((filterProductsDto.getSubcategoryIds() != null  && !filterProductsDto.getSubcategoryIds().isEmpty())
                     || (filterProductsDto.getCategoryIds() != null && !filterProductsDto.getCategoryIds().isEmpty())){
 
                 List<ProductDto> filteredProductsByName = searchProductsByName(filterProductsDto.getProductName(), filteredProducts);
 
-                if(filteredProductsByName.size() <= 0){
+               if(filteredProductsByName.size() <= 0){
                     DidYouMeanDto didYouMean = getDidYouMeanMostMatchingString(filterProductsDto.getProductName(), filteredProducts);
                     if(didYouMean != null){
-                        filteredProducts = didYouMean.getMatchingProducts(); //searchProductsByName(didYouMeanName);
+                        filteredProducts = didYouMean.getMatchingProducts();
                         productsInfiniteDto.setDidYouMean(didYouMean.getDidYouMeanString());
                     }
-                  /*  String didYouMeanName = getDidYouMeanMostMatchingString(filterProductsDto.getProductName());
-                    if(didYouMeanName != null){
-                        filteredProducts = searchProductsByName(didYouMeanName, filteredProducts);
-                        productsInfiniteDto.setDidYouMean(didYouMeanName);
-                    }*/
                 }
                 else {
                     filteredProducts = filteredProductsByName;
@@ -752,14 +762,9 @@ public class ProductService {
                 if(filteredProducts.size() <= 0){
                     DidYouMeanDto didYouMean = getDidYouMeanMostMatchingString(filterProductsDto.getProductName(), null);
                     if(didYouMean != null){
-                        filteredProducts = didYouMean.getMatchingProducts(); //searchProductsByName(didYouMeanName);
+                        filteredProducts = didYouMean.getMatchingProducts();
                         productsInfiniteDto.setDidYouMean(didYouMean.getDidYouMeanString());
                     }
-                    /*String didYouMeanName = getDidYouMeanMostMatchingString(filterProductsDto.getProductName());
-                    if(didYouMeanName != null){
-                        filteredProducts = searchProductsByName(didYouMeanName);
-                        productsInfiniteDto.setDidYouMean(didYouMeanName);
-                    }*/
                 }
             }
         }
