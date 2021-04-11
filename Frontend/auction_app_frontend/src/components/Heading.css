@@ -23,7 +23,38 @@
 
 div.row.pageHeadingDivRow {
   background-color: #fafafa;
-  /*height: 100%;*/
+}
+.didYouMeanValue {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #8367d8;
+  letter-spacing: 0.63px;
+}
+.didYouMeanClickable {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #8367d8;
+  letter-spacing: 0.63px;
+}
+.didYouMeanClickable:hover {
+  cursor: pointer;
+}
+
+.didYouMeanMessage {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #9b9b9b;
+  letter-spacing: 0.63px;
+  padding-right: 10px;
+}
+
+.col-lg-9.didYouMeanCol {
+  padding-left: 0;
+}
+@media (max-width: 991.5px) {
+  .col-lg-9.didYouMeanCol {
+    padding-left: 20px;
+  }
 }
 
 @media (max-width: 575.5px) {

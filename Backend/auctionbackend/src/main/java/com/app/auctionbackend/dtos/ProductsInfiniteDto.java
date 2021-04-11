@@ -7,6 +7,15 @@ public class ProductsInfiniteDto {
 
     List<ProductDto> productsList = new ArrayList<>();
     Boolean hasMoreData = true;
+    private String didYouMean;
+
+    public String getDidYouMean() {
+        return didYouMean;
+    }
+
+    public void setDidYouMean(String didYouMean) {
+        this.didYouMean = didYouMean;
+    }
 
     public Boolean getHasMoreData() {
         return hasMoreData;

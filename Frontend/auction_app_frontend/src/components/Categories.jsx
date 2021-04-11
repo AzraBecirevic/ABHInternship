@@ -19,6 +19,7 @@ import {
   GRID_VIEW,
   LIST_VIEW,
   NO_SEARCHED_PRODUCTS,
+  DID_YOU_MEAN_MESSAGE,
 } from "../constants/messages";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -74,6 +75,8 @@ export class Categories extends Component {
     sliderCurrentlyChanging: false,
     gridChosen: true,
     productName: "",
+    didYouMeanName: "",
+    didYouMeanClickable: false,
   };
 
   categoryService = new CategoryService();
@@ -141,17 +144,17 @@ export class Categories extends Component {
   componentDidMount = async () => {
     this.fetchNumber = 1;
     try {
-      var chosenCategory = 0;
-      var isLoggedIn = false;
-      var email = "";
-      var token = "";
-      var productName = "";
-      var chosenType = null;
-      var chosenOptionGrid = true;
+      let chosenCategory = 0;
+      let isLoggedIn = false;
+      let email = "";
+      let token = "";
+      let productName = "";
+      let chosenType = null;
+      let chosenOptionGrid = true;
 
       this.setIsLoading(true);
 
-      var productsDto = null;
+      let productsDto = null;
 
       if (this.props.location == null || this.props.location.state == null) {
         if (localStorage.getItem(TOKEN) != null) {
@@ -185,16 +188,16 @@ export class Categories extends Component {
 
       await this.setState({ filterTags: [] });
 
-      var categoryFiltersPath = this.props.match.params.categories;
+      let categoryFiltersPath = this.props.match.params.categories;
       if (
         categoryFiltersPath !== undefined &&
         categoryFiltersPath !== null &&
         categoryFiltersPath !== ""
       ) {
         if (categoryFiltersPath !== ":categories") {
-          var categoryFilters = categoryFiltersPath.split(",");
+          let categoryFilters = categoryFiltersPath.split(",");
           for (let i = 0; i < categoryFilters.length; i++) {
-            var categoryLabel = categoryFilters[i].split("-");
+            let categoryLabel = categoryFilters[i].split("-");
 
             this.filteredProducts.categoryIds.push(categoryLabel[0]);
             this.setState({
@@ -211,16 +214,16 @@ export class Categories extends Component {
         }
       }
 
-      var subcategoryFiltersPath = this.props.match.params.subcategories;
+      let subcategoryFiltersPath = this.props.match.params.subcategories;
       if (
         subcategoryFiltersPath !== undefined &&
         subcategoryFiltersPath !== null &&
         subcategoryFiltersPath !== ""
       ) {
         if (subcategoryFiltersPath !== ":subcategories") {
-          var subcategoryFilters = subcategoryFiltersPath.split(",");
+          let subcategoryFilters = subcategoryFiltersPath.split(",");
           for (let i = 0; i < subcategoryFilters.length; i++) {
-            var subcategoryLabel = subcategoryFilters[i].split("-");
+            let subcategoryLabel = subcategoryFilters[i].split("-");
 
             this.filteredProducts.subcategoryIds.push(subcategoryLabel[0]);
             this.setState({
@@ -238,8 +241,8 @@ export class Categories extends Component {
       }
       const priceFilterData = await this.productService.getPriceFilterData();
 
-      var productNameFilterPath = this.props.match.params.productName;
-      var priceFilterPath = this.props.match.params.priceFilter;
+      let productNameFilterPath = this.props.match.params.productName;
+      let priceFilterPath = this.props.match.params.priceFilter;
       if (
         priceFilterPath !== undefined &&
         priceFilterPath !== null &&
@@ -293,7 +296,7 @@ export class Categories extends Component {
         }
       }
 
-      var sortFilterPath = this.props.match.params.sortType;
+      let sortFilterPath = this.props.match.params.sortType;
       if (
         sortFilterPath !== undefined &&
         sortFilterPath !== null &&
@@ -310,7 +313,7 @@ export class Categories extends Component {
         chosenType = this.sortingTypes[0];
       }
 
-      var viewOptionPath = this.props.match.params.view;
+      let viewOptionPath = this.props.match.params.view;
       if (
         viewOptionPath !== undefined &&
         viewOptionPath !== null &&
@@ -328,6 +331,19 @@ export class Categories extends Component {
         this.fetchNumber
       );
 
+      let didYouMeanText = "";
+      let didYouMeanClick = false;
+      if (productsDto.didYouMean !== null) {
+        didYouMeanText = productsDto.didYouMean;
+        if (
+          productsDto.productsList !== undefined &&
+          productsDto.productsList !== null &&
+          productsDto.productsList.length == 1
+        ) {
+          didYouMeanClick = true;
+        }
+      }
+
       const categoriesList = await this.categoryService.getCategories();
 
       this.setState({
@@ -343,6 +359,8 @@ export class Categories extends Component {
         sliderCurrentlyChanging: false,
         gridChosen: chosenOptionGrid,
         productName: productNameFilterPath,
+        didYouMeanName: didYouMeanText,
+        didYouMeanClickable: didYouMeanClick,
       });
 
       this.setIsLoading(false);
@@ -354,6 +372,28 @@ export class Categories extends Component {
 
   setIsLoading = (isLoadingValue) => {
     this.props.setIsLoading(isLoadingValue);
+  };
+
+  openDidYouMeanLink = () => {
+    const {
+      didYouMeanClickable,
+      email,
+      token,
+      isLoggedIn,
+      products,
+    } = this.state;
+    if (didYouMeanClickable) {
+      let product = products[0];
+      this.props.history.push({
+        pathname: SINGLE_PRODUCT_ROUTE.replace(":prodId", product.id),
+        state: {
+          chosenProduct: product.id,
+          isLoggedIn: isLoggedIn,
+          email: email,
+          token: token,
+        },
+      });
+    }
   };
 
   exploreMore = async () => {
@@ -410,8 +450,8 @@ export class Categories extends Component {
       return;
     }
 
-    var filterTagsToRemove = [];
-    var removed = false;
+    let filterTagsToRemove = [];
+    let removed = false;
 
     for (let i = 0; i < subcategoryList.length; i++) {
       for (let k = 0; k < this.state.filterTags.length; k++) {
@@ -433,13 +473,13 @@ export class Categories extends Component {
       removed = true;
     }
 
-    var categoryLink = this.props.match.params.categories;
+    let categoryLink = this.props.match.params.categories;
 
     categoryLink == undefined
       ? (categoryLink = categoryId + "-" + categoryName)
       : (categoryLink += "," + categoryId + "-" + categoryName);
 
-    var subcategoryLink = "";
+    let subcategoryLink = "";
     for (let i = 0; i < this.state.filterTags.length; i++) {
       if (this.state.filterTags[i].type == SUBCATEGORY_TYPE) {
         subcategoryLink +=
@@ -451,7 +491,7 @@ export class Categories extends Component {
     }
     subcategoryLink = subcategoryLink.substring(0, subcategoryLink.length - 1);
 
-    var route = CATEGORIES_ROUTE + `/Categories/${categoryLink}`;
+    let route = CATEGORIES_ROUTE + `/Categories/${categoryLink}`;
 
     if (subcategoryLink == "") {
       subcategoryLink = ":subcategories";
@@ -522,14 +562,14 @@ export class Categories extends Component {
       return;
     }
 
-    var subcategoryLink = this.props.match.params.subcategories;
+    let subcategoryLink = this.props.match.params.subcategories;
 
     subcategoryLink == undefined
       ? (subcategoryLink = subcategoryId + "-" + subcategoryName)
       : (subcategoryLink += "," + subcategoryId + "-" + subcategoryName);
 
-    var removed = false;
-    var filterTag = null;
+    let removed = false;
+    let filterTag = null;
     for (let i = 0; i < this.state.filterTags.length; i++) {
       if (
         this.state.filterTags[i].id == categoryId &&
@@ -547,7 +587,7 @@ export class Categories extends Component {
       removed = true;
     }
 
-    var categoryLink = "";
+    let categoryLink = "";
 
     for (let i = 0; i < this.state.filterTags.length; i++) {
       if (this.state.filterTags[i].type == CATEGORY_TYPE) {
@@ -560,7 +600,7 @@ export class Categories extends Component {
     }
     categoryLink = categoryLink.substring(0, categoryLink.length - 1);
 
-    var route = CATEGORIES_ROUTE;
+    let route = CATEGORIES_ROUTE;
 
     if (categoryLink == "") {
       categoryLink = ":categories";
@@ -622,14 +662,14 @@ export class Categories extends Component {
   };
 
   removeFilter = async (filterTag) => {
-    var filterTagsArray = this.state.filterTags;
+    let filterTagsArray = this.state.filterTags;
 
     filterTagsArray = filterTagsArray.filter(function (fTag) {
       return fTag != filterTag;
     });
 
     if (filterTag.type == CATEGORY_TYPE) {
-      var categoryLink = "";
+      let categoryLink = "";
       for (let i = 0; i < filterTagsArray.length; i++) {
         if (filterTagsArray[i].type == CATEGORY_TYPE) {
           categoryLink +=
@@ -638,7 +678,7 @@ export class Categories extends Component {
       }
       categoryLink = categoryLink.substring(0, categoryLink.length - 1);
 
-      var route = CATEGORIES_ROUTE;
+      let route = CATEGORIES_ROUTE;
 
       if (categoryLink == "") {
         categoryLink = ":categories";
@@ -685,7 +725,7 @@ export class Categories extends Component {
         });
       }
     } else if (filterTag.type == SUBCATEGORY_TYPE) {
-      var subcategoryLink = "";
+      let subcategoryLink = "";
       for (let i = 0; i < filterTagsArray.length; i++) {
         if (filterTagsArray[i].type == SUBCATEGORY_TYPE) {
           subcategoryLink +=
@@ -697,7 +737,7 @@ export class Categories extends Component {
         subcategoryLink.length - 1
       );
 
-      var route = CATEGORIES_ROUTE;
+      let route = CATEGORIES_ROUTE;
 
       if (subcategoryLink == "") {
         subcategoryLink = ":subcategories";
@@ -750,7 +790,7 @@ export class Categories extends Component {
     this.filteredProducts.minPrice = value[0];
     this.filteredProducts.maxPrice = value[1];
 
-    var priceFilterLink =
+    let priceFilterLink =
       this.filteredProducts.minPrice + "," + this.filteredProducts.maxPrice;
 
     this.lowerPriceText = value[0];
@@ -759,7 +799,7 @@ export class Categories extends Component {
     this.lowerPriceValue = value[0];
     this.higherPriceValue = value[1];
 
-    var route = CATEGORIES_ROUTE;
+    let route = CATEGORIES_ROUTE;
 
     if (this.props.match.params.categories !== undefined) {
       route += `/Categories/${this.props.match.params.categories}`;
@@ -792,7 +832,7 @@ export class Categories extends Component {
   };
 
   sortingTypeChosen = (sortingTypeId) => {
-    var route = CATEGORIES_ROUTE;
+    let route = CATEGORIES_ROUTE;
 
     if (this.props.match.params.categories !== undefined) {
       route += `/Categories/${this.props.match.params.categories}`;
@@ -821,7 +861,7 @@ export class Categories extends Component {
   };
 
   chooseGridView = () => {
-    var route = CATEGORIES_ROUTE;
+    let route = CATEGORIES_ROUTE;
 
     if (this.props.match.params.categories !== undefined) {
       route += `/Categories/${this.props.match.params.categories}`;
@@ -846,7 +886,7 @@ export class Categories extends Component {
   };
 
   chooseListView = () => {
-    var route = CATEGORIES_ROUTE;
+    let route = CATEGORIES_ROUTE;
 
     if (this.props.match.params.categories !== undefined) {
       route += `/Categories/${this.props.match.params.categories}`;
@@ -891,10 +931,20 @@ export class Categories extends Component {
       sliderCurrentlyChanging,
       gridChosen,
       productName,
+      didYouMeanName,
+      didYouMeanClickable,
     } = this.state;
 
     return (
       <div>
+        {didYouMeanName !== "" && (
+          <Heading
+            didYouMeanMessage={DID_YOU_MEAN_MESSAGE}
+            didYouMeanValue={didYouMeanName}
+            openDidYouMeanLink={this.openDidYouMeanLink}
+            didYouMeanClickable={didYouMeanClickable}
+          ></Heading>
+        )}
         <div className="row">
           <div className="col-lg-2"></div>
           <div className="col-lg-8 categoriesColumn">

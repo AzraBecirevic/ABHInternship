@@ -21,11 +21,20 @@ public class CategoryService {
 
         List<CategoryDto> categoryDtos = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
-        for (Category c:categories) {
+        for (Category c : categories) {
             CategoryDto categoryDto = modelMapper.map(c, CategoryDto.class);
             categoryDtos.add(categoryDto);
         }
         return categoryDtos;
+    }
+
+    public Category getCategoryByName(String name){
+        List<Category> categories = categoryRepository.findAll();
+        for (Category c : categories) {
+            if(c.getName().toLowerCase().equals(name.toLowerCase()))
+                return c;
+        }
+        return null;
     }
 
 }
