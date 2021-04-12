@@ -132,9 +132,7 @@ export class Profile extends Component {
   authService = new AuthService();
   stripeService = new StripeService();
 
-  stripePromise = loadStripe(
-    "pk_test_51IbMXrAMYsRIxGUFSQehTyEOAgSNMFqLCvtXRVrDPGGgyRXKDoEDblXfQ7dUoNO1xoOTCgoTMTqCuhC4FRgLxczI00rD4fWKa3"
-  );
+  stripePromise = null;
 
   days = [];
 
@@ -310,6 +308,10 @@ export class Profile extends Component {
   componentDidMount = async () => {
     try {
       const { token, userEmail } = this.props;
+
+      let stripePublicKey = await this.stripeService.getPublicKey(token);
+
+      this.stripePromise = loadStripe(stripePublicKey.publicKey);
 
       var countries = this.loadCountries();
 
@@ -750,21 +752,6 @@ export class Profile extends Component {
 
         var showSucces = true;
 
-        if (this.isDeliveryFormChanged()) {
-          var deliveryData = await this.customerService.updateCustomerDeliveryData(
-            userEmail,
-            token,
-            country,
-            region,
-            city,
-            zipCode,
-            street
-          );
-          if (deliveryData == null) {
-            showSucces = false;
-          }
-        }
-
         if (this.isCardFormChanged()) {
           if (!this.stripePromise) {
             return;
@@ -774,7 +761,7 @@ export class Profile extends Component {
             token
           );
           if (setupIntent !== null) {
-            const result = (await this.stripePromise).confirmCardSetup(
+            const result = await (await this.stripePromise).confirmCardSetup(
               setupIntent.client_secret,
               {
                 payment_method: {
@@ -790,6 +777,21 @@ export class Profile extends Component {
               showSucces = false;
               this.toastService.showErrorToast(CARD_DATA_NOT_SAVED);
             }
+          }
+        }
+
+        if (showSucces && this.isDeliveryFormChanged()) {
+          var deliveryData = await this.customerService.updateCustomerDeliveryData(
+            userEmail,
+            token,
+            country,
+            region,
+            city,
+            zipCode,
+            street
+          );
+          if (deliveryData == null) {
+            showSucces = false;
           }
         }
 

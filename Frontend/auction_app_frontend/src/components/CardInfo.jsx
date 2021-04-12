@@ -55,7 +55,7 @@ export class CardInfo extends Component {
               <div className="cityInput">
                 <label className="formLabel">Card Number</label>
                 <CardNumberElement
-                  className="form-control"
+                  className="form-control card"
                   onChange={(cardNum) => this.handleCardNumberChange(cardNum)}
                 ></CardNumberElement>
                 <small
@@ -72,7 +72,7 @@ export class CardInfo extends Component {
               <div className="cityInput">
                 <label className="formLabel">Expiration Date</label>
                 <CardExpiryElement
-                  className="form-control"
+                  className="form-control card"
                   onChange={(expDate) =>
                     this.handleCardExpirationDateChange(expDate)
                   }
@@ -87,7 +87,7 @@ export class CardInfo extends Component {
               <div className="cityInput">
                 <label className="formLabel">CVC</label>
                 <CardCvcElement
-                  className="form-control"
+                  className="form-control card"
                   onChange={(cvc) => this.handleCardCVCDateChange(cvc)}
                 ></CardCvcElement>
                 <small className="errorMessage" hidden={cardCVCErrMess === ""}>
