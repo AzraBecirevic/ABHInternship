@@ -146,3 +146,8 @@ export const PRODUCT_NAME_MAX_WORDS_MESSAGE =
 export const DESCRIPTION_MAX_WORDS_MESSAGE =
   "Description can have maximum 100 words ";
 export const DID_YOU_MEAN_MESSAGE = "Did you mean?";
+export const CARD_NAME_REQUIRED_MESSAGE = "Card name is required";
+export const CARD_NUMBER_REQUIRED_MESSAGE = "Card number is required";
+export const CARD_EXPIRATION_DATE_REQUIRED_MESSAGE =
+  "Card expiration date is required";
+export const CARD_CVC_REQUIRED_MESSAGE = "Cvc is required";
