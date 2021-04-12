@@ -8,7 +8,15 @@ import userImage from "../assets/userImage.png";
 import ValidationService from "../services/validationService";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
+  CARD_CVC_FORMAT_MESSAGE,
+  CARD_CVC_REQUIRED_MESSAGE,
+  CARD_DATA_NOT_SAVED,
+  CARD_EXPIRATION_DATE_FORMAT_MESSAGE,
+  CARD_EXPIRATION_DATE_REQUIRED_MESSAGE,
   CARD_INFORMATION,
+  CARD_NAME_REQUIRED_MESSAGE,
+  CARD_NUMBER_FORMAT_MESSAGE,
+  CARD_NUMBER_REQUIRED_MESSAGE,
   CHANGE_PHOTO,
   CITY_FORMAT_MESSAGE,
   CITY_REQUIRED_MESSAGE,
@@ -46,8 +54,22 @@ import { CLOSE_TOAST_AFTER_MILISECONDS } from "../constants/toastClosing";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import csc from "country-state-city";
 import { ICountry, IState, ICity } from "country-state-city";
+import CardInfo from "./CardInfo";
+import { Elements, ElementsConsumer } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import StripeService from "../services/stripeService";
+import {
+  CardCvcElement,
+  CardElement,
+  CardExpiryElement,
+  CardNumberElement,
+} from "@stripe/react-stripe-js";
 
 export class Profile extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     firstName: "",
     lastName: "",
@@ -89,6 +111,18 @@ export class Profile extends Component {
     chosenStateName: "",
     chosenCityCode: "",
     chosenCityName: "",
+    cardName: "",
+    cardNameErrMess: "",
+    cardNumberErrMess: "",
+    cardNumberEmpty: true,
+    cardExpirationDateErrMess: "",
+    cardExpirationDateEmpty: true,
+    cardCVCErrMess: "",
+    cardCVCEmpty: true,
+    elements: "",
+    cardNumberCompleted: false,
+    cardExpirationDateCompleted: false,
+    cardCVCCompleted: false,
   };
 
   customerService = new CustomerService();
@@ -96,6 +130,9 @@ export class Profile extends Component {
   validationService = new ValidationService();
   toastService = new ToastService();
   authService = new AuthService();
+  stripeService = new StripeService();
+
+  stripePromise = null;
 
   days = [];
 
@@ -146,6 +183,34 @@ export class Profile extends Component {
     for (let i = 1; i <= maxDays; i++) {
       this.days.push(i);
     }
+  };
+
+  fillCardNumber = (cardNumberState, cardNumberCompletedState) => {
+    this.setState({
+      cardNumberEmpty: cardNumberState,
+      cardNumberCompleted: cardNumberCompletedState,
+    });
+  };
+
+  fillCardExpirationDate = (
+    cardExpirationDateState,
+    cardExpirationDateCompletedState
+  ) => {
+    this.setState({
+      cardExpirationDateEmpty: cardExpirationDateState,
+      cardExpirationDateCompleted: cardExpirationDateCompletedState,
+    });
+  };
+
+  fillCardCVC = (cvcState, cvcCompletedState) => {
+    this.setState({
+      cardCVCEmpty: cvcState,
+      cardCVCCompleted: cvcCompletedState,
+    });
+  };
+
+  fillElements = (elements) => {
+    this.setState({ elements: elements });
   };
 
   fillYears = (birthYear) => {
@@ -243,6 +308,10 @@ export class Profile extends Component {
   componentDidMount = async () => {
     try {
       const { token, userEmail } = this.props;
+
+      let stripePublicKey = await this.stripeService.getPublicKey(token);
+
+      this.stripePromise = loadStripe(stripePublicKey.publicKey);
 
       var countries = this.loadCountries();
 
@@ -504,6 +573,96 @@ export class Profile extends Component {
     return false;
   };
 
+  validateCardName = () => {
+    const { cardName } = this.state;
+    if (this.validationService.validateRequiredFiled(cardName) == false) {
+      this.setState({ cardNameErrMess: CARD_NAME_REQUIRED_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateCardNumber = () => {
+    const { cardNumberEmpty, cardNumberCompleted } = this.state;
+    if (cardNumberEmpty == true) {
+      this.setState({ cardNumberErrMess: CARD_NUMBER_REQUIRED_MESSAGE });
+      return false;
+    }
+    if (cardNumberCompleted == false) {
+      this.setState({
+        cardNumberErrMess: CARD_NUMBER_FORMAT_MESSAGE,
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  validateCardExpirationDate = () => {
+    const { cardExpirationDateEmpty, cardExpirationDateCompleted } = this.state;
+    if (cardExpirationDateEmpty == true) {
+      this.setState({
+        cardExpirationDateErrMess: CARD_EXPIRATION_DATE_REQUIRED_MESSAGE,
+      });
+      return false;
+    }
+    if (cardExpirationDateCompleted == false) {
+      this.setState({
+        cardExpirationDateErrMess: CARD_EXPIRATION_DATE_FORMAT_MESSAGE,
+      });
+      return false;
+    }
+    return true;
+  };
+  validateCardCVC = () => {
+    const { cardCVCEmpty, cardCVCCompleted } = this.state;
+    if (cardCVCEmpty == true) {
+      this.setState({ cardCVCErrMess: CARD_CVC_REQUIRED_MESSAGE });
+      return false;
+    }
+    if (cardCVCCompleted == false) {
+      this.setState({ cardCVCErrMess: CARD_CVC_FORMAT_MESSAGE });
+      return false;
+    }
+    return true;
+  };
+
+  validateCardForm = () => {
+    let cardFormIsValid = true;
+
+    if (this.validateCardName() === false) {
+      cardFormIsValid = false;
+    }
+    if (this.validateCardNumber() === false) {
+      cardFormIsValid = false;
+    }
+    if (this.validateCardExpirationDate() === false) {
+      cardFormIsValid = false;
+    }
+    if (this.validateCardCVC() === false) {
+      cardFormIsValid = false;
+    }
+    return cardFormIsValid;
+  };
+
+  isCardFormChanged = () => {
+    const {
+      cardName,
+      cardNumberEmpty,
+      cardExpirationDateEmpty,
+      cardCVCEmpty,
+    } = this.state;
+    if (
+      cardName !== "" ||
+      cardNumberEmpty == false ||
+      cardExpirationDateEmpty == false ||
+      cardCVCEmpty == false
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   validateData = () => {
     var formIsValid = true;
 
@@ -537,6 +696,12 @@ export class Profile extends Component {
       }
     }
 
+    if (this.isCardFormChanged()) {
+      if (this.validateCardForm() === false) {
+        formIsValid = false;
+      }
+    }
+
     return formIsValid;
   };
 
@@ -553,6 +718,10 @@ export class Profile extends Component {
       countryErrMess: "",
       regionErrMess: "",
       genderErrMeess: "",
+      cardNameErrMess: "",
+      cardNumberErrMess: "",
+      cardExpirationDateErrMess: "",
+      cardCVCErrMess: "",
     });
 
     if (this.validateData()) {
@@ -576,13 +745,42 @@ export class Profile extends Component {
           city,
           zipCode,
           street,
+          cardName,
         } = this.state;
 
         this.setIsLoading(true);
 
         var showSucces = true;
 
-        if (this.isDeliveryFormChanged()) {
+        if (this.isCardFormChanged()) {
+          if (!this.stripePromise) {
+            return;
+          }
+          let setupIntent = await this.stripeService.createSetupIntent(
+            email,
+            token
+          );
+          if (setupIntent !== null) {
+            const result = await (await this.stripePromise).confirmCardSetup(
+              setupIntent.client_secret,
+              {
+                payment_method: {
+                  card: this.state.elements,
+                  billing_details: {
+                    name: cardName,
+                  },
+                },
+              }
+            );
+
+            if (result.error) {
+              showSucces = false;
+              this.toastService.showErrorToast(CARD_DATA_NOT_SAVED);
+            }
+          }
+        }
+
+        if (showSucces && this.isDeliveryFormChanged()) {
           var deliveryData = await this.customerService.updateCustomerDeliveryData(
             userEmail,
             token,
@@ -679,6 +877,7 @@ export class Profile extends Component {
   }
 
   render() {
+    const { userEmail, token } = this.props;
     const {
       firstName,
       lastName,
@@ -712,6 +911,11 @@ export class Profile extends Component {
       countryList,
       stateList,
       cityList,
+      cardName,
+      cardNameErrMess,
+      cardNumberErrMess,
+      cardExpirationDateErrMess,
+      cardCVCErrMess,
     } = this.state;
 
     return (
@@ -895,6 +1099,27 @@ export class Profile extends Component {
         </div>
         <div className="userInfoDiv">
           <div className="userInfoDivHeading">{CARD_INFORMATION}</div>
+          <Elements stripe={this.stripePromise}>
+            <ElementsConsumer>
+              {({ stripe, elements }) => (
+                <CardInfo
+                  elements={elements}
+                  email={userEmail}
+                  token={token}
+                  cardName={cardName}
+                  cardNameErrMess={cardNameErrMess}
+                  cardNumberErrMess={cardNumberErrMess}
+                  cardExpirationDateErrMess={cardExpirationDateErrMess}
+                  cardCVCErrMess={cardCVCErrMess}
+                  onChange={this.onChange}
+                  fillCardNumber={this.fillCardNumber}
+                  fillCardExpirationDate={this.fillCardExpirationDate}
+                  fillCardCVC={this.fillCardCVC}
+                  fillElements={this.fillElements}
+                ></CardInfo>
+              )}
+            </ElementsConsumer>
+          </Elements>
         </div>
         <div className="userInfoDiv">
           <div className="userInfoDivHeading">{OPTIONAL}</div>

@@ -33,3 +33,5 @@ export const DEACTIVATE_ACCOUNT_ENDPOINT = "/customer/deactivateAccount/";
 export const CHECK_IF_ACCOUNT_IS_ACTIVE = "/customer/checkIsAccountActive/";
 export const ADD_PRODUCT = "/product/addProduct";
 export const ADD_PRODUCT_PHOTO = "/product/addProductPhotos/";
+export const CREATE_SETUP_INTENT = "/stripe/create-setup-intent";
+export const GET_PUBLIC_KEY = "/stripe/getPublicKey";

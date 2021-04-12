@@ -307,6 +307,11 @@ public class CustomerService {
        return null;
     }
 
+    public void saveCustomerStripeId(String stripeId, Customer customer){
+         customer.setStripeId(stripeId);
+         customerRepository.save(customer);
+    }
+
     public Boolean isCustomerSellingProducts(String email){
         Customer customer = findByEmail(email);
 

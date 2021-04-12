@@ -36,6 +36,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 
+    private String stripeId;
+
     public Integer getId() {
         return id;
     }
@@ -138,5 +140,13 @@ public class Customer {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getStripeId() {
+        return stripeId;
+    }
+
+    public void setStripeId(String stripeId) {
+        this.stripeId = stripeId;
     }
 }
