@@ -10,16 +10,19 @@ import styles from "./CardInfo.css";
 
 export class CardInfo extends Component {
   handleCardNumberChange = (cardNumber) => {
-    this.props.fillCardNumber(cardNumber.empty);
+    this.props.fillCardNumber(cardNumber.empty, cardNumber.complete);
     this.props.fillElements(this.props.elements.getElement(CardNumberElement));
   };
 
   handleCardExpirationDateChange = (expirationDate) => {
-    this.props.fillCardExpirationDate(expirationDate.empty);
+    this.props.fillCardExpirationDate(
+      expirationDate.empty,
+      expirationDate.complete
+    );
   };
 
   handleCardCVCDateChange = (cvc) => {
-    this.props.fillCardCVC(cvc.empty);
+    this.props.fillCardCVC(cvc.empty, cvc.complete);
   };
 
   render() {

@@ -52,6 +52,9 @@ public class StripeController {
                     .build();
             SetupIntent setupIntent = SetupIntent.create(setupIntentParams);
 
+            customerService.saveCustomerStripeId(setupIntent.getCustomer(), appCustomer);
+
+
             return new ResponseEntity(gson.toJson(setupIntent), HttpStatus.OK);
         }
         catch (Exception ex){

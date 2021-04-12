@@ -8,10 +8,14 @@ import userImage from "../assets/userImage.png";
 import ValidationService from "../services/validationService";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
+  CARD_CVC_FORMAT_MESSAGE,
   CARD_CVC_REQUIRED_MESSAGE,
+  CARD_DATA_NOT_SAVED,
+  CARD_EXPIRATION_DATE_FORMAT_MESSAGE,
   CARD_EXPIRATION_DATE_REQUIRED_MESSAGE,
   CARD_INFORMATION,
   CARD_NAME_REQUIRED_MESSAGE,
+  CARD_NUMBER_FORMAT_MESSAGE,
   CARD_NUMBER_REQUIRED_MESSAGE,
   CHANGE_PHOTO,
   CITY_FORMAT_MESSAGE,
@@ -64,7 +68,6 @@ import {
 export class Profile extends Component {
   constructor(props) {
     super(props);
-    //   this.childRef = React.createRef();
   }
 
   state = {
@@ -117,6 +120,9 @@ export class Profile extends Component {
     cardCVCErrMess: "",
     cardCVCEmpty: true,
     elements: "",
+    cardNumberCompleted: false,
+    cardExpirationDateCompleted: false,
+    cardCVCCompleted: false,
   };
 
   customerService = new CustomerService();
@@ -181,21 +187,32 @@ export class Profile extends Component {
     }
   };
 
-  fillCardNumber = (cardNumberState) => {
-    this.setState({ cardNumberEmpty: cardNumberState });
+  fillCardNumber = (cardNumberState, cardNumberCompletedState) => {
+    this.setState({
+      cardNumberEmpty: cardNumberState,
+      cardNumberCompleted: cardNumberCompletedState,
+    });
   };
 
-  fillCardExpirationDate = (cardExpirationDateState) => {
-    this.setState({ cardExpirationDateEmpty: cardExpirationDateState });
+  fillCardExpirationDate = (
+    cardExpirationDateState,
+    cardExpirationDateCompletedState
+  ) => {
+    this.setState({
+      cardExpirationDateEmpty: cardExpirationDateState,
+      cardExpirationDateCompleted: cardExpirationDateCompletedState,
+    });
   };
 
-  fillCardCVC = (cvcState) => {
-    this.setState({ cardCVCEmpty: cvcState });
+  fillCardCVC = (cvcState, cvcCompletedState) => {
+    this.setState({
+      cardCVCEmpty: cvcState,
+      cardCVCCompleted: cvcCompletedState,
+    });
   };
 
   fillElements = (elements) => {
     this.setState({ elements: elements });
-    console.log(this.state.elements); //
   };
 
   fillYears = (birthYear) => {
@@ -564,28 +581,45 @@ export class Profile extends Component {
   };
 
   validateCardNumber = () => {
-    const { cardNumberEmpty } = this.state;
+    const { cardNumberEmpty, cardNumberCompleted } = this.state;
     if (cardNumberEmpty == true) {
       this.setState({ cardNumberErrMess: CARD_NUMBER_REQUIRED_MESSAGE });
       return false;
     }
+    if (cardNumberCompleted == false) {
+      this.setState({
+        cardNumberErrMess: CARD_NUMBER_FORMAT_MESSAGE,
+      });
+      return false;
+    }
+
     return true;
   };
 
   validateCardExpirationDate = () => {
-    const { cardExpirationDateEmpty } = this.state;
+    const { cardExpirationDateEmpty, cardExpirationDateCompleted } = this.state;
     if (cardExpirationDateEmpty == true) {
       this.setState({
         cardExpirationDateErrMess: CARD_EXPIRATION_DATE_REQUIRED_MESSAGE,
       });
       return false;
     }
+    if (cardExpirationDateCompleted == false) {
+      this.setState({
+        cardExpirationDateErrMess: CARD_EXPIRATION_DATE_FORMAT_MESSAGE,
+      });
+      return false;
+    }
     return true;
   };
   validateCardCVC = () => {
-    const { cardCVCEmpty } = this.state;
+    const { cardCVCEmpty, cardCVCCompleted } = this.state;
     if (cardCVCEmpty == true) {
       this.setState({ cardCVCErrMess: CARD_CVC_REQUIRED_MESSAGE });
+      return false;
+    }
+    if (cardCVCCompleted == false) {
+      this.setState({ cardCVCErrMess: CARD_CVC_FORMAT_MESSAGE });
       return false;
     }
     return true;
@@ -689,127 +723,127 @@ export class Profile extends Component {
     });
 
     if (this.validateData()) {
-      //  try {
-      this.setState({ disabledSaveInfoBtn: true });
-      const { token, userEmail } = this.props;
-      const {
-        firstName,
-        lastName,
-        genderId,
-        phoneNumber,
-        email,
-        dateDay,
-        dateMonth,
-        dateYear,
-        imgFile,
-        chosenImage,
-        profileImage,
-        country,
-        region,
-        city,
-        zipCode,
-        street,
-        cardName,
-      } = this.state;
-
-      this.setIsLoading(true);
-
-      var showSucces = true;
-
-      if (this.isDeliveryFormChanged()) {
-        var deliveryData = await this.customerService.updateCustomerDeliveryData(
-          userEmail,
-          token,
-          country,
-          region,
-          city,
-          zipCode,
-          street
-        );
-        if (deliveryData == null) {
-          showSucces = false;
-        }
-      }
-
-      if (this.isCardFormChanged()) {
-        if (!this.stripePromise) {
-          return;
-        }
-        let setupIntent = await this.stripeService.createSetupIntent(
-          email,
-          token
-        );
-        if (setupIntent !== null) {
-          const result = (await this.stripePromise).confirmCardSetup(
-            setupIntent.client_secret,
-            {
-              payment_method: {
-                card: this.state.elements,
-                billing_details: {
-                  name: cardName,
-                },
-              },
-            }
-          );
-
-          if (result.error) {
-            showSucces = false;
-            this.toastService.showErrorToast("error");
-          } else {
-            this.toastService.showSuccessToast("successfully changed data"); //
-          }
-        }
-      }
-
-      if (showSucces && chosenImage !== userImage && profileImage == null) {
-        var photo = await this.customerService.upadateCustomerPhoto(
-          userEmail,
-          token,
-          imgFile
-        );
-        if (photo == null) {
-          showSucces = false;
-        }
-      }
-
-      if (showSucces) {
-        var customer = await this.customerService.updateCustomer(
-          userEmail,
-          token,
+      try {
+        this.setState({ disabledSaveInfoBtn: true });
+        const { token, userEmail } = this.props;
+        const {
           firstName,
           lastName,
-          email,
           genderId,
           phoneNumber,
+          email,
           dateDay,
           dateMonth,
           dateYear,
           imgFile,
-          this.showErrorMessage
-        );
+          chosenImage,
+          profileImage,
+          country,
+          region,
+          city,
+          zipCode,
+          street,
+          cardName,
+        } = this.state;
 
-        if (customer == null) {
-          showSucces = false;
+        this.setIsLoading(true);
+
+        var showSucces = true;
+
+        if (this.isDeliveryFormChanged()) {
+          var deliveryData = await this.customerService.updateCustomerDeliveryData(
+            userEmail,
+            token,
+            country,
+            region,
+            city,
+            zipCode,
+            street
+          );
+          if (deliveryData == null) {
+            showSucces = false;
+          }
         }
-      }
-      this.setState({ disabledSaveInfoBtn: false });
-      this.setIsLoading(false);
 
-      if (showSucces && userEmail !== email) {
-        this.toastService.showSuccessToast(
-          SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE
-        );
-        this.authService.logout();
-        this.props.history.push(LOGIN_ROUTE);
-      } else if (showSucces) {
-        this.toastService.showSuccessToast(SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE);
-      }
-      //  } catch (error) {
-      //   this.setState({ disabledSaveInfoBtn: false });
-      //   this.setIsLoading(false);
+        if (this.isCardFormChanged()) {
+          if (!this.stripePromise) {
+            return;
+          }
+          let setupIntent = await this.stripeService.createSetupIntent(
+            email,
+            token
+          );
+          if (setupIntent !== null) {
+            const result = (await this.stripePromise).confirmCardSetup(
+              setupIntent.client_secret,
+              {
+                payment_method: {
+                  card: this.state.elements,
+                  billing_details: {
+                    name: cardName,
+                  },
+                },
+              }
+            );
 
-      //   this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
-      // }
+            if (result.error) {
+              showSucces = false;
+              this.toastService.showErrorToast(CARD_DATA_NOT_SAVED);
+            }
+          }
+        }
+
+        if (showSucces && chosenImage !== userImage && profileImage == null) {
+          var photo = await this.customerService.upadateCustomerPhoto(
+            userEmail,
+            token,
+            imgFile
+          );
+          if (photo == null) {
+            showSucces = false;
+          }
+        }
+
+        if (showSucces) {
+          var customer = await this.customerService.updateCustomer(
+            userEmail,
+            token,
+            firstName,
+            lastName,
+            email,
+            genderId,
+            phoneNumber,
+            dateDay,
+            dateMonth,
+            dateYear,
+            imgFile,
+            this.showErrorMessage
+          );
+
+          if (customer == null) {
+            showSucces = false;
+          }
+        }
+        this.setState({ disabledSaveInfoBtn: false });
+        this.setIsLoading(false);
+
+        if (showSucces && userEmail !== email) {
+          this.toastService.showSuccessToast(
+            SUCCESSFUL_CUSTOMER_UPDATE_LOGIN_MESSAGE
+          );
+          this.authService.logout();
+          this.props.history.push(LOGIN_ROUTE);
+        } else if (showSucces) {
+          this.toastService.showSuccessToast(
+            SUCCESSFUL_CUSTOMER_UPDATE_MESSAGE
+          );
+        }
+      } catch (error) {
+        this.setState({ disabledSaveInfoBtn: false });
+        this.setIsLoading(false);
+
+        this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
+      }
     }
   };
 
