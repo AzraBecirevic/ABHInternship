@@ -136,4 +136,10 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/getRecommended/{email}")
+    public List<ProductDto> getRecommendedProducts(@PathVariable String email){
+       List<ProductDto> productDtos = productService.getRecommendedProducts(email);
+       return productDtos;
+    }
+
 }

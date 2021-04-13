@@ -182,6 +182,25 @@ div.infinite-scroll-component {
   overflow: unset !important;
 }
 
+.featureProductsHeading {
+  font-family: Lato-Regular;
+  font-size: 28px;
+  color: #252525;
+  letter-spacing: 0.98px;
+}
+
+.featureProductsHr {
+  background: #ececec;
+  height: 2px;
+  margin-bottom: 25px;
+}
+
+div.row.featureProductsRow {
+  margin-top: 0;
+}
+.featureProductsDiv {
+  margin-bottom: 100px;
+}
 @media (max-width: 1500px) {
   .mainProductImage {
     padding-top: 70px;

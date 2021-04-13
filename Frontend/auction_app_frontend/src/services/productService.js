@@ -16,6 +16,7 @@ import {
   GET_PRODUCTS_CUSTOMER_DID_BID_ENDPOINT,
   ADD_PRODUCT,
   ADD_PRODUCT_PHOTO,
+  GET_RECOMMENDED_PRODUCTS,
 } from "../constants/endpoints";
 import ToastService from "./toastService";
 
@@ -133,6 +134,13 @@ class ProductService {
       GET_PRODUCTS_CUSTOMER_DID_BID_ENDPOINT + email,
       requestOptions
     );
+  }
+
+  async getRecommendedProducts(email) {
+    const requestOptions = {
+      method: "GET",
+    };
+    return await this.getData(GET_RECOMMENDED_PRODUCTS + email, requestOptions);
   }
 
   async getFilteredProducts(filteredProducts, filterFetchNumber) {

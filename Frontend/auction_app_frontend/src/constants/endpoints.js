@@ -35,3 +35,4 @@ export const ADD_PRODUCT = "/product/addProduct";
 export const ADD_PRODUCT_PHOTO = "/product/addProductPhotos/";
 export const CREATE_SETUP_INTENT = "/stripe/create-setup-intent";
 export const GET_PUBLIC_KEY = "/stripe/getPublicKey";
+export const GET_RECOMMENDED_PRODUCTS = "/product/getRecommended/";
