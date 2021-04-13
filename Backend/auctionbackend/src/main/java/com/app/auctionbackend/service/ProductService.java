@@ -1232,7 +1232,7 @@ public class ProductService {
         }
     }
 
-    public List<ProductDto> getRecommendedProducts2(String customerEmail){
+    public List<ProductDto> getRecommendedProducts(String customerEmail){
         Customer customer = customerService.findByEmail(customerEmail);
 
        if(customer == null){
@@ -1335,41 +1335,4 @@ public class ProductService {
             return changeToDto(recommendableProductsTop4);
         }
     }
-
-     public List<ProductDto> getRecommendedProducts1(String customerEmail){
-        Customer customer = customerService.findByEmail(customerEmail);
-
-       if(customer == null){
-           return getMostPopularProducts();
-       }
-
-        List<Bid> customerBids = bidRepository.findByCustomerIdOrderByBidPrice(customer.getId());
-
-        if(customerBids == null || customerBids.isEmpty()){
-            return getMostPopularProducts();
-        }
-        else{
-            List<Product> biddedProducts = new ArrayList<>();
-
-            for (Bid bid: customerBids) {
-                biddedProducts.add(bid.getProduct());
-            }
-
-            Comparator<Product> compareByNumberOfBids = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
-
-            Collections.sort(biddedProducts, compareByNumberOfBids);
-
-            if(biddedProducts.size() <= 4){
-               return changeToDto(biddedProducts);
-            }
-
-            List<Product> recommendableProductsTop4 = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                recommendableProductsTop4.add(biddedProducts.get(i));
-            }
-
-            return changeToDto(recommendableProductsTop4);
-        }
-    }
-
 }
