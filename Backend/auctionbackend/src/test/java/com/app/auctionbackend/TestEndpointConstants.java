@@ -20,6 +20,7 @@ public class TestEndpointConstants {
     public static final String UPDATE_CUSTOMER_ENDPOINT = "/customer/update/";
     public static final String SAVE_DELIVERY_DATA_ENDPOINT = "/customer/saveDeliveryData/";
     public static final String ADD_PRODUCT_ENDPOINT = "/product/addProduct";
+    public static final String GET_RECOMMENDED_PRODUCTS_ENDPOINT = "/product//getRecommended/";
 
 
 }

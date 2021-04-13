@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.plaf.LabelUI;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -1084,6 +1085,291 @@ public class ProductService {
             }
         }
         return productDtos;
+    }
+
+    private List<ProductDto> getMostPopularProducts(){
+        List<Product> products = getAvailableProducts();
+
+        if(products == null || products.isEmpty())
+            return null;
+
+        Comparator<Product> compareByBidsCount = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
+
+        Collections.sort(products, compareByBidsCount);
+
+        if(products.size() <= 4){
+            return changeToDto(products);
+        }
+        else{
+            List<Product> productsTop4 = new ArrayList<>();
+            for (int i = 0; i < 4; i++){
+                productsTop4.add(products.get(i));
+            }
+            return changeToDto(productsTop4);
+        }
+    }
+
+    private List<ProductDto> getMostPopularOtherCustomersProducts(Customer customer){
+        List<Product> products = getAvailableProducts();
+
+        if(products == null || products.isEmpty())
+            return new ArrayList<>();
+
+        List<Product> otherCustomerProducts = new ArrayList<>();
+        for (Product p : products) {
+            if(p.getCustomer() != null){
+                if(p.getCustomer().getId() != customer.getId()){
+                    otherCustomerProducts.add(p);
+                }
+            }
+            else {
+                otherCustomerProducts.add(p);
+            }
+        }
+
+        if(otherCustomerProducts.isEmpty())
+            return new ArrayList<>();
+
+        Comparator<Product> compareByBidsCount = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
+
+        Collections.sort(otherCustomerProducts, compareByBidsCount);
+
+        if(otherCustomerProducts.size() <= 4){
+            return changeToDto(otherCustomerProducts);
+        }
+        else{
+            List<Product> otherCustomerProductsTop4 = new ArrayList<>();
+            for (int i = 0; i < 4; i++){
+                otherCustomerProductsTop4.add(otherCustomerProducts.get(i));
+            }
+            return changeToDto(otherCustomerProductsTop4);
+        }
+    }
+
+    private List<ProductDto> getRecommendedProductsList(List<Product> recommendableProducts, Customer customer){
+        int size = recommendableProducts.size();
+        int counter = 0;
+
+        List<ProductDto> mostPopularProducts = getMostPopularOtherCustomersProductsThatCustomerDidNotBided(customer);
+
+        if(mostPopularProducts.size() <= 0)
+            return changeToDto(recommendableProducts);
+
+        List<ProductDto> recommendedProducts = changeToDto(recommendableProducts);
+
+        while (size < 4){
+            ProductDto nextProduct = mostPopularProducts.get(counter);
+            Boolean addProduct = true;
+            for (ProductDto p : recommendedProducts) {
+                if(p.getId() == nextProduct.getId()){
+                    addProduct = false;
+                }
+            }
+            if(addProduct) {
+                recommendedProducts.add(mostPopularProducts.get(counter));
+                size++;
+            }
+            counter++;
+            if(counter > 3)
+                break;
+        }
+
+        return recommendedProducts;
+    }
+
+    private List<ProductDto> getMostPopularOtherCustomersProductsThatCustomerDidNotBided(Customer customer){
+        List<Product> products = getAvailableProducts();
+
+        if(products == null || products.isEmpty())
+            return new ArrayList<>();
+
+        List<Product> otherCustomerProducts = new ArrayList<>();
+        for (Product p : products) {
+            if(p.getCustomer() != null){
+                if(p.getCustomer().getId() != customer.getId()){
+                    Boolean customerPlacedBid = false;
+                    List<Bid> bids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+                    for (Bid bid : bids) {
+                        if(bid.getCustomer().getId() == customer.getId()){
+                            customerPlacedBid = true;
+                            break;
+                        }
+                    }
+                    if(!customerPlacedBid)
+                        otherCustomerProducts.add(p);
+                }
+            }
+            else {
+                Boolean customerPlacedBid = false;
+                List<Bid> bids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+                for (Bid bid : bids) {
+                    if(bid.getCustomer().getId() == customer.getId()){
+                        customerPlacedBid = true;
+                        break;
+                    }
+                }
+                if(!customerPlacedBid)
+                    otherCustomerProducts.add(p);
+            }
+        }
+
+        if(otherCustomerProducts.isEmpty())
+            return new ArrayList<>();
+
+        Comparator<Product> compareByBidsCount = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
+
+        Collections.sort(otherCustomerProducts, compareByBidsCount);
+
+        if(otherCustomerProducts.size() <= 4){
+            return changeToDto(otherCustomerProducts);
+        }
+        else{
+            List<Product> otherCustomerProductsTop4 = new ArrayList<>();
+            for (int i = 0; i < 4; i++){
+                otherCustomerProductsTop4.add(otherCustomerProducts.get(i));
+            }
+            return changeToDto(otherCustomerProductsTop4);
+        }
+    }
+
+    public List<ProductDto> getRecommendedProducts2(String customerEmail){
+        Customer customer = customerService.findByEmail(customerEmail);
+
+       if(customer == null){
+           return getMostPopularProducts();
+       }
+
+        List<Bid> customerBids = bidRepository.findByCustomerIdOrderByBidPrice(customer.getId());
+
+        if(customerBids == null || customerBids.isEmpty()){
+            return getMostPopularOtherCustomersProducts(customer);
+        }
+        else{
+            List<Product> biddedProducts = new ArrayList<>();
+
+            for (Bid bid: customerBids) {
+                biddedProducts.add(bid.getProduct());
+            }
+
+            List<Integer> customerThatBidProductsIds = new ArrayList<>();
+
+            for (Product biddedProduct : biddedProducts) {
+               List<Bid> productBids = biddedProduct.getBids();
+                for (Bid productBid : productBids) {
+                    if(productBid.getCustomer().getId() != customer.getId()){
+                        Boolean customerIdAlreadyAdded = false;
+                        for (Integer customerId : customerThatBidProductsIds) {
+                            if(productBid.getCustomer().getId() == customerId){
+                                customerIdAlreadyAdded = true;
+                                break;
+                            }
+                        }
+                        if(!customerIdAlreadyAdded)
+                            customerThatBidProductsIds.add(productBid.getCustomer().getId());
+                    }
+                }
+            }
+
+            if(customerThatBidProductsIds.size()<=0){
+                return getMostPopularOtherCustomersProductsThatCustomerDidNotBided(customer);
+            }
+
+            List<Product> recommendableProducts = new ArrayList<>();
+
+            for (Integer customerId : customerThatBidProductsIds) {
+                List<Bid> customerIdBids = bidRepository.findByCustomerIdOrderByBidPrice(customerId);
+                for (Bid b : customerIdBids) {
+                    Product p = b.getProduct();
+                    Boolean available = false;
+                    Boolean customerBidOnProduct = false;
+                    Boolean customerSellsProduct = false;
+                    if(p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())){
+                        available = true;
+                    }
+                    if(p.getCustomer().getId() == customer.getId())
+                        customerSellsProduct=true;
+
+                    List<Bid> productBids = p.getBids();
+                    for (Bid productBid: productBids) {
+                        if(productBid.getCustomer().getId() == customer.getId()){
+                            customerBidOnProduct = true;
+                            break;
+                        }
+                    }
+                    if(available && !customerBidOnProduct && !customerSellsProduct){
+                        Boolean productIsInList = false;
+                        for (Product recommendable : recommendableProducts) {
+                            if(recommendable.getId() == p.getId()){
+                                productIsInList = true;
+                                break;
+                            }
+                        }
+                        if(!productIsInList){
+                            recommendableProducts.add(p);
+                        }
+                    }
+                }
+            }
+
+            if(recommendableProducts.size() <= 0){
+                return getMostPopularOtherCustomersProductsThatCustomerDidNotBided(customer);
+            }
+
+            Comparator<Product> compareByNumberOfBids = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
+
+            Collections.sort(recommendableProducts, compareByNumberOfBids);
+
+            if(recommendableProducts.size() == 4){
+                return changeToDto(recommendableProducts);
+            }
+
+            if(recommendableProducts.size() < 4){
+                return getRecommendedProductsList(recommendableProducts, customer);
+            }
+
+            List<Product> recommendableProductsTop4 = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                recommendableProductsTop4.add(recommendableProducts.get(i));
+            }
+
+            return changeToDto(recommendableProductsTop4);
+        }
+    }
+
+     public List<ProductDto> getRecommendedProducts1(String customerEmail){
+        Customer customer = customerService.findByEmail(customerEmail);
+
+       if(customer == null){
+           return getMostPopularProducts();
+       }
+
+        List<Bid> customerBids = bidRepository.findByCustomerIdOrderByBidPrice(customer.getId());
+
+        if(customerBids == null || customerBids.isEmpty()){
+            return getMostPopularProducts();
+        }
+        else{
+            List<Product> biddedProducts = new ArrayList<>();
+
+            for (Bid bid: customerBids) {
+                biddedProducts.add(bid.getProduct());
+            }
+
+            Comparator<Product> compareByNumberOfBids = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
+
+            Collections.sort(biddedProducts, compareByNumberOfBids);
+
+            if(biddedProducts.size() <= 4){
+               return changeToDto(biddedProducts);
+            }
+
+            List<Product> recommendableProductsTop4 = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                recommendableProductsTop4.add(biddedProducts.get(i));
+            }
+
+            return changeToDto(recommendableProductsTop4);
+        }
     }
 
 }

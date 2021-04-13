@@ -29,6 +29,7 @@ export class Home extends Component {
     fetchNumber: 1,
     currentFetchnigNewArrivals: false,
     currentFetchnigLastChance: false,
+    recommendedProducts: null,
   };
   arrow = ">";
   categoryService = new CategoryService();
@@ -45,6 +46,21 @@ export class Home extends Component {
         const product = await this.productService.getProduct();
         const categories = await this.categoryService.getCategories();
 
+        let email = null;
+        if (
+          this.props.email == undefined ||
+          this.props.email == null ||
+          this.props.email == ""
+        ) {
+          email = "none";
+        } else {
+          email = this.props.email;
+        }
+
+        const recommendedProducts = await this.productService.getRecommendedProducts(
+          email
+        );
+
         this.fetchNumber = 1;
 
         if (categories != null && categories.length > 9) {
@@ -59,6 +75,7 @@ export class Home extends Component {
           product: product,
           newArrivals: newArrivalsDto.productsList,
           hasMoreNewArrivalsData: newArrivalsDto.hasMoreData,
+          recommendedProducts: recommendedProducts,
         });
         this.setIsLoading(false);
       }
@@ -278,6 +295,88 @@ export class Home extends Component {
           <div className="row">
             <div className="col-lg-2"></div>
             <div className="col-lg-8">
+              {this.state.recommendedProducts !== null &&
+                this.state.recommendedProducts.length > 0 && (
+                  <div className="featureProductsDiv">
+                    <div className="row">
+                      <div className="col-lg-12">
+                        <div className="featureProductsHeading">
+                          Feature products
+                        </div>
+                        <hr className="featureProductsHr"></hr>
+                        <div className="row featureProductsRow">
+                          {this.state.recommendedProducts.map(
+                            function (product) {
+                              return (
+                                <div
+                                  className="col-lg-3 col-md-3 col-sm-6 col-xs-6 featureProductDiv"
+                                  key={product.id}
+                                >
+                                  <Link
+                                    to={{
+                                      pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                        ":prodId",
+                                        product.id
+                                      ),
+                                      state: {
+                                        chosenProduct: product.id,
+                                        isLoggedIn: this.props.isLoggedIn,
+                                        email: this.props.email,
+                                        token: this.props.token,
+                                      },
+                                    }}
+                                  >
+                                    <img
+                                      className="tabProductImage"
+                                      src={`data:image/png;base64, ${product.image}`}
+                                    />
+                                  </Link>
+
+                                  <div>
+                                    <Link
+                                      className="productNameLink"
+                                      to={{
+                                        pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                          ":prodId",
+                                          product.id
+                                        ),
+                                        state: {
+                                          chosenProduct: product.id,
+                                          isLoggedIn: this.props.isLoggedIn,
+                                          email: this.props.email,
+                                          token: this.props.token,
+                                        },
+                                      }}
+                                    >
+                                      {product.name}
+                                    </Link>
+                                  </div>
+                                  <Link
+                                    className="startsFrom"
+                                    to={{
+                                      pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                        ":prodId",
+                                        product.id
+                                      ),
+                                      state: {
+                                        chosenProduct: product.id,
+                                        isLoggedIn: this.props.isLoggedIn,
+                                        email: this.props.email,
+                                        token: this.props.token,
+                                      },
+                                    }}
+                                  >
+                                    Starts from ${product.startPriceText}
+                                  </Link>
+                                </div>
+                              );
+                            }.bind(this)
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               <div className="homeTabsDiv">
                 <Tabs
                   defaultActiveKey="newArrivals"

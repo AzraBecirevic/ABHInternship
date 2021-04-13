@@ -279,7 +279,6 @@ public class Seed {
         womenWhiteTShirtImages.get(3).setProduct(womenWhiteTShort);
         womenWhiteTShirtImages.get(4).setProduct(womenWhiteTShort);
 
-          //?
         womenWhiteTShort.setImageList(womenWhiteTShirtImages);
 
         productRepository.save(womenWhiteTShort);

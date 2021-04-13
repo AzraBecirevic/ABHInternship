@@ -177,4 +177,14 @@ public class ProductControllerTest {
                 .content("{\"name\": \"Shoes\", \"startPrice\": \"20\", \"startDateDay\":\"19\", \"startDateMonth\": \"20\", \"startDateYear\":\"2021\", \"endDateDay\":\"30\", \"endDateMonth\":\"4\" , \"endDateYear\":\"2021\", \"description\":\"women shoes\" , \"subcategoryId\":\"2\", \"customerEmail\":\""+email+"\"}")
         ).andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void getRecommendedProductsReturnOk() throws Exception{
+        TestEmailHandler testEmailHandler = (TestEmailHandler) context.getBean("testEmailHandler");
+        String email = testEmailHandler.testEmail;
+
+        mvc.perform(MockMvcRequestBuilders.get(GET_RECOMMENDED_PRODUCTS_ENDPOINT + email)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
 }
