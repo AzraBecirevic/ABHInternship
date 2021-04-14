@@ -831,6 +831,14 @@ export class Categories extends Component {
     this.setState({ sortingTypesHidden: true });
   };
 
+  showCloseSortingTypes = () => {
+    if (this.state.sortingTypesHidden === true) {
+      this.setState({ sortingTypesHidden: false });
+    } else {
+      this.setState({ sortingTypesHidden: true });
+    }
+  };
+
   sortingTypeChosen = (sortingTypeId) => {
     let route = CATEGORIES_ROUTE;
 
@@ -1135,7 +1143,12 @@ export class Categories extends Component {
                   {products != null && products.length > 0 && (
                     <div className="row productOptionsDiv">
                       <div className="col-lg-4 col-md-6 col-sm-6">
-                        <div className="chosenSortTypeDiv">
+                        <div
+                          className="chosenSortTypeDiv"
+                          onClick={() => {
+                            this.showCloseSortingTypes();
+                          }}
+                        >
                           <div>{sortingType.sortName}</div>
                           <div>
                             {sortingTypesHidden && (

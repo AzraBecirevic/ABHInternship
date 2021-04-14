@@ -275,6 +275,11 @@ div.col-lg-4.col-md-6.col-sm-6.product {
   padding-left: 18px;
   padding-right: 10px;
 }
+
+.chosenSortTypeDiv:hover {
+  cursor: pointer;
+}
+
 .sortingTypesList {
   background: #ffffff;
   border: 3px solid #ececec;

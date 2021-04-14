@@ -301,7 +301,7 @@ export class Home extends Component {
                     <div className="row">
                       <div className="col-lg-12">
                         <div className="featureProductsHeading">
-                          Feature Products
+                          Featured Products
                         </div>
                         <hr className="featureProductsHr"></hr>
                         <div className="row featureProductsRow">
