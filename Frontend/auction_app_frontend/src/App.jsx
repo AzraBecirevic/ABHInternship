@@ -78,6 +78,14 @@ import {
   CATEGORIES_ROUTE_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT_VIEW,
   CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRODUCT_NAME_SORT_VIEW,
   CATEGORIES_ROUTE_CATEGORIES_SUBCATEGORIES_PRICE_FILTER_PRODUCT_NAME_SORT_VIEW,
+  USER_PAGE_ROUTE,
+  CATEGORIES_ROUTE_SORT,
+  CATEGORIES_ROUTE_VIEW,
+  CATEGORIES_ROUTE_PRICE_FILTER_SORT,
+  CATEGORIES_ROUTE_PRICE_FILTER_VIEW,
+  CATEGORIES_ROUTE_SORT_VIEW,
+  CATEGORIES_ROUTE_PRICE_FILTER_SORT_VIEW,
+  ADD_ITEM_ROUTE,
 } from "./constants/routes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -93,6 +101,11 @@ import ForgotPassword from "./components/ForgotPassword";
 import ChangePassword from "./components/ChangePassword";
 import NotFound from "./components/NotFound";
 import { TOKEN, EMAIL } from "./constants/auth";
+import UserPage from "./components/UserPage";
+import Sell from "./components/Sell";
+import Settings from "./components/Settings";
+import { ADD_ITEM } from "./constants/messages";
+import AddItem from "./components/AddItem";
 
 export class App extends Component {
   state = {
@@ -607,6 +620,44 @@ export class App extends Component {
                       <Categories {...props} setIsLoading={this.setIsLoading} />
                     )}
                   />
+
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_SORT_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_PRICE_FILTER_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+
+                  <Route
+                    path={CATEGORIES_ROUTE_SORT_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_VIEW}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
+                  <Route
+                    path={CATEGORIES_ROUTE_SORT}
+                    render={(props) => (
+                      <Categories {...props} setIsLoading={this.setIsLoading} />
+                    )}
+                  />
                   <Route
                     path={CATEGORIES_ROUTE_PRICE_FILTER}
                     render={(props) => (
@@ -626,7 +677,6 @@ export class App extends Component {
                     )}
                   />
                 </Switch>
-
                 <Route
                   exact
                   path={SINGLE_PRODUCT_ROUTE}
@@ -653,6 +703,23 @@ export class App extends Component {
                       {...props}
                       setIsLoading={this.setIsLoading}
                     />
+                  )}
+                />
+                <Route
+                  path={USER_PAGE_ROUTE}
+                  render={(props) => (
+                    <UserPage
+                      {...props}
+                      setIsLoading={this.setIsLoading}
+                      logoutCustomer={this.logoutCustomer}
+                    />
+                  )}
+                />
+
+                <Route
+                  path={ADD_ITEM_ROUTE}
+                  render={(props) => (
+                    <AddItem {...props} setIsLoading={this.setIsLoading} />
                   )}
                 />
                 <Route path={NOT_FOUND_ROUTE} component={NotFound} />

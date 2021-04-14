@@ -69,6 +69,21 @@ public class BidService {
             return addedBidDto;
         }
 
+        Product product = productRepository.findById(placeBidDto.getProductId()).orElse(null);
+        Customer customer = customerRepository.findByEmail(placeBidDto.getCustomerEmail());
+
+        if(product == null || customer == null){
+            addedBidDto.setBidAdded(false);
+            addedBidDto.setMessage(BID_NOT_THERE_CUSTOMER_NOT_ALLOWED_MESSAGE);
+            return addedBidDto;
+        }
+
+        if(customer.getId() == product.getCustomer().getId()){
+            addedBidDto.setBidAdded(false);
+            addedBidDto.setMessage(CUSTOMER_CAN_NOT_BID_PRODUCT);
+            return addedBidDto;
+        }
+
         List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(placeBidDto.getProductId());
 
         if(bidList != null && bidList.size() > 0){
@@ -93,14 +108,6 @@ public class BidService {
         }
         Bid newBid = new Bid();
 
-        Product product = productRepository.findById(placeBidDto.getProductId()).orElse(null);
-        Customer customer = customerRepository.findByEmail(placeBidDto.getCustomerEmail());
-
-        if(product == null || customer == null){
-            addedBidDto.setBidAdded(false);
-            addedBidDto.setMessage(BID_NOT_THERE_CUSTOMER_NOT_ALLOWED_MESSAGE);
-            return addedBidDto;
-        }
 
         if(product.getStartPrice() > placeBidDto.getBidPrice()){
             addedBidDto.setBidAdded(false);

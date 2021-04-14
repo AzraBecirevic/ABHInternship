@@ -15,6 +15,7 @@ public class Product extends ModelObject {
     private double startPrice;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    @Column(name = "Description", length = 700)
     private String description;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Image> imageList = new ArrayList<>();
@@ -23,6 +24,10 @@ public class Product extends ModelObject {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Bid> bids = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = true)
+    private Customer customer;
 
     @Override
     public Integer getId() {
@@ -93,4 +98,11 @@ public class Product extends ModelObject {
         this.bids = bids;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 }

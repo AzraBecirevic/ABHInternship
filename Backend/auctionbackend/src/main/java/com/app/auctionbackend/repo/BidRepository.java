@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface BidRepository extends JpaRepository<Bid, Integer> {
     List<Bid> findByProductIdOrderByBidPrice(Integer productId);
+    List<Bid> findByCustomerIdOrderByBidPrice(Integer customerId);
 }

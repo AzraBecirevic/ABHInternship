@@ -1,6 +1,8 @@
 package com.app.auctionbackend.controller;
 
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
+import com.app.auctionbackend.dtos.CustomerDetailsDto;
+import com.app.auctionbackend.dtos.DeliveryDataDto;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
 import com.app.auctionbackend.service.EmailService;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -81,4 +84,89 @@ public class CustomerController {
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping(value = "/getInfoData/{email}")
+    public ResponseEntity<CustomerDetailsDto> getCustomerInfoData(@PathVariable String email){
+        CustomerDetailsDto customerDetailsDto = customerService.getCustomerInfoData(email);
+        if(customerDetailsDto == null)
+            return new ResponseEntity<CustomerDetailsDto>(HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(customerDetailsDto, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/update/{email}")
+    public ResponseEntity updateCustomer(@PathVariable String email, @RequestBody CustomerDetailsDto customerData){
+        try{
+            CustomerDetailsDto updatedCustomer = customerService.updateCustomer(email, customerData);
+            if(updatedCustomer != null){
+                return new ResponseEntity(updatedCustomer,HttpStatus.OK);
+            }
+        }
+        catch (Exception ex){
+            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(new Message("Something went wrong"), HttpStatus.BAD_REQUEST);
+
+    }
+
+    @PostMapping(value = "/updatePhoto/{email}")
+    public ResponseEntity updateCustomerPhoto(@PathVariable String email, @RequestParam MultipartFile imgFile){
+        try{
+            CustomerDetailsDto updatedCustomer = customerService.updateCustomerPhoto(email, imgFile);
+            if(updatedCustomer != null){
+                return new ResponseEntity(updatedCustomer,HttpStatus.OK);
+            }
+        }
+        catch (Exception ex){
+            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(new Message("Image can not be changed"), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/getDeliveryData/{email}")
+    public ResponseEntity<DeliveryDataDto> getCustomerDeliveryData(@PathVariable String email){
+        DeliveryDataDto deliveryDataDto = customerService.getCustomerDeliveryData(email);
+        if(deliveryDataDto == null)
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<DeliveryDataDto>(deliveryDataDto, HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/saveDeliveryData/{email}")
+    public ResponseEntity saveCustomerDeliveryData(@PathVariable String email, @RequestBody DeliveryDataDto deliveryDataDto){
+        try{
+            DeliveryDataDto savedDeliveryData = customerService.saveCustomerDeliveryData(deliveryDataDto, email);
+            if(savedDeliveryData != null){
+                return new ResponseEntity(savedDeliveryData,HttpStatus.OK);
+            }
+        }
+        catch (Exception ex){
+            return new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(new Message("Delivery data can not be saved"), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/hasSellingProducts/{email}")
+    public ResponseEntity<Boolean> isCustomerSellingProducts(@PathVariable String email){
+
+        Boolean sellingProducts = customerService.isCustomerSellingProducts(email);
+        return new ResponseEntity<Boolean>(sellingProducts, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/deactivateAccount/{email}" )
+    public ResponseEntity<Boolean> deactivateAccount(@PathVariable String email){
+
+        Boolean accountDeactivated = customerService.deactivateAccount(email);
+        return new ResponseEntity<Boolean>(accountDeactivated, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/checkIsAccountActive/{email}" )
+    public ResponseEntity<Boolean> chekIsAccountActive(@PathVariable String email){
+
+        Boolean accountActive = customerService.checkIsAccountActive(email);
+        return new ResponseEntity<Boolean>(accountActive, HttpStatus.OK);
+    }
 }

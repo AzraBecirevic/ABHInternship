@@ -4,8 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsInfiniteDto {
+
     List<ProductDto> productsList = new ArrayList<>();
     Boolean hasMoreData = true;
+    private String didYouMean;
+
+    public String getDidYouMean() {
+        return didYouMean;
+    }
+
+    public void setDidYouMean(String didYouMean) {
+        this.didYouMean = didYouMean;
+    }
 
     public Boolean getHasMoreData() {
         return hasMoreData;
@@ -22,4 +32,5 @@ public class ProductsInfiniteDto {
     public void setProductsList(List<ProductDto> productsList) {
         this.productsList = productsList;
     }
+
 }

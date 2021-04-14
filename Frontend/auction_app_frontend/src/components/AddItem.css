@@ -1,0 +1,174 @@
+.tabFormDiv {
+  width: 85%;
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 70px;
+}
+
+.addItemDiv {
+  margin-top: 40px;
+}
+
+.selectCategoryDiv {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #252525;
+  letter-spacing: 0.63px;
+}
+
+.nextBackDoneBtnDivAddItem {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+}
+
+.btnBackNext {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-family: Lato-Bold;
+  font-size: 18px;
+  color: #252525;
+  letter-spacing: 0.63px;
+}
+
+.nextBtnAddItem {
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+}
+
+.form-control.setPrices {
+  background: #ffffff !important;
+  border: 1px solid #d8d8d8 !important;
+  font-family: Lato-Regular;
+  font-size: 16px;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+}
+
+.starPriceValuteDiv {
+  background: #fcfcfc;
+  border: 1px solid #d8d8d8;
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #252525;
+  letter-spacing: 0.63px;
+  text-align: center;
+  width: 12%;
+  padding-top: 5px;
+}
+
+.startPriceInputDiv {
+  display: flex;
+}
+
+.startEndDateMessageDiv {
+  margin-top: 13px;
+  font-family: Lato-Regular;
+  font-size: 16px;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  line-height: 30px;
+}
+
+.backBtnAddItem {
+  background: #ffffff;
+  border: 3px solid #e3e3e3;
+  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+}
+
+.nextBackDoneBtnDivSetPrices {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 110px;
+}
+
+.cityZipCodeDiv.categorySubcategory {
+  margin-bottom: 40px;
+}
+
+.cityZipCodeDiv.dates {
+  margin-top: 60px;
+}
+
+.ruleMessage {
+  font-family: Lato-Regular;
+  font-size: 16px;
+  color: #9b9b9b;
+  letter-spacing: 0.56px;
+  text-align: right;
+}
+
+.productImgPreview {
+  width: 200px;
+  height: 200px;
+}
+
+.dragDropDiv {
+  text-align: center;
+  min-height: 300px;
+  margin-top: 70px;
+}
+
+.dragDropDivEmpty {
+  text-align: center;
+  margin-top: 70px;
+}
+
+.dragDropInputDivEmpty {
+  background: #fcfcfc;
+  border: 1px dashed #d8d8d8;
+  height: 300px;
+  padding-top: 115.7px;
+}
+
+.dragDropInputDiv {
+  background: #fcfcfc;
+  border: 1px dashed #d8d8d8;
+  height: 300px;
+  padding-top: 115.7px;
+}
+
+.purpleDropText {
+  font-family: Lato-Bold;
+  font-size: 14px;
+  color: #8367d8;
+  letter-spacing: 0.49px;
+  margin-right: 5px;
+}
+.purpleDropText:hover {
+  cursor: pointer;
+}
+
+.normalDropText {
+  font-family: Lato-Regular;
+  font-size: 14px;
+  color: #252525;
+  letter-spacing: 0.49px;
+}
+
+.imgPreviewDiv {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.imgPreviewTitle {
+  font-size: 14px;
+  letter-spacing: 0.49px;
+}
+
+.imgPreviewListDiv {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.imgPreviewRemove {
+  font-size: 14px;
+  letter-spacing: 0.49px;
+}
+.imgPreviewRemove:hover {
+  cursor: pointer;
+}

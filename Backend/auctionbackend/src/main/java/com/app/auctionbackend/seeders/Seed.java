@@ -37,6 +37,9 @@ public class Seed {
     @Autowired
     BidRepository bidRepository;
 
+    @Autowired
+    GenderRepository genderRepository;
+
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
@@ -57,11 +60,23 @@ public class Seed {
     @EventListener
     public void seed(ContextRefreshedEvent event) {
 
+        Gender female = new Gender();
+        female.setName("Female");
+
+        Gender male = new Gender();
+        male.setName("Male");
+
+        genderRepository.save(female);
+        genderRepository.save(male);
+
         Customer customer = new Customer();
         customer.setFirstName("Mable");
         customer.setLastName("Labmert");
         customer.setEmail("mableLambert@mail.com");
         customer.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer.setActive(true);
+        customer.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer.setGender(male);
         customerRepository.save(customer);
 
         Customer customer2 = new Customer();
@@ -69,6 +84,9 @@ public class Seed {
         customer2.setLastName("Warren");
         customer2.setEmail("miltonWarren@mail.com");
         customer2.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer2.setActive(true);
+        customer2.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer2.setGender(male);
         customerRepository.save(customer2);
 
         Customer customer3 = new Customer();
@@ -76,6 +94,9 @@ public class Seed {
         customer3.setLastName("Parks");
         customer3.setEmail("loydParks@mail.com");
         customer3.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer3.setActive(true);
+        customer3.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer3.setGender(male);
         customerRepository.save(customer3);
 
         Customer customer4 = new Customer();
@@ -83,13 +104,20 @@ public class Seed {
         customer4.setLastName("Fuller");
         customer4.setEmail("charlieFuller@mail.com");
         customer4.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer4.setActive(true);
+        customer4.setDateOfBirth(LocalDateTime.of(2000,1,1,0,0));
+        customer4.setGender(female);
         customerRepository.save(customer4);
+
 
         Customer customer5 = new Customer();
         customer5.setFirstName("Azra");
         customer5.setLastName("Becirevic");
         customer5.setEmail("azra.becirevic1998@gmail.com");
         customer5.setPassword(passwordEncoder.encode("mojpass123@"));
+        customer5.setActive(true);
+        customer5.setDateOfBirth(LocalDateTime.of(2000,2,2,0,0));
+        customer5.setGender(female);
         customerRepository.save(customer5);
 
         LocalDateTime currentDate = LocalDateTime.now();
@@ -122,7 +150,7 @@ public class Seed {
 
         Product womenTShort1 = new Product();
         womenTShort1.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateB = LocalDateTime.of(2021,4,30,0,0);
+        LocalDateTime endDateB = LocalDateTime.of(2021,4,7,0,0);
         womenTShort1.setEndDate(endDateB);
         LocalDateTime startDateB = LocalDateTime.of(2021,3,30,0,0);
         womenTShort1.setStartDate(startDateB);
@@ -130,7 +158,7 @@ public class Seed {
         womenTShort1.setStartPrice(50.55);
         womenTShort1.setCreatedOn(LocalDateTime.now());
         womenTShort1.setModifiedOn(LocalDateTime.now());
-
+        womenTShort1.setCustomer(customer5);
 
         womenTShirtImages.get(0).setProduct(womenTShort1);
         womenTShirtImages.get(1).setProduct(womenTShort1);
@@ -169,12 +197,13 @@ public class Seed {
         womenRedTShort.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateR = LocalDateTime.of(2021,4,30,0,0);
         womenRedTShort.setEndDate(endDateR);
-        LocalDateTime startDateR = LocalDateTime.of(2021,3,30,0,0);
+        LocalDateTime startDateR = LocalDateTime.of(2021,4,3,0,0);
         womenRedTShort.setStartDate(startDateR);
         womenRedTShort.setName("Red Shirt");
         womenRedTShort.setStartPrice(60);
         womenRedTShort.setCreatedOn(LocalDateTime.now());
         womenRedTShort.setModifiedOn(LocalDateTime.now());
+        womenRedTShort.setCustomer(customer5);
 
         womenRedTShirtImages.get(0).setProduct(womenRedTShort);
         womenRedTShirtImages.get(1).setProduct(womenRedTShort);
@@ -234,14 +263,15 @@ public class Seed {
 
         Product womenWhiteTShort = new Product();
         womenWhiteTShort.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateW = LocalDateTime.of(2021,4,3,0,0);
+        LocalDateTime endDateW = LocalDateTime.of(2021,4,30,0,0);
         womenWhiteTShort.setEndDate(endDateW);
-        LocalDateTime startDateW = LocalDateTime.of(2021,3,5,0,0);
+        LocalDateTime startDateW = LocalDateTime.of(2021,4,13,0,0);
         womenWhiteTShort.setStartDate(startDateW);
         womenWhiteTShort.setName("White Shirt");
         womenWhiteTShort.setStartPrice(70);
         womenWhiteTShort.setCreatedOn(LocalDateTime.now());
         womenWhiteTShort.setModifiedOn(LocalDateTime.now());
+        womenWhiteTShort.setCustomer(customer5);
 
         womenWhiteTShirtImages.get(0).setProduct(womenWhiteTShort);
         womenWhiteTShirtImages.get(1).setProduct(womenWhiteTShort);
@@ -249,8 +279,7 @@ public class Seed {
         womenWhiteTShirtImages.get(3).setProduct(womenWhiteTShort);
         womenWhiteTShirtImages.get(4).setProduct(womenWhiteTShort);
 
-
-        womenRedTShort.setImageList(womenWhiteTShirtImages);
+        womenWhiteTShort.setImageList(womenWhiteTShirtImages);
 
         productRepository.save(womenWhiteTShort);
         imageRepository.save(womenWhiteTShirtImage1);
@@ -299,6 +328,7 @@ public class Seed {
         womenSneakers.setStartPrice(200);
         womenSneakers.setCreatedOn(LocalDateTime.now());
         womenSneakers.setModifiedOn(LocalDateTime.now());
+        womenSneakers.setCustomer(customer5);
 
         womenSneakersImages.get(0).setProduct(womenSneakers);
         womenSneakersImages.get(1).setProduct(womenSneakers);
@@ -360,7 +390,7 @@ public class Seed {
 
         Product womenWhiteSneakers = new Product();
         womenWhiteSneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateWS = LocalDateTime.of(2021,4,27,0,0);
+        LocalDateTime endDateWS = LocalDateTime.of(2021,4,7,0,0);
         womenWhiteSneakers.setEndDate(endDateWS);
         LocalDateTime startDateWS = LocalDateTime.of(2021,3,18,0,0);
         womenWhiteSneakers.setStartDate(startDateWS);
@@ -368,6 +398,7 @@ public class Seed {
         womenWhiteSneakers.setStartPrice(150);
         womenWhiteSneakers.setCreatedOn(LocalDateTime.now());
         womenWhiteSneakers.setModifiedOn(LocalDateTime.now());
+        womenWhiteSneakers.setCustomer(customer5);
 
         womenWhiteSneakersImages.get(0).setProduct(womenWhiteSneakers);
         womenWhiteSneakersImages.get(1).setProduct(womenWhiteSneakers);
@@ -403,14 +434,15 @@ public class Seed {
 
         Product womenPinkSneakers = new Product();
         womenPinkSneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateP = LocalDateTime.of(2021,4,30,0,0);
+        LocalDateTime endDateP = LocalDateTime.of(2021,4,17,0,0);
         womenPinkSneakers.setEndDate(endDateP);
-        LocalDateTime startDateP = LocalDateTime.of(2021,3,20,0,0);
+        LocalDateTime startDateP = LocalDateTime.of(2021,4,4,0,0);
         womenPinkSneakers.setStartDate(startDateP);
         womenPinkSneakers.setName("Pink sneakers");
         womenPinkSneakers.setStartPrice(130);
         womenPinkSneakers.setCreatedOn(LocalDateTime.now());
         womenPinkSneakers.setModifiedOn(LocalDateTime.now());
+        womenPinkSneakers.setCustomer(customer4);
 
         womenPinkSneakersImages.get(0).setProduct(womenPinkSneakers);
         womenPinkSneakersImages.get(1).setProduct(womenPinkSneakers);
@@ -460,7 +492,7 @@ public class Seed {
 
         Product womenRedBag = new Product();
         womenRedBag.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateRB = LocalDateTime.of(2021,4,3,0,0);
+        LocalDateTime endDateRB = LocalDateTime.of(2021,4,17,0,0);
         womenRedBag.setEndDate(endDateRB);
         LocalDateTime startDateRB = LocalDateTime.of(2021,3,10,0,0);
         womenRedBag.setStartDate(startDateRB);
@@ -468,6 +500,7 @@ public class Seed {
         womenRedBag.setStartPrice(100);
         womenRedBag.setCreatedOn(LocalDateTime.now());
         womenRedBag.setModifiedOn(LocalDateTime.now());
+        womenRedBag.setCustomer(customer4);
 
         womenRedBagImages.get(0).setProduct(womenRedBag);
         womenRedBagImages.get(1).setProduct(womenRedBag);
@@ -504,12 +537,13 @@ public class Seed {
         womenCamelBag.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateCB = LocalDateTime.of(2021,4,30,0,0);
         womenCamelBag.setEndDate(endDateCB);
-        LocalDateTime startDateCB = LocalDateTime.of(2021,3,10,0,0);
+        LocalDateTime startDateCB = LocalDateTime.of(2021,4,15,0,0);
         womenCamelBag.setStartDate(startDateCB);
         womenCamelBag.setName("Camel bag");
         womenCamelBag.setStartPrice(80);
         womenCamelBag.setCreatedOn(LocalDateTime.now());
         womenCamelBag.setModifiedOn(LocalDateTime.now());
+        womenCamelBag.setCustomer(customer4);
 
         womenCamelBagImages.get(0).setProduct(womenCamelBag);
         womenCamelBagImages.get(1).setProduct(womenCamelBag);
@@ -554,6 +588,7 @@ public class Seed {
         womenBlackBag.setStartPrice(100);
         womenBlackBag.setCreatedOn(LocalDateTime.now());
         womenBlackBag.setModifiedOn(LocalDateTime.now());
+        womenBlackBag.setCustomer(customer4);
 
         womenBlackBagImages.get(0).setProduct(womenBlackBag);
         womenBlackBagImages.get(1).setProduct(womenBlackBag);
@@ -596,6 +631,7 @@ public class Seed {
         womenBeigeBag.setStartPrice(85);
         womenBeigeBag.setCreatedOn(LocalDateTime.now());
         womenBeigeBag.setModifiedOn(LocalDateTime.now());
+        womenBeigeBag.setCustomer(customer4);
 
         womenBeigeBagImages.get(0).setProduct(womenBeigeBag);
         womenBeigeBagImages.get(1).setProduct(womenBeigeBag);
@@ -661,6 +697,7 @@ public class Seed {
         manWhiteTShirt.setStartPrice(100);
         manWhiteTShirt.setCreatedOn(LocalDateTime.now());
         manWhiteTShirt.setModifiedOn(LocalDateTime.now());
+        manWhiteTShirt.setCustomer(customer3);
 
         manWhiteTShirtImages.get(0).setProduct(manWhiteTShirt);
         manWhiteTShirtImages.get(1).setProduct(manWhiteTShirt);
@@ -698,12 +735,13 @@ public class Seed {
         manBlackShirt.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateBS = LocalDateTime.of(2021,4,30,0,0);
         manBlackShirt.setEndDate(endDateBS);
-        LocalDateTime startDateBS = LocalDateTime.of(2021,3,4,0,0);
+        LocalDateTime startDateBS = LocalDateTime.of(2021,4,3,0,0);
         manBlackShirt.setStartDate(startDateBS);
         manBlackShirt.setName("Black shirt");
         manBlackShirt.setStartPrice(170);
         manBlackShirt.setCreatedOn(LocalDateTime.now());
         manBlackShirt.setModifiedOn(LocalDateTime.now());
+        manBlackShirt.setCustomer(customer3);
 
         manBlackShirtImages.get(0).setProduct(manBlackShirt);
         manBlackShirtImages.get(1).setProduct(manBlackShirt);
@@ -747,6 +785,7 @@ public class Seed {
         manBlueShirt.setStartPrice(155);
         manBlueShirt.setCreatedOn(LocalDateTime.now());
         manBlueShirt.setModifiedOn(LocalDateTime.now());
+        manBlueShirt.setCustomer(customer3);
 
         manBlueShirtImages.get(0).setProduct(manBlueShirt);
         manBlueShirtImages.get(1).setProduct(manBlueShirt);
@@ -798,12 +837,13 @@ public class Seed {
         manBlackSneakers.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
         LocalDateTime endDateBl = LocalDateTime.of(2021,4,30,0,0);
         manBlackSneakers.setEndDate(endDateBl);
-        LocalDateTime startDateBl = LocalDateTime.of(2021,3,5,0,0);
+        LocalDateTime startDateBl = LocalDateTime.of(2021,3,3,0,0);
         manBlackSneakers.setStartDate(startDateBl);
         manBlackSneakers.setName("Black sneakers");
         manBlackSneakers.setStartPrice(100);
         manBlackSneakers.setCreatedOn(LocalDateTime.now());
         manBlackSneakers.setModifiedOn(LocalDateTime.now());
+        manBlackSneakers.setCustomer(customer3);
 
         manBlackSneakersImages.get(0).setProduct(manBlackSneakers);
         manBlackSneakersImages.get(1).setProduct(manBlackSneakers);
@@ -846,6 +886,7 @@ public class Seed {
         manGreySneakers.setStartPrice(135);
         manGreySneakers.setCreatedOn(LocalDateTime.now());
         manGreySneakers.setModifiedOn(LocalDateTime.now());
+        manGreySneakers.setCustomer(customer2);
 
         manGreySneakersImages.get(0).setProduct(manGreySneakers);
         manGreySneakersImages.get(1).setProduct(manGreySneakers);
@@ -888,6 +929,7 @@ public class Seed {
         manOrangeSneakers.setStartPrice(145);
         manOrangeSneakers.setCreatedOn(LocalDateTime.now());
         manOrangeSneakers.setModifiedOn(LocalDateTime.now());
+        manOrangeSneakers.setCustomer(customer2);
 
         manOrangeSneakersImages.get(0).setProduct(manOrangeSneakers);
         manOrangeSneakersImages.get(1).setProduct(manOrangeSneakers);
@@ -950,6 +992,7 @@ public class Seed {
         kidsNavyTShirt.setStartPrice(70);
         kidsNavyTShirt.setCreatedOn(LocalDateTime.now());
         kidsNavyTShirt.setModifiedOn(LocalDateTime.now());
+        kidsNavyTShirt.setCustomer(customer2);
 
         kidsNavyTShirtImages.get(0).setProduct(kidsNavyTShirt);
         kidsNavyTShirtImages.get(1).setProduct(kidsNavyTShirt);
@@ -993,6 +1036,7 @@ public class Seed {
         kidsBlueTShirt.setStartPrice(70);
         kidsBlueTShirt.setCreatedOn(LocalDateTime.now());
         kidsBlueTShirt.setModifiedOn(LocalDateTime.now());
+        kidsBlueTShirt.setCustomer(customer2);
 
         kidsBlueTShirtImages.get(0).setProduct(kidsBlueTShirt);
         kidsBlueTShirtImages.get(1).setProduct(kidsBlueTShirt);
@@ -1046,7 +1090,7 @@ public class Seed {
 
         Product homeDecorationCloud = new Product();
         homeDecorationCloud.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.");
-        LocalDateTime endDateHC = LocalDateTime.of(2021,4,29,0,0);
+        LocalDateTime endDateHC = LocalDateTime.of(2021,4,18,0,0);
         homeDecorationCloud.setEndDate(endDateHC);
         LocalDateTime startDateHC = LocalDateTime.of(2021,3,14,0,0);
         homeDecorationCloud.setStartDate(startDateHC);
@@ -1054,6 +1098,7 @@ public class Seed {
         homeDecorationCloud.setStartPrice(70);
         homeDecorationCloud.setCreatedOn(LocalDateTime.now());
         homeDecorationCloud.setModifiedOn(LocalDateTime.now());
+        homeDecorationCloud.setCustomer(customer);
 
         homeDecorationCloudImages.get(0).setProduct(homeDecorationCloud);
         homeDecorationCloudImages.get(1).setProduct(homeDecorationCloud);
@@ -1094,6 +1139,7 @@ public class Seed {
         homeDecorationCandlestick.setStartPrice(90);
         homeDecorationCandlestick.setCreatedOn(LocalDateTime.now());
         homeDecorationCandlestick.setModifiedOn(LocalDateTime.now());
+        homeDecorationCandlestick.setCustomer(customer);
 
         homeDecorationCandlestickImages.get(0).setProduct(homeDecorationCandlestick);
         homeDecorationCandlestickImages.get(1).setProduct(homeDecorationCandlestick);
@@ -1155,6 +1201,7 @@ public class Seed {
         artPainting1.setStartPrice(70);
         artPainting1.setCreatedOn(LocalDateTime.now());
         artPainting1.setModifiedOn(LocalDateTime.now());
+        artPainting1.setCustomer(customer);
 
         artPainting1Images.get(0).setProduct(artPainting1);
         artPainting1Images.get(1).setProduct(artPainting1);
@@ -1214,6 +1261,7 @@ public class Seed {
         computer1.setStartPrice(70);
         computer1.setCreatedOn(LocalDateTime.now());
         computer1.setModifiedOn(LocalDateTime.now());
+        computer1.setCustomer(customer);
 
         computer1Images.get(0).setProduct(computer1);
         computer1Images.get(1).setProduct(computer1);
@@ -1271,6 +1319,7 @@ public class Seed {
         mobilePhone1.setStartPrice(70);
         mobilePhone1.setCreatedOn(LocalDateTime.now());
         mobilePhone1.setModifiedOn(LocalDateTime.now());
+        mobilePhone1.setCustomer(customer);
 
         mobilePhone1Images.get(0).setProduct(mobilePhone1);
         mobilePhone1Images.get(1).setProduct(mobilePhone1);
@@ -1325,6 +1374,7 @@ public class Seed {
         mobileCase1.setStartPrice(70);
         mobileCase1.setCreatedOn(LocalDateTime.now());
         mobileCase1.setModifiedOn(LocalDateTime.now());
+        mobileCase1.setCustomer(customer2);
 
         mobileCase1Images.get(0).setProduct(mobileCase1);
         mobileCase1Images.get(1).setProduct(mobileCase1);
@@ -1382,6 +1432,7 @@ public class Seed {
         vacuumCleaner1.setStartPrice(150);
         vacuumCleaner1.setCreatedOn(LocalDateTime.now());
         vacuumCleaner1.setModifiedOn(LocalDateTime.now());
+        vacuumCleaner1.setCustomer(customer3);
 
         vacuumCleaner1Images.get(0).setProduct(vacuumCleaner1);
         vacuumCleaner1Images.get(1).setProduct(vacuumCleaner1);
@@ -1422,6 +1473,7 @@ public class Seed {
         vacuumCleanerRobot.setStartPrice(150);
         vacuumCleanerRobot.setCreatedOn(LocalDateTime.now());
         vacuumCleanerRobot.setModifiedOn(LocalDateTime.now());
+        vacuumCleanerRobot.setCustomer(customer4);
 
         vacuumCleanerRobotImages.get(0).setProduct(vacuumCleanerRobot);
         vacuumCleanerRobotImages.get(1).setProduct(vacuumCleanerRobot);
@@ -1482,6 +1534,7 @@ public class Seed {
         football1.setStartPrice(150);
         football1.setCreatedOn(LocalDateTime.now());
         football1.setModifiedOn(LocalDateTime.now());
+        football1.setCustomer(customer3);
 
         footballImages.get(0).setProduct(football1);
         footballImages.get(1).setProduct(football1);
@@ -1523,6 +1576,7 @@ public class Seed {
         basketball1.setStartPrice(150);
         basketball1.setCreatedOn(LocalDateTime.now());
         basketball1.setModifiedOn(LocalDateTime.now());
+        basketball1.setCustomer(customer2);
 
         basketballImages.get(0).setProduct(basketball1);
         basketballImages.get(1).setProduct(basketball1);
@@ -1582,6 +1636,7 @@ public class Seed {
         mascara.setStartPrice(20);
         mascara.setCreatedOn(LocalDateTime.now());
         mascara.setModifiedOn(LocalDateTime.now());
+        mascara.setCustomer(customer5);
 
         mascaraImages.get(0).setProduct(mascara);
         mascaraImages.get(1).setProduct(mascara);
@@ -1623,6 +1678,7 @@ public class Seed {
         bronzer.setStartPrice(20);
         bronzer.setCreatedOn(LocalDateTime.now());
         bronzer.setModifiedOn(LocalDateTime.now());
+        bronzer.setCustomer(customer5);
 
         bronzerImages.get(0).setProduct(bronzer);
         bronzerImages.get(1).setProduct(bronzer);

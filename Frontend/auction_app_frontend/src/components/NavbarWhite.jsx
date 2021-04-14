@@ -11,10 +11,13 @@ import {
   CATEGORIES_ROUTE,
   HOME_ROUTE,
   SINGLE_PRODUCT_ROUTE,
+  USER_PAGE_ROUTE,
 } from "../constants/routes";
 import ProductService from "../services/productService";
 import SearchResult from "./SearchResult";
 import AboutUs from "./AboutUs";
+import UserPageModel from "../model/UserPageModel";
+import UserAccountMenu from "./UserAccountMenu";
 
 export class NavbarWhite extends Component {
   constructor(props) {
@@ -24,6 +27,7 @@ export class NavbarWhite extends Component {
   state = {
     productName: "",
     products: null,
+    userAccountMenuHidden: true,
   };
 
   productService = new ProductService();
@@ -46,18 +50,23 @@ export class NavbarWhite extends Component {
         },
       });
     } else {
-      var route = CATEGORIES_ROUTE;
-      route += `/ProductName/${this.state.productName}`;
-      this.props.history.push({
-        pathname: route,
-        state: {
-          chosenCategory: 0,
-          isLoggedIn: this.props.isLoggedIn,
-          email: this.props.email,
-          token: this.props.token,
-          productName: this.state.productName,
-        },
-      });
+      setTimeout(
+        function () {
+          var route = CATEGORIES_ROUTE;
+          route += `/ProductName/${this.state.productName}`;
+          this.props.history.push({
+            pathname: route,
+            state: {
+              chosenCategory: 0,
+              isLoggedIn: this.props.isLoggedIn,
+              email: this.props.email,
+              token: this.props.token,
+              productName: this.state.productName,
+            },
+          });
+        }.bind(this),
+        800
+      );
     }
   };
 
@@ -65,8 +74,16 @@ export class NavbarWhite extends Component {
     this.setState({ productName: "" });
   };
 
+  showMyAccountMenu = () => {
+    this.setState({ userAccountMenuHidden: false });
+  };
+
+  closeMyAccountMenu = () => {
+    this.setState({ userAccountMenuHidden: true });
+  };
+
   render() {
-    const { productName, products } = this.state;
+    const { productName, products, userAccountMenuHidden } = this.state;
 
     const { isLoggedIn, email, token } = this.props;
 
@@ -90,7 +107,7 @@ export class NavbarWhite extends Component {
                     </div>
                   </div>
 
-                  <div className="col-lg-6 col-md-4 col-sm-4 col-xs-12">
+                  <div className="col-lg-5 col-md-4 col-sm-4 col-xs-12">
                     <div className="row searchBar" style={{ display: "flex" }}>
                       <input
                         type="text"
@@ -109,7 +126,7 @@ export class NavbarWhite extends Component {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-3 col-md-4 col-sm-4 col-xs-12 menuDiv">
+                  <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12 menuDiv">
                     <div className="menu">
                       <div className="menuDiv">
                         <Link to={HOME_ROUTE} className="menuItem">
@@ -129,6 +146,23 @@ export class NavbarWhite extends Component {
                         >
                           SHOP
                         </Link>
+                        <Link
+                          onMouseOver={this.showMyAccountMenu}
+                          to={{
+                            pathname: USER_PAGE_ROUTE.replace(
+                              ":tab",
+                              "Profile"
+                            ),
+                            state: {
+                              isLoggedIn: this.props.isLoggedIn,
+                              email: this.props.email,
+                              token: this.props.token,
+                            },
+                          }}
+                          className="menuItem last"
+                        >
+                          MY ACCOUNT
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -138,6 +172,14 @@ export class NavbarWhite extends Component {
           </div>
           <div className="col-lg-2 col-md-0 col-sm-0"></div>
         </div>
+        <UserAccountMenu
+          hidden={userAccountMenuHidden}
+          hideUserAccountMenu={userAccountMenuHidden}
+          closeUserAccountMenu={this.closeMyAccountMenu}
+          isLoggedIn={isLoggedIn}
+          email={email}
+          token={token}
+        ></UserAccountMenu>
       </div>
     );
   }

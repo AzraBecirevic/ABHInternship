@@ -2,6 +2,7 @@ package com.app.auctionbackend.service;
 
 import com.app.auctionbackend.dtos.ProductDto;
 import com.app.auctionbackend.dtos.SubcategoryDto;
+import com.app.auctionbackend.model.Category;
 import com.app.auctionbackend.model.Subcategory;
 import com.app.auctionbackend.repo.SubcategoryRepository;
 import org.modelmapper.ModelMapper;
@@ -38,4 +39,39 @@ public class SubcategoryService {
         return subcategoryDtos;
     }
 
+    public Subcategory findById(Integer id){
+        Subcategory subcategory = subcategoryRepository.findById(id).orElse(null);
+        return subcategory;
+    }
+
+    public List<Subcategory> getAllSubcategories(){
+        return subcategoryRepository.findAll();
+    }
+
+    public Subcategory getSubcategoryByName(String name){
+        List<Subcategory> subcategories = subcategoryRepository.findAll();
+        for (Subcategory s : subcategories) {
+            if(s.getName().toLowerCase().equals(name.toLowerCase()))
+                return s;
+        }
+        return null;
+    }
+
+    public Subcategory save(Subcategory subcategory){
+        Subcategory subcategory1 = findById(subcategory.getId());
+        if(subcategory1 != null){
+            subcategory1.setName(subcategory.getName());
+            subcategory1.setCategory(subcategory.getCategory());
+            subcategory1.setProducts(subcategory.getProducts());
+            subcategoryRepository.save(subcategory1);
+            return subcategory1;
+        }
+
+        Subcategory newSubcategory = new Subcategory();
+        newSubcategory.setName(subcategory.getName());
+        newSubcategory.setProducts(subcategory.getProducts());
+        newSubcategory.setCategory(subcategory.getCategory());
+        subcategoryRepository.save(newSubcategory);
+        return newSubcategory;
+    }
 }
