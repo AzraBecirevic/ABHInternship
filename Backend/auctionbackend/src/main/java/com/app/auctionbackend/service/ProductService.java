@@ -645,6 +645,9 @@ public class ProductService {
         if(searchName == null || searchName.trim().equals("")) {
             return null;
         }
+        if(searchName.contains(" ")){
+           searchName = searchName.replaceFirst("\\s*", "");
+        }
 
         List<Product> products = productRepository.findAll();
         List<CategoryDto> categories = categoryService.getAllCategories();
