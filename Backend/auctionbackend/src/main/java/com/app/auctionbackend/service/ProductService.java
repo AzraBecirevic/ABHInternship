@@ -642,9 +642,13 @@ public class ProductService {
     }
 
     private DidYouMeanDto getDidYouMeanMostMatchingString(String searchName, List<ProductDto> filteredProducts){
-        if(searchName == null || searchName.trim().equals("")) {
+        if(searchName == null)
             return null;
-        }
+
+        searchName = searchName.trim();
+
+        if(searchName.equals(""))
+            return null;
 
         List<Product> products = productRepository.findAll();
         List<CategoryDto> categories = categoryService.getAllCategories();
