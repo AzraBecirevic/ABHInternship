@@ -278,7 +278,11 @@ export class Home extends Component {
                         >
                           <img
                             className="mainProductImage"
-                            src={`data:image/png;base64, ${this.state.product.imageList[0].image}`}
+                            src={`data:image/png;base64, ${
+                              this.state.product.imageList.length <= 0
+                                ? null
+                                : this.state.product.imageList[0].image
+                            }`}
                           />
                         </Link>
                       </div>
