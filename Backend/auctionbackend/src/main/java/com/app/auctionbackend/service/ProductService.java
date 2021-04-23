@@ -5,6 +5,7 @@ import com.app.auctionbackend.helper.FuzzyScore;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
 import com.app.auctionbackend.repo.ProductRepository;
+import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -965,18 +966,22 @@ public class ProductService {
 
        for (Bid b : bids) {
            Product p = b.getProduct();
-           SellProductDto sellProductDto = makeSellProductDto(p);
-           double customerBidPrice = b.getBidPrice();
-           sellProductDto.setCustomerBidPrice(df.format(customerBidPrice));
+           if(!p.getPaid()) {  // if product is not already payed - bought ?
+               SellProductDto sellProductDto = makeSellProductDto(p);
+               double customerBidPrice = b.getBidPrice();
+               sellProductDto.setCustomerBidPrice(df.format(customerBidPrice));
 
-           List<Bid> productBids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
-           double highestProductBid = productBids.get(productBids.size()-1).getBidPrice();
-           sellProductDto.setHighestBid(df.format(highestProductBid));
-           if(customerBidPrice == highestProductBid){
-               sellProductDto.setCustomerPriceHighestBid(true);
+               List<Bid> productBids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+               double highestProductBid = productBids.get(productBids.size() - 1).getBidPrice();
+               sellProductDto.setHighestBid(df.format(highestProductBid));
+               if (customerBidPrice == highestProductBid) {
+                   sellProductDto.setCustomerPriceHighestBid(true);
+                   if (LocalDateTime.now().isAfter(p.getEndDate()))
+                       sellProductDto.setPaymentEnabled(true);
+               }
+
+               bidProducts.add(sellProductDto);
            }
-
-           bidProducts.add(sellProductDto);
        }
 
         return bidProducts;
@@ -1065,6 +1070,19 @@ public class ProductService {
         }
         catch (Exception exception){
             return  false;
+        }
+    }
+
+    public Product findProductById(Integer id){
+        Product product = productRepository.findById(id).orElse(null);
+        return product;
+    }
+
+    public void savePaidProduct(Integer id){
+        Product product = findProductById(id);
+        if(product != null){
+            product.setPaid(true);
+            productRepository.save(product);
         }
     }
 

@@ -344,4 +344,18 @@ public class CustomerService {
         Boolean activeAccount = customer.getActive();
         return activeAccount;
     }
+
+    public Boolean checkIfCustomerHasCard(String email){
+        Customer customer = findByEmail(email);
+
+        if(customer == null)
+            return false;
+
+        Boolean hasCard = false;
+
+        if(customer.getStripeId() != null && !customer.getStripeId().isEmpty()){
+            hasCard = true;
+        }
+        return hasCard;
+    }
 }

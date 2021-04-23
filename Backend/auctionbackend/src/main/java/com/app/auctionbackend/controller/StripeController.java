@@ -2,18 +2,28 @@ package com.app.auctionbackend.controller;
 
 import com.app.auctionbackend.dtos.CustomerStripeDto;
 import com.app.auctionbackend.dtos.PublicKeyDto;
+import com.app.auctionbackend.model.Bid;
+import com.app.auctionbackend.service.BidService;
 import com.app.auctionbackend.service.CustomerService;
+import com.app.auctionbackend.service.ProductService;
 import com.google.gson.Gson;
 import com.stripe.Stripe;
-import com.stripe.model.Customer;
-import com.stripe.model.SetupIntent;
+import com.stripe.exception.CardException;
+import com.stripe.exception.StripeException;
+import com.stripe.model.*;
+import com.stripe.model.checkout.Session;
 import com.stripe.param.CustomerCreateParams;
+import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.PaymentMethodListParams;
 import com.stripe.param.SetupIntentCreateParams;
+import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 
 @RestController
@@ -30,6 +40,12 @@ public class StripeController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private BidService bidService;
 
     @PostMapping("/create-setup-intent")
     public ResponseEntity createSetupIntent(@RequestBody CustomerStripeDto customerStripeDto){
@@ -57,6 +73,129 @@ public class StripeController {
             return new ResponseEntity(gson.toJson(setupIntent), HttpStatus.OK);
         }
         catch (Exception ex){
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private PaymentMethod getPaymentMethod(com.app.auctionbackend.model.Customer appCustomer){
+        try{
+            PaymentMethodListParams params =
+                    PaymentMethodListParams.builder()
+                            .setCustomer(appCustomer.getStripeId())
+                            .setType(PaymentMethodListParams.Type.CARD)
+                            .build();
+
+            PaymentMethodCollection paymentMethods = PaymentMethod.list(params);
+            return paymentMethods.getData().get(0);
+
+        }catch(Exception exception){
+           return null;
+        }
+    }
+
+    @PostMapping("/create-payment-intent")
+    public ResponseEntity createPaymentIntent(@RequestBody CustomerStripeDto customerStripeDto){
+
+        com.app.auctionbackend.model.Customer appCustomer = customerService.findByEmail(customerStripeDto.getEmail());
+        if(appCustomer == null)
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+
+        com.app.auctionbackend.model.Product appProduct = productService.findProductById(customerStripeDto.getProductId());
+        if(appProduct == null)
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+
+        Bid bid = bidService.getCustomerBidForProduct(appCustomer.getId(), appProduct.getId());
+        if(bid == null)
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+
+        Stripe.apiKey = stripeSecretKey;
+
+       PaymentMethod paymentMethod = getPaymentMethod(appCustomer);
+
+
+       if(paymentMethod != null){
+           Long amount = ((long) bid.getBidPrice())*100;
+           PaymentIntentCreateParams params =
+                   PaymentIntentCreateParams.builder()
+                           .setCurrency("usd")
+                           .setAmount(amount)
+                           .setPaymentMethod(paymentMethod.getId())
+                           .setCustomer(appCustomer.getStripeId())
+                           .setConfirm(true)
+                           .setOffSession(true)
+                           .build();
+           try {
+
+               PaymentIntent paymentIntent = PaymentIntent.create(params);
+               productService.savePaidProduct(appProduct.getId());
+               return new ResponseEntity(gson.toJson(paymentIntent), HttpStatus.OK);
+
+           } catch (StripeException err) {
+
+               String paymentIntentId = err.getStripeError().getPaymentIntent().getId();
+               try{
+                   PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
+
+                   productService.savePaidProduct(appProduct.getId());
+                   return new ResponseEntity(gson.toJson(paymentIntent), HttpStatus.OK);
+               }
+               catch (StripeException exception){
+                   return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+               }
+
+           }
+       }
+
+        return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+
+    }
+
+    @PostMapping("/create-checkout-session")
+    public ResponseEntity createCheckoutSession(@RequestBody CustomerStripeDto customerStripeDto){
+        com.app.auctionbackend.model.Customer appCustomer = customerService.findByEmail(customerStripeDto.getEmail());
+        if(appCustomer == null)
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+
+        com.app.auctionbackend.model.Product appProduct = productService.findProductById(customerStripeDto.getProductId());
+        if(appProduct == null)
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+
+        Bid bid = bidService.getCustomerBidForProduct(appCustomer.getId(), appProduct.getId());
+        if(bid == null)
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+
+        Stripe.apiKey = stripeSecretKey;
+
+        try {
+            Long amount = ((long) bid.getBidPrice())*100;
+            final String YOUR_DOMAIN = "http://localhost:3000/userPage/Bids";
+            SessionCreateParams params =
+                    SessionCreateParams.builder()
+                            .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                            .setMode(SessionCreateParams.Mode.PAYMENT)
+                            .setSuccessUrl(YOUR_DOMAIN + "?success=true")
+                            .setCancelUrl(YOUR_DOMAIN + "?canceled=true")
+                            .addLineItem(
+                                    SessionCreateParams.LineItem.builder()
+                                            .setQuantity(1L)
+                                            .setPriceData(
+                                                    SessionCreateParams.LineItem.PriceData.builder()
+                                                            .setCurrency("usd")
+                                                            .setUnitAmount(amount)
+                                                            .setProductData(
+                                                                    SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                            .setName(appProduct.getName())
+                                                                            .build())
+                                                            .build())
+                                            .build())
+                            .build();
+            Session session = Session.create(params);
+            HashMap<String, String> responseData = new HashMap<String, String>();
+            responseData.put("id", session.getId());
+            return new ResponseEntity(gson.toJson(responseData), HttpStatus.OK);
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
             return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         }
     }

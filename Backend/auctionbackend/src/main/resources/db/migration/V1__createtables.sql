@@ -99,6 +99,7 @@ CREATE TABLE product(
   created_on timestamp,
   modified_on timestamp,
   customer_id integer,
+  paid boolean,
   PRIMARY KEY(id),
   CONSTRAINT fk_product_customer
       FOREIGN KEY(customer_id)

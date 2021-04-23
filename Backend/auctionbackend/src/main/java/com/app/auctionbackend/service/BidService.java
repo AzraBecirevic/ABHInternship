@@ -126,5 +126,15 @@ public class BidService {
         addedBidDto.setMessage(BID_PLACED_SUCCESSFULLY_MESSAGE);
         return addedBidDto;
     }
+
+    public Bid getCustomerBidForProduct(Integer customerId, Integer productId){
+        List<Bid> bids = bidRepository.findByCustomerIdOrderByBidPrice(customerId);
+        Bid customerBidForProduct = null;
+        for (Bid bid:bids) {
+            if(bid.getProduct().getId().equals(productId))
+                customerBidForProduct = bid;
+        }
+        return customerBidForProduct;
+    }
     
 }

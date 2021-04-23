@@ -13,6 +13,7 @@ public class SellProductDto {
     private Boolean isBidHighest = false;
     private String customerBidPrice;
     private Boolean isCustomerPriceHighestBid = false;
+    private Boolean paymentEnabled = false;
 
     public String getName() {
         return name;
@@ -102,5 +103,12 @@ public class SellProductDto {
         isCustomerPriceHighestBid = customerPriceHighestBid;
     }
 
+    public Boolean getPaymentEnabled() {
+        return paymentEnabled;
+    }
+
+    public void setPaymentEnabled(Boolean paymentEnabled) {
+        this.paymentEnabled = paymentEnabled;
+    }
 }
 

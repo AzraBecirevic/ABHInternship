@@ -50,7 +50,6 @@
 .addItemOptionDiv {
   background: #8367d8;
   border: 3px solid #8367d8;
-  /*box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);*/
   font-family: Lato-Bold;
   font-size: 18px;
   color: #ffffff;
@@ -101,6 +100,16 @@
   background: #ffffff;
   border: 3px solid #e3e3e3;
   box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.05);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.activeSoldPayButton {
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 20px;
