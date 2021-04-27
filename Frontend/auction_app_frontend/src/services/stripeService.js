@@ -5,8 +5,11 @@ import {
   GET_PUBLIC_KEY,
   CREATE_CHECKOUT_SESSION,
 } from "../constants/endpoints";
+import ToastService from "./toastService";
 
 class StripeService {
+  toastService = new ToastService();
+
   async createSetupIntent(email, token) {
     const requestOptions = {
       method: "POST",
@@ -32,6 +35,18 @@ class StripeService {
 
     if (!response) {
       throw response;
+    }
+    if (response.status === 403) {
+      var data = await response.json();
+      this.toastService.showErrorToast(data.text);
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {}
+      return null;
     }
     if (response.status === 200) {
       var data = await response.json();
@@ -102,6 +117,18 @@ class StripeService {
     if (!response) {
       throw response;
     }
+    if (response.status === 403) {
+      var data = await response.json();
+      this.toastService.showErrorToast(data.text);
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {}
+      return null;
+    }
     if (response.status === 200) {
       var data = await response.json();
       return data;
@@ -136,6 +163,18 @@ class StripeService {
 
     if (!response) {
       throw response;
+    }
+    if (response.status === 403) {
+      var data = await response.json();
+      this.toastService.showErrorToast(data.text);
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {}
+      return null;
     }
     if (response.status === 200) {
       var data = await response.json();

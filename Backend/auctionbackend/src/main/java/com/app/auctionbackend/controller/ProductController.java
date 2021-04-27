@@ -145,10 +145,9 @@ public class ProductController {
     @PostMapping("/saveSoldProduct")
     public ResponseEntity addProduct(@RequestBody SoldProductDto addProductDto){
         if(addProductDto.getProductId() <= 0)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(false, HttpStatus.BAD_REQUEST);
         productService.savePaidProduct(addProductDto.getProductId());
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(true, HttpStatus.OK);
     }
-
 
 }

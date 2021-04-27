@@ -888,6 +888,9 @@ public class ProductService {
         }
 
         long timeLeft = ChronoUnit.DAYS.between(LocalDateTime.now(),p.getEndDate());
+        timeLeft++;
+        if(timeLeft < 0)
+            timeLeft = 0;
         sellProductDto.setTimeLeft(timeLeft);
         return sellProductDto;
     }
@@ -966,7 +969,7 @@ public class ProductService {
 
        for (Bid b : bids) {
            Product p = b.getProduct();
-           if(!p.getPaid()) {  // if product is not already payed - bought ?
+           if(!p.getPaid()) {
                SellProductDto sellProductDto = makeSellProductDto(p);
                double customerBidPrice = b.getBidPrice();
                sellProductDto.setCustomerBidPrice(df.format(customerBidPrice));

@@ -10,13 +10,15 @@ import {
   SUCCESSFUL_PAYMENT,
   PAYMENT_INFO_MESSAGE,
 } from "../constants/messages";
-import { SINGLE_PRODUCT_ROUTE } from "../constants/routes";
+import { BIDS_ROUTE, SINGLE_PRODUCT_ROUTE } from "../constants/routes";
 import ProductService from "../services/productService";
 import CustomerService from "../services/customerService";
 import StripeService from "../services/stripeService";
 import { loadStripe } from "@stripe/stripe-js";
 import { EMAIL, ENDPOINT, TOKEN } from "../constants/auth";
 import ToastService from "../services/toastService";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 export class Bids extends Component {
   state = { products: null, email: "", token: "", isLoggedIn: false };
@@ -80,9 +82,11 @@ export class Bids extends Component {
   };
 
   onPayClick = async (productId) => {
-    const confirmPayment = window.confirm(
+    let confirmPayment = await this.showConfirmAlert(
+      "Make payment",
       PAYMENT_INFO_MESSAGE + PAYMENT_QUESTION
     );
+
     if (confirmPayment === true) {
       const { token, email } = this.state;
       let stripePublicKey = await this.stripeService.getPublicKey(token);
@@ -115,6 +119,10 @@ export class Bids extends Component {
     if (paymentIntent !== null) {
       if (paymentIntent.status === "succeeded") {
         this.toastServivce.showSuccessToast(SUCCESSFUL_PAYMENT);
+        const result = await this.productService.saveSoldProduct(
+          productId,
+          token
+        );
         this.loadData();
       } else {
         let result = await (await this.stripePromise).confirmCardPayment(
@@ -124,7 +132,8 @@ export class Bids extends Component {
           }
         );
         if (result.error) {
-          let enterNewCard = window.confirm(
+          let enterNewCard = await this.showConfirmAlert(
+            "Make payment",
             result.error.message + PAYMENT_NEW_CARD_QUESTION_MESSAGE
           );
           if (enterNewCard === true) {
@@ -133,6 +142,10 @@ export class Bids extends Component {
         } else {
           if (result.paymentIntent.status === "succeeded") {
             this.toastServivce.showSuccessToast(SUCCESSFUL_PAYMENT);
+            const result = await this.productService.saveSoldProduct(
+              productId,
+              token
+            );
             this.loadData();
           }
         }
@@ -157,6 +170,37 @@ export class Bids extends Component {
         this.toastServivce.showErrorToast(result.error.message);
       }
     }
+  };
+
+  showConfirmAlertAsync = (showTitle, showMessage) => {
+    return new Promise((resolve, reject) => {
+      confirmAlert({
+        title: showTitle,
+        message: showMessage,
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => {
+              resolve(true);
+            },
+          },
+          {
+            label: "No",
+            onClick: () => {
+              resolve(false);
+            },
+          },
+        ],
+      });
+    });
+  };
+
+  showConfirmAlert = async (showTitle, showMessage) => {
+    let confirmedAlert = await this.showConfirmAlertAsync(
+      showTitle,
+      showMessage
+    );
+    return confirmedAlert;
   };
 
   render() {

@@ -159,10 +159,10 @@ export const CARD_DATA_NOT_SAVED =
   "Your card information have not been stored successfully";
 
 export const SUCCESSFUL_PAYMENT = "Successful payment";
-export const FAILED_PAYMENT = "Payment could not be made";
+export const FAILED_PAYMENT = "Payment has not be made";
 export const PAYMENT_QUESTION =
   "Are you sure you want make payment for this product?";
 export const PAYMENT_INFO_MESSAGE =
   "If you have already added your card data, that card is going to be used for this payment. ";
 export const PAYMENT_NEW_CARD_QUESTION_MESSAGE =
-  " Do you want to enter new card data";
+  " Do you want to enter new card data?";

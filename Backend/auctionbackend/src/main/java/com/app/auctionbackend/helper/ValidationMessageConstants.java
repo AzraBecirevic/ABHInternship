@@ -14,7 +14,7 @@ public class ValidationMessageConstants {
     public static final String BID_MUST_BE_BIGGER_THAN_HIGHEST_MESSAGE = "There are higher bids than yours. You could give a second try.";
     public static final String BID_IS_ALREADY_HIGHEST_MESSAGE = "Your bid is already highest bid.";
     public static final String BID_PLACED_SUCCESSFULLY_MESSAGE =  "Congrats! You are the highest bidder!";
-    public static final String USER_DOES_NOT_EXIST = "There are no user associated with this account";
+    public static final String USER_DOES_NOT_EXIST = "There is no user associated with this account";
     public static final String GENDER_DOES_NOT_EXIST = "Specified gender does not exist";
     public static final String USER_MIN_AGE_MESSAGE = "You must be older than 18";
     public static final String DATE_OF_BIRTH_REQUIRED_MESSAGE = "Date of birth is required";
@@ -40,4 +40,9 @@ public class ValidationMessageConstants {
     public static final String END_DATE_MIN_VALUE_MESSAGE = "End date must be later than start date";
     public static final String PRODUCT_ACTIVE_VALUE_MESSAGE = "Your product can not be active more than 1 year";
     public static final String CUSTOMER_CAN_NOT_BID_PRODUCT = "You can not bid on your own product.";
+    public static final String DEACTIVATED_CUSTOMER_FORBIDDEN_ACTION_MESSAGE = "You can not make this action as a deactivated user";
+    public static final String PRODUCT_DOES_NOT_EXIST_MESSAGE = "Specified product does not exist.";
+    public static final String NO_BID_FOR_PRODUCT_AND_CUSTOMER_MESSAGE = "There is no bid placed for specified product from specified user";
+    public static final String PRODUCT_IS_ALREADY_SOLD_MESSAGE = "Product has been already sold.";
+
 }
