@@ -1,6 +1,7 @@
 import { faPhabricator } from "@fortawesome/free-brands-svg-icons";
 import { ENDPOINT } from "../constants/auth";
 import {
+  CHECK_IF_CUSTOMER_HAS_CARD,
   DEACTIVATE_ACCOUNT_ENDPOINT,
   GET_CUSTOMER_DELIVERY_DATA_ENDPOINT,
   GET_CUSTOMER_INFO_DATA,
@@ -183,6 +184,10 @@ class CustomerService {
       } catch (err) {}
       return null;
     }
+  }
+
+  async checkIfUserHaveStripeId(email, token) {
+    return await this.getData(CHECK_IF_CUSTOMER_HAS_CARD + email, token);
   }
 
   async getData(link, token) {

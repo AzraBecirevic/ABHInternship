@@ -1,7 +1,15 @@
 import { ENDPOINT } from "../constants/auth";
-import { CREATE_SETUP_INTENT, GET_PUBLIC_KEY } from "../constants/endpoints";
+import {
+  CREATE_PAYMENT_INTENT,
+  CREATE_SETUP_INTENT,
+  GET_PUBLIC_KEY,
+  CREATE_CHECKOUT_SESSION,
+} from "../constants/endpoints";
+import ToastService from "./toastService";
 
 class StripeService {
+  toastService = new ToastService();
+
   async createSetupIntent(email, token) {
     const requestOptions = {
       method: "POST",
@@ -27,6 +35,18 @@ class StripeService {
 
     if (!response) {
       throw response;
+    }
+    if (response.status === 403) {
+      var data = await response.json();
+      this.toastService.showErrorToast(data.text);
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {}
+      return null;
     }
     if (response.status === 200) {
       var data = await response.json();
@@ -62,6 +82,100 @@ class StripeService {
       throw response;
     }
 
+    if (response.status === 200) {
+      var data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  async createPaymentIntent(email, token, productId) {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        email: email,
+        productId: productId,
+      }),
+    };
+
+    const response = await fetch(
+      ENDPOINT + CREATE_PAYMENT_INTENT,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+
+    if (!response) {
+      throw response;
+    }
+    if (response.status === 403) {
+      var data = await response.json();
+      this.toastService.showErrorToast(data.text);
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {}
+      return null;
+    }
+    if (response.status === 200) {
+      var data = await response.json();
+      return data;
+    } else {
+      return null;
+    }
+  }
+
+  async createChecoutSession(email, token, productId) {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        email: email,
+        productId: productId,
+      }),
+    };
+
+    const response = await fetch(
+      ENDPOINT + CREATE_CHECKOUT_SESSION,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+
+    if (!response) {
+      throw response;
+    }
+    if (response.status === 403) {
+      var data = await response.json();
+      this.toastService.showErrorToast(data.text);
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {}
+      return null;
+    }
     if (response.status === 200) {
       var data = await response.json();
       return data;

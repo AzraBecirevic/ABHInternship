@@ -50,7 +50,6 @@
 .addItemOptionDiv {
   background: #8367d8;
   border: 3px solid #8367d8;
-  /*box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);*/
   font-family: Lato-Bold;
   font-size: 18px;
   color: #ffffff;
@@ -107,6 +106,17 @@
   padding-right: 20px;
 }
 
+.activeSoldPayButton {
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  font-family: Lato-Bold;
+}
+
 .highestBidTd {
   color: #6cc047;
   font-family: Lato-Bold;
@@ -128,6 +138,13 @@ table > tbody > tr.no-border > td,
 }
 
 .activeSoldProductName {
+  font-family: Lato-Bold;
+  font-size: 18px;
+  color: #252525;
+  letter-spacing: 0.63px;
+}
+
+.activeSoldPaidProductName {
   font-family: Lato-Bold;
   font-size: 18px;
   color: #252525;

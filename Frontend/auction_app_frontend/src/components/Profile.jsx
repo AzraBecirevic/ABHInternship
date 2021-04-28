@@ -757,7 +757,7 @@ export class Profile extends Component {
             return;
           }
           let setupIntent = await this.stripeService.createSetupIntent(
-            email,
+            userEmail,
             token
           );
           if (setupIntent !== null) {

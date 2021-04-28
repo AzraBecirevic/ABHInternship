@@ -21,6 +21,7 @@ public class Product extends ModelObject {
     private List<Image> imageList = new ArrayList<>();
     @ManyToMany(mappedBy = "products")
     private List<Subcategory> subcategories = new ArrayList<>();
+    private Boolean paid;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Bid> bids = new ArrayList<>();
@@ -104,5 +105,13 @@ public class Product extends ModelObject {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
     }
 }

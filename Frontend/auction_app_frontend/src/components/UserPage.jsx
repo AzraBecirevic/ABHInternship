@@ -229,11 +229,17 @@ export class UserPage extends Component {
                         />
                       )}
                       {tabToShow == "Bids" && (
-                        <Bids
-                          email={email}
-                          token={token}
-                          isLoggedIn={isLoggedIn}
-                          setIsLoading={this.props.setIsLoading}
+                        <Route
+                          path=""
+                          render={(props) => (
+                            <Bids
+                              {...props}
+                              email={email}
+                              token={token}
+                              isLoggedIn={isLoggedIn}
+                              setIsLoading={this.props.setIsLoading}
+                            />
+                          )}
                         />
                       )}
 

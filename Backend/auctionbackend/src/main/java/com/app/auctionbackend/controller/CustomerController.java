@@ -169,4 +169,11 @@ public class CustomerController {
         Boolean accountActive = customerService.checkIsAccountActive(email);
         return new ResponseEntity<Boolean>(accountActive, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/checkIfCustomerHasCard/{email}" )
+    public ResponseEntity<Boolean> checkIfCustomerHasCard(@PathVariable String email){
+
+        Boolean hasCard = customerService.checkIfCustomerHasCard(email);
+        return new ResponseEntity<Boolean>(hasCard, HttpStatus.OK);
+    }
 }

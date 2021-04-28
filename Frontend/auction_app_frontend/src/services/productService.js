@@ -17,6 +17,7 @@ import {
   ADD_PRODUCT,
   ADD_PRODUCT_PHOTO,
   GET_RECOMMENDED_PRODUCTS,
+  SAVE_SOLD_PRODUCT,
 } from "../constants/endpoints";
 import ToastService from "./toastService";
 
@@ -270,6 +271,37 @@ class ProductService {
         return false;
       } catch (err) {}
       return false;
+    }
+  }
+
+  async saveSoldProduct(productId, token) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: token },
+      body: JSON.stringify({
+        productId: productId,
+      }),
+    };
+
+    const response = await fetch(
+      ENDPOINT + SAVE_SOLD_PRODUCT,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+    if (!response) {
+      throw response;
+    }
+
+    if (response.status === 200) {
+      var data = await response.json();
+      return data;
+    } else {
+      return null;
     }
   }
 

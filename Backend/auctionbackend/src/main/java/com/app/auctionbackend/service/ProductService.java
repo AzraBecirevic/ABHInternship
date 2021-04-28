@@ -5,6 +5,7 @@ import com.app.auctionbackend.helper.FuzzyScore;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
 import com.app.auctionbackend.repo.ProductRepository;
+import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -887,6 +888,9 @@ public class ProductService {
         }
 
         long timeLeft = ChronoUnit.DAYS.between(LocalDateTime.now(),p.getEndDate());
+        timeLeft++;
+        if(timeLeft < 0)
+            timeLeft = 0;
         sellProductDto.setTimeLeft(timeLeft);
         return sellProductDto;
     }
@@ -970,10 +974,18 @@ public class ProductService {
            sellProductDto.setCustomerBidPrice(df.format(customerBidPrice));
 
            List<Bid> productBids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
-           double highestProductBid = productBids.get(productBids.size()-1).getBidPrice();
+           double highestProductBid = productBids.get(productBids.size() - 1).getBidPrice();
            sellProductDto.setHighestBid(df.format(highestProductBid));
-           if(customerBidPrice == highestProductBid){
+           if (customerBidPrice == highestProductBid) {
                sellProductDto.setCustomerPriceHighestBid(true);
+               if(p.getPaid()){
+                   sellProductDto.setPaymentEnabled(false);
+                   sellProductDto.setProductPaid(true);
+               }
+               else {
+                   if (LocalDateTime.now().isAfter(p.getEndDate()))
+                       sellProductDto.setPaymentEnabled(true);
+               }
            }
 
            bidProducts.add(sellProductDto);
@@ -1065,6 +1077,19 @@ public class ProductService {
         }
         catch (Exception exception){
             return  false;
+        }
+    }
+
+    public Product findProductById(Integer id){
+        Product product = productRepository.findById(id).orElse(null);
+        return product;
+    }
+
+    public void savePaidProduct(Integer id){
+        Product product = findProductById(id);
+        if(product != null){
+            product.setPaid(true);
+            productRepository.save(product);
         }
     }
 
