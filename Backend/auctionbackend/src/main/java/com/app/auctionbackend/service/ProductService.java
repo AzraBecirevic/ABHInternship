@@ -969,22 +969,26 @@ public class ProductService {
 
        for (Bid b : bids) {
            Product p = b.getProduct();
-           if(!p.getPaid()) {
-               SellProductDto sellProductDto = makeSellProductDto(p);
-               double customerBidPrice = b.getBidPrice();
-               sellProductDto.setCustomerBidPrice(df.format(customerBidPrice));
+           SellProductDto sellProductDto = makeSellProductDto(p);
+           double customerBidPrice = b.getBidPrice();
+           sellProductDto.setCustomerBidPrice(df.format(customerBidPrice));
 
-               List<Bid> productBids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
-               double highestProductBid = productBids.get(productBids.size() - 1).getBidPrice();
-               sellProductDto.setHighestBid(df.format(highestProductBid));
-               if (customerBidPrice == highestProductBid) {
-                   sellProductDto.setCustomerPriceHighestBid(true);
+           List<Bid> productBids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+           double highestProductBid = productBids.get(productBids.size() - 1).getBidPrice();
+           sellProductDto.setHighestBid(df.format(highestProductBid));
+           if (customerBidPrice == highestProductBid) {
+               sellProductDto.setCustomerPriceHighestBid(true);
+               if(p.getPaid()){
+                   sellProductDto.setPaymentEnabled(false);
+                   sellProductDto.setProductPaid(true);
+               }
+               else {
                    if (LocalDateTime.now().isAfter(p.getEndDate()))
                        sellProductDto.setPaymentEnabled(true);
                }
-
-               bidProducts.add(sellProductDto);
            }
+
+           bidProducts.add(sellProductDto);
        }
 
         return bidProducts;

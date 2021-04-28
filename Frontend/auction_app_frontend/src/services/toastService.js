@@ -10,6 +10,9 @@ class ToastService {
   showInfoToast(infoMessage) {
     toast.info(infoMessage);
   }
+  showWarningToast(warningMessage) {
+    toast.warning(warningMessage);
+  }
 }
 
 export default ToastService;

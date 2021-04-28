@@ -59,7 +59,7 @@ export class Bids extends Component {
           token
         );
       } else if (this.props.location.search === "?canceled=true") {
-        this.toastServivce.showErrorToast(FAILED_PAYMENT);
+        this.toastServivce.showWarningToast(FAILED_PAYMENT);
       }
     }
 
@@ -88,12 +88,17 @@ export class Bids extends Component {
     );
 
     if (confirmPayment === true) {
+      this.setIsLoading(true);
+
       const { token, email } = this.state;
       let stripePublicKey = await this.stripeService.getPublicKey(token);
       this.stripePromise = loadStripe(stripePublicKey.publicKey);
-
       this.makePayment(productId, token, email);
     }
+  };
+
+  setIsLoading = (isLoadingValue) => {
+    this.props.setIsLoading(isLoadingValue);
   };
 
   makePayment = async (productId, token, email) => {
@@ -118,6 +123,7 @@ export class Bids extends Component {
 
     if (paymentIntent !== null) {
       if (paymentIntent.status === "succeeded") {
+        this.setIsLoading(false);
         this.toastServivce.showSuccessToast(SUCCESSFUL_PAYMENT);
         const result = await this.productService.saveSoldProduct(
           productId,
@@ -132,15 +138,21 @@ export class Bids extends Component {
           }
         );
         if (result.error) {
+          this.setIsLoading(false);
+
           let enterNewCard = await this.showConfirmAlert(
             "Make payment",
             result.error.message + PAYMENT_NEW_CARD_QUESTION_MESSAGE
           );
           if (enterNewCard === true) {
+            this.setIsLoading(true);
+
             this.makeNewPayment(email, token, productId);
           }
         } else {
           if (result.paymentIntent.status === "succeeded") {
+            this.setIsLoading(false);
+
             this.toastServivce.showSuccessToast(SUCCESSFUL_PAYMENT);
             const result = await this.productService.saveSoldProduct(
               productId,
@@ -235,23 +247,30 @@ export class Bids extends Component {
                           ></img>
                         </td>
                         <td>
-                          <Link
-                            className="activeSoldProductName"
-                            to={{
-                              pathname: SINGLE_PRODUCT_ROUTE.replace(
-                                ":prodId",
-                                product.id
-                              ),
-                              state: {
-                                chosenProduct: product.id,
-                                isLoggedIn: isLoggedIn,
-                                email: email,
-                                token: token,
-                              },
-                            }}
-                          >
-                            {product.name}
-                          </Link>
+                          {!product.productPaid && (
+                            <Link
+                              className="activeSoldProductName"
+                              to={{
+                                pathname: SINGLE_PRODUCT_ROUTE.replace(
+                                  ":prodId",
+                                  product.id
+                                ),
+                                state: {
+                                  chosenProduct: product.id,
+                                  isLoggedIn: isLoggedIn,
+                                  email: email,
+                                  token: token,
+                                },
+                              }}
+                            >
+                              {product.name}
+                            </Link>
+                          )}
+                          {product.productPaid && (
+                            <div className="activeSoldPaidProductName">
+                              {product.name}
+                            </div>
+                          )}
                         </td>
                         <td>{product.timeLeft} days</td>
                         <td
@@ -276,7 +295,7 @@ export class Bids extends Component {
                           $ {product.highestBid}
                         </td>
                         <td align="center">
-                          {!product.paymentEnabled && (
+                          {!product.paymentEnabled && !product.productPaid && (
                             <Link
                               className="activeSoldProductName"
                               to={{
@@ -306,6 +325,11 @@ export class Bids extends Component {
                             >
                               PAY
                             </button>
+                          )}
+                          {product.productPaid && (
+                            <div className="activeSoldPaidProductName">
+                              PAID
+                            </div>
                           )}
                         </td>
                       </tr>
