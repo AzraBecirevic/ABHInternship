@@ -21,6 +21,7 @@ public class Product extends ModelObject {
     private List<Image> imageList = new ArrayList<>();
     @ManyToMany(mappedBy = "products")
     private List<Subcategory> subcategories = new ArrayList<>();
+    private LocalDateTime endDatePayment;
     private Boolean paid;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
@@ -113,5 +114,13 @@ public class Product extends ModelObject {
 
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+
+    public LocalDateTime getEndDatePayment() {
+        return endDatePayment;
+    }
+
+    public void setEndDatePayment(LocalDateTime endDatePayment) {
+        this.endDatePayment = endDatePayment;
     }
 }

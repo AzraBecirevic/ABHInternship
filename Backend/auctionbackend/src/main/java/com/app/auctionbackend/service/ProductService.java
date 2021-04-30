@@ -18,6 +18,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
+import static com.app.auctionbackend.config.MessageConstants.EMAIL_30_DAYS_PAST_SUBJECT;
+import static com.app.auctionbackend.config.MessageConstants.EMAIL_MESSAGE;
 import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
 import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 
@@ -41,6 +43,9 @@ public class ProductService {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    EmailService emailService;
 
     DecimalFormat df = new DecimalFormat("#0.00");
 
@@ -1090,6 +1095,44 @@ public class ProductService {
         if(product != null){
             product.setPaid(true);
             productRepository.save(product);
+        }
+    }
+
+    public void sendEmailToCustomer(Customer customer, Bid bid, Product product){
+        if(customer == null){
+            return;
+        }
+
+        String emailMessage = "Dear "+customer.getFirstName()+" "+customer.getLastName()+", the product payment period for " + product.getName() + "(" + bid.getBidPrice() + ")  has expired.";
+
+        try {                                     // customer.getEmail()
+            emailService.sendSimpleMessage("azra.becirevic1998@gmail.com", EMAIL_30_DAYS_PAST_SUBJECT, emailMessage);
+        }
+        catch(Error err){
+            return;
+        }
+
+        return;
+    }
+
+    public void sendEmailForBidProduct(){
+        List<Product> products = productRepository.findAll();
+
+        for (Product p : products) {
+            List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+            if(LocalDateTime.now().isAfter(p.getEndDate()) && bidList.size() > 0 && !p.getPaid()){
+                LocalDateTime endDatePayment = p.getEndDate().plusDays(30);
+
+                LocalDateTime paymentEndDate = LocalDateTime.of(endDatePayment.getYear(), endDatePayment.getMonth(), endDatePayment.getDayOfMonth(), 0,0);
+                LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
+
+                // p.getCustomer().getEmail().equals("azra.becirevic1998@gmail.com")
+                if(currentDate.isEqual(paymentEndDate)){
+                    Bid highestBid = bidList.get(bidList.size()-1);
+                    Customer highestBidder = highestBid.getCustomer();
+                    sendEmailToCustomer(highestBidder, highestBid, p);
+                }
+            }
         }
     }
 

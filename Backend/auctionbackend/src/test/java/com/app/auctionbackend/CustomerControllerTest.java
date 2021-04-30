@@ -35,14 +35,6 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void registerCustomerShouldReturnIsCreated() throws Exception{
-        mvc.perform(MockMvcRequestBuilders.post(REGISTER_ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"firstName\": \"Cust1\", \"lastName\": \"Cust1Lats\", \"email\":\"cust1@mail.com\", \"password\":\"mojpass123@\"}")
-        ).andExpect(status().isCreated());
-    }
-
-    @Test
     public void registerCustomerIncorrectEmailShouldReturnBadRequest() throws Exception{
         mvc.perform(MockMvcRequestBuilders.post(REGISTER_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
