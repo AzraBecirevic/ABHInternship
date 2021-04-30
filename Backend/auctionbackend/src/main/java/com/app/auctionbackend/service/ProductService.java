@@ -8,6 +8,7 @@ import com.app.auctionbackend.repo.ProductRepository;
 import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +47,9 @@ public class ProductService {
 
     @Autowired
     EmailService emailService;
+
+    @Value("${test.email}")
+    String testEmail;
 
     DecimalFormat df = new DecimalFormat("#0.00");
 
@@ -1098,15 +1102,31 @@ public class ProductService {
         }
     }
 
+    private String makeEmailMessage(String firstName, String lastName, String productName, String bidPrice){
+       String message = new StringBuilder()
+                .append("Dear ")
+                .append(firstName)
+                .append(" ")
+                .append(lastName)
+                .append(", the product payment period for ")
+                .append(productName)
+                .append(" (")
+                .append(bidPrice)
+                .append(" $) has expired.").toString();
+
+       return message;
+    }
+
     public void sendEmailToCustomer(Customer customer, Bid bid, Product product){
         if(customer == null){
             return;
         }
 
-        String emailMessage = "Dear "+customer.getFirstName()+" "+customer.getLastName()+", the product payment period for " + product.getName() + "(" + df.format( bid.getBidPrice()) + " $)  has expired.";
+        String bidPrice = df.format( bid.getBidPrice());
+        String emailMessage = makeEmailMessage(customer.getFirstName(), customer.getLastName(), product.getName(), bidPrice);
 
-        try {                                     // customer.getEmail()
-            emailService.sendSimpleMessage("azra.becirevic1998@gmail.com", EMAIL_30_DAYS_PAST_SUBJECT, emailMessage);
+        try {                                // customer.getEmail()
+            emailService.sendSimpleMessage(testEmail, EMAIL_30_DAYS_PAST_SUBJECT, emailMessage);
         }
         catch(Error err){
             return;

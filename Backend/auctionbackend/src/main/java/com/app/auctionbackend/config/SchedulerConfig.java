@@ -47,9 +47,7 @@ public class SchedulerConfig {
     }
 
     @Bean
-    public SimpleTriggerFactoryBean simpleJobTrigger(@Qualifier("simpleJobDetail") JobDetail jobDetail,
-                                                     @Value("${simplejob.frequency}") long frequency) {
-
+    public SimpleTriggerFactoryBean simpleJobTrigger(@Qualifier("sendEmailJobDetail") JobDetail jobDetail, @Value("${sendemailjob.frequency}") long frequency) {
         SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setStartDelay(0L);
@@ -67,9 +65,9 @@ public class SchedulerConfig {
     }
 
     @Bean
-    public JobDetailFactoryBean simpleJobDetail() {
+    public JobDetailFactoryBean sendEmailJobDetail() {
         JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
-        factoryBean.setJobClass(SimpleJob.class);
+        factoryBean.setJobClass(SendEmailJob.class);
         factoryBean.setDurability(true);
         return factoryBean;
     }
