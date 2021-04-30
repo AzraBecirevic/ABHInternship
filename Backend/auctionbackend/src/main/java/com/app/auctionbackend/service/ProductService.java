@@ -1103,7 +1103,7 @@ public class ProductService {
             return;
         }
 
-        String emailMessage = "Dear "+customer.getFirstName()+" "+customer.getLastName()+", the product payment period for " + product.getName() + "(" + bid.getBidPrice() + ")  has expired.";
+        String emailMessage = "Dear "+customer.getFirstName()+" "+customer.getLastName()+", the product payment period for " + product.getName() + "(" + df.format( bid.getBidPrice()) + " $)  has expired.";
 
         try {                                     // customer.getEmail()
             emailService.sendSimpleMessage("azra.becirevic1998@gmail.com", EMAIL_30_DAYS_PAST_SUBJECT, emailMessage);
@@ -1126,7 +1126,6 @@ public class ProductService {
                 LocalDateTime paymentEndDate = LocalDateTime.of(endDatePayment.getYear(), endDatePayment.getMonth(), endDatePayment.getDayOfMonth(), 0,0);
                 LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
 
-                // p.getCustomer().getEmail().equals("azra.becirevic1998@gmail.com")
                 if(currentDate.isEqual(paymentEndDate)){
                     Bid highestBid = bidList.get(bidList.size()-1);
                     Customer highestBidder = highestBid.getCustomer();

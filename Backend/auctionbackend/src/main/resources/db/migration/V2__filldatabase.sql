@@ -42,7 +42,7 @@ VALUES               ('Women clothes', 1),
 
 
 INSERT INTO product (name, start_date, end_date, start_price, description, created_on, modified_on, customer_id, end_date_payment, paid)
-VALUES              ('Black T-Shirt', '2021-03-30', '2021-04-20', 50.55, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, null, false),
+VALUES              ('Black T-Shirt', '2021-03-30', '2021-03-31', 50.55, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, null, false),
                     ('Red Shirt', '2021-03-30', '2021-05-30', 60, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, null, false),
 					('White Shirt', '2021-03-30', '2021-05-30', 70, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, null, false),
 					('Purple sneakers', '2021-03-30', '2021-05-30', 200, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, null, false),

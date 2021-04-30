@@ -2,11 +2,6 @@ package com.app.auctionbackend;
 
 import com.app.auctionbackend.config.SchedulerConfig;
 import com.app.auctionbackend.config.SecretKeyHandler;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
