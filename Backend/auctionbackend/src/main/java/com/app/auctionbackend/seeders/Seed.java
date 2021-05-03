@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -90,7 +91,31 @@ public class Seed {
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
+///
+        Customer customer = customerRepository.findById(1).orElse(null);
+        Customer customer1 = customerRepository.findById(5).orElse(null);
 
+        Product p = new Product();
+        p.setName("Yellow Sneakers");
+        p.setPaid(false);
+        p.setCustomer(customer);
+        p.setEndDate(LocalDateTime.now());
+        p.setStartDate(LocalDateTime.of(2021, 4,5,0,0));
+        p.setDescription("Men yellow sneakers");
+        p.setStartPrice(120);
+        p.setModifiedOn(LocalDateTime.now());
+        p.setCreatedOn(LocalDateTime.now());
+
+        productRepository.save(p);
+
+        Bid bid = new Bid();
+        bid.setCustomer(customer1);
+        bid.setDateOfBidPlacement(LocalDateTime.of(2021, 4, 6, 0,0));
+        bid.setBidPrice(125);
+        bid.setProduct(p);
+
+        bidRepository.save(bid);
+///
         List<Image> images = imageRepository.findAll();
         if(images != null && images.size() > 0)
             return;

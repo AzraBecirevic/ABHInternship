@@ -36,7 +36,13 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    private List<Notification> notifications = new ArrayList<>();
+
     private String stripeId;
+
+    @OneToOne(mappedBy = "customer")
+    private NotificationToken notificationToken;
 
     public Integer getId() {
         return id;
@@ -148,5 +154,21 @@ public class Customer {
 
     public void setStripeId(String stripeId) {
         this.stripeId = stripeId;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    public NotificationToken getNotificationToken() {
+        return notificationToken;
+    }
+
+    public void setNotificationToken(NotificationToken notificationToken) {
+        this.notificationToken = notificationToken;
     }
 }

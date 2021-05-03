@@ -40,3 +40,4 @@ export const GET_RECOMMENDED_PRODUCTS = "/product/getRecommended/";
 export const CHECK_IF_CUSTOMER_HAS_CARD = "/customer/checkIfCustomerHasCard/";
 export const CREATE_CHECKOUT_SESSION = "/stripe/create-checkout-session";
 export const SAVE_SOLD_PRODUCT = "/product/saveSoldProduct";
+export const SAVE_NOTIFICATION_TOKEN = "/notification/save";

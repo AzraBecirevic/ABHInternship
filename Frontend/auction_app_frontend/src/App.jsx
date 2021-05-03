@@ -106,6 +106,8 @@ import Sell from "./components/Sell";
 import Settings from "./components/Settings";
 import { ADD_ITEM } from "./constants/messages";
 import AddItem from "./components/AddItem";
+import firebase from "firebase";
+import NotificationService from "./services/notificationService";
 
 export class App extends Component {
   state = {
@@ -115,9 +117,11 @@ export class App extends Component {
 
   jwtToken = "";
   email = "";
+  userDeviceToken = "";
 
   toastService = new ToastService();
   authService = new AuthService();
+  notificationService = new NotificationService();
 
   componentDidMount() {
     var email;
@@ -146,12 +150,105 @@ export class App extends Component {
     if (email != null && token != null) {
       this.loginCustomer(email, token);
     }
+    /*  //
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("firebase-messaging-sw.js")
+        .then(function (registration) {
+          console.log("[SW]: SCOPE: ", registration.scope);
+          return registration.scope;
+        })
+        .catch(function (err) {
+          return err;
+        });
+    }
+
+    ////
+    let userDeviceToken = "";
+    var firebaseConfig = {
+      apiKey: "AIzaSyDb2hsI0Y3rNcBzxoqkbH6ws0SRH1Gu1Aw",
+      authDomain: "auctionappnotifications.firebaseapp.com",
+      projectId: "auctionappnotifications",
+      storageBucket: "auctionappnotifications.appspot.com",
+      messagingSenderId: "101636570166",
+      appId: "1:101636570166:web:9b48cf59ebeb7d79e32c97",
+    };
+    firebase.initializeApp(firebaseConfig); ///
+
+    firebase
+      .messaging()
+      .requestPermission()
+      .then(() => firebase.messaging().getToken())
+      .then((deviceToken) => {
+        console.log(deviceToken); 
+        userDeviceToken = deviceToken; 
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    ////
+    this.notificationService.saveNotificationToken(email, userDeviceToken);
+    //*/
   }
 
   loginCustomer = (email, JWT) => {
     this.email = email;
     this.jwtToken = JWT;
     this.setState({ isLoggedIn: true });
+
+    //
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("firebase-messaging-sw.js")
+        .then(function (registration) {
+          console.log("[SW]: SCOPE: ", registration.scope);
+          return registration.scope;
+        })
+        .catch(function (err) {
+          return err;
+        });
+    }
+
+    //if (!firebase.app.length) {
+    var firebaseConfig = {
+      apiKey: "AIzaSyDb2hsI0Y3rNcBzxoqkbH6ws0SRH1Gu1Aw",
+      authDomain: "auctionappnotifications.firebaseapp.com",
+      projectId: "auctionappnotifications",
+      storageBucket: "auctionappnotifications.appspot.com",
+      messagingSenderId: "101636570166",
+      appId: "1:101636570166:web:9b48cf59ebeb7d79e32c97",
+    };
+    firebase.initializeApp(firebaseConfig);
+    // }
+
+    firebase
+      .messaging()
+      .requestPermission()
+      .then(() => firebase.messaging().getToken())
+      .then((deviceToken) => {
+        this.saveUserDeviceToken(email, deviceToken);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    firebase.messaging().onMessage((payload) => {
+      this.toastService.showInfoToast(
+        payload.notification.title + " - " + payload.notification.body
+      );
+    });
+  };
+
+  saveUserDeviceToken = (email, token) => {
+    this.userDeviceToken = token;
+    this.saveNotificationToken(email, token);
+  };
+
+  saveNotificationToken = async (email, userDeviceToken) => {
+    await this.notificationService.saveNotificationToken(
+      email,
+      userDeviceToken
+    );
   };
 
   logoutCustomer = () => {

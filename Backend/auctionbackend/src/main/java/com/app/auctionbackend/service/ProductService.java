@@ -48,6 +48,9 @@ public class ProductService {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    NotificationService notificationService;
+
     @Value("${test.email}")
     String testEmail;
 
@@ -1151,6 +1154,15 @@ public class ProductService {
                     Customer highestBidder = highestBid.getCustomer();
                     sendEmailToCustomer(highestBidder, highestBid, p);
                 }
+            }
+
+            LocalDateTime endDate = LocalDateTime.of(p.getEndDate().getYear(), p.getEndDate().getMonth(), p.getEndDate().getDayOfMonth(), 0,0);
+            LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
+            if(currentDate.isEqual(endDate) && bidList.size() > 0){
+                Bid highestBid = bidList.get(bidList.size()-1);
+                Customer highestBidder = highestBid.getCustomer();
+
+                notificationService.sendNotificationToProductHighestBidder(highestBidder, p);
             }
         }
     }
