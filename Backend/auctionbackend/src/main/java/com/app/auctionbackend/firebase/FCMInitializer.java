@@ -4,7 +4,6 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +12,6 @@ import java.io.IOException;
 
 @Service
 public class FCMInitializer {
-
-    private final Environment environment;
-
-    public FCMInitializer(Environment environment) {
-        this.environment = environment;
-    }
 
     @Value("${app.firebase-configuration-file}")
     private String firebaseConfigPath;
