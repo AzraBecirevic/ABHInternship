@@ -91,32 +91,20 @@ public class Seed {
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
-///
-        Customer customer = customerRepository.findById(1).orElse(null);
-        Customer customer1 = customerRepository.findById(5).orElse(null);
 
-        Product p = new Product();
-        p.setName("Yellow Sneakers");
-        p.setPaid(false);
-        p.setCustomer(customer);
-        p.setEndDate(LocalDateTime.now());
-        p.setStartDate(LocalDateTime.of(2021, 4,5,0,0));
-        p.setDescription("Men yellow sneakers");
-        p.setStartPrice(120);
-        p.setModifiedOn(LocalDateTime.now());
-        p.setCreatedOn(LocalDateTime.now());
+        Product p1 = productRepository.findById(31).orElse(null);
+        if(p1 != null) {
+            p1.setEndDate(LocalDateTime.now());
+            productRepository.save(p1);
+        }
 
-        productRepository.save(p);
+        Product p2 = productRepository.findById(1).orElse(null);
+        if(p2 != null) {
+            p2.setEndDate(LocalDateTime.now().minusDays(30));
+            productRepository.save(p2);
+        }
 
-        Bid bid = new Bid();
-        bid.setCustomer(customer1);
-        bid.setDateOfBidPlacement(LocalDateTime.of(2021, 4, 6, 0,0));
-        bid.setBidPrice(125);
-        bid.setProduct(p);
-
-        bidRepository.save(bid);
-///
-        List<Image> images = imageRepository.findAll();
+       List<Image> images = imageRepository.findAll();
         if(images != null && images.size() > 0)
             return;
 
@@ -359,6 +347,15 @@ public class Seed {
         p30ImagePaths.add("src/main/resources/images/bronzerImage.jpg");
         p30ImagePaths.add("src/main/resources/images/bronzerImage.jpg");
         seedProductImage(30, p30ImagePaths);
+
+        List<String> p31ImagePaths = new ArrayList<>();
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        seedProductImage(31, p31ImagePaths);
+
     }
 }
 

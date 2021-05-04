@@ -71,7 +71,9 @@ VALUES              ('Black T-Shirt', '2021-03-30', '2021-04-02', 50.55, 'Lorem 
 					('Ball', '2021-03-30', '2021-05-30', 150, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 3, false),
 					('Ball', '2021-03-30', '2021-05-30', 150, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 2, false),
 					('Mascara', '2021-03-30', '2021-05-30', 20, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, false),
-					('Bronzer', '2021-03-30', '2021-05-30', 20, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, false);
+					('Bronzer', '2021-03-30', '2021-05-30', 20, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 5, false),
+					('Yellow sneakers', '2021-03-30', current_timestamp , 135, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut blandit consequat placerat. Donec eget tortor sed mi pharetra facilisis.', current_timestamp, current_timestamp, 3, false);
+
 
 
 INSERT INTO subcategory_products (subcategory_id, product_id)
@@ -104,7 +106,8 @@ VALUES                           (1, 1),
 								 (13, 27),
 								 (13, 28),
 								 (14, 29),
-								 (14, 30);
+								 (14, 30),
+								 (5, 31);
 
 
 INSERT INTO bid (bid_price, date_of_bid_placement, customer_id, product_id)
@@ -113,6 +116,7 @@ VALUES          (61, '2021-04-18', 2, 2),
                 (210, '2021-04-18', 2, 4),
                 (230, '2021-04-18', 3, 4),
                 (60, '2021-04-15', 4, 1),
-                (160, '2021-04-10', 1, 5);
+                (160, '2021-04-10', 1, 5),
+                (140, '2021-04-10' , 5, 31);
 
 

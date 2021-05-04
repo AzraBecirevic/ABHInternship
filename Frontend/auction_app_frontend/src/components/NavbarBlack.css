@@ -18,6 +18,17 @@ div.row.firstNavRow {
   align-items: center;
   height: 100%;
 }
+
+.bellIconFilled {
+  color: #8367d8;
+}
+.bellIcon:hover {
+  cursor: pointer;
+}
+.bellIconFilled:hover {
+  cursor: pointer;
+}
+
 .registerLogin {
   display: flex;
   justify-self: end;

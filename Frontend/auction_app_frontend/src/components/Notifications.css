@@ -1,0 +1,47 @@
+.notificationDiv {
+  font-family: "Lato-Regular";
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.singleNotificationDiv {
+  padding: 20px;
+  background-color: #2e2d2d;
+  margin-bottom: 10px;
+}
+
+.notificationHeadingCloseDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.closeSingleNotificationIcon {
+  color: #ffffff;
+}
+.closeSingleNotificationIcon:hover {
+  cursor: pointer;
+}
+
+.notificationHeading {
+  color: #ffffff;
+}
+
+.notificationText {
+  color: #d8d8d8;
+}
+
+.notificationMessage {
+  text-align: right;
+  color: #ffffff;
+}
+.notificationMessage:hover {
+  color: #8367d8;
+  cursor: pointer;
+}
+
+.noNotificationMessage {
+  margin-top: 20px;
+  text-align: center;
+  color: #ffffff;
+}

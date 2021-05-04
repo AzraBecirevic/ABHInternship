@@ -900,7 +900,6 @@ public class ProductService {
         }
 
         long timeLeft = ChronoUnit.DAYS.between(LocalDateTime.now(),p.getEndDate());
-        timeLeft++;
         if(timeLeft < 0)
             timeLeft = 0;
         sellProductDto.setTimeLeft(timeLeft);
@@ -1128,8 +1127,8 @@ public class ProductService {
         String bidPrice = df.format( bid.getBidPrice());
         String emailMessage = makeEmailMessage(customer.getFirstName(), customer.getLastName(), product.getName(), bidPrice);
 
-        try {                                // customer.getEmail()
-            emailService.sendSimpleMessage(testEmail, EMAIL_30_DAYS_PAST_SUBJECT, emailMessage);
+        try {                                //testEmail
+            emailService.sendSimpleMessage(customer.getEmail(), EMAIL_30_DAYS_PAST_SUBJECT, emailMessage);
         }
         catch(Error err){
             return;
@@ -1143,7 +1142,7 @@ public class ProductService {
 
         for (Product p : products) {
             List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(p.getId());
-            if(LocalDateTime.now().isAfter(p.getEndDate()) && bidList.size() > 0 && !p.getPaid()){
+            if(LocalDateTime.now().isAfter(p.getEndDate()) && bidList !=null && bidList.size() > 0 && !p.getPaid()){
                 LocalDateTime endDatePayment = p.getEndDate().plusDays(30);
 
                 LocalDateTime paymentEndDate = LocalDateTime.of(endDatePayment.getYear(), endDatePayment.getMonth(), endDatePayment.getDayOfMonth(), 0,0);
@@ -1158,7 +1157,7 @@ public class ProductService {
 
             LocalDateTime endDate = LocalDateTime.of(p.getEndDate().getYear(), p.getEndDate().getMonth(), p.getEndDate().getDayOfMonth(), 0,0);
             LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
-            if(currentDate.isEqual(endDate) && bidList.size() > 0){
+            if(currentDate.isEqual(endDate) && bidList != null && bidList.size() > 0){
                 Bid highestBid = bidList.get(bidList.size()-1);
                 Customer highestBidder = highestBid.getCustomer();
 

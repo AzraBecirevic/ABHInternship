@@ -1,17 +1,19 @@
 package com.app.auctionbackend.controller;
 
+import com.app.auctionbackend.dtos.NotificationDto;
+import com.app.auctionbackend.dtos.NotificationSeenDto;
 import com.app.auctionbackend.dtos.NotificationTokenDto;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.model.NotificationToken;
 import com.app.auctionbackend.service.CustomerService;
+import com.app.auctionbackend.service.NotificationService;
 import com.app.auctionbackend.service.NotificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/notification")
@@ -22,6 +24,9 @@ public class NotificationController {
 
     @Autowired
     NotificationTokenService notificationTokenService;
+
+    @Autowired
+    NotificationService notificationService;
 
     @PostMapping("/save")
     public ResponseEntity saveNotificationToken(@RequestBody NotificationTokenDto notificationTokenDto){
@@ -35,5 +40,39 @@ public class NotificationController {
             return new ResponseEntity(notificationTokenDto1, HttpStatus.OK);
         }
         return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping(value = "/getUnread/{email}")
+    public ResponseEntity getUnreadNotifications(@PathVariable String email){
+        Customer customer = customerService.findByEmail(email);
+        if(customer == null){
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+
+        List<NotificationDto> notificationDtos = notificationService.getUnreadNotifications(customer);
+        return new ResponseEntity(notificationDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/clearAllNotifications/{email}")
+    public ResponseEntity clearAllNotifications(@PathVariable String email){
+        Customer customer = customerService.findByEmail(email);
+        if(customer == null){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+        notificationService.setAllCustomersNotificationToRead(customer);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/clearSingleNotification")
+    public ResponseEntity clearSingleNotification(@RequestBody NotificationSeenDto notificationSeenDto){
+        Customer customer = customerService.findByEmail(notificationSeenDto.getEmail());
+        if(customer != null && notificationSeenDto.getNotificationId() > 0){
+
+        Boolean notificationRead = notificationService.setSingleCustomerNotificationToRead(customer, notificationSeenDto.getNotificationId());
+        if(notificationRead)
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }

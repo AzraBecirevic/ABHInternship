@@ -7,6 +7,7 @@ import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faInstagramSquare } from "@fortawesome/free-brands-svg-icons";
 import { faTwitterSquare } from "@fortawesome/free-brands-svg-icons";
 import { faGooglePlus } from "@fortawesome/free-brands-svg-icons";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
 
 import React, { Component } from "react";
 import { HOME_ROUTE, LOGIN_ROUTE, REGISTER_ROUTE } from "../constants/routes";
@@ -21,6 +22,10 @@ export class NavbarBlack extends Component {
 
   openWebPage = (e, link) => {
     this.props.openWebPage(e, link);
+  };
+
+  showNotifications = (e) => {
+    this.props.showNotifications();
   };
 
   render() {
@@ -44,11 +49,23 @@ export class NavbarBlack extends Component {
         <div className="registerLogin">
           <div className="regLoginDiv">
             <a className="disabledLink">{this.props.email}</a>
+            <FontAwesomeIcon
+              className={
+                this.props.notifications != null &&
+                this.props.notifications.length > 0
+                  ? "bellIconFilled"
+                  : "bellIcon"
+              }
+              icon={faBell}
+              size={"lg"}
+              onClick={(e) => this.showNotifications(e)}
+            />{" "}
             <Link
               to={HOME_ROUTE}
               onClick={this.props.logout}
               className="upperLink"
             >
+              {" "}
               Logout
             </Link>
           </div>

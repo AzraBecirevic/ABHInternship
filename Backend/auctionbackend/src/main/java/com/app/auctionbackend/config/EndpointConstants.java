@@ -20,5 +20,6 @@ public class EndpointConstants {
     public static final String CHECK_IS_ACCOUNT_ACTIVE_ENDPOINT = "/customer/checkIsAccountActive/{email}";
     public static final String GET_RECOMMENDED_PRODUCTS = "/product/getRecommended/{email}";
     public static final String SAVE_NOTIFICATION_TOKEN = "/notification/save";
+    public static final String GET_UNREAD_NOTIFICATIONS = "/notification/getUnread/{email}";
 
 }

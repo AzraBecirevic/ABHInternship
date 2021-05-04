@@ -166,3 +166,6 @@ export const PAYMENT_INFO_MESSAGE =
   "If you have already added your card data, that card is going to be used for this payment. ";
 export const PAYMENT_NEW_CARD_QUESTION_MESSAGE =
   " Do you want to enter new card data?";
+export const CLEAR_ALL_NOTIFICATION_MESSAGE = "Clear all unread notifications.";
+export const NO_UNREAD_NOTIFICATION_MESSAGE =
+  "There are no unread notifications.";

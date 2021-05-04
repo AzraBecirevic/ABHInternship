@@ -108,11 +108,15 @@ import { ADD_ITEM } from "./constants/messages";
 import AddItem from "./components/AddItem";
 import firebase from "firebase";
 import NotificationService from "./services/notificationService";
+import ReactNotificationAlert from "react-notification-alert";
+import Notifications from "./components/Notifications";
 
 export class App extends Component {
   state = {
     isLoggedIn: false,
     isLoading: false,
+    notificattionsHidden: true,
+    notifications: null,
   };
 
   jwtToken = "";
@@ -150,58 +154,23 @@ export class App extends Component {
     if (email != null && token != null) {
       this.loginCustomer(email, token);
     }
-    /*  //
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("firebase-messaging-sw.js")
-        .then(function (registration) {
-          console.log("[SW]: SCOPE: ", registration.scope);
-          return registration.scope;
-        })
-        .catch(function (err) {
-          return err;
-        });
-    }
-
-    ////
-    let userDeviceToken = "";
-    var firebaseConfig = {
-      apiKey: "AIzaSyDb2hsI0Y3rNcBzxoqkbH6ws0SRH1Gu1Aw",
-      authDomain: "auctionappnotifications.firebaseapp.com",
-      projectId: "auctionappnotifications",
-      storageBucket: "auctionappnotifications.appspot.com",
-      messagingSenderId: "101636570166",
-      appId: "1:101636570166:web:9b48cf59ebeb7d79e32c97",
-    };
-    firebase.initializeApp(firebaseConfig); ///
-
-    firebase
-      .messaging()
-      .requestPermission()
-      .then(() => firebase.messaging().getToken())
-      .then((deviceToken) => {
-        console.log(deviceToken); 
-        userDeviceToken = deviceToken; 
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    ////
-    this.notificationService.saveNotificationToken(email, userDeviceToken);
-    //*/
   }
 
-  loginCustomer = (email, JWT) => {
+  componentDidUpdate() {}
+
+  loginCustomer = async (email, JWT) => {
     this.email = email;
     this.jwtToken = JWT;
     this.setState({ isLoggedIn: true });
 
-    //
+    let notificationsList = await this.notificationService.getCustomersUnreadNotifications(
+      email
+    );
+
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("firebase-messaging-sw.js")
         .then(function (registration) {
-          console.log("[SW]: SCOPE: ", registration.scope);
           return registration.scope;
         })
         .catch(function (err) {
@@ -209,7 +178,6 @@ export class App extends Component {
         });
     }
 
-    //if (!firebase.app.length) {
     var firebaseConfig = {
       apiKey: "AIzaSyDb2hsI0Y3rNcBzxoqkbH6ws0SRH1Gu1Aw",
       authDomain: "auctionappnotifications.firebaseapp.com",
@@ -219,7 +187,6 @@ export class App extends Component {
       appId: "1:101636570166:web:9b48cf59ebeb7d79e32c97",
     };
     firebase.initializeApp(firebaseConfig);
-    // }
 
     firebase
       .messaging()
@@ -233,10 +200,31 @@ export class App extends Component {
       });
 
     firebase.messaging().onMessage((payload) => {
-      this.toastService.showInfoToast(
-        payload.notification.title + " - " + payload.notification.body
-      );
+      this.refs.notificationAlert.notificationAlert({
+        place: "br",
+        message: (
+          <div>
+            <b>{payload.notification.title}</b>
+            <p>{payload.notification.body}</p>
+          </div>
+        ),
+        type: "dark",
+        icon: "",
+        autoDismiss: 8,
+        closeButton: true,
+      });
+
+      this.getUnreadNotifications();
     });
+
+    this.setState({ notifications: notificationsList });
+  };
+
+  getUnreadNotifications = async () => {
+    let notificationsList = await this.notificationService.getCustomersUnreadNotifications(
+      this.email
+    );
+    this.setState({ notifications: notificationsList });
   };
 
   saveUserDeviceToken = (email, token) => {
@@ -274,6 +262,42 @@ export class App extends Component {
     if (newWindow) newWindow.opener = null;
   }
 
+  showNotifications = () => {
+    this.setState({ notificattionsHidden: false });
+  };
+
+  closeNotifications = () => {
+    this.setState({ notificattionsHidden: true });
+  };
+
+  clearAllNotifications = async () => {
+    let response = await this.notificationService.clearAllNotification(
+      this.email,
+      this.jwtToken
+    );
+    if (response) {
+      let notificationsList = await this.notificationService.getCustomersUnreadNotifications(
+        this.email
+      );
+      this.setState({ notifications: notificationsList });
+    }
+  };
+
+  setNotificationRead = async (notificationId) => {
+    let response = await this.notificationService.clearNotification(
+      notificationId,
+      this.email,
+      this.jwtToken
+    );
+
+    if (response) {
+      let notificationsList = await this.notificationService.getCustomersUnreadNotifications(
+        this.email
+      );
+      this.setState({ notifications: notificationsList });
+    }
+  };
+
   render() {
     return (
       <Router>
@@ -282,9 +306,22 @@ export class App extends Component {
             position="top-right"
             autoClose={CLOSE_TOAST_AFTER_MILISECONDS}
           ></ToastContainer>
+          <ReactNotificationAlert ref="notificationAlert" onClick={() => {}} />
+
           {this.state.isLoading && <LoadingSpinner></LoadingSpinner>}
           {
             <div className="app">
+              <div
+                className="notificationsDiv"
+                hidden={this.state.notificattionsHidden}
+              >
+                <Notifications
+                  closeNotifications={this.closeNotifications}
+                  notifications={this.state.notifications}
+                  clearAllNotifications={this.clearAllNotifications}
+                  setNotificationRead={this.setNotificationRead}
+                ></Notifications>
+              </div>
               <Route
                 path=""
                 render={(props) => (
@@ -295,6 +332,8 @@ export class App extends Component {
                     email={this.email}
                     logout={this.logoutCustomer}
                     token={this.jwtToken}
+                    showNotifications={this.showNotifications}
+                    notifications={this.state.notifications}
                   />
                 )}
               />
