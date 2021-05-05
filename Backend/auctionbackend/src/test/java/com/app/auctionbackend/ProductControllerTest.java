@@ -157,7 +157,7 @@ public class ProductControllerTest {
         mvc.perform(MockMvcRequestBuilders.post(ADD_PRODUCT_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", token)
-                .content("{\"name\": \"Shoes\", \"startPrice\": \"20\", \"startDateDay\":\"19\", \"startDateMonth\": \"4\", \"startDateYear\":\"2021\", \"endDateDay\":\"30\", \"endDateMonth\":\"4\" , \"endDateYear\":\"2021\", \"description\":\"women shoes\" , \"subcategoryId\":\"2\", \"customerEmail\":\""+email+"\"}")
+                .content("{\"name\": \"Shoes\", \"startPrice\": \"20\", \"startDateDay\":\"30\", \"startDateMonth\": \"6\", \"startDateYear\":\"2021\", \"endDateDay\":\"30\", \"endDateMonth\":\"8\" , \"endDateYear\":\"2021\", \"description\":\"women shoes\" , \"subcategoryId\":\"2\", \"customerEmail\":\""+email+"\"}")
         ).andExpect(status().isCreated());
     }
 

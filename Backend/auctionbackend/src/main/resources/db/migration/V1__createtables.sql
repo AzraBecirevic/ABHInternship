@@ -142,3 +142,26 @@ CREATE TABLE subcategory_products(
       FOREIGN KEY(product_id)
 	  REFERENCES product(id)
 );
+
+CREATE TABLE notification(
+ id integer GENERATED ALWAYS AS IDENTITY,
+ heading varchar(255),
+ text varchar(700),
+ seen boolean,
+ sending_date timestamp,
+ customer_id integer,
+ PRIMARY KEY(id),
+   CONSTRAINT fk_customer_notification
+       FOREIGN KEY(customer_id)
+ 	   REFERENCES customer(id)
+);
+
+CREATE TABLE notification_token(
+id integer GENERATED ALWAYS AS IDENTITY,
+token varchar(700),
+customer_id integer,
+PRIMARY KEY(id),
+   CONSTRAINT fk_customer_notification
+       FOREIGN KEY(customer_id)
+ 	   REFERENCES customer(id)
+);

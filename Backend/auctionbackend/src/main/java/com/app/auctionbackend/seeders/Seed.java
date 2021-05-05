@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -91,7 +92,19 @@ public class Seed {
     @EventListener
     public void seed(ContextRefreshedEvent event) {
 
-        List<Image> images = imageRepository.findAll();
+        Product p1 = productRepository.findById(31).orElse(null);
+        if(p1 != null) {
+            p1.setEndDate(LocalDateTime.now());
+            productRepository.save(p1);
+        }
+
+        Product p2 = productRepository.findById(1).orElse(null);
+        if(p2 != null) {
+            p2.setEndDate(LocalDateTime.now().minusDays(30));
+            productRepository.save(p2);
+        }
+
+       List<Image> images = imageRepository.findAll();
         if(images != null && images.size() > 0)
             return;
 
@@ -334,6 +347,15 @@ public class Seed {
         p30ImagePaths.add("src/main/resources/images/bronzerImage.jpg");
         p30ImagePaths.add("src/main/resources/images/bronzerImage.jpg");
         seedProductImage(30, p30ImagePaths);
+
+        List<String> p31ImagePaths = new ArrayList<>();
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        p31ImagePaths.add("src/main/resources/images/yellowsneakers1.jpg");
+        seedProductImage(31, p31ImagePaths);
+
     }
 }
 

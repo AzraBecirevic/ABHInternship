@@ -3,6 +3,7 @@ package com.app.auctionbackend.service;
 import com.app.auctionbackend.dtos.AddedBidDto;
 import com.app.auctionbackend.dtos.BidDto;
 import com.app.auctionbackend.dtos.PlaceBidDto;
+import com.app.auctionbackend.firebase.NotificationRequest;
 import com.app.auctionbackend.model.Bid;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.model.Product;
@@ -33,6 +34,9 @@ public class BidService {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
     DecimalFormat df = new DecimalFormat("#0.00");
 
     public List<BidDto> getBidsByProductId(Integer productId){
@@ -53,6 +57,7 @@ public class BidService {
         bidDtoList.get(bidDtoList.size()-1).setHighestBid(true);
         return bidDtoList;
     }
+
 
    private void modifyUserBid(Bid bid, PlaceBidDto placeBidDto){
        bid.setDateOfBidPlacement(LocalDateTime.now());
@@ -99,6 +104,11 @@ public class BidService {
                         addedBidDto.setMessage(BID_IS_ALREADY_HIGHEST_MESSAGE);
                         return addedBidDto;
                     }
+
+                    Bid previousHighestBid = bidList.get(bidList.size()-1);
+                    Customer previousHighestCustomer = previousHighestBid.getCustomer();
+                    notificationService.sendNotificationToLastHighestBidder(previousHighestCustomer, product);
+
                     modifyUserBid(bid, placeBidDto);
                     addedBidDto.setBidAdded(true);
                     addedBidDto.setMessage(BID_PLACED_SUCCESSFULLY_MESSAGE);
@@ -113,6 +123,12 @@ public class BidService {
             addedBidDto.setBidAdded(false);
             addedBidDto.setMessage("Enter $"+product.getStartPrice()+ " or more.");
             return addedBidDto;
+        }
+
+        if(bidList != null && bidList.size() > 0){
+            Bid previousHighestBid = bidList.get(bidList.size()-1);
+            Customer previousHighestCustomer = previousHighestBid.getCustomer();
+            notificationService.sendNotificationToLastHighestBidder(previousHighestCustomer, product);
         }
 
         newBid.setProduct(product);

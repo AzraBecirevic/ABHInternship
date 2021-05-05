@@ -8,6 +8,7 @@ import com.app.auctionbackend.repo.ProductRepository;
 import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
+import static com.app.auctionbackend.config.MessageConstants.EMAIL_30_DAYS_PAST_SUBJECT;
+import static com.app.auctionbackend.config.MessageConstants.EMAIL_MESSAGE;
 import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
 import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 
@@ -41,6 +44,15 @@ public class ProductService {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    NotificationService notificationService;
+
+    @Value("${test.email}")
+    String testEmail;
 
     DecimalFormat df = new DecimalFormat("#0.00");
 
@@ -888,7 +900,6 @@ public class ProductService {
         }
 
         long timeLeft = ChronoUnit.DAYS.between(LocalDateTime.now(),p.getEndDate());
-        timeLeft++;
         if(timeLeft < 0)
             timeLeft = 0;
         sellProductDto.setTimeLeft(timeLeft);
@@ -1090,6 +1101,68 @@ public class ProductService {
         if(product != null){
             product.setPaid(true);
             productRepository.save(product);
+        }
+    }
+
+    private String makeEmailMessage(String firstName, String lastName, String productName, String bidPrice){
+       String message = new StringBuilder()
+                .append("Dear ")
+                .append(firstName)
+                .append(" ")
+                .append(lastName)
+                .append(", the product payment period for ")
+                .append(productName)
+                .append(" (")
+                .append(bidPrice)
+                .append(" $) has expired.").toString();
+
+       return message;
+    }
+
+    public void sendEmailToCustomer(Customer customer, Bid bid, Product product){
+        if(customer == null){
+            return;
+        }
+
+        String bidPrice = df.format( bid.getBidPrice());
+        String emailMessage = makeEmailMessage(customer.getFirstName(), customer.getLastName(), product.getName(), bidPrice);
+
+        try {                                //testEmail
+            emailService.sendSimpleMessage(customer.getEmail(), EMAIL_30_DAYS_PAST_SUBJECT, emailMessage);
+        }
+        catch(Error err){
+            return;
+        }
+
+        return;
+    }
+
+    public void sendEmailForBidProduct(){
+        List<Product> products = productRepository.findAll();
+
+        for (Product p : products) {
+            List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(p.getId());
+            if(LocalDateTime.now().isAfter(p.getEndDate()) && bidList !=null && bidList.size() > 0 && !p.getPaid()){
+                LocalDateTime endDatePayment = p.getEndDate().plusDays(30);
+
+                LocalDateTime paymentEndDate = LocalDateTime.of(endDatePayment.getYear(), endDatePayment.getMonth(), endDatePayment.getDayOfMonth(), 0,0);
+                LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
+
+                if(currentDate.isEqual(paymentEndDate)){
+                    Bid highestBid = bidList.get(bidList.size()-1);
+                    Customer highestBidder = highestBid.getCustomer();
+                    sendEmailToCustomer(highestBidder, highestBid, p);
+                }
+            }
+
+            LocalDateTime endDate = LocalDateTime.of(p.getEndDate().getYear(), p.getEndDate().getMonth(), p.getEndDate().getDayOfMonth(), 0,0);
+            LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
+            if(currentDate.isEqual(endDate) && bidList != null && bidList.size() > 0){
+                Bid highestBid = bidList.get(bidList.size()-1);
+                Customer highestBidder = highestBid.getCustomer();
+
+                notificationService.sendNotificationToProductHighestBidder(highestBidder, p);
+            }
         }
     }
 

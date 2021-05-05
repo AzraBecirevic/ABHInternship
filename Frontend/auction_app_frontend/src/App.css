@@ -7,3 +7,25 @@
   padding-bottom: 396px;
   margin-bottom: 40px;
 }
+
+.notificationsDiv {
+  width: 30%;
+  position: absolute;
+  left: 70%;
+  background-color: #252525;
+  height: 100%;
+  z-index: 1;
+  overflow-y: scroll;
+}
+
+.notificationDivClose {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 772.5px) {
+  .notificationsDiv {
+    width: 100%;
+    left: 10px;
+  }
+}

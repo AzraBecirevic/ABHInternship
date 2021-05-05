@@ -18,6 +18,8 @@ export class Header extends Component {
           isLoggedIn={this.props.isLoggedIn}
           email={this.props.email}
           logout={this.props.logout}
+          showNotifications={this.props.showNotifications}
+          notifications={this.props.notifications}
         ></NavbarBlack>
         <Route
           path=""
