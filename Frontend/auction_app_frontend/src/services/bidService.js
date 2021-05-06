@@ -3,8 +3,11 @@ import {
   ADD_BID_ENDPOINT,
   GET_BIDS_BY_PRODUCT_ID_ENDPOINT,
 } from "../constants/endpoints";
+import ToastService from "./toastService";
 
 class BidService {
+  toastService = new ToastService();
+
   async getBidsByProductId(productId) {
     return await this.getData(GET_BIDS_BY_PRODUCT_ID_ENDPOINT + productId);
   }
@@ -61,6 +64,14 @@ class BidService {
 
     if (!response || response.status === 404 || response.status === 400) {
       throw response;
+    }
+    if (response.status === 403) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {
+        return null;
+      }
     }
     if (response.status === 200) {
       var data = await response.json();

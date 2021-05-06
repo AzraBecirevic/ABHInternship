@@ -177,16 +177,17 @@ export class App extends Component {
           return err;
         });
     }
-
-    var firebaseConfig = {
-      apiKey: "AIzaSyDb2hsI0Y3rNcBzxoqkbH6ws0SRH1Gu1Aw",
-      authDomain: "auctionappnotifications.firebaseapp.com",
-      projectId: "auctionappnotifications",
-      storageBucket: "auctionappnotifications.appspot.com",
-      messagingSenderId: "101636570166",
-      appId: "1:101636570166:web:9b48cf59ebeb7d79e32c97",
-    };
-    firebase.initializeApp(firebaseConfig);
+    try {
+      var firebaseConfig = {
+        apiKey: "AIzaSyDb2hsI0Y3rNcBzxoqkbH6ws0SRH1Gu1Aw",
+        authDomain: "auctionappnotifications.firebaseapp.com",
+        projectId: "auctionappnotifications",
+        storageBucket: "auctionappnotifications.appspot.com",
+        messagingSenderId: "101636570166",
+        appId: "1:101636570166:web:9b48cf59ebeb7d79e32c97",
+      };
+      firebase.initializeApp(firebaseConfig);
+    } catch (error) {}
 
     firebase
       .messaging()

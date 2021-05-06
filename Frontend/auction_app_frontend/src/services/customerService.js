@@ -209,6 +209,24 @@ class CustomerService {
     if (!response) {
       throw response;
     }
+    if (response.status === 403) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {
+        return null;
+      }
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        var data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {
+        return null;
+      }
+      return null;
+    }
 
     if (response.status === 200) {
       var data = await response.json();

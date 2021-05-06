@@ -315,7 +315,7 @@ public class CustomerService {
     public Boolean isCustomerSellingProducts(String email){
         Customer customer = findByEmail(email);
 
-        if(customer == null)
+        if(customer == null || !customer.getActive())
             return false;
 
         if(productService.hasCustomerSellingProducts(customer.getId()))
@@ -348,7 +348,7 @@ public class CustomerService {
     public Boolean checkIfCustomerHasCard(String email){
         Customer customer = findByEmail(email);
 
-        if(customer == null)
+        if(customer == null || !customer.getActive())
             return false;
 
         Boolean hasCard = false;
@@ -358,4 +358,40 @@ public class CustomerService {
         }
         return hasCard;
     }
+
+   public Boolean hasBidProducts(String email){
+        Customer customer = findByEmail(email);
+
+       List<Product> customersProduct = customer.getProducts();
+       if(customersProduct == null || customersProduct.size() <= 0)
+           return false;
+
+       for (Product p : customersProduct) {
+           if(p.getBids() != null && p.getBids().size() > 0){
+              return true;
+           }
+       }
+       return false;
+   }
+
+   public Boolean hasProductsToPay(String email){
+       Customer customer = findByEmail(email);
+
+       List<Bid> customerBids = customer.getBids();
+
+       if(customerBids == null || customerBids.size() <= 0)
+           return false;
+
+       for (Bid bid : customerBids) {
+          Product product = bid.getProduct();
+          if(product != null){
+              LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
+              LocalDateTime endDate = LocalDateTime.of(product.getEndDate().getYear(), product.getEndDate().getMonth(), product.getEndDate().getDayOfMonth(), 0, 0);
+              if((LocalDateTime.now().isAfter(product.getEndDate()) || currentDate.isEqual(endDate)) && !product.getPaid()){
+                  return true;
+              }
+          }
+       }
+       return false;
+   }
 }

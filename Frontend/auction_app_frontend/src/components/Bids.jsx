@@ -19,6 +19,7 @@ import { EMAIL, ENDPOINT, TOKEN } from "../constants/auth";
 import ToastService from "../services/toastService";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import ConfirmAlertService from "../services/confirmAlertService";
 
 export class Bids extends Component {
   state = { products: null, email: "", token: "", isLoggedIn: false };
@@ -27,6 +28,7 @@ export class Bids extends Component {
   customerService = new CustomerService();
   stripeService = new StripeService();
   toastServivce = new ToastService();
+  confirmAlertService = new ConfirmAlertService();
   stripePromise = null;
 
   componentDidMount = async () => {
@@ -82,11 +84,10 @@ export class Bids extends Component {
   };
 
   onPayClick = async (productId) => {
-    let confirmPayment = await this.showConfirmAlert(
+    let confirmPayment = await this.confirmAlertService.showConfirmAlert(
       "Make payment",
       PAYMENT_INFO_MESSAGE + PAYMENT_QUESTION
     );
-
     if (confirmPayment === true) {
       this.setIsLoading(true);
 
@@ -140,7 +141,7 @@ export class Bids extends Component {
         if (result.error) {
           this.setIsLoading(false);
 
-          let enterNewCard = await this.showConfirmAlert(
+          let enterNewCard = await this.confirmAlertService.showConfirmAlert(
             "Make payment",
             result.error.message + PAYMENT_NEW_CARD_QUESTION_MESSAGE
           );
@@ -182,37 +183,6 @@ export class Bids extends Component {
         this.toastServivce.showErrorToast(result.error.message);
       }
     }
-  };
-
-  showConfirmAlertAsync = (showTitle, showMessage) => {
-    return new Promise((resolve, reject) => {
-      confirmAlert({
-        title: showTitle,
-        message: showMessage,
-        buttons: [
-          {
-            label: "Yes",
-            onClick: () => {
-              resolve(true);
-            },
-          },
-          {
-            label: "No",
-            onClick: () => {
-              resolve(false);
-            },
-          },
-        ],
-      });
-    });
-  };
-
-  showConfirmAlert = async (showTitle, showMessage) => {
-    let confirmedAlert = await this.showConfirmAlertAsync(
-      showTitle,
-      showMessage
-    );
-    return confirmedAlert;
   };
 
   render() {

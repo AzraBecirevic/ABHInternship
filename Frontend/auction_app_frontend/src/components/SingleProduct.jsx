@@ -202,20 +202,22 @@ export class SingleProduct extends Component {
           token
         );
 
-        this.setState({ isBidPlaced: BidAdded.bidAdded });
-        if (BidAdded.bidAdded) {
-          this.setState({
-            product: await this.productService.getProductById(productId),
-            images: this.state.product.imageList.filter((image, index) => {
-              return image.id != this.state.mainImage.id;
-            }),
-            bids: await this.bidService.getBidsByProductId(productId),
-            placeBidSuccesMessage: BidAdded.message,
-          });
-        } else {
-          this.setState({
-            placeBidErrorMessage: BidAdded.message,
-          });
+        if (BidAdded !== undefined && BidAdded !== null) {
+          this.setState({ isBidPlaced: BidAdded.bidAdded });
+          if (BidAdded.bidAdded) {
+            this.setState({
+              product: await this.productService.getProductById(productId),
+              images: this.state.product.imageList.filter((image, index) => {
+                return image.id != this.state.mainImage.id;
+              }),
+              bids: await this.bidService.getBidsByProductId(productId),
+              placeBidSuccesMessage: BidAdded.message,
+            });
+          } else {
+            this.setState({
+              placeBidErrorMessage: BidAdded.message,
+            });
+          }
         }
       } catch (error) {
         this.toastService.showErrorToast(CONNECTION_REFUSED_MESSAGE);
