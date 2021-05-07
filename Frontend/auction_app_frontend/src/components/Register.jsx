@@ -18,12 +18,14 @@ import {
   PASSWORD_FORMAT_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
 } from "../constants/messages";
+import ValidationService from "../services/validationService";
 
 export class Register extends Component {
   constructor(props) {
     super(props);
   }
   toastService = new ToastService();
+  validationService = new ValidationService();
 
   state = {
     firstName: "",
@@ -38,67 +40,77 @@ export class Register extends Component {
     disableRegisterButton: false,
   };
 
-  validateEmailFormat(email) {
-    const re = EMAIL_REGEX;
-    return re.test(String(email).toLowerCase());
-  }
-
-  validatePasswordFormat(password) {
-    const re = PASSWORD_REGEX;
-    return re.test(String(password));
-  }
-
   validateFirstName = () => {
-    if (this.state.firstName === "") {
+    const { firstName } = this.state;
+    if (!this.validationService.validateRequiredFiled(firstName)) {
       this.setState({ firstNameErrMess: FIRST_NAME_REQUIRED_MESSAGE });
       return false;
     }
+    this.setState({ firstNameErrMess: "" });
     return true;
   };
 
   validateLastName = () => {
-    if (this.state.lastName === "") {
+    const { lastName } = this.state;
+    if (!this.validationService.validateRequiredFiled(lastName)) {
       this.setState({ lastNameErrMess: LAST_NAME_REQUIRED_MESSAGE });
       return false;
     }
+    this.setState({ lastNameErrMess: "" });
     return true;
   };
 
   validateEmail = () => {
-    if (this.state.email === "") {
+    const { email } = this.state;
+    if (!this.validationService.validateRequiredFiled(email)) {
       this.setState({ emailErrMess: EMAIL_REQUIRED_MESSAGE });
       return false;
     }
-    if (
-      this.state.email !== "" &&
-      this.validateEmailFormat(this.state.email) === false
-    ) {
-      this.setState({
-        emailErrMess: EMAIL_FORMAT_MESSAGE,
-      });
+    if (!this.validationService.validateEmailFormat(email)) {
+      this.setState({ emailErrMess: EMAIL_FORMAT_MESSAGE });
       return false;
     }
+    this.setState({ emailErrMess: "" });
     return true;
   };
 
   validatePassword = () => {
-    if (this.state.password === "") {
+    const { password } = this.state;
+    if (!this.validationService.validateRequiredFiled(password)) {
       this.setState({ passwordErrMess: PASSWORD_REQUIRED_MESSAGE });
       return false;
     }
-    if (
-      this.state.password !== "" &&
-      this.validatePasswordFormat(this.state.password) === false
-    ) {
-      this.setState({
-        passwordErrMess: PASSWORD_FORMAT_MESSAGE,
-      });
+    if (!this.validationService.validatePasswordFormat(password)) {
+      this.setState({ passwordErrMess: PASSWORD_FORMAT_MESSAGE });
       return false;
     }
+    this.setState({ passwordErrMess: "" });
     return true;
   };
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChange = async (e) => {
+    await this.setState({ [e.target.name]: e.target.value });
+    this.validateTargetName(e.target.name);
+  };
+
+  validateTargetName = (targetName) => {
+    switch (targetName) {
+      case "firstName":
+        this.validateFirstName();
+        break;
+      case "lastName":
+        this.validateLastName();
+        break;
+      case "email":
+        this.validateEmail();
+        break;
+      case "password":
+        this.validatePassword();
+        break;
+      default:
+        break;
+    }
+  };
 
   validateForm = () => {
     var formIsValid = true;

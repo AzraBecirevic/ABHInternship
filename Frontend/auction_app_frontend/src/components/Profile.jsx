@@ -392,7 +392,8 @@ export class Profile extends Component {
 
   validateFirstName = () => {
     if (
-      this.validationService.validateFirstName(this.state.firstName) == false
+      this.validationService.validateRequiredFiled(this.state.firstName) ==
+      false
     ) {
       this.setState({ firstNameErrMess: FIRST_NAME_REQUIRED_MESSAGE });
       return false;
@@ -401,7 +402,9 @@ export class Profile extends Component {
   };
 
   validateLastName = () => {
-    if (this.validationService.validateLastName(this.state.lastName) == false) {
+    if (
+      this.validationService.validateRequiredFiled(this.state.lastName) == false
+    ) {
       this.setState({ lastNameErrMess: LAST_NAME_REQUIRED_MESSAGE });
       return false;
     }
@@ -409,7 +412,9 @@ export class Profile extends Component {
   };
 
   validateEmail = () => {
-    if (this.validationService.validateEmail(this.state.email) == false) {
+    if (
+      this.validationService.validateRequiredFiled(this.state.email) == false
+    ) {
       this.setState({ emailErrMess: EMAIL_REQUIRED_MESSAGE });
       return false;
     }
@@ -424,7 +429,8 @@ export class Profile extends Component {
 
   validatePhone = () => {
     if (
-      this.validationService.validatePhone(this.state.phoneNumber) == false ||
+      this.validationService.validateRequiredFiled(this.state.phoneNumber) ==
+        false ||
       this.state.phoneNumber == undefined
     ) {
       this.setState({ phoneNumberErrMess: PHONE_NUMBER_REQUIRED_MESSAGE });
@@ -463,7 +469,9 @@ export class Profile extends Component {
   };
 
   validateZipCode = () => {
-    if (this.validationService.validateZipCode(this.state.zipCode) == false) {
+    if (
+      this.validationService.validateRequiredFiled(this.state.zipCode) == false
+    ) {
       this.setState({ zipCodeErrMess: ZIP_CODE_REQUIRED_MESSAGE });
       return false;
     }
@@ -479,15 +487,17 @@ export class Profile extends Component {
 
     return true;
   };
+
   validateCityConutryRegionFormat = (text) => {
     if (text === " - ") {
       return false;
     }
     return true;
   };
+
   validateCity = () => {
     if (
-      this.validationService.validateCity(this.state.city) == false ||
+      this.validationService.validateRequiredFiled(this.state.city) == false ||
       !this.validateCityConutryRegionFormat(this.state.city)
     ) {
       this.setState({ cityErrMess: CITY_REQUIRED_MESSAGE });
@@ -499,7 +509,8 @@ export class Profile extends Component {
 
   validateCountry = () => {
     if (
-      this.validationService.validateCountry(this.state.country) == false ||
+      this.validationService.validateRequiredFiled(this.state.country) ==
+        false ||
       !this.validateCityConutryRegionFormat(this.state.country)
     ) {
       this.setState({ countryErrMess: COUNTRY_REQUIRED_MESSAGE });
@@ -510,7 +521,8 @@ export class Profile extends Component {
 
   validateRegion = () => {
     if (
-      this.validationService.validateRegion(this.state.region) == false ||
+      this.validationService.validateRequiredFiled(this.state.region) ==
+        false ||
       !this.validateCityConutryRegionFormat(this.state.region)
     ) {
       this.setState({ regionErrMess: REGION_REQUIRED_MESSAGE });
@@ -520,7 +532,9 @@ export class Profile extends Component {
   };
 
   validateStreet = () => {
-    if (this.validationService.validateStreet(this.state.street) == false) {
+    if (
+      this.validationService.validateRequiredFiled(this.state.street) == false
+    ) {
       this.setState({ streetErrMess: STREET_REQUIRED_MESSAGE });
       return false;
     }
