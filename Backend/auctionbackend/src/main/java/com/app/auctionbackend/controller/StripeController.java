@@ -2,6 +2,7 @@ package com.app.auctionbackend.controller;
 
 import com.app.auctionbackend.dtos.CustomerStripeDto;
 import com.app.auctionbackend.dtos.PublicKeyDto;
+import com.app.auctionbackend.helper.Message;
 import com.app.auctionbackend.model.Bid;
 import com.app.auctionbackend.service.BidService;
 import com.app.auctionbackend.service.CustomerService;
@@ -30,14 +31,6 @@ import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 @RestController
 @RequestMapping("/stripe")
 public class StripeController {
-
-    public class Message {
-        public String text;
-
-        public Message(String text) {
-            this.text = text;
-        }
-    }
 
     private static Gson gson = new Gson();
 

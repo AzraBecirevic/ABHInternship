@@ -3,6 +3,7 @@ package com.app.auctionbackend.controller;
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
 import com.app.auctionbackend.dtos.CustomerDetailsDto;
 import com.app.auctionbackend.dtos.DeliveryDataDto;
+import com.app.auctionbackend.helper.Message;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
 import com.app.auctionbackend.service.EmailService;
@@ -17,18 +18,11 @@ import java.net.URI;
 
 import static com.app.auctionbackend.config.MessageConstants.EMAIL_MESSAGE;
 import static com.app.auctionbackend.config.MessageConstants.EMAIL_SUBJECT;
+import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
-
-    public class Message {
-        public String text;
-
-        public Message(String text) {
-            this.text = text;
-        }
-    }
 
     @Autowired
     private CustomerService customerService;
@@ -86,6 +80,13 @@ public class CustomerController {
 
     @GetMapping(value = "/getInfoData/{email}")
     public ResponseEntity<CustomerDetailsDto> getCustomerInfoData(@PathVariable String email){
+        if(customerService.findByEmail(email)==null){
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        if(!customerService.checkIsAccountActive(email)){
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+
         CustomerDetailsDto customerDetailsDto = customerService.getCustomerInfoData(email);
         if(customerDetailsDto == null)
             return new ResponseEntity<CustomerDetailsDto>(HttpStatus.BAD_REQUEST);
@@ -95,6 +96,14 @@ public class CustomerController {
 
     @PostMapping(value = "/update/{email}")
     public ResponseEntity updateCustomer(@PathVariable String email, @RequestBody CustomerDetailsDto customerData){
+        if(customerService.findByEmail(email)==null){
+            return new ResponseEntity(new Message(USER_DOES_NOT_EXIST), HttpStatus.FORBIDDEN);
+        }
+
+        if(!customerService.checkIsAccountActive(email)){
+            return new ResponseEntity(new Message(DEACTIVATED_CUSTOMER_FORBIDDEN_ACTION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
         try{
             CustomerDetailsDto updatedCustomer = customerService.updateCustomer(email, customerData);
             if(updatedCustomer != null){
@@ -106,11 +115,17 @@ public class CustomerController {
         }
 
         return new ResponseEntity<>(new Message("Something went wrong"), HttpStatus.BAD_REQUEST);
-
     }
 
     @PostMapping(value = "/updatePhoto/{email}")
     public ResponseEntity updateCustomerPhoto(@PathVariable String email, @RequestParam MultipartFile imgFile){
+        if(customerService.findByEmail(email)==null){
+            return new ResponseEntity(new Message(USER_DOES_NOT_EXIST), HttpStatus.FORBIDDEN);
+        }
+        if(!customerService.checkIsAccountActive(email)){
+            return new ResponseEntity(new Message(DEACTIVATED_CUSTOMER_FORBIDDEN_ACTION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
         try{
             CustomerDetailsDto updatedCustomer = customerService.updateCustomerPhoto(email, imgFile);
             if(updatedCustomer != null){
@@ -126,6 +141,14 @@ public class CustomerController {
 
     @GetMapping(value = "/getDeliveryData/{email}")
     public ResponseEntity<DeliveryDataDto> getCustomerDeliveryData(@PathVariable String email){
+
+        if(customerService.findByEmail(email)==null){
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        if(!customerService.checkIsAccountActive(email)){
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+
         DeliveryDataDto deliveryDataDto = customerService.getCustomerDeliveryData(email);
         if(deliveryDataDto == null)
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
@@ -136,6 +159,14 @@ public class CustomerController {
 
     @PostMapping(value = "/saveDeliveryData/{email}")
     public ResponseEntity saveCustomerDeliveryData(@PathVariable String email, @RequestBody DeliveryDataDto deliveryDataDto){
+
+        if(customerService.findByEmail(email)==null){
+            return new ResponseEntity(new Message(USER_DOES_NOT_EXIST), HttpStatus.FORBIDDEN);
+        }
+        if(!customerService.checkIsAccountActive(email)){
+            return new ResponseEntity(new Message(DEACTIVATED_CUSTOMER_FORBIDDEN_ACTION_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
         try{
             DeliveryDataDto savedDeliveryData = customerService.saveCustomerDeliveryData(deliveryDataDto, email);
             if(savedDeliveryData != null){
@@ -158,6 +189,21 @@ public class CustomerController {
 
     @GetMapping(value = "/deactivateAccount/{email}" )
     public ResponseEntity<Boolean> deactivateAccount(@PathVariable String email){
+
+        if(customerService.findByEmail(email)==null){
+            return new ResponseEntity(new Message(USER_DOES_NOT_EXIST), HttpStatus.FORBIDDEN);
+        }
+        if(!customerService.checkIsAccountActive(email)){
+            return new ResponseEntity(new Message(ACCOUNT_HAS_ALREADY_BEEN_DEACTIVATED_MESSAGE), HttpStatus.FORBIDDEN);
+        }
+
+        if(customerService.hasBidProducts(email)){
+            return new ResponseEntity(new Message(CAN_NOT_DEACTIVATE_HAS_BID_PRODUCTS_MESSAGE), HttpStatus.BAD_REQUEST);
+        }
+
+        if(customerService.hasProductsToPay(email)){
+            return new ResponseEntity(new Message(CAN_NOT_DEACTIVATE_HAS_PRODUCTS_TO_PAY), HttpStatus.BAD_REQUEST);
+        }
 
         Boolean accountDeactivated = customerService.deactivateAccount(email);
         return new ResponseEntity<Boolean>(accountDeactivated, HttpStatus.OK);

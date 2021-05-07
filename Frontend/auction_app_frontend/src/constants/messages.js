@@ -80,6 +80,9 @@ export const NO_ITEMS_FOR_SALE_MESSAGE =
 export const NO_PRODUCTS_TO_SHOW_MESSAGE = "There are no products to show.";
 export const DEACTIVATE_ACCOUNT_QUESTION_MESSAGE =
   "Do you want to deactivate account?";
+export const DEACTIVATE_ACCOUNT_QUESTION =
+  "Are you sure you want to deactivate your account?";
+export const DEACTIVATE_ACCOUNT_HEADING_MESSAGE = "Account deactivation";
 export const SUCCESSFULLY_DEACTIVATED_ACOUNT_MESSAGE =
   "Your account has been successfully deactivated.";
 export const NOT_DEACTIVATED_ACOUNT_MESSAGE =

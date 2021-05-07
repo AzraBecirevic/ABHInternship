@@ -2,6 +2,7 @@ package com.app.auctionbackend.controller;
 
 import com.app.auctionbackend.dtos.*;
 import com.app.auctionbackend.helper.Helper;
+import com.app.auctionbackend.helper.Message;
 import com.app.auctionbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,14 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-
-    public class Message {
-        public String text;
-
-        public Message(String text) {
-            this.text = text;
-        }
-    }
 
     @Autowired
     private ProductService productService;

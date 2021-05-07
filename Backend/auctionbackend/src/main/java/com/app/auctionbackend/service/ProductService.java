@@ -5,14 +5,12 @@ import com.app.auctionbackend.helper.FuzzyScore;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
 import com.app.auctionbackend.repo.ProductRepository;
-import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.plaf.LabelUI;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -20,7 +18,6 @@ import java.util.*;
 
 
 import static com.app.auctionbackend.config.MessageConstants.EMAIL_30_DAYS_PAST_SUBJECT;
-import static com.app.auctionbackend.config.MessageConstants.EMAIL_MESSAGE;
 import static com.app.auctionbackend.helper.InfinityScrollConstants.*;
 import static com.app.auctionbackend.helper.ValidationMessageConstants.*;
 
@@ -105,6 +102,12 @@ public class ProductService {
             throw new Exception(errorMessage);
     }
 
+    private Boolean isProductSellerActive(Product product){
+        if(product.getCustomer() != null && product.getCustomer().getActive())
+            return true;
+        return false;
+    }
+
     public List<ProductDto> getProducts(){
 
         List<Product> products = productRepository.findAll();
@@ -121,35 +124,36 @@ public class ProductService {
         Product product = productRepository.findById(id).orElse(null);
 
         if(product != null){
+            if(isProductSellerActive(product)) {
 
-            ModelMapper modelMapper = new ModelMapper();
-            ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
+                ModelMapper modelMapper = new ModelMapper();
+                ProductDetailsDto productDetailsDto = modelMapper.map(product, ProductDetailsDto.class);
 
-            List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(id);
-            if(bidList == null || bidList.size() == 0){
-                productDetailsDto.setHighestBid(0);
-                productDetailsDto.setNumberOfBids(0);
+                List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(id);
+                if (bidList == null || bidList.size() == 0) {
+                    productDetailsDto.setHighestBid(0);
+                    productDetailsDto.setNumberOfBids(0);
+                } else {
+                    Bid highestBid = bidList.get(bidList.size() - 1);
+                    productDetailsDto.setHighestBid(highestBid.getBidPrice());
+                    productDetailsDto.setNumberOfBids(bidList.size());
+                }
+
+                productDetailsDto.setStartPriceText(df.format(productDetailsDto.getStartPrice()));
+
+                productDetailsDto.setHighestBidText(df.format(productDetailsDto.getHighestBid()));
+
+                long diff = ChronoUnit.DAYS.between(LocalDateTime.now(), product.getEndDate());
+                productDetailsDto.setTimeLeft(diff);
+
+                if (product.getEndDate().isBefore(LocalDateTime.now()) ||
+                        product.getStartDate().isAfter(LocalDateTime.now())) {
+                    productDetailsDto.setActiveProduct(false);
+                    productDetailsDto.setTimeLeft(0);
+                }
+
+                return productDetailsDto;
             }
-            else{
-                Bid highestBid = bidList.get(bidList.size() - 1);
-                productDetailsDto.setHighestBid(highestBid.getBidPrice());
-                productDetailsDto.setNumberOfBids(bidList.size());
-            }
-
-            productDetailsDto.setStartPriceText(df.format(productDetailsDto.getStartPrice()));
-
-            productDetailsDto.setHighestBidText(df.format(productDetailsDto.getHighestBid()));
-
-            long diff = ChronoUnit.DAYS.between(LocalDateTime.now(),product.getEndDate());
-            productDetailsDto.setTimeLeft(diff);
-
-            if(product.getEndDate().isBefore(LocalDateTime.now()) ||
-                    product.getStartDate().isAfter(LocalDateTime.now())){
-                productDetailsDto.setActiveProduct(false);
-                productDetailsDto.setTimeLeft(0);
-            }
-
-            return productDetailsDto;
         }
         return null;
     }
@@ -276,7 +280,13 @@ public class ProductService {
         List<Product> products = productRepository.findByOrderByStartPrice();
         if(products == null || products.size() == 0)
             return null;
-        Product product = products.get(products.size() - 1);
+
+        List<Product> activeCustomerProducts = new ArrayList<>();
+        for (Product p : products) {
+            if(isProductSellerActive(p))
+                activeCustomerProducts.add(p);
+        }
+        Product product = activeCustomerProducts.get(activeCustomerProducts.size()-1);
 
         if(product != null){
             ModelMapper modelMapper = new ModelMapper();
@@ -347,12 +357,14 @@ public class ProductService {
         return averagePrice;
     }
 
-    private List<Product> getAvailableProducts(){
+    private List<Product> getAvailableActiveCustomersProducts(){
         List<Product> products = productRepository.findAll();
         List<Product> availableProducts = new ArrayList<>();
         for (Product p : products) {
-            if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())){
-                availableProducts.add(p);
+            if(isProductSellerActive(p)) {
+                if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
+                    availableProducts.add(p);
+                }
             }
         }
         return availableProducts;
@@ -360,7 +372,7 @@ public class ProductService {
 
     public PriceFilterDto getPriceFilterValues(){
         PriceFilterDto priceFilterDto = new PriceFilterDto();
-        List<Product> availableProducts = getAvailableProducts();
+        List<Product> availableProducts = getAvailableActiveCustomersProducts();
 
         availableProducts.sort(Comparator.comparing(Product::getStartPrice));
         priceFilterDto.setMinPrice(availableProducts.get(0).getStartPrice());
@@ -686,8 +698,10 @@ public class ProductService {
         if(products != null && products.size() > 0) {
 
             for (Product p : products) {
-                if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
-                    availableProductNames.add(p.getName());
+                if(isProductSellerActive(p)) {
+                    if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
+                        availableProductNames.add(p.getName());
+                    }
                 }
             }
 
@@ -922,7 +936,7 @@ public class ProductService {
     public List<SellProductDto> getActiveProducts(String customerEmail){
 
         Customer customer = customerService.findByEmail(customerEmail);
-        if(customer == null)
+        if(customer == null || !customer.getActive())
             return null;
 
         List<Product> products = productRepository.findByCustomerId(customer.getId());
@@ -945,7 +959,7 @@ public class ProductService {
 
     public List<SellProductDto> getSoldProducts(String customerEmail){
         Customer customer = customerService.findByEmail(customerEmail);
-        if(customer == null)
+        if(customer == null || !customer.getActive())
             return null;
 
         List<Product> products = productRepository.findByCustomerId(customer.getId());
@@ -968,7 +982,7 @@ public class ProductService {
 
     public List<SellProductDto> getBidProducts(String customerEmail){
        Customer customer = customerService.findByEmail(customerEmail);
-        if(customer == null)
+        if(customer == null || !customer.getActive())
             return null;
 
         List<Bid> bids = bidRepository.findByCustomerIdOrderByBidPrice(customer.getId());
@@ -1009,6 +1023,9 @@ public class ProductService {
      Customer customer = customerService.findByEmail(addProductDto.getCustomerEmail());
      if(customer == null)
          throw new Exception(USER_DOES_NOT_EXIST);
+
+     if(!customer.getActive())
+         throw new Exception(DEACTIVATED_CUSTOMER_FORBIDDEN_ACTION_MESSAGE);
 
      validateRequiredField(addProductDto.getName(), PRODUCT_NAME_REQUIRED_MESSAGE);
      validateRequiredField(addProductDto.getDescription(), DESCRIPTION_REQUIRED_MESSAGE);
@@ -1142,7 +1159,7 @@ public class ProductService {
 
         for (Product p : products) {
             List<Bid> bidList = bidRepository.findByProductIdOrderByBidPrice(p.getId());
-            if(LocalDateTime.now().isAfter(p.getEndDate()) && bidList !=null && bidList.size() > 0 && !p.getPaid()){
+            if(LocalDateTime.now().isAfter(p.getEndDate()) && bidList != null && bidList.size() > 0 && !p.getPaid()){
                 LocalDateTime endDatePayment = p.getEndDate().plusDays(30);
 
                 LocalDateTime paymentEndDate = LocalDateTime.of(endDatePayment.getYear(), endDatePayment.getMonth(), endDatePayment.getDayOfMonth(), 0,0);
@@ -1157,7 +1174,7 @@ public class ProductService {
 
             LocalDateTime endDate = LocalDateTime.of(p.getEndDate().getYear(), p.getEndDate().getMonth(), p.getEndDate().getDayOfMonth(), 0,0);
             LocalDateTime currentDate = LocalDateTime.of(LocalDateTime.now().getYear(), LocalDateTime.now().getMonth(), LocalDateTime.now().getDayOfMonth(), 0,0);
-            if(currentDate.isEqual(endDate) && bidList != null && bidList.size() > 0){
+            if(currentDate.isEqual(endDate) && bidList != null && bidList.size() > 0 && !p.getPaid()){
                 Bid highestBid = bidList.get(bidList.size()-1);
                 Customer highestBidder = highestBid.getCustomer();
 
@@ -1170,27 +1187,29 @@ public class ProductService {
         List<ProductDto> productDtos = new ArrayList<>();
 
         for (Product p : products) {
-            if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
-                ProductDto productDto = new ProductDto();
-                productDto.setId(p.getId());
-                productDto.setName(p.getName());
-                productDto.setStartPrice(p.getStartPrice());
-                Image image = (p.getImageList() != null && !p.getImageList().isEmpty()) ? p.getImageList().get(0) : null;
-                if (image != null)
-                    productDto.setImage(image.getImage());
+            if(isProductSellerActive(p)) {
+                if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
+                    ProductDto productDto = new ProductDto();
+                    productDto.setId(p.getId());
+                    productDto.setName(p.getName());
+                    productDto.setStartPrice(p.getStartPrice());
+                    Image image = (p.getImageList() != null && !p.getImageList().isEmpty()) ? p.getImageList().get(0) : null;
+                    if (image != null)
+                        productDto.setImage(image.getImage());
 
-                productDto.setStartPriceText(df.format(productDto.getStartPrice()));
-                productDto.setCreatedOn(p.getCreatedOn());
-                productDto.setEndDate(p.getEndDate());
-                productDto.setDescription(p.getDescription());
-                productDtos.add(productDto);
+                    productDto.setStartPriceText(df.format(productDto.getStartPrice()));
+                    productDto.setCreatedOn(p.getCreatedOn());
+                    productDto.setEndDate(p.getEndDate());
+                    productDto.setDescription(p.getDescription());
+                    productDtos.add(productDto);
+                }
             }
         }
         return productDtos;
     }
 
     private List<ProductDto> getMostPopularProducts(){
-        List<Product> products = getAvailableProducts();
+        List<Product> products = getAvailableActiveCustomersProducts();
 
         if(products == null || products.isEmpty())
             return null;
@@ -1212,7 +1231,7 @@ public class ProductService {
     }
 
     private List<ProductDto> getMostPopularOtherCustomersProducts(Customer customer){
-        List<Product> products = getAvailableProducts();
+        List<Product> products = getAvailableActiveCustomersProducts();
 
         if(products == null || products.isEmpty())
             return new ArrayList<>();
@@ -1280,7 +1299,7 @@ public class ProductService {
     }
 
     private List<ProductDto> getMostPopularOtherCustomersProductsThatCustomerDidNotBided(Customer customer){
-        List<Product> products = getAvailableProducts();
+        List<Product> products = getAvailableActiveCustomersProducts();
 
         if(products == null || products.isEmpty())
             return new ArrayList<>();
@@ -1385,7 +1404,7 @@ public class ProductService {
                     Boolean available = false;
                     Boolean customerBidOnProduct = false;
                     Boolean customerSellsProduct = false;
-                    if(p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())){
+                    if(p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now()) && p.getCustomer().getActive()){
                         available = true;
                     }
                     if(p.getCustomer().getId() == customer.getId())

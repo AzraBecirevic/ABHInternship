@@ -65,11 +65,11 @@ class CustomerService {
       throw response;
     }
     if (response.status === 200) {
-      var data = await response.json();
+      let data = await response.json();
       return data;
     } else {
       try {
-        var data = await response.json();
+        let data = await response.json();
         this.toastService.showErrorToast(data.text);
         return null;
       } catch (err) {}
@@ -116,11 +116,11 @@ class CustomerService {
       throw response;
     }
     if (response.status === 200) {
-      var data = await response.json();
+      let data = await response.json();
       return data;
     } else {
       try {
-        var data = await response.json();
+        let data = await response.json();
         this.toastService.showErrorToast(data.text);
         return null;
       } catch (err) {}
@@ -174,11 +174,11 @@ class CustomerService {
     }
 
     if (response.status === 200) {
-      var data = await response.json();
+      let data = await response.json();
       return data;
     } else {
       try {
-        var data = await response.json();
+        let data = await response.json();
         this.toastService.showErrorToast(data.text);
         return null;
       } catch (err) {}
@@ -209,9 +209,27 @@ class CustomerService {
     if (!response) {
       throw response;
     }
+    if (response.status === 403) {
+      try {
+        let data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {
+        return null;
+      }
+      return null;
+    }
+    if (response.status === 400) {
+      try {
+        let data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {
+        return null;
+      }
+      return null;
+    }
 
     if (response.status === 200) {
-      var data = await response.json();
+      let data = await response.json();
       return data;
     } else {
       return null;

@@ -5,8 +5,11 @@ import {
   CLEAR_CUSTOMERS_ALL_NOTIFICATION,
   CLEAR_CUSTOMERS_SINGLE_NOTIFICATION,
 } from "../constants/endpoints";
+import ToastService from "./toastService";
 
 class NotificationService {
+  toastService = new ToastService();
+
   async saveNotificationToken(email, notificationToken) {
     const requestOptions = {
       method: "POST",
@@ -35,7 +38,7 @@ class NotificationService {
     }
 
     if (response.status === 200) {
-      var data = await response.json();
+      let data = await response.json();
       return data;
     } else {
       return null;
@@ -62,7 +65,7 @@ class NotificationService {
 
     if (response.status === 200) {
       try {
-        var data = await response.json();
+        let data = await response.json();
         return data;
       } catch (error) {
         return null;
@@ -88,6 +91,16 @@ class NotificationService {
       }
     });
     if (!response) {
+      return false;
+    }
+
+    if (response.status === 403) {
+      try {
+        let data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {
+        return false;
+      }
       return false;
     }
 
@@ -118,6 +131,16 @@ class NotificationService {
       }
     });
     if (!response) {
+      return false;
+    }
+
+    if (response.status === 403) {
+      try {
+        let data = await response.json();
+        this.toastService.showErrorToast(data.text);
+      } catch (error) {
+        return false;
+      }
       return false;
     }
 

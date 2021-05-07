@@ -328,21 +328,25 @@ export class Profile extends Component {
         token
       );
 
-      this.fillDays(customer.birthMonth, customer.birthYear);
-      this.fillYears(customer.birthYear);
+      if (customer != null) {
+        this.fillDays(customer.birthMonth, customer.birthYear);
+        this.fillYears(customer.birthYear);
+        this.setState({
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          email: customer.email,
+          genderId: customer.genderId,
+          dateOfBirth: customer.dateOfBirth,
+          dateDay: customer.birthDay,
+          dateMonth: customer.birthMonth,
+          dateYear: customer.birthYear,
+          phoneNumber: customer.phoneNumber,
+          profileImage: customer.profileImage,
+        });
+      }
 
       this.setState({
         genderList: genders,
-        firstName: customer.firstName,
-        lastName: customer.lastName,
-        email: customer.email,
-        genderId: customer.genderId,
-        dateOfBirth: customer.dateOfBirth,
-        dateDay: customer.birthDay,
-        dateMonth: customer.birthMonth,
-        dateYear: customer.birthYear,
-        phoneNumber: customer.phoneNumber,
-        profileImage: customer.profileImage,
         chosenImage: userImage,
         imgFile: null,
         countryList: countries,
