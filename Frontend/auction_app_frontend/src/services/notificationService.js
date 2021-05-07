@@ -38,7 +38,7 @@ class NotificationService {
     }
 
     if (response.status === 200) {
-      var data = await response.json();
+      let data = await response.json();
       return data;
     } else {
       return null;
@@ -65,7 +65,7 @@ class NotificationService {
 
     if (response.status === 200) {
       try {
-        var data = await response.json();
+        let data = await response.json();
         return data;
       } catch (error) {
         return null;
@@ -96,7 +96,7 @@ class NotificationService {
 
     if (response.status === 403) {
       try {
-        var data = await response.json();
+        let data = await response.json();
         this.toastService.showErrorToast(data.text);
       } catch (error) {
         return false;
@@ -136,7 +136,7 @@ class NotificationService {
 
     if (response.status === 403) {
       try {
-        var data = await response.json();
+        let data = await response.json();
         this.toastService.showErrorToast(data.text);
       } catch (error) {
         return false;
