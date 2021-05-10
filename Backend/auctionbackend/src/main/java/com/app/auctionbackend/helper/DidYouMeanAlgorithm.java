@@ -33,7 +33,15 @@ public class DidYouMeanAlgorithm {
     @Autowired
     private ProductRepository productRepository;
 
-
+    /**
+     * getNamesFuzzyScore method gets a list of names, search name and an object of a FuzzyScore class which implements fuzzy score algorithm (that calculates similarity between strings) as parameters.
+     * It calculates fuzzy score (similarity) between the search name and every name from the list.
+     * It returns a list of scores for every name.
+     * @param fuzzyScore
+     * @param availableProductNames
+     * @param searchName
+     * @return
+     */
     private List<Integer> getNamesFuzzyScore(FuzzyScore fuzzyScore, List<String> availableProductNames, String searchName){
         List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
 
@@ -45,7 +53,17 @@ public class DidYouMeanAlgorithm {
         return availableProductNameFuzzyScore;
     }
 
-    private List<Integer> getCategory_SubcategoryNamesFuzzyScore(FuzzyScore fuzzyScore, List<String> names, String searchName) {
+    /**
+     * getCategorySubcategoryNamesFuzzyScore method gets a list of names, search name and an object of a FuzzyScore class which implements fuzzy score algorithm (that calculates similarity between strings) as parameters.
+     * It calculates fuzzy score (similarity) between the search name and every name from the list.
+     * It returns a list of scores for every name.
+     *
+     * @param fuzzyScore
+     * @param names
+     * @param searchName
+     * @return
+     */
+    private List<Integer> getCategorySubcategoryNamesFuzzyScore(FuzzyScore fuzzyScore, List<String> names, String searchName) {
         List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
         for (String name : names) {
             int score = fuzzyScore.getFuzzyScore(name, searchName);
@@ -54,6 +72,11 @@ public class DidYouMeanAlgorithm {
         return availableProductNameFuzzyScore;
     }
 
+    /**
+     * getNamesFuzzyScoreMaximumScore has a list of names scores as a parameter, and calculates the maximum value (score) from the list.
+     * @param availableProductNameFuzzyScore
+     * @return
+     */
     private Integer getNamesFuzzyScoreMaximumScore(List<Integer> availableProductNameFuzzyScore){
         Integer maximumScore = Integer.MIN_VALUE;
 
@@ -65,6 +88,14 @@ public class DidYouMeanAlgorithm {
         return maximumScore;
     }
 
+    /**
+     * getAvailableProductFuzzyScoreMaxIndexes method has a list of scores for product names scores and max score as parameters.
+     * It stores the index of every score (from product score list), that is equal to the max score, in a new list, and returns that list in the end.
+     *
+     * @param availableProductNameFuzzyScore
+     * @param maximumScore
+     * @return
+     */
     private List<Integer> getAvailableProductFuzzyScoreMaxIndexes(List<Integer> availableProductNameFuzzyScore, Integer maximumScore){
         List<Integer> maxScoreIndexes = new ArrayList<>();
 
@@ -76,6 +107,14 @@ public class DidYouMeanAlgorithm {
         return maxScoreIndexes;
     }
 
+    /**
+     * getMatchingProductNames method gets a list of max score indexes and a list of product names as parameters.
+     * For every index in maxScore indexes, it gets the name which is on that index in a product names list, stores that name in a new list, and returns that list in the end.
+     *
+     * @param maxScoreIndexes
+     * @param availableProductNames
+     * @return
+     */
     private List<String> getMatchingProductNames(List<Integer> maxScoreIndexes, List<String> availableProductNames){
         List<String> matchingProductNames = new ArrayList<>();
         for (Integer index : maxScoreIndexes) {
@@ -84,6 +123,15 @@ public class DidYouMeanAlgorithm {
         return matchingProductNames;
     }
 
+    /**
+     * getMatchingProductNameWords method has a list of product names as a parameter.
+     * The method checks if there is a " " (space) in the product name, for every product name in the list.
+     * In case there is space, it splits every name by " ", and adds every separate word in a list of words.
+     * It returns a list of separate words.
+     *
+     * @param matchingProductNames
+     * @return
+     */
     public List<String> getMatchingProductNameWords(List<String> matchingProductNames){
         List<String> words = new ArrayList<>();
 
@@ -101,6 +149,17 @@ public class DidYouMeanAlgorithm {
         return words;
     }
 
+    /**
+     * getWordsSimilarityScores method has a list of words, search name and an object of a FuzzyScore class which implements fuzzy score algorithm (that calculates similarity between strings) as parameters.
+     * It calls a function that implements fuzzy score algorithm and calculates similarity between search name and every word form list.
+     * It returns a list of similarity scores for every word.
+     *
+     * @param words
+     * @param fuzzyScore
+     * @param searchName
+     * @return
+     */
+
     List<Integer> getWordsSimilarityScores(List<String> words, FuzzyScore fuzzyScore, String searchName) {
         List<Integer> wordsSimilarityScores = new ArrayList<>();
         for (String word : words) {
@@ -114,6 +173,12 @@ public class DidYouMeanAlgorithm {
         return wordsSimilarityScores;
     }
 
+    /**
+     * getIndexOfMaxWordScore method gets a list of similarity scores as a parameter, and finds the index of maximum value in the list.
+     *
+     * @param wordsSimilarityScores
+     * @return
+     */
     Integer getIndexOfMaxWordScore(List<Integer> wordsSimilarityScores) {
         Integer maxWordsScore = Integer.MIN_VALUE;
         Integer indexOfMaxWordsScore = -1;
@@ -127,6 +192,12 @@ public class DidYouMeanAlgorithm {
         return indexOfMaxWordsScore;
     }
 
+    /**
+     * checkIfHasMoreMaxScores method gets a list of similarity scores as a parameter, finds the maximum value in the list, and checks if there are more maximum values (max scores) in the list.
+     *
+     * @param wordsSimilarityScores
+     * @return
+     */
     private Boolean checkIfHasMoreMaxScores(List<Integer> wordsSimilarityScores){
         int maxScore = Collections.max(wordsSimilarityScores);
         int maxScoreCount = 0;
@@ -139,6 +210,17 @@ public class DidYouMeanAlgorithm {
         return false;
     }
 
+    /**
+     * separateToSmallerWords method gets a list of matching product names, search name, filtered products list, an object of a FuzzyScore class which implements fuzzy score algorithm (that calculates similarity between strings) as parameters.
+     * It calls method for splitting product names by " " (space) into words, then method for calculating similarity scores between the words and search name, finds the index of the most similar word and calls method for finding product(s) with similar name(s).
+     *
+     * @param matchingProductNames
+     * @param searchName
+     * @param fuzzyScore
+     * @param filteredProducts
+     * @return
+     */
+
     private DidYouMeanDto separateToSmallerWords(List<String> matchingProductNames, String searchName, FuzzyScore fuzzyScore, List<ProductDto> filteredProducts) {
         List<String> words = getMatchingProductNameWords(matchingProductNames);
 
@@ -148,7 +230,17 @@ public class DidYouMeanAlgorithm {
         return setMostSimilarProduct(indexOfMaxWordScore1,words, filteredProducts);
     }
 
-    private DidYouMeanDto setMostSimilarProduct(Integer indexOfMaxWordScore, List<String> matchingProductNames, List<ProductDto> filteredProducts/*, /*DidYouMeanDto didYouMeanDto*/){
+    /**
+     * setMostSimilarProduct method gets an index of max score, matching product names list, and filtered products list.
+     * It finds the most similar product name, and search for products with that most similar name.
+     * Sets product(s) and most similar name in DidYouMean object and returns it.
+     *
+     * @param indexOfMaxWordScore
+     * @param matchingProductNames
+     * @param filteredProducts
+     * @return
+     */
+    private DidYouMeanDto setMostSimilarProduct(Integer indexOfMaxWordScore, List<String> matchingProductNames, List<ProductDto> filteredProducts){
         if (indexOfMaxWordScore != -1) {
             DidYouMeanDto didYouMeanDto = new DidYouMeanDto();
             String mostSimilarWord = matchingProductNames.get(indexOfMaxWordScore);
@@ -174,6 +266,20 @@ public class DidYouMeanAlgorithm {
         return null;
     }
 
+
+    /**
+     * getDidYouMeanProducts gets a list of available products names, available products names scores, maximum score, search name, an object of a FuzzyScore class which implements fuzzy score algorithm (that calculates similarity between strings) as parameters.
+     * It calls methods for finding names with max scores, and in case there are more names with maximum scores, it calls method to separate product names in words, and find the most similar word (in case product names have more than one word),
+     * else it finds the index of the most similar name and calls method for finding product(s) with that name.
+     *
+     * @param availableProductNameFuzzyScore
+     * @param availableProductNames
+     * @param maxScore
+     * @param searchName
+     * @param fuzzyScore
+     * @param filteredProducts
+     * @return
+     */
     private DidYouMeanDto getDidYouMeanProducts(List<Integer> availableProductNameFuzzyScore, List<String> availableProductNames, Integer maxScore, String searchName, FuzzyScore fuzzyScore, List<ProductDto> filteredProducts){
         List<Integer> maxScoreIndexes = getAvailableProductFuzzyScoreMaxIndexes(availableProductNameFuzzyScore, maxScore);
 
@@ -205,6 +311,16 @@ public class DidYouMeanAlgorithm {
         return setMostSimilarProduct(indexOfMaxWordScore, matchingProductNames, filteredProducts);
     }
 
+    /**
+     * getDidYouMeanCategories has a list of category names, list of category names scores (scores represent similarity between category names and search name), and list of filtered products as a parameters.
+     * It gets the most similar category name (name with highest score), and it gets products which belong to the category with the most similar name.
+     * Sets products and most similar name in DidYouMean object and returns it.
+     *
+     * @param categoryNameFuzzyScores
+     * @param categoryNames
+     * @param filteredProducts
+     * @return
+     */
     private DidYouMeanDto getDidYouMeanCategories(List<Integer> categoryNameFuzzyScores, List<String> categoryNames, List<ProductDto> filteredProducts){
         Integer indexOfMaxWordScore = getIndexOfMaxWordScore(categoryNameFuzzyScores);
 
@@ -238,6 +354,16 @@ public class DidYouMeanAlgorithm {
         return null;
     }
 
+    /**
+     * getDidYouMeanSubcategories has a list of subcategory names, list of subcategory names scores (scores represent similarity between subcategory names and search name), and list of filtered products as a parameters.
+     * It gets the most similar subcategory name (name with highest score), and it gets products which belong to the subcategory with the most similar name.
+     * Sets products and most similar name in DidYouMean object and returns it.
+     *
+     * @param subcategoryNameFuzzyScores
+     * @param subcategoryNames
+     * @param filteredProducts
+     * @return
+     */
     private DidYouMeanDto getDidYouMeanSubcategories(List<Integer> subcategoryNameFuzzyScores, List<String> subcategoryNames, List<ProductDto> filteredProducts){
         Integer indexOfMaxWordScore = getIndexOfMaxWordScore(subcategoryNameFuzzyScores);
 
@@ -261,6 +387,14 @@ public class DidYouMeanAlgorithm {
         return null;
     }
 
+    /**
+     * getAvailableProductNames method has a list of products as a parameter.
+     * It finds all available products from that list (product seller is active, and the current date is between the start date and the end date of the product auction).
+     * It returns a list of names of available products.
+     *
+     * @param products
+     * @return
+     */
     private List<String> getAvailableProductNames(List<Product> products){
         List<String> availableProductNames = new ArrayList<>();
         for (Product p : products) {
@@ -273,6 +407,12 @@ public class DidYouMeanAlgorithm {
         return availableProductNames;
     }
 
+    /**
+     * getCategoryNames method has a list of categories as a parameter and gets name of every category from the list. It returns a list with categories names.
+     *
+     * @param categories
+     * @return
+     */
     private List<String> getCategoryNames(List<CategoryDto> categories){
         List<String> categoryNames = new ArrayList<>();
         for (CategoryDto c : categories) {
@@ -281,6 +421,12 @@ public class DidYouMeanAlgorithm {
         return categoryNames;
     }
 
+    /**
+     * getSubcategoryNames method has a list of subcategories as a parameter and gets name of every subcategory from the list. It returns a list with subcategories names.
+     *
+     * @param subcategories
+     * @return
+     */
     private List<String> getSubcategoryNames(List<Subcategory> subcategories){
         List<String> subcategoryNames = new ArrayList<>();
         for (Subcategory s : subcategories) {
@@ -289,6 +435,15 @@ public class DidYouMeanAlgorithm {
         return subcategoryNames;
     }
 
+    /**
+     * getDidYouMeanMostMatchingString method has two parameters, searchName and list of filtered products from ProductService.
+     * This method finds products, categories and subcategories names and gets scores that represent similarity with searchName.
+     * Then it determines the max score, and depending on the max score value, gets the product/category/subcategory with the most similar name.
+     *
+     * @param searchName
+     * @param filteredProducts
+     * @return
+     */
     public DidYouMeanDto getDidYouMeanMostMatchingString(String searchName, List<ProductDto> filteredProducts){
         if(searchName == null)
             return null;
@@ -331,7 +486,7 @@ public class DidYouMeanAlgorithm {
 
             categoryNames.sort((s1,s2)-> s1.length() - s2.length());
 
-            categoryNameFuzzyScores = getCategory_SubcategoryNamesFuzzyScore(fuzzyScore,categoryNames, searchName);
+            categoryNameFuzzyScores = getCategorySubcategoryNamesFuzzyScore(fuzzyScore,categoryNames, searchName);
 
             maxScoreCategories = getNamesFuzzyScoreMaximumScore(categoryNameFuzzyScores);
         }
@@ -341,7 +496,7 @@ public class DidYouMeanAlgorithm {
 
             subcategoryNames.sort((s1,s2)-> s1.length() - s2.length());
 
-            subcategoryNameFuzzyScores = getCategory_SubcategoryNamesFuzzyScore(fuzzyScore, subcategoryNames, searchName);
+            subcategoryNameFuzzyScores = getCategorySubcategoryNamesFuzzyScore(fuzzyScore, subcategoryNames, searchName);
 
             maxScoreSubcategories = getNamesFuzzyScoreMaximumScore(subcategoryNameFuzzyScores);
         }
