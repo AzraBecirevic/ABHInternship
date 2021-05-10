@@ -1,7 +1,8 @@
 package com.app.auctionbackend.service;
 
 import com.app.auctionbackend.dtos.*;
-import com.app.auctionbackend.helper.FuzzyScore;
+import com.app.auctionbackend.helper.DidYouMeanAlgorithm;
+import com.app.auctionbackend.helper.RecommendedProductsAlgorithm;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.BidRepository;
 import com.app.auctionbackend.repo.ProductRepository;
@@ -40,13 +41,16 @@ public class ProductService {
     ImageService imageService;
 
     @Autowired
-    CategoryService categoryService;
-
-    @Autowired
     EmailService emailService;
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    DidYouMeanAlgorithm didYouMeanAlgorithm;
+
+    @Autowired
+    RecommendedProductsAlgorithm recommendedProductsAlgorithm;
 
     @Value("${test.email}")
     String testEmail;
@@ -102,7 +106,7 @@ public class ProductService {
             throw new Exception(errorMessage);
     }
 
-    private Boolean isProductSellerActive(Product product){
+    public Boolean isProductSellerActive(Product product){
         if(product.getCustomer() != null && product.getCustomer().getActive())
             return true;
         return false;
@@ -357,7 +361,7 @@ public class ProductService {
         return averagePrice;
     }
 
-    private List<Product> getAvailableActiveCustomersProducts(){
+    public List<Product> getAvailableActiveCustomersProducts(){
         List<Product> products = productRepository.findAll();
         List<Product> availableProducts = new ArrayList<>();
         for (Product p : products) {
@@ -416,363 +420,6 @@ public class ProductService {
         return productDtos;
     }
 
-    private List<Integer> getNamesFuzzyScore(FuzzyScore fuzzyScore, List<String> availableProductNames, String searchName){
-        List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
-
-        for (String productName : availableProductNames) {
-            int score = fuzzyScore.fuzzyScore(productName, searchName);
-            availableProductNameFuzzyScore.add(score);
-        }
-
-        return availableProductNameFuzzyScore;
-    }
-
-    private List<Integer> getCategory_SubcategoryNamesFuzzyScore(FuzzyScore fuzzyScore, List<String> names, String searchName) {
-        List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
-        for (String name : names) {
-            int score = fuzzyScore.getFuzzyScore(name, searchName);
-            availableProductNameFuzzyScore.add(score);
-        }
-        return availableProductNameFuzzyScore;
-    }
-
-    private Integer getNamesFuzzyScoreMaximumScore(List<Integer> availableProductNameFuzzyScore){
-        Integer maximumScore = Integer.MIN_VALUE;
-
-        for(int i = 0; i < availableProductNameFuzzyScore.size(); i++){
-            if(availableProductNameFuzzyScore.get(i) > maximumScore){
-                maximumScore = availableProductNameFuzzyScore.get(i);
-            }
-        }
-        return maximumScore;
-    }
-
-    private List<Integer> getAvailableProductFuzzyScoreMaxIndexes(List<Integer> availableProductNameFuzzyScore, Integer maximumScore){
-        List<Integer> maxScoreIndexes = new ArrayList<>();
-
-        for(int i = 0; i < availableProductNameFuzzyScore.size(); i++){
-            if(availableProductNameFuzzyScore.get(i) == maximumScore){
-                maxScoreIndexes.add(i);
-            }
-        }
-        return maxScoreIndexes;
-    }
-
-    private List<String> getMatchingProductNames(List<Integer> maxScoreIndexes, List<String> availableProductNames){
-        List<String> matchingProductNames = new ArrayList<>();
-        for (Integer index : maxScoreIndexes) {
-            matchingProductNames.add(availableProductNames.get(index));
-        }
-        return matchingProductNames;
-    }
-
-    public List<String> getMatchingProductNameWords(List<String> matchingProductNames){
-        List<String> words = new ArrayList<>();
-
-            for (String name : matchingProductNames) {
-                if(name.contains(" ")){
-                    String[] wordParts = name.split(" ");
-                    for (int i = 0; i < wordParts.length; i++){
-                        words.add(wordParts[i]);
-                    }
-                }
-                else{
-                    words.add(name);
-                }
-            }
-        return words;
-    }
-
-    List<Integer> getWordsSimilarityScores(List<String> words, FuzzyScore fuzzyScore, String searchName) {
-        List<Integer> wordsSimilarityScores = new ArrayList<>();
-        for (String word : words) {
-
-            int score1 = fuzzyScore.fuzzyScore(word, searchName);
-            int score2 = fuzzyScore.fuzzyScore(searchName, word);
-
-            int score = Integer.max(score1,score2);
-            wordsSimilarityScores.add(score);
-        }
-        return wordsSimilarityScores;
-    }
-
-    Integer getIndexOfMaxWordScore(List<Integer> wordsSimilarityScores) {
-        Integer maxWordsScore = Integer.MIN_VALUE;
-        Integer indexOfMaxWordsScore = -1;
-
-        for (int i = 0; i < wordsSimilarityScores.size(); i++) {
-            if (wordsSimilarityScores.get(i) > maxWordsScore) {
-                maxWordsScore = wordsSimilarityScores.get(i);
-                indexOfMaxWordsScore = i;
-            }
-        }
-        return indexOfMaxWordsScore;
-    }
-
-    private Boolean checkIfHasMoreMaxScores(List<Integer> wordsSimilarityScores){
-        int maxScore = Collections.max(wordsSimilarityScores);
-        int maxScoreCount = 0;
-        for (Integer score: wordsSimilarityScores) {
-            if(score == maxScore)
-                maxScoreCount++;
-        }
-        if(maxScoreCount > 1)
-            return true;
-        return false;
-    }
-
-    private DidYouMeanDto separateToSmallerWords(List<String> matchingProductNames,String searchName, FuzzyScore fuzzyScore, List<ProductDto> filteredProducts) {
-        List<String> words = getMatchingProductNameWords(matchingProductNames);
-
-        DidYouMeanDto didYouMeanDto = new DidYouMeanDto();
-
-        List<Integer> wordsSimilarityScores = getWordsSimilarityScores(words, fuzzyScore, searchName);
-        Integer indexOfMaxWordScore1 = getIndexOfMaxWordScore(wordsSimilarityScores);
-
-        if (indexOfMaxWordScore1 != -1) {
-            String mostSimilarWord1 = words.get(indexOfMaxWordScore1);
-            String mostSimilar = mostSimilarWord1.substring(0, 1).toUpperCase() + mostSimilarWord1.substring(1);
-
-            List<ProductDto> matchingProducts;
-            if (filteredProducts == null)
-                matchingProducts = searchProductsByName(mostSimilar);
-            else
-                matchingProducts = searchProductsByName(mostSimilar, filteredProducts);
-
-            didYouMeanDto.setMatchingProducts(matchingProducts);
-
-            if (matchingProducts == null || matchingProducts.size() <= 0) {
-                didYouMeanDto.setDidYouMeanString(null);
-            } else {
-                didYouMeanDto.setDidYouMeanString(mostSimilar);
-            }
-
-            return didYouMeanDto;
-        }
-        return null;
-    }
-
-    private DidYouMeanDto getDidYouMeanProducts(List<Integer> availableProductNameFuzzyScore, List<String> availableProductNames, Integer maxScore, String searchName, FuzzyScore fuzzyScore, List<ProductDto> filteredProducts){
-        List<Integer> maxScoreIndexes = getAvailableProductFuzzyScoreMaxIndexes(availableProductNameFuzzyScore, maxScore);
-
-        List<String> matchingProductNames = getMatchingProductNames(maxScoreIndexes, availableProductNames);
-
-        DidYouMeanDto didYouMeanDto = new DidYouMeanDto();
-
-
-        if(checkIfHasMoreMaxScores(availableProductNameFuzzyScore) && searchName.contains(" ")){
-            Integer indexOfMaxWordScore = getIndexOfMaxWordScore(maxScoreIndexes);
-
-            if (indexOfMaxWordScore != -1) {
-                String mostSimilarWord = matchingProductNames.get(indexOfMaxWordScore);
-                if(mostSimilarWord.contains(" ")){
-                   return separateToSmallerWords(matchingProductNames, searchName, fuzzyScore, filteredProducts);
-                }
-            }
-        }
-
-        if (checkIfHasMoreMaxScores(availableProductNameFuzzyScore) && !searchName.contains(" ")) {
-            return separateToSmallerWords(matchingProductNames, searchName, fuzzyScore, filteredProducts);
-        }
-
-        Integer indexOfMaxWordScore = -1;
-        if(matchingProductNames.size() > 1){
-           indexOfMaxWordScore = getIndexOfMaxWordScore(maxScoreIndexes);
-        }
-       else if(matchingProductNames.size() == 1){
-            indexOfMaxWordScore = 0;
-        }
-
-
-        if (indexOfMaxWordScore != -1) {
-
-            String mostSimilarWord = matchingProductNames.get(indexOfMaxWordScore);
-            String mostSimilar = mostSimilarWord.substring(0, 1).toUpperCase() + mostSimilarWord.substring(1);
-
-            List<ProductDto> matchingProducts;
-            if(filteredProducts == null)
-                matchingProducts = searchProductsByName(mostSimilar);
-            else{
-                matchingProducts = searchProductsByName(mostSimilar, filteredProducts);
-            }
-
-            didYouMeanDto.setMatchingProducts(matchingProducts);
-
-            if(matchingProducts == null || matchingProducts.size() <= 0){
-                didYouMeanDto.setDidYouMeanString(null);
-            }
-            else{
-                didYouMeanDto.setDidYouMeanString(mostSimilar);
-            }
-
-            return didYouMeanDto;
-        }
-        return null;
-    }
-
-    private DidYouMeanDto getDidYouMeanCategories(List<Integer> categoryNameFuzzyScores, List<String> categoryNames, List<ProductDto> filteredProducts){
-        Integer indexOfMaxWordScore = getIndexOfMaxWordScore(categoryNameFuzzyScores);
-
-        DidYouMeanDto didYouMeanDto = new DidYouMeanDto();
-
-        if (indexOfMaxWordScore != -1) {
-            String mostSimilarWord = categoryNames.get(indexOfMaxWordScore);
-            String mostSimilar = mostSimilarWord.substring(0, 1).toUpperCase() + mostSimilarWord.substring(1);
-
-            didYouMeanDto.setDidYouMeanString(mostSimilar);
-
-            if(filteredProducts == null){
-                Category category = categoryService.getCategoryByName(mostSimilar);
-                if(category != null) {
-                    List<ProductDto> matchingProducts = getProductsByCategoryId(category.getId());
-                    didYouMeanDto.setMatchingProducts(matchingProducts);
-                }
-            }
-            else{
-                Category category = categoryService.getCategoryByName(mostSimilar);
-                if(category != null) {
-                    List<ProductDto> matchingProducts = getProductsWithCategoryId(category.getId(), filteredProducts);
-                    didYouMeanDto.setMatchingProducts(matchingProducts);
-                }
-                else{
-                    didYouMeanDto.setDidYouMeanString(null);
-                }
-            }
-            return didYouMeanDto;
-        }
-        return null;
-    }
-
-    private DidYouMeanDto getDidYouMeanSubcategories(List<Integer> subcategoryNameFuzzyScores, List<String> subcategoryNames, List<ProductDto> filteredProducts){
-        Integer indexOfMaxWordScore = getIndexOfMaxWordScore(subcategoryNameFuzzyScores);
-
-        DidYouMeanDto didYouMeanDto = new DidYouMeanDto();
-
-        if (indexOfMaxWordScore != -1) {
-            String mostSimilarWord = subcategoryNames.get(indexOfMaxWordScore);
-            String mostSimilar = mostSimilarWord.substring(0, 1).toUpperCase() + mostSimilarWord.substring(1);
-
-
-            if(filteredProducts == null){
-                Subcategory subcategory = subcategoryService.getSubcategoryByName(mostSimilar);
-                if(subcategory != null){
-                    List<ProductDto> matchingProducts = getProductsBySubcategoryId(subcategory.getId());
-                    didYouMeanDto.setMatchingProducts(matchingProducts);
-                    didYouMeanDto.setDidYouMeanString(mostSimilar);
-                }
-            }
-            return didYouMeanDto;
-        }
-        return null;
-    }
-
-    private DidYouMeanDto getDidYouMeanMostMatchingString(String searchName, List<ProductDto> filteredProducts){
-        if(searchName == null)
-            return null;
-
-        searchName = searchName.trim();
-
-        if(searchName.equals(""))
-            return null;
-
-        List<Product> products = productRepository.findAll();
-        List<CategoryDto> categories = categoryService.getAllCategories();
-        List<Subcategory> subcategories = subcategoryService.getAllSubcategories();
-
-        Integer maxScoreProducts = 0;
-        Integer maxScoreCategories = 0;
-        Integer maxScoreSubcategories = 0;
-
-        FuzzyScore fuzzyScore = new FuzzyScore();
-
-        List<String> availableProductNames = new ArrayList<>();
-        List<Integer> availableProductNameFuzzyScore = new ArrayList<>();
-
-        List<String> categoryNames = new ArrayList<>();
-        List<Integer> categoryNameFuzzyScores = new ArrayList<>();
-
-        List<String> subcategoryNames = new ArrayList<>();
-        List<Integer> subcategoryNameFuzzyScores = new ArrayList<>();
-
-
-        if(products != null && products.size() > 0) {
-
-            for (Product p : products) {
-                if(isProductSellerActive(p)) {
-                    if (p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now())) {
-                        availableProductNames.add(p.getName());
-                    }
-                }
-            }
-
-            availableProductNameFuzzyScore = getNamesFuzzyScore(fuzzyScore, availableProductNames, searchName);
-
-            Integer maximumScore = getNamesFuzzyScoreMaximumScore(availableProductNameFuzzyScore);
-
-            maxScoreProducts = maximumScore;
-
-        }
-
-        if(categories != null && categories.size() > 0){
-
-            for (CategoryDto c : categories) {
-                categoryNames.add(c.getName());
-            }
-
-            categoryNames.sort((s1,s2)-> s1.length() - s2.length());
-
-            categoryNameFuzzyScores = getCategory_SubcategoryNamesFuzzyScore(fuzzyScore,categoryNames, searchName);
-
-            Integer maximumScore = getNamesFuzzyScoreMaximumScore(categoryNameFuzzyScores);
-
-            maxScoreCategories = maximumScore;
-        }
-
-        if(subcategories != null && subcategories.size() > 0){
-
-            for (Subcategory s : subcategories) {
-                subcategoryNames.add(s.getName());
-            }
-
-            subcategoryNames.sort((s1,s2)-> s1.length() - s2.length());
-
-            subcategoryNameFuzzyScores = getCategory_SubcategoryNamesFuzzyScore(fuzzyScore, subcategoryNames, searchName);
-
-            Integer maximumScore = getNamesFuzzyScoreMaximumScore(subcategoryNameFuzzyScores);
-
-            maxScoreSubcategories = maximumScore;
-        }
-
-        if(maxScoreCategories <= 0 && maxScoreProducts <= 0 && maxScoreSubcategories <=0)
-            return null;
-
-        Integer maxScore = Integer.max(Integer.max(maxScoreProducts, maxScoreSubcategories), maxScoreCategories);
-
-        DidYouMeanDto didYouMeanDto = new DidYouMeanDto();
-
-        if(maxScore == maxScoreProducts){
-            didYouMeanDto = getDidYouMeanProducts(availableProductNameFuzzyScore, availableProductNames, maxScore, searchName, fuzzyScore, filteredProducts);
-            if(didYouMeanDto != null)
-                return didYouMeanDto;
-        }
-
-        if(maxScore == maxScoreCategories){
-            didYouMeanDto = getDidYouMeanCategories(categoryNameFuzzyScores, categoryNames, filteredProducts);
-
-            if(didYouMeanDto != null){
-                return didYouMeanDto;
-            }
-        }
-
-        if(maxScore == maxScoreSubcategories){
-            didYouMeanDto = getDidYouMeanSubcategories(subcategoryNameFuzzyScores, subcategoryNames, filteredProducts);
-            if(didYouMeanDto != null) {
-                return didYouMeanDto;
-            }
-        }
-        return null;
-    }
-
     public ProductsInfiniteDto getFilteredProducts(FilterProductsDto filterProductsDto){
 
         ProductsInfiniteDto productsInfiniteDto = new ProductsInfiniteDto();
@@ -805,7 +452,7 @@ public class ProductService {
                 List<ProductDto> filteredProductsByName = searchProductsByName(filterProductsDto.getProductName(), filteredProducts);
 
                if(filteredProductsByName.size() <= 0){
-                    DidYouMeanDto didYouMean = getDidYouMeanMostMatchingString(filterProductsDto.getProductName(), filteredProducts);
+                    DidYouMeanDto didYouMean = didYouMeanAlgorithm.getDidYouMeanMostMatchingString(filterProductsDto.getProductName(), filteredProducts);
                     if(didYouMean != null){
                         filteredProducts = didYouMean.getMatchingProducts();
                         productsInfiniteDto.setDidYouMean(didYouMean.getDidYouMeanString());
@@ -819,7 +466,7 @@ public class ProductService {
                 filteredProducts = searchProductsByName(filterProductsDto.getProductName());
 
                 if(filteredProducts.size() <= 0){
-                    DidYouMeanDto didYouMean = getDidYouMeanMostMatchingString(filterProductsDto.getProductName(), null);
+                    DidYouMeanDto didYouMean = didYouMeanAlgorithm.getDidYouMeanMostMatchingString(filterProductsDto.getProductName(), null);
                     if(didYouMean != null){
                         filteredProducts = didYouMean.getMatchingProducts();
                         productsInfiniteDto.setDidYouMean(didYouMean.getDidYouMeanString());
@@ -1183,7 +830,7 @@ public class ProductService {
         }
     }
 
-    private List<ProductDto> changeToDto(List<Product>products){
+    public List<ProductDto> changeToDto(List<Product>products){
         List<ProductDto> productDtos = new ArrayList<>();
 
         for (Product p : products) {
@@ -1208,252 +855,7 @@ public class ProductService {
         return productDtos;
     }
 
-    private List<ProductDto> getMostPopularProducts(){
-        List<Product> products = getAvailableActiveCustomersProducts();
-
-        if(products == null || products.isEmpty())
-            return null;
-
-        Comparator<Product> compareByBidsCount = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
-
-        Collections.sort(products, compareByBidsCount);
-
-        if(products.size() <= 4){
-            return changeToDto(products);
-        }
-        else{
-            List<Product> productsTop4 = new ArrayList<>();
-            for (int i = 0; i < 4; i++){
-                productsTop4.add(products.get(i));
-            }
-            return changeToDto(productsTop4);
-        }
-    }
-
-    private List<ProductDto> getMostPopularOtherCustomersProducts(Customer customer){
-        List<Product> products = getAvailableActiveCustomersProducts();
-
-        if(products == null || products.isEmpty())
-            return new ArrayList<>();
-
-        List<Product> otherCustomerProducts = new ArrayList<>();
-        for (Product p : products) {
-            if(p.getCustomer() != null){
-                if(p.getCustomer().getId() != customer.getId()){
-                    otherCustomerProducts.add(p);
-                }
-            }
-            else {
-                otherCustomerProducts.add(p);
-            }
-        }
-
-        if(otherCustomerProducts.isEmpty())
-            return new ArrayList<>();
-
-        Comparator<Product> compareByBidsCount = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
-
-        Collections.sort(otherCustomerProducts, compareByBidsCount);
-
-        if(otherCustomerProducts.size() <= 4){
-            return changeToDto(otherCustomerProducts);
-        }
-        else{
-            List<Product> otherCustomerProductsTop4 = new ArrayList<>();
-            for (int i = 0; i < 4; i++){
-                otherCustomerProductsTop4.add(otherCustomerProducts.get(i));
-            }
-            return changeToDto(otherCustomerProductsTop4);
-        }
-    }
-
-    private List<ProductDto> getRecommendedProductsList(List<Product> recommendableProducts, Customer customer){
-        int size = recommendableProducts.size();
-        int counter = 0;
-
-        List<ProductDto> mostPopularProducts = getMostPopularOtherCustomersProductsThatCustomerDidNotBided(customer);
-
-        if(mostPopularProducts.size() <= 0)
-            return changeToDto(recommendableProducts);
-
-        List<ProductDto> recommendedProducts = changeToDto(recommendableProducts);
-
-        while (size < 4){
-            ProductDto nextProduct = mostPopularProducts.get(counter);
-            Boolean addProduct = true;
-            for (ProductDto p : recommendedProducts) {
-                if(p.getId() == nextProduct.getId()){
-                    addProduct = false;
-                }
-            }
-            if(addProduct) {
-                recommendedProducts.add(mostPopularProducts.get(counter));
-                size++;
-            }
-            counter++;
-            if(counter > 3)
-                break;
-        }
-
-        return recommendedProducts;
-    }
-
-    private List<ProductDto> getMostPopularOtherCustomersProductsThatCustomerDidNotBided(Customer customer){
-        List<Product> products = getAvailableActiveCustomersProducts();
-
-        if(products == null || products.isEmpty())
-            return new ArrayList<>();
-
-        List<Product> otherCustomerProducts = new ArrayList<>();
-        for (Product p : products) {
-            if(p.getCustomer() != null){
-                if(p.getCustomer().getId() != customer.getId()){
-                    Boolean customerPlacedBid = false;
-                    List<Bid> bids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
-                    for (Bid bid : bids) {
-                        if(bid.getCustomer().getId() == customer.getId()){
-                            customerPlacedBid = true;
-                            break;
-                        }
-                    }
-                    if(!customerPlacedBid)
-                        otherCustomerProducts.add(p);
-                }
-            }
-            else {
-                Boolean customerPlacedBid = false;
-                List<Bid> bids = bidRepository.findByProductIdOrderByBidPrice(p.getId());
-                for (Bid bid : bids) {
-                    if(bid.getCustomer().getId() == customer.getId()){
-                        customerPlacedBid = true;
-                        break;
-                    }
-                }
-                if(!customerPlacedBid)
-                    otherCustomerProducts.add(p);
-            }
-        }
-
-        if(otherCustomerProducts.isEmpty())
-            return new ArrayList<>();
-
-        Comparator<Product> compareByBidsCount = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
-
-        Collections.sort(otherCustomerProducts, compareByBidsCount);
-
-        if(otherCustomerProducts.size() <= 4){
-            return changeToDto(otherCustomerProducts);
-        }
-        else{
-            List<Product> otherCustomerProductsTop4 = new ArrayList<>();
-            for (int i = 0; i < 4; i++){
-                otherCustomerProductsTop4.add(otherCustomerProducts.get(i));
-            }
-            return changeToDto(otherCustomerProductsTop4);
-        }
-    }
-
     public List<ProductDto> getRecommendedProducts(String customerEmail){
-        Customer customer = customerService.findByEmail(customerEmail);
-
-       if(customer == null){
-           return getMostPopularProducts();
-       }
-
-        List<Bid> customerBids = bidRepository.findByCustomerIdOrderByBidPrice(customer.getId());
-
-        if(customerBids == null || customerBids.isEmpty()){
-            return getMostPopularOtherCustomersProducts(customer);
-        }
-        else{
-            List<Product> biddedProducts = new ArrayList<>();
-
-            for (Bid bid: customerBids) {
-                biddedProducts.add(bid.getProduct());
-            }
-
-            List<Integer> customerThatBidProductsIds = new ArrayList<>();
-
-            for (Product biddedProduct : biddedProducts) {
-               List<Bid> productBids = biddedProduct.getBids();
-                for (Bid productBid : productBids) {
-                    if(productBid.getCustomer().getId() != customer.getId()){
-                        Boolean customerIdAlreadyAdded = false;
-                        for (Integer customerId : customerThatBidProductsIds) {
-                            if(productBid.getCustomer().getId() == customerId){
-                                customerIdAlreadyAdded = true;
-                                break;
-                            }
-                        }
-                        if(!customerIdAlreadyAdded)
-                            customerThatBidProductsIds.add(productBid.getCustomer().getId());
-                    }
-                }
-            }
-
-            if(customerThatBidProductsIds.size()<=0){
-                return getMostPopularOtherCustomersProductsThatCustomerDidNotBided(customer);
-            }
-
-            List<Product> recommendableProducts = new ArrayList<>();
-
-            for (Integer customerId : customerThatBidProductsIds) {
-                List<Bid> customerIdBids = bidRepository.findByCustomerIdOrderByBidPrice(customerId);
-                for (Bid b : customerIdBids) {
-                    Product p = b.getProduct();
-                    Boolean available = false;
-                    Boolean customerBidOnProduct = false;
-                    Boolean customerSellsProduct = false;
-                    if(p.getStartDate().isBefore(LocalDateTime.now()) && p.getEndDate().isAfter(LocalDateTime.now()) && p.getCustomer().getActive()){
-                        available = true;
-                    }
-                    if(p.getCustomer().getId() == customer.getId())
-                        customerSellsProduct=true;
-
-                    List<Bid> productBids = p.getBids();
-                    for (Bid productBid: productBids) {
-                        if(productBid.getCustomer().getId() == customer.getId()){
-                            customerBidOnProduct = true;
-                            break;
-                        }
-                    }
-                    if(available && !customerBidOnProduct && !customerSellsProduct){
-                        Boolean productIsInList = false;
-                        for (Product recommendable : recommendableProducts) {
-                            if(recommendable.getId() == p.getId()){
-                                productIsInList = true;
-                                break;
-                            }
-                        }
-                        if(!productIsInList){
-                            recommendableProducts.add(p);
-                        }
-                    }
-                }
-            }
-
-            if(recommendableProducts.size() <= 0){
-                return getMostPopularOtherCustomersProductsThatCustomerDidNotBided(customer);
-            }
-
-            Comparator<Product> compareByNumberOfBids = (Product p1, Product p2) -> p2.getBids().size() - p1.getBids().size();
-
-            Collections.sort(recommendableProducts, compareByNumberOfBids);
-
-            if(recommendableProducts.size() == 4){
-                return changeToDto(recommendableProducts);
-            }
-
-            if(recommendableProducts.size() < 4){
-                return getRecommendedProductsList(recommendableProducts, customer);
-            }
-
-            List<Product> recommendableProductsTop4 = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                recommendableProductsTop4.add(recommendableProducts.get(i));
-            }
-
-            return changeToDto(recommendableProductsTop4);
-        }
+        return recommendedProductsAlgorithm.getRecommendedProducts(customerEmail);
     }
 }
