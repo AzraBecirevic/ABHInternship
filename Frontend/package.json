@@ -43,7 +43,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "publishToHeroku": "cd ../../ && git subtree push --prefix Frontend/auction_app_frontend heroku-auction-frontend master || true"
+    "publishToHeroku": "cd ../../ && git subtree push --prefix Frontend heroku-auction-frontend master || true"
   },
   "eslintConfig": {
     "extends": [
