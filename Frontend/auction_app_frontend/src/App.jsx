@@ -1,13 +1,13 @@
 import "./App.css";
-import Header from "./components/Header";
+import Header from "./components/common/Header";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Footer from "./components/Footer";
-import AboutUs from "./components/AboutUs";
-import Home from "./components/Home";
-import TearmsAndConditions from "./components/TearmsAndConditions";
-import PrivacyAndPolicy from "./components/PrivacyAndPolicy";
-import ScrollToTop from "./components/ScrollToTop";
-import Register from "./components/Register";
+import Footer from "./components/common/Footer";
+import AboutUs from "./components/static/AboutUs";
+import Home from "./components/home/Home";
+import TearmsAndConditions from "./components/static/TearmsAndConditions";
+import PrivacyAndPolicy from "./components/static/PrivacyAndPolicy";
+import ScrollToTop from "./components/common/ScrollToTop";
+import Register from "./components/auth/Register";
 import React, { Component } from "react";
 import {
   ABOUT_ROUTE,
@@ -90,26 +90,26 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "./constants/toastClosing";
-import Login from "./components/Login";
-import LoadingSpinner from "./components/LoadingSpinner";
+import Login from "./components/auth/Login";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 import jwtDecoder from "jwt-decode";
 import ToastService from "./services/toastService";
 import AuthService from "./services/authService";
-import Categories from "./components/Categories";
-import SingleProduct from "./components/SingleProduct";
-import ForgotPassword from "./components/ForgotPassword";
-import ChangePassword from "./components/ChangePassword";
-import NotFound from "./components/NotFound";
+import Categories from "./components/shop/Categories";
+import SingleProduct from "./components/shop/SingleProduct";
+import ForgotPassword from "./components/auth/ForgotPassword";
+import ChangePassword from "./components/auth/ChangePassword";
+import NotFound from "./components/static/NotFound";
 import { TOKEN, EMAIL } from "./constants/auth";
-import UserPage from "./components/UserPage";
-import Sell from "./components/Sell";
-import Settings from "./components/Settings";
+import UserPage from "./components/myAccount/UserPage";
+import Sell from "./components/myAccount/Sell";
+import Settings from "./components/myAccount/Settings";
 import { ADD_ITEM } from "./constants/messages";
-import AddItem from "./components/AddItem";
+import AddItem from "./components/addItem/AddItem";
 import firebase from "firebase";
 import NotificationService from "./services/notificationService";
 import ReactNotificationAlert from "react-notification-alert";
-import Notifications from "./components/Notifications";
+import Notifications from "./components/common/Notifications";
 
 export class App extends Component {
   state = {
