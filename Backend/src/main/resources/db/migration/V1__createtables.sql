@@ -165,3 +165,15 @@ PRIMARY KEY(id),
        FOREIGN KEY(customer_id)
  	   REFERENCES customer(id)
 );
+
+CREATE TABLE social_media_auth_data(
+id integer GENERATED ALWAYS AS IDENTITY,
+provider varchar(255),
+provider_id varchar(255),
+access_token varchar(700),
+customer_id integer,
+PRIMARY KEY(id),
+   CONSTRAINT fk_customer_social_media_auth
+       FOREIGN KEY(customer_id)
+ 	   REFERENCES customer(id)
+);

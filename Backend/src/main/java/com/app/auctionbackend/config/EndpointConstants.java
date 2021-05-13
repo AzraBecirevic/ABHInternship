@@ -21,5 +21,5 @@ public class EndpointConstants {
     public static final String GET_RECOMMENDED_PRODUCTS = "/product/getRecommended/{email}";
     public static final String SAVE_NOTIFICATION_TOKEN = "/notification/save";
     public static final String GET_UNREAD_NOTIFICATIONS = "/notification/getUnread/{email}";
-
+    public static final String ADD_CUSTOMER_SOCIAL_MEDIA_LOGIN = "/customer/addCustomerSocialMediaLogin";
 }

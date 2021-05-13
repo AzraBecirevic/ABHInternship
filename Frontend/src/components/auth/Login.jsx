@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import {
   EMAIL_REQUIRED_MESSAGE,
   PASSWORD_REQUIRED_MESSAGE,
+  SOCIAL_MEDIA_LOGIN_FAILED_MESSAGE,
 } from "../../constants/messages";
 import { FORGOT_PASSWORD_ROUTE, HOME_ROUTE } from "../../constants/routes";
 import { CLOSE_TOAST_AFTER_MILISECONDS } from "../../constants/toastClosing";
@@ -10,6 +11,10 @@ import AuthService from "../../services/authService";
 import ToastService from "../../services/toastService";
 import Heading from "../common/Heading";
 import styles from "./Login.css";
+import { GoogleLogin } from "react-google-login";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export class Login extends Component {
   constructor(props) {
     super(props);
@@ -107,6 +112,75 @@ export class Login extends Component {
     this.setState({ rememberMe: !this.state.rememberMe });
   };
 
+  socialMediaRegister = async (res, type) => {
+    const auth = new AuthService();
+    let name = "";
+    let email = "";
+    let provider = "";
+    let providerId = "";
+    let accessToken = "";
+    let firstName = "";
+    let lastName = "";
+
+    if (type === "google" && res.ft.Qt) {
+      name = res.ft.Te;
+      email = res.ft.Qt;
+      provider = type;
+      providerId = res.FS;
+      accessToken = res.accessToken;
+      firstName = res.qU;
+      lastName = res.lS;
+    }
+
+    let signedUp = await auth.signUpViaSocialMedia(
+      name,
+      email,
+      provider,
+      providerId,
+      accessToken,
+      firstName,
+      lastName,
+      " "
+    );
+
+    if (signedUp) {
+      var succesfullyLoggedIn = await auth.login(
+        email,
+        " ",
+        false,
+        this.showErrorMessage,
+        this.showSuccesMessage,
+        this.setIsLoading
+      );
+
+      if (succesfullyLoggedIn) {
+        var token = this.state.rememberMe
+          ? localStorage.getItem("token")
+          : sessionStorage.getItem("token");
+
+        this.props.onLogin(email, token);
+        this.props.history.push(HOME_ROUTE);
+      } else {
+        this.toastService.showErrorToast(SOCIAL_MEDIA_LOGIN_FAILED_MESSAGE);
+      }
+    } else {
+      this.toastService.showErrorToast(SOCIAL_MEDIA_LOGIN_FAILED_MESSAGE);
+    }
+  };
+
+  responseGoogle = (response) => {
+    this.socialMediaRegister(response, "google");
+  };
+
+  failureGoogle = (response) => {
+    this.toastService.showErrorToast(SOCIAL_MEDIA_LOGIN_FAILED_MESSAGE);
+  };
+
+  logoutGoogle = (res) => {
+    const auth = new AuthService();
+    auth.logout();
+  };
+
   render() {
     return (
       <div>
@@ -172,6 +246,30 @@ export class Login extends Component {
                         LOGIN
                       </button>
                     </form>
+                    <div className="socialMediaLoginDiv">
+                      <GoogleLogin
+                        clientId="237542562789-d3u2rfr3a16icebgo4gfoukhcksftfm1.apps.googleusercontent.com"
+                        render={(renderProps) => (
+                          <button
+                            className="googleLoginBtn"
+                            onClick={renderProps.onClick}
+                            disabled={renderProps.disabled}
+                          >
+                            <FontAwesomeIcon
+                              className="envelopeIcon"
+                              icon={faEnvelope}
+                              size={"lg"}
+                            />
+                            LOGIN WITH GMAIL
+                          </button>
+                        )}
+                        buttonText="Login"
+                        onSuccess={this.responseGoogle}
+                        onFailure={this.failureGoogle}
+                        cookiePolicy={"single_host_origin"}
+                        isSignedIn={true}
+                      />
+                    </div>
                     <p className="formMessage">
                       <Link
                         className="forgotPasswordLink"

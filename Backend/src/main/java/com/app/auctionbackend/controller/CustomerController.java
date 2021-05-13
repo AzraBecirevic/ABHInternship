@@ -3,10 +3,12 @@ package com.app.auctionbackend.controller;
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
 import com.app.auctionbackend.dtos.CustomerDetailsDto;
 import com.app.auctionbackend.dtos.DeliveryDataDto;
+import com.app.auctionbackend.dtos.SocialMediaAuthDto;
 import com.app.auctionbackend.helper.Message;
 import com.app.auctionbackend.model.Customer;
 import com.app.auctionbackend.service.CustomerService;
 import com.app.auctionbackend.service.EmailService;
+import com.app.auctionbackend.service.SocialMediaAuthDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,9 @@ public class CustomerController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private SocialMediaAuthDataService socialMediaAuthDataService;
+
     @PostMapping(consumes = "application/json")
     public ResponseEntity addCustomer(@RequestBody Customer customer){
         try {
@@ -48,6 +53,32 @@ public class CustomerController {
             return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
 
+        return new ResponseEntity<>(new Message("Something went wrong"), HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping(value = "/addCustomerSocialMediaLogin")
+    public ResponseEntity addCustomerViaSocialMediaLogin(@RequestBody SocialMediaAuthDto socialMediaAuthDto){
+        try {
+            Customer customer = customerService.findByEmail(socialMediaAuthDto.getEmail());
+            if(customer != null){
+               socialMediaAuthDataService.updateCustomerSocialMediaAuthData(socialMediaAuthDto, customer);
+                return new ResponseEntity(HttpStatus.OK);
+            }
+
+            Customer registeredCustomer = customerService.registerCustomerViaSocialMedia(socialMediaAuthDto);
+            if(registeredCustomer != null){
+                socialMediaAuthDataService.setCustomerSocialMediaAuthData(socialMediaAuthDto, registeredCustomer);
+                URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(registeredCustomer.getId())
+                        .toUri();
+
+                return new ResponseEntity(location,HttpStatus.CREATED);
+            }
+        }
+        catch (Exception ex){
+            return  new ResponseEntity<>(new Message(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(new Message("Something went wrong"), HttpStatus.BAD_REQUEST);
     }
 
