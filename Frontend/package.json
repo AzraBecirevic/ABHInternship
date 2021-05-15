@@ -1,0 +1,67 @@
+{
+  "name": "auction_app_frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^27.0.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@material-ui/core": "^4.11.3",
+    "@stripe/react-stripe-js": "^1.4.0",
+    "@stripe/stripe-js": "^1.13.2",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.7.1",
+    "bootstrap": "^4.6.0",
+    "country-state-city": "^2.0.0",
+    "firebase": "^8.4.3",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.5.1",
+    "jwt-decode": "^3.1.2",
+    "nib-core": "^2.7.16",
+    "popper.js": "^1.16.1",
+    "react": "^17.0.1",
+    "react-bootstrap": "^1.5.0",
+    "react-confirm-alert": "^2.7.0",
+    "react-country-region-selector": "^3.0.2",
+    "react-dom": "^17.0.1",
+    "react-dropzone": "^11.3.2",
+    "react-google-login": "^5.2.2",
+    "react-infinite-scroll-component": "^6.0.0",
+    "react-loader-spinner": "^4.0.0",
+    "react-notification-alert": "^0.0.13",
+    "react-phone-number-input": "^3.1.18",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.2",
+    "react-toastify": "^7.0.3",
+    "web-vitals": "^1.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "publishToHeroku": "cd ../../ && git subtree push --prefix Frontend heroku-auction-frontend master || true"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

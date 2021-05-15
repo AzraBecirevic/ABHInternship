@@ -1,0 +1,121 @@
+.loginDiv {
+  margin-top: 85px;
+  margin-bottom: 200px;
+}
+
+.loginBtn {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  background-color: #8367d8;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  font-family: Lato-Bold;
+  font-size: 18px;
+  color: #ffffff;
+  letter-spacing: 0.63px;
+  text-align: center;
+  margin-top: 60px;
+  height: 57px;
+}
+
+.loginBtn:disabled {
+  cursor: unset;
+  opacity: 0.75;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-clip: content-box;
+  border: 1px solid #d8d8d8;
+  border-radius: 0;
+  background-color: #ececec;
+  margin-right: 10px;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #8367d8;
+}
+
+input[type="checkbox"]:focus {
+  outline: #8367d8 !important;
+}
+.forgotPasswordLink {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #8367d8;
+  letter-spacing: 0.63px;
+}
+
+.forgotPasswordLink:hover {
+  text-decoration: none;
+  color: #8367d8;
+}
+.forgotPassMessage {
+  font-family: Lato-Regular;
+  font-size: 18px;
+  color: #9b9b9b;
+  letter-spacing: 0.63px;
+}
+.forgPassBtn {
+  background: #ffffff;
+  border: 3px solid #8367d8;
+  box-shadow: 3px 3px 0 0 rgba(131, 103, 216, 0.31);
+  height: 57px;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.forgPassBtn:disabled {
+  cursor: unset;
+  opacity: 0.75;
+  color: #ccc;
+}
+
+.form-control.inputField {
+  height: 57px;
+}
+.formDivForgotPass {
+  margin-left: 51px;
+  margin-right: 51px;
+  margin-bottom: 76px;
+}
+
+.forggotPasswordDiv {
+  margin-left: 51px;
+  margin-right: 51px;
+  margin-bottom: 0px;
+  margin-top: 43px;
+}
+
+.socialMediaLoginDiv {
+  margin-top: 30px;
+}
+
+.googleLoginBtn {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #cd5542;
+  border: 3px solid #cd5542;
+  font-family: Lato-Bold;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: 0.56px;
+  text-align: center;
+  width: 100%;
+}
+
+.envelopeIcon {
+  margin-right: 10px;
+}
