@@ -119,5 +119,6 @@ public class SellProductDto {
     public void setProductPaid(Boolean productPaid) {
         this.productPaid = productPaid;
     }
+
 }
 

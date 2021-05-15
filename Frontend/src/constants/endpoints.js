@@ -46,3 +46,5 @@ export const CLEAR_CUSTOMERS_ALL_NOTIFICATION =
   "/notification/clearAllNotifications/";
 export const CLEAR_CUSTOMERS_SINGLE_NOTIFICATION =
   "/notification/clearSingleNotification";
+export const ADD_CUSTOMER_SOCIAL_MEDIA_LOGIN =
+  "/customer/addCustomerSocialMediaLogin";

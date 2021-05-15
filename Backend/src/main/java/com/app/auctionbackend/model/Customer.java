@@ -44,6 +44,9 @@ public class Customer {
     @OneToOne(mappedBy = "customer")
     private NotificationToken notificationToken;
 
+    @OneToOne(mappedBy = "customer")
+    private SocialMediaAuthData socialMediaAuthData;
+
     public Integer getId() {
         return id;
     }
@@ -170,5 +173,13 @@ public class Customer {
 
     public void setNotificationToken(NotificationToken notificationToken) {
         this.notificationToken = notificationToken;
+    }
+
+    public SocialMediaAuthData getSocialMediaAuthData() {
+        return socialMediaAuthData;
+    }
+
+    public void setSocialMediaAuthData(SocialMediaAuthData socialMediaAuthData) {
+        this.socialMediaAuthData = socialMediaAuthData;
     }
 }

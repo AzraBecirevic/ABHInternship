@@ -3,6 +3,7 @@ package com.app.auctionbackend.service;
 import com.app.auctionbackend.dtos.CustomerChangePassDto;
 import com.app.auctionbackend.dtos.CustomerDetailsDto;
 import com.app.auctionbackend.dtos.DeliveryDataDto;
+import com.app.auctionbackend.dtos.SocialMediaAuthDto;
 import com.app.auctionbackend.helper.Helper;
 import com.app.auctionbackend.model.*;
 import com.app.auctionbackend.repo.CustomerRepository;
@@ -393,5 +394,20 @@ public class CustomerService {
           }
        }
        return false;
+   }
+
+   public Customer registerCustomerViaSocialMedia(SocialMediaAuthDto socialMediaAuthDto){
+        try {
+            Customer customer = new Customer();
+            customer.setActive(true);
+            customer.setEmail(socialMediaAuthDto.getEmail());
+            customer.setPassword(passwordEncoder.encode(socialMediaAuthDto.getPassword()));
+
+            customerRepository.save(customer);
+            return customer;
+        }
+        catch (Exception exception){
+            return null;
+        }
    }
 }

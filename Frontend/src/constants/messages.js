@@ -172,3 +172,5 @@ export const PAYMENT_NEW_CARD_QUESTION_MESSAGE =
 export const CLEAR_ALL_NOTIFICATION_MESSAGE = "Clear all unread notifications.";
 export const NO_UNREAD_NOTIFICATION_MESSAGE =
   "There are no unread notifications.";
+export const SOCIAL_MEDIA_LOGIN_FAILED_MESSAGE =
+  "You can not be logged in rigth now. Please try later.";

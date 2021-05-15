@@ -1,5 +1,6 @@
 import { ENDPOINT } from "../constants/auth";
 import {
+  ADD_CUSTOMER_SOCIAL_MEDIA_LOGIN,
   CHANGE_PASSWORD_ENDPOINT,
   CHECK_IF_ACCOUNT_IS_ACTIVE,
   FORGOT_PASSWORD_ENDPONT,
@@ -210,6 +211,52 @@ class AuthService {
       sessionStorage.removeItem(key);
     });
   };
+
+  async signUpViaSocialMedia(
+    name,
+    email,
+    provider,
+    providerId,
+    accessToken,
+    firstName,
+    lastName,
+    pass
+  ) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        provider: provider,
+        providerId: providerId,
+        accessToken: accessToken,
+        firstName: firstName,
+        lastName: lastName,
+        password: pass,
+      }),
+    };
+
+    const response = await fetch(
+      ENDPOINT + ADD_CUSTOMER_SOCIAL_MEDIA_LOGIN,
+      requestOptions
+    ).catch((error) => {
+      if (!error.response) {
+        return null;
+      } else {
+        return;
+      }
+    });
+
+    if (!response) {
+      return false;
+    }
+    if (response.status === 201 || response.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 export default AuthService;
